@@ -1,4 +1,6 @@
-package com.nmichail.wordly_android.ui.theme
+@file:Suppress("MagicNumber")
+
+package com.nmichail.wordly.android.component.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

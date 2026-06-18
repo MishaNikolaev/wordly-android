@@ -1,0 +1,34 @@
+val Modules = mapOf(
+	"APP" to ":app",
+	"FEATURE" to mapOf(
+		"SIGN_IN" to ":features:authorization:signin",
+		"SIGN_UP" to ":features:authorization:signup",
+	),
+	"CORE" to mapOf(
+		"NAVIGATION" to ":core:navigation",
+		"NETWORK" to ":core:network",
+		"FAKE_NETWORK" to ":core:fakenetwork",
+		"VALIDATION" to ":core:validation",
+		"PREFERENCES" to ":core:preferences",
+	),
+	"COMPONENT" to mapOf(
+		"UI" to ":component:ui",
+	),
+)
+
+fun unpackMapValues(map: Map<String, Any>, action: (String) -> Unit) {
+	map.values.forEach { value ->
+		when (value) {
+			is String -> action(value)
+			is Map<*, *> -> @Suppress("UNCHECKED_CAST")
+			unpackMapValues(value as Map<String, Any>, action)
+		}
+	}
+}
+
+fun nameToPath(name: String): String = name.drop(1).replace(":", "/")
+
+unpackMapValues(Modules) { moduleName ->
+	include(moduleName)
+	project(moduleName).projectDir = File(settingsDir, nameToPath(moduleName))
+}
