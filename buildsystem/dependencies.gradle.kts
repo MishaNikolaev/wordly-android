@@ -19,6 +19,8 @@ val Versions = mapOf(
 	"MOSHI" to "1.15.2",
 
 	"DECOMPOSE" to "3.3.0",
+	"ESSENTY" to "2.5.0",
+	"MVIKOTLIN" to "4.3.0",
 
 	"COMPOSE_ACTIVITY" to "1.9.3",
 	"COMPOSE_MATERIAL" to "1.4.0",
@@ -98,6 +100,13 @@ val Deps = mapOf(
 	"DECOMPOSE" to mapOf(
 		"CORE" to "com.arkivanov.decompose:decompose:${Versions["DECOMPOSE"]}",
 		"COMPOSE" to "com.arkivanov.decompose:extensions-compose:${Versions["DECOMPOSE"]}",
+		"COROUTINES" to "com.arkivanov.essenty:lifecycle-coroutines:${Versions["ESSENTY"]}",
+	),
+
+	"MVIKOTLIN" to mapOf(
+		"CORE" to "com.arkivanov.mvikotlin:mvikotlin:${Versions["MVIKOTLIN"]}",
+		"MAIN" to "com.arkivanov.mvikotlin:mvikotlin-main:${Versions["MVIKOTLIN"]}",
+		"EXTENSIONS_COROUTINES" to "com.arkivanov.mvikotlin:mvikotlin-extensions-coroutines:${Versions["MVIKOTLIN"]}",
 	),
 
 	"LOTTIE" to "com.airbnb.android:lottie-compose:${Versions["LOTTIE"]}",

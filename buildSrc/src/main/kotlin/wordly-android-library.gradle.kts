@@ -63,4 +63,5 @@ tasks.named("preBuild") {
 
 dependencies {
 	implementation(libs.findLibrary("kotlin-stdlib").get())
+	implementation(libs.findLibrary("compose-runtime").get())
 }
