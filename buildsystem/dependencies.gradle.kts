@@ -1,5 +1,6 @@
 val Versions = mapOf(
 	"KOTLIN" to "2.0.21",
+	"KSP" to "2.0.21-1.0.28",
 	"GRADLE" to "8.12.0",
 	"DETEKT" to "1.23.8",
 
@@ -43,6 +44,8 @@ val Deps = mapOf(
 	),
 
 	"COMPOSE_COMPILER" to "org.jetbrains.kotlin:compose-compiler-gradle-plugin:${Versions["KOTLIN"]}",
+
+	"KSP" to "com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin:${Versions["KSP"]}",
 
 	"GRADLE" to "com.android.tools.build:gradle:${Versions["GRADLE"]}",
 

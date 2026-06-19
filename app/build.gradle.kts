@@ -1,9 +1,13 @@
 plugins {
 	alias(libs.plugins.wordlyAndroidApplication)
+	alias(libs.plugins.ksp)
 }
 
 dependencies {
 	implementation(projects.component.ui)
+
+	implementation(libs.dagger)
+	ksp(libs.dagger.compiler)
 
 	implementation(libs.androidx.core.ktx)
 	implementation(libs.androidx.lifecycle.runtime.ktx)
