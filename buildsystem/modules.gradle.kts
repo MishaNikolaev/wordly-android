@@ -11,6 +11,10 @@ val Modules = mapOf(
 		"VALIDATION" to ":core:validation",
 		"PREFERENCES" to ":core:preferences",
 	),
+	"SHARED" to mapOf(
+		"AUTHORIZATION_CONTRACT" to ":shared:authorization:contract",
+		"CONVERTERS_DATE" to ":shared:converters:dateconverter",
+	),
 	"COMPONENT" to mapOf(
 		"UI" to ":component:ui",
 	),

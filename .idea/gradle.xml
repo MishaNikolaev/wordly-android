@@ -33,6 +33,11 @@
             <option value="$PROJECT_DIR$/features/authorization" />
             <option value="$PROJECT_DIR$/features/authorization/signin" />
             <option value="$PROJECT_DIR$/features/authorization/signup" />
+            <option value="$PROJECT_DIR$/shared" />
+            <option value="$PROJECT_DIR$/shared/authorization" />
+            <option value="$PROJECT_DIR$/shared/authorization/contract" />
+            <option value="$PROJECT_DIR$/shared/converters" />
+            <option value="$PROJECT_DIR$/shared/converters/dateconverter" />
           </set>
         </option>
       </GradleProjectSettings>
