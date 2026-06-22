@@ -1,0 +1,27 @@
+package com.nmichail.wordly.android.features.authorization.signin.presentation
+
+import com.arkivanov.mvikotlin.core.store.Store
+
+interface SignInStore : Store<SignInStore.Intent, SignInStore.State, SignInStore.Label> {
+
+	data class State(
+		val email: String,
+		val password: String,
+	)
+
+	sealed interface Intent {
+
+		data class ChangeEmail(val email: String) : Intent
+
+		data class ChangePassword(val password: String) : Intent
+
+		data object Submit : Intent
+
+		data object NavigateToSignUp : Intent
+	}
+
+	sealed interface Label {
+
+		data object OpenSignUp : Label
+	}
+}

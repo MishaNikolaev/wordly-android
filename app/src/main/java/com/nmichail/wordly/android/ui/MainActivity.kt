@@ -4,27 +4,20 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.ui.Modifier
-import com.nmichail.wordly.android.component.ui.theme.WordlyAndroidTheme
+import com.arkivanov.decompose.defaultComponentContext
+import com.nmichail.wordly.android.mainhost.presentation.DefaultRootComponentFactory
+import com.nmichail.wordly.android.mainhost.ui.RootContent
 
 class MainActivity : ComponentActivity() {
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		enableEdgeToEdge()
+
+		val rootComponent = DefaultRootComponentFactory()(defaultComponentContext())
+
 		setContent {
-			WordlyAndroidTheme {
-				Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-					Text(
-						text = "Wordly",
-						modifier = Modifier.padding(innerPadding),
-					)
-				}
-			}
+			RootContent(component = rootComponent)
 		}
 	}
 }

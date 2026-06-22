@@ -17,7 +17,13 @@ val Versions = mapOf(
 
 	"RETROFIT" to "3.0.0",
 	"OKHTTP" to "5.2.0",
+	"GSON" to "2.11.0",
 	"MOSHI" to "1.15.2",
+
+	"ROOM" to "2.7.1",
+
+	"GLIDE" to "5.0.5",
+	"GLIDE_COMPOSE" to "1.0.0-beta01",
 
 	"DECOMPOSE" to "3.3.0",
 	"ESSENTY" to "2.5.0",
@@ -82,6 +88,7 @@ val Deps = mapOf(
 	"SQUAREUP" to mapOf(
 		"RETROFIT" to "com.squareup.retrofit2:retrofit:${Versions["RETROFIT"]}",
 		"RETROFIT_SCALARS" to "com.squareup.retrofit2:converter-scalars:${Versions["RETROFIT"]}",
+		"RETROFIT_GSON" to "com.squareup.retrofit2:converter-gson:${Versions["RETROFIT"]}",
 		"OKHTTP_INTERCEPTOR" to "com.squareup.okhttp3:logging-interceptor:${Versions["OKHTTP"]}",
 		"MOSHI_RETROFIT" to "com.squareup.retrofit2:converter-moshi:${Versions["RETROFIT"]}",
 		"MOSHI" to "com.squareup.moshi:moshi-kotlin:${Versions["MOSHI"]}",
@@ -89,10 +96,25 @@ val Deps = mapOf(
 		"MOSHI_ADAPTERS" to "com.squareup.moshi:moshi-adapters:${Versions["MOSHI"]}",
 	),
 
+	"GSON" to "com.google.code.gson:gson:${Versions["GSON"]}",
+
+	"ROOM" to mapOf(
+		"RUNTIME" to "androidx.room:room-runtime:${Versions["ROOM"]}",
+		"KTX" to "androidx.room:room-ktx:${Versions["ROOM"]}",
+		"COMPILER" to "androidx.room:room-compiler:${Versions["ROOM"]}",
+	),
+
+	"GLIDE" to mapOf(
+		"CORE" to "com.github.bumptech.glide:glide:${Versions["GLIDE"]}",
+		"COMPOSE" to "com.github.bumptech.glide:compose:${Versions["GLIDE_COMPOSE"]}",
+	),
+
 	"COMPOSE_ACTIVITY" to "androidx.activity:activity-compose:${Versions["COMPOSE_ACTIVITY"]}",
 	"COMPOSE_BOM" to "androidx.compose:compose-bom:${Versions["COMPOSE_BOM"]}",
 	"COMPOSE" to mapOf(
 		"MATERIAL" to "androidx.compose.material3:material3:${Versions["COMPOSE_MATERIAL"]}",
+		"MATERIAL_ICONS_CORE" to "androidx.compose.material:material-icons-core",
+		"MATERIAL_ICONS_EXTENDED" to "androidx.compose.material:material-icons-extended",
 		"RUNTIME" to "androidx.compose.runtime:runtime:${Versions["COMPOSE"]}",
 		"STUDIO_PREVIEW" to "androidx.compose.ui:ui-tooling-preview:${Versions["COMPOSE"]}",
 		"TOOLING" to "androidx.compose.ui:ui-tooling:${Versions["COMPOSE"]}",
@@ -110,6 +132,7 @@ val Deps = mapOf(
 		"CORE" to "com.arkivanov.mvikotlin:mvikotlin:${Versions["MVIKOTLIN"]}",
 		"MAIN" to "com.arkivanov.mvikotlin:mvikotlin-main:${Versions["MVIKOTLIN"]}",
 		"EXTENSIONS_COROUTINES" to "com.arkivanov.mvikotlin:mvikotlin-extensions-coroutines:${Versions["MVIKOTLIN"]}",
+		"LOGGING" to "com.arkivanov.mvikotlin:mvikotlin-logging:${Versions["MVIKOTLIN"]}",
 	),
 
 	"LOTTIE" to "com.airbnb.android:lottie-compose:${Versions["LOTTIE"]}",

@@ -22,7 +22,6 @@
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/buildSrc" />
             <option value="$PROJECT_DIR$/component" />
-            <option value="$PROJECT_DIR$/component/contract" />
             <option value="$PROJECT_DIR$/component/ui" />
             <option value="$PROJECT_DIR$/core" />
             <option value="$PROJECT_DIR$/core/fakenetwork" />
@@ -34,10 +33,8 @@
             <option value="$PROJECT_DIR$/features/authorization" />
             <option value="$PROJECT_DIR$/features/authorization/signin" />
             <option value="$PROJECT_DIR$/features/authorization/signup" />
-            <option value="$PROJECT_DIR$/features/mainhost" />
+            <option value="$PROJECT_DIR$/mainhost" />
             <option value="$PROJECT_DIR$/shared" />
-            <option value="$PROJECT_DIR$/shared/authorization" />
-            <option value="$PROJECT_DIR$/shared/authorization/contract" />
             <option value="$PROJECT_DIR$/shared/converters" />
             <option value="$PROJECT_DIR$/shared/converters/dateconverter" />
           </set>

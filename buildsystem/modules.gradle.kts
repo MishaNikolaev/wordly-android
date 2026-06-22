@@ -1,7 +1,7 @@
 val Modules = mapOf(
 	"APP" to ":app",
+	"MAIN_HOST" to ":mainhost",
 	"FEATURE" to mapOf(
-		"MAIN_HOST" to ":features:mainhost",
 		"SIGN_IN" to ":features:authorization:signin",
 		"SIGN_UP" to ":features:authorization:signup",
 	),
@@ -13,12 +13,10 @@ val Modules = mapOf(
 		"PREFERENCES" to ":core:preferences",
 	),
 	"SHARED" to mapOf(
-		"AUTHORIZATION_CONTRACT" to ":shared:authorization:contract",
 		"CONVERTERS_DATE" to ":shared:converters:dateconverter",
 	),
 	"COMPONENT" to mapOf(
 		"UI" to ":component:ui",
-		"CONTRACT" to ":component:contract",
 	),
 )
 

@@ -4,7 +4,11 @@ plugins {
 }
 
 dependencies {
+	implementation(projects.mainhost)
 	implementation(projects.component.ui)
+
+	implementation(libs.decompose)
+	implementation(libs.decompose.compose)
 
 	implementation(libs.dagger)
 	ksp(libs.dagger.compiler)
