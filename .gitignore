@@ -1,8 +1,8 @@
 *.iml
 .gradle
 .kotlin
-.run
-**/.kotlin
+**/.run/
+**/.kotlin/
 /local.properties
 .idea
 .DS_Store
