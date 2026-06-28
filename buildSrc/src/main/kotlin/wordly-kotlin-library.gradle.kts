@@ -21,6 +21,10 @@ kotlin {
 	}
 }
 
+tasks.withType<Test>().configureEach {
+	useJUnitPlatform()
+}
+
 dependencies {
 	implementation(libs.findLibrary("kotlin-stdlib").get())
 }

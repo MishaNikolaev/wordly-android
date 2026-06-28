@@ -24,4 +24,20 @@
 	<string name="auth_preview_eloquent_word">eloquent</string>
 	<string name="auth_preview_eloquent_phonetic">/ˈeləkwənt/</string>
 	<string name="auth_preview_eloquent_translation">красноречивый</string>
+
+	<string name="empty" />
+
+	<string name="validation_error_empty">Это поле не может быть пустым</string>
+	<string name="validation_error_empty_email">Укажите почту</string>
+	<string name="validation_error_invalid_email">Некорректная почта</string>
+	<string name="validation_error_invalid_length_email">Длина почты должна быть от 3 до 320 символов</string>
+	<string name="validation_error_invalid_length_before_at_email">Длина почты до @ должна быть от 1 до 64 символов</string>
+	<string name="validation_error_empty_password">Укажите пароль</string>
+	<string name="validation_error_invalid_min_length_password">Минимальная длина пароля: 8 символов</string>
+	<string name="validation_error_invalid_max_length_password">Превышена максимальная длина пароля</string>
+	<string name="validation_error_empty_first_name">Укажите имя</string>
+	<string name="validation_error_empty_last_name">Укажите фамилию</string>
+	<string name="validation_error_invalid_name">Поле может содержать только латинские буквы и дефис</string>
+	<string name="validation_error_invalid_min_length_name">Минимальное количество символов: 2</string>
+	<string name="validation_error_invalid_max_length_name">Превышено максимальное количество символов</string>
 </resources>

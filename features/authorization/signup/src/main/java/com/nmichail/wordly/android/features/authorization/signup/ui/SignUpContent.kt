@@ -20,9 +20,17 @@ import com.nmichail.wordly.android.component.ui.components.Button
 import com.nmichail.wordly.android.component.ui.components.ScreenTitle
 import com.nmichail.wordly.android.component.ui.components.SignUpAuthHeader
 import com.nmichail.wordly.android.component.ui.components.TextField
+import com.nmichail.wordly.android.component.ui.validation.emailErrorMessage
+import com.nmichail.wordly.android.component.ui.validation.nameErrorMessage
+import com.nmichail.wordly.android.component.ui.validation.notEmptyErrorMessage
+import com.nmichail.wordly.android.component.ui.validation.passwordErrorMessage
+import com.nmichail.wordly.android.core.validation.DefaultValidationState
+import com.nmichail.wordly.android.core.validation.name.NamePart
+import com.nmichail.wordly.android.core.validation.notEmpty.NotEmptyValidationState
 import com.nmichail.wordly.android.features.authorization.signup.R
 import com.nmichail.wordly.android.features.authorization.signup.presentation.SignUpComponent
 import com.nmichail.wordly.android.features.authorization.signup.presentation.SignUpStore
+import com.nmichail.wordly.android.features.authorization.signup.presentation.areFieldsValid
 
 @Composable
 fun SignUpContent(
@@ -63,16 +71,20 @@ private fun SignUpForm(
 
 	TextField(
 		label = stringResource(ComponentR.string.common_label_email),
-		value = state.email,
+		value = state.email.data,
 		onValueChange = component::onEmailChanged,
 		keyboardType = KeyboardType.Email,
+		errorVisible = state.email.validationState is DefaultValidationState.Invalid,
+		errorMessage = stringResource(id = emailErrorMessage(state = state.email.validationState)),
 		modifier = Modifier.padding(top = 24.dp),
 	)
 	TextField(
 		label = stringResource(ComponentR.string.common_label_password),
-		value = state.password,
+		value = state.password.data,
 		onValueChange = component::onPasswordChanged,
 		isPassword = true,
+		errorVisible = state.password.validationState is DefaultValidationState.Invalid,
+		errorMessage = stringResource(id = passwordErrorMessage(state = state.password.validationState)),
 		modifier = Modifier.padding(top = 16.dp),
 	)
 
@@ -82,6 +94,7 @@ private fun SignUpForm(
 	Button(
 		text = stringResource(R.string.sign_up_submit),
 		onClick = component::onSubmitClicked,
+		enabled = state.areFieldsValid(),
 		modifier = Modifier.padding(top = 24.dp),
 	)
 	CaptionText(
@@ -104,16 +117,30 @@ private fun SignUpNameFields(
 	) {
 		TextField(
 			label = stringResource(R.string.sign_up_first_name_label),
-			value = state.firstName,
+			value = state.firstName.data,
 			onValueChange = component::onFirstNameChanged,
+			errorVisible = state.firstName.validationState is DefaultValidationState.Invalid,
+			errorMessage = stringResource(
+				id = nameErrorMessage(
+					state = state.firstName.validationState,
+					namePart = NamePart.NAME,
+				),
+			),
 			modifier = Modifier
 				.weight(1f)
 				.padding(end = 8.dp),
 		)
 		TextField(
 			label = stringResource(R.string.sign_up_last_name_label),
-			value = state.lastName,
+			value = state.lastName.data,
 			onValueChange = component::onLastNameChanged,
+			errorVisible = state.lastName.validationState is DefaultValidationState.Invalid,
+			errorMessage = stringResource(
+				id = nameErrorMessage(
+					state = state.lastName.validationState,
+					namePart = NamePart.SURNAME,
+				),
+			),
 			modifier = Modifier
 				.weight(1f)
 				.padding(start = 8.dp),
@@ -130,9 +157,11 @@ private fun SignUpEnglishLevelField(
 
 	SelectionField(
 		label = stringResource(R.string.sign_up_english_level_label),
-		value = state.englishLevel,
+		value = state.englishLevel.data,
 		options = englishLevels,
 		onValueChange = component::onEnglishLevelChanged,
+		errorVisible = state.englishLevel.validationState is NotEmptyValidationState.Invalid,
+		errorMessage = stringResource(id = notEmptyErrorMessage(state = state.englishLevel.validationState)),
 		modifier = Modifier.padding(top = 16.dp),
 	)
 }

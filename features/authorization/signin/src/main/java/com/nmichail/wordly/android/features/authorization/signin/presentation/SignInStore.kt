@@ -1,12 +1,14 @@
 package com.nmichail.wordly.android.features.authorization.signin.presentation
 
 import com.arkivanov.mvikotlin.core.store.Store
+import com.nmichail.wordly.android.core.validation.email.EmailValidationItem
+import com.nmichail.wordly.android.core.validation.password.PasswordValidationItem
 
 interface SignInStore : Store<SignInStore.Intent, SignInStore.State, SignInStore.Label> {
 
 	data class State(
-		val email: String,
-		val password: String,
+		val email: EmailValidationItem = EmailValidationItem(),
+		val password: PasswordValidationItem = PasswordValidationItem(),
 	)
 
 	sealed interface Intent {

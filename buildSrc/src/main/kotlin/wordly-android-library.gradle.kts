@@ -58,6 +58,10 @@ android {
 	}
 }
 
+tasks.withType<Test>().configureEach {
+	useJUnitPlatform()
+}
+
 tasks.named("preBuild") {
 	dependsOn("detekt")
 }

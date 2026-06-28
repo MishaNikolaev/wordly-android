@@ -25,7 +25,9 @@ dependencies {
 	debugImplementation(libs.androidx.ui.tooling)
 	debugImplementation(libs.androidx.ui.test.manifest)
 
-	testImplementation(libs.junit)
+	testImplementation(libs.test.junit.api)
+	testImplementation(libs.test.junit.engine)
+	testImplementation(libs.test.junit.params)
 	androidTestImplementation(libs.androidx.junit)
 	androidTestImplementation(libs.androidx.test.core)
 }

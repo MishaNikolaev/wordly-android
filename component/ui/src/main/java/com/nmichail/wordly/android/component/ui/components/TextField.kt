@@ -27,11 +27,13 @@ fun TextField(
 	modifier: Modifier = Modifier,
 	isPassword: Boolean = false,
 	keyboardType: KeyboardType = KeyboardType.Text,
+	errorVisible: Boolean = false,
+	errorMessage: String = "",
 ) {
 	val leadingIcon = when {
-		isPassword -> Icons.Outlined.Lock
+		isPassword                         -> Icons.Outlined.Lock
 		keyboardType == KeyboardType.Email -> Icons.Outlined.Email
-		else -> null
+		else                               -> null
 	}
 
 	Column(modifier = modifier.fillMaxWidth()) {
@@ -56,6 +58,8 @@ fun TextField(
 			},
 			shape = MaterialTheme.shapes.small,
 			singleLine = true,
+			isError = errorVisible,
+			supportingText = fieldErrorText(errorMessage),
 			visualTransformation = if (isPassword) {
 				PasswordVisualTransformation()
 			} else {
@@ -68,7 +72,22 @@ fun TextField(
 				disabledContainerColor = MaterialTheme.colorScheme.background,
 				focusedBorderColor = MaterialTheme.colorScheme.primary,
 				unfocusedBorderColor = MaterialTheme.colorScheme.outline,
+				errorBorderColor = MaterialTheme.colorScheme.error,
+				errorSupportingTextColor = MaterialTheme.colorScheme.error,
 			),
 		)
 	}
 }
+
+@Composable
+private fun fieldErrorText(errorMessage: String): (@Composable () -> Unit)? =
+	if (errorMessage.isNotEmpty()) {
+		{
+			Text(
+				text = errorMessage,
+				color = MaterialTheme.colorScheme.error,
+			)
+		}
+	} else {
+		null
+	}

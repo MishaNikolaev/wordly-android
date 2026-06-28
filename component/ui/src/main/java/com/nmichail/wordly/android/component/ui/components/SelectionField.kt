@@ -30,6 +30,8 @@ fun SelectionField(
 	options: List<String>,
 	onValueChange: (String) -> Unit,
 	modifier: Modifier = Modifier,
+	errorVisible: Boolean = false,
+	errorMessage: String = "",
 ) {
 	var showDialog by remember { mutableStateOf(false) }
 
@@ -40,38 +42,12 @@ fun SelectionField(
 			color = MaterialTheme.colorScheme.onSurfaceVariant,
 			modifier = Modifier.padding(bottom = 8.dp),
 		)
-		Box(modifier = Modifier.fillMaxWidth()) {
-			OutlinedTextField(
-				value = value,
-				onValueChange = {},
-				readOnly = true,
-				modifier = Modifier.fillMaxWidth(),
-				trailingIcon = {
-					Icon(
-						imageVector = Icons.Filled.KeyboardArrowDown,
-						contentDescription = null,
-						tint = MaterialTheme.colorScheme.onSurfaceVariant,
-					)
-				},
-				shape = MaterialTheme.shapes.small,
-				colors = OutlinedTextFieldDefaults.colors(
-					focusedContainerColor = MaterialTheme.colorScheme.background,
-					unfocusedContainerColor = MaterialTheme.colorScheme.background,
-					disabledContainerColor = MaterialTheme.colorScheme.background,
-					focusedBorderColor = MaterialTheme.colorScheme.primary,
-					unfocusedBorderColor = MaterialTheme.colorScheme.outline,
-				),
-			)
-			Box(
-				modifier = Modifier
-					.matchParentSize()
-					.clickable(
-						interactionSource = remember { MutableInteractionSource() },
-						indication = null,
-						onClick = { showDialog = true },
-					),
-			)
-		}
+		SelectionFieldInput(
+			value = value,
+			errorVisible = errorVisible,
+			errorMessage = errorMessage,
+			onClick = { showDialog = true },
+		)
 	}
 
 	if (showDialog) {
@@ -88,3 +64,65 @@ fun SelectionField(
 		)
 	}
 }
+
+@Composable
+private fun SelectionFieldInput(
+	value: String,
+	errorVisible: Boolean,
+	errorMessage: String,
+	onClick: () -> Unit,
+) {
+	Box(modifier = Modifier.fillMaxWidth()) {
+		OutlinedTextField(
+			value = value,
+			onValueChange = {},
+			readOnly = true,
+			modifier = Modifier.fillMaxWidth(),
+			isError = errorVisible,
+			supportingText = fieldErrorText(errorMessage),
+			trailingIcon = {
+				Icon(
+					imageVector = Icons.Filled.KeyboardArrowDown,
+					contentDescription = null,
+					tint = MaterialTheme.colorScheme.onSurfaceVariant,
+				)
+			},
+			shape = MaterialTheme.shapes.small,
+			colors = selectionFieldColors(),
+		)
+		Box(
+			modifier = Modifier
+				.matchParentSize()
+				.clickable(
+					interactionSource = remember { MutableInteractionSource() },
+					indication = null,
+					onClick = onClick,
+				),
+		)
+	}
+}
+
+@Composable
+private fun fieldErrorText(errorMessage: String): (@Composable () -> Unit)? =
+	if (errorMessage.isNotEmpty()) {
+		{
+			Text(
+				text = errorMessage,
+				color = MaterialTheme.colorScheme.error,
+			)
+		}
+	} else {
+		null
+	}
+
+@Composable
+private fun selectionFieldColors() =
+	OutlinedTextFieldDefaults.colors(
+		focusedContainerColor = MaterialTheme.colorScheme.background,
+		unfocusedContainerColor = MaterialTheme.colorScheme.background,
+		disabledContainerColor = MaterialTheme.colorScheme.background,
+		focusedBorderColor = MaterialTheme.colorScheme.primary,
+		unfocusedBorderColor = MaterialTheme.colorScheme.outline,
+		errorBorderColor = MaterialTheme.colorScheme.error,
+		errorSupportingTextColor = MaterialTheme.colorScheme.error,
+	)

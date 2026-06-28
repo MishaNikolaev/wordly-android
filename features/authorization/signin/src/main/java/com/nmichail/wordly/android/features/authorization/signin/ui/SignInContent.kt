@@ -21,9 +21,13 @@ import com.nmichail.wordly.android.component.ui.components.ScreenTitle
 import com.nmichail.wordly.android.component.ui.components.SignInAuthHeader
 import com.nmichail.wordly.android.component.ui.components.TextField
 import com.nmichail.wordly.android.component.ui.components.TextLink
+import com.nmichail.wordly.android.component.ui.validation.emailErrorMessage
+import com.nmichail.wordly.android.component.ui.validation.passwordErrorMessage
+import com.nmichail.wordly.android.core.validation.DefaultValidationState
 import com.nmichail.wordly.android.features.authorization.signin.R
 import com.nmichail.wordly.android.features.authorization.signin.presentation.SignInComponent
 import com.nmichail.wordly.android.features.authorization.signin.presentation.SignInStore
+import com.nmichail.wordly.android.features.authorization.signin.presentation.areFieldsValid
 
 @Composable
 fun SignInContent(
@@ -62,16 +66,20 @@ private fun SignInForm(
 	)
 	TextField(
 		label = stringResource(ComponentR.string.common_label_email),
-		value = state.email,
+		value = state.email.data,
 		onValueChange = component::onEmailChanged,
 		keyboardType = KeyboardType.Email,
+		errorVisible = state.email.validationState is DefaultValidationState.Invalid,
+		errorMessage = stringResource(id = emailErrorMessage(state = state.email.validationState)),
 		modifier = Modifier.padding(top = 24.dp),
 	)
 	TextField(
 		label = stringResource(ComponentR.string.common_label_password),
-		value = state.password,
+		value = state.password.data,
 		onValueChange = component::onPasswordChanged,
 		isPassword = true,
+		errorVisible = state.password.validationState is DefaultValidationState.Invalid,
+		errorMessage = stringResource(id = passwordErrorMessage(state = state.password.validationState)),
 		modifier = Modifier.padding(top = 16.dp),
 	)
 	Box(
@@ -90,6 +98,7 @@ private fun SignInForm(
 	Button(
 		text = stringResource(R.string.sign_in_submit),
 		onClick = component::onSubmitClicked,
+		enabled = state.areFieldsValid(),
 		modifier = Modifier.padding(top = 24.dp),
 	)
 	TextLink(

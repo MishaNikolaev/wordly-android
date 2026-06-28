@@ -16,4 +16,9 @@ dependencies {
 
 	implementation(projects.component.ui)
 	implementation(projects.core.navigation)
+	implementation(projects.core.validation)
+
+	testImplementation(libs.test.junit.api)
+	testImplementation(libs.test.junit.engine)
+	testImplementation(libs.test.junit.params)
 }
