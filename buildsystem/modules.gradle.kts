@@ -1,7 +1,7 @@
 val Modules = mapOf(
 	"APP" to ":app",
-	"MAIN_HOST" to ":mainhost",
 	"FEATURE" to mapOf(
+		"MAIN_HOST" to ":features:mainhost",
 		"SIGN_IN" to ":features:authorization:signin",
 		"SIGN_UP" to ":features:authorization:signup",
 	),

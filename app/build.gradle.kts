@@ -4,7 +4,7 @@ plugins {
 }
 
 dependencies {
-	implementation(projects.mainhost)
+	implementation(projects.features.mainhost)
 	implementation(projects.component.ui)
 
 	implementation(libs.decompose)
