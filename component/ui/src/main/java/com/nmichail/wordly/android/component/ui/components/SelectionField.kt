@@ -1,0 +1,90 @@
+package com.nmichail.wordly.android.component.ui.components
+
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import com.nmichail.wordly.android.component.ui.R
+
+@Composable
+fun SelectionField(
+	label: String,
+	value: String,
+	options: List<String>,
+	onValueChange: (String) -> Unit,
+	modifier: Modifier = Modifier,
+) {
+	var showDialog by remember { mutableStateOf(false) }
+
+	Column(modifier = modifier.fillMaxWidth()) {
+		Text(
+			text = label,
+			style = MaterialTheme.typography.labelMedium,
+			color = MaterialTheme.colorScheme.onSurfaceVariant,
+			modifier = Modifier.padding(bottom = 8.dp),
+		)
+		Box(modifier = Modifier.fillMaxWidth()) {
+			OutlinedTextField(
+				value = value,
+				onValueChange = {},
+				readOnly = true,
+				modifier = Modifier.fillMaxWidth(),
+				trailingIcon = {
+					Icon(
+						imageVector = Icons.Filled.KeyboardArrowDown,
+						contentDescription = null,
+						tint = MaterialTheme.colorScheme.onSurfaceVariant,
+					)
+				},
+				shape = MaterialTheme.shapes.small,
+				colors = OutlinedTextFieldDefaults.colors(
+					focusedContainerColor = MaterialTheme.colorScheme.background,
+					unfocusedContainerColor = MaterialTheme.colorScheme.background,
+					disabledContainerColor = MaterialTheme.colorScheme.background,
+					focusedBorderColor = MaterialTheme.colorScheme.primary,
+					unfocusedBorderColor = MaterialTheme.colorScheme.outline,
+				),
+			)
+			Box(
+				modifier = Modifier
+					.matchParentSize()
+					.clickable(
+						interactionSource = remember { MutableInteractionSource() },
+						indication = null,
+						onClick = { showDialog = true },
+					),
+			)
+		}
+	}
+
+	if (showDialog) {
+		SelectionDialog(
+			title = label,
+			options = options,
+			selectedOption = value,
+			saveButtonText = stringResource(R.string.common_save),
+			onDismiss = { showDialog = false },
+			onSave = { selected ->
+				onValueChange(selected)
+				showDialog = false
+			},
+		)
+	}
+}

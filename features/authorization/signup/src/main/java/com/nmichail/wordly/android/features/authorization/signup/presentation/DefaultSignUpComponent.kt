@@ -33,6 +33,26 @@ class DefaultSignUpComponent(
 	override val model: StateFlow<SignUpStore.State>
 		get() = store.stateFlow
 
+	override fun onEmailChanged(email: String) {
+		store.accept(SignUpStore.Intent.ChangeEmail(email = email))
+	}
+
+	override fun onPasswordChanged(password: String) {
+		store.accept(SignUpStore.Intent.ChangePassword(password = password))
+	}
+
+	override fun onFirstNameChanged(firstName: String) {
+		store.accept(SignUpStore.Intent.ChangeFirstName(firstName = firstName))
+	}
+
+	override fun onLastNameChanged(lastName: String) {
+		store.accept(SignUpStore.Intent.ChangeLastName(lastName = lastName))
+	}
+
+	override fun onEnglishLevelChanged(englishLevel: String) {
+		store.accept(SignUpStore.Intent.ChangeEnglishLevel(englishLevel = englishLevel))
+	}
+
 	override fun onSubmitClicked() {
 		store.accept(SignUpStore.Intent.Submit)
 	}

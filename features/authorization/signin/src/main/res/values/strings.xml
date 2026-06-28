@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="sign_in_title">Авторизация</string>
+	<string name="sign_in_forgot_password">Забыли пароль?</string>
+	<string name="sign_in_submit">Авторизоваться</string>
+	<string name="sign_in_no_account">У меня нет аккаунта</string>
+</resources>

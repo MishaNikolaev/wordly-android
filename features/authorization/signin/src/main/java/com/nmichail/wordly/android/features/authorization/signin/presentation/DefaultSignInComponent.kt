@@ -33,6 +33,14 @@ class DefaultSignInComponent(
 	override val model: StateFlow<SignInStore.State>
 		get() = store.stateFlow
 
+	override fun onEmailChanged(email: String) {
+		store.accept(SignInStore.Intent.ChangeEmail(email = email))
+	}
+
+	override fun onPasswordChanged(password: String) {
+		store.accept(SignInStore.Intent.ChangePassword(password = password))
+	}
+
 	override fun onSubmitClicked() {
 		store.accept(SignInStore.Intent.Submit)
 	}

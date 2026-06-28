@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="sign_up_title">Регистрация</string>
+	<string name="sign_up_subtitle">Зарегистрируйтесь, чтобы начать</string>
+	<string name="sign_up_first_name_label">Имя</string>
+	<string name="sign_up_last_name_label">Фамилия</string>
+	<string name="sign_up_english_level_label">Уровень английского</string>
+	<string name="sign_up_submit">Зарегистрироваться</string>
+	<string name="sign_up_terms">Регистрируясь, вы принимаете условия использования</string>
+
+	<string-array name="sign_up_english_levels">
+		<item>A1 - начинающий</item>
+		<item>A2 - любитель</item>
+		<item>B1 - средний</item>
+		<item>B2 - уверенный</item>
+		<item>C1 - продвинутый</item>
+		<item>C2 - профессионал</item>
+	</string-array>
+</resources>

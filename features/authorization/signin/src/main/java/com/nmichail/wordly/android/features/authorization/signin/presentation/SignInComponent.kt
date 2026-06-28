@@ -7,6 +7,10 @@ interface SignInComponent {
 
 	val model: StateFlow<SignInStore.State>
 
+	fun onEmailChanged(email: String)
+
+	fun onPasswordChanged(password: String)
+
 	fun onSubmitClicked()
 
 	fun onSignUpClicked()

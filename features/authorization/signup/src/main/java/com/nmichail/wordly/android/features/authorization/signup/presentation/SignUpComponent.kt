@@ -7,6 +7,16 @@ interface SignUpComponent {
 
 	val model: StateFlow<SignUpStore.State>
 
+	fun onEmailChanged(email: String)
+
+	fun onPasswordChanged(password: String)
+
+	fun onFirstNameChanged(firstName: String)
+
+	fun onLastNameChanged(lastName: String)
+
+	fun onEnglishLevelChanged(englishLevel: String)
+
 	fun onSubmitClicked()
 
 	fun onSignInClicked()

@@ -1,46 +1,77 @@
 package com.nmichail.wordly.android.component.ui.theme
 
-import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.dynamicDarkColorScheme
-import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
-
-private val DarkColorScheme = darkColorScheme(
-	primary = Purple80,
-	secondary = PurpleGrey80,
-	tertiary = Pink80,
-)
+import androidx.compose.ui.graphics.Color
 
 private val LightColorScheme = lightColorScheme(
-	primary = Purple40,
-	secondary = PurpleGrey40,
-	tertiary = Pink40,
+	primary = WordlyColors.Primary,
+	onPrimary = WordlyColors.OnPrimary,
+	primaryContainer = WordlyColors.LightPrimaryContainer,
+	onPrimaryContainer = WordlyColors.LightOnPrimaryContainer,
+	inversePrimary = WordlyColors.LightOnPrimaryContainer,
+	secondary = WordlyColors.LightSecondary,
+	onSecondary = WordlyColors.LightOnSecondary,
+	secondaryContainer = WordlyColors.LightSecondaryContainer,
+	onSecondaryContainer = WordlyColors.LightSecondary,
+	tertiary = WordlyColors.LightSuccess,
+	onTertiary = Color.White,
+	tertiaryContainer = WordlyColors.LightWarning,
+	onTertiaryContainer = Color.White,
+	background = WordlyColors.LightBackground,
+	onBackground = WordlyColors.LightOnSurface,
+	surface = WordlyColors.LightSurface,
+	onSurface = WordlyColors.LightOnSurface,
+	surfaceVariant = WordlyColors.LightSurfaceVariant,
+	onSurfaceVariant = WordlyColors.LightOnSurfaceVariant,
+	surfaceBright = WordlyColors.LightSurface,
+	outline = WordlyColors.LightOutline,
+	error = WordlyColors.LightError,
+	onError = Color.White,
+	surfaceContainerHigh = WordlyColors.LightSurface,
+)
+
+private val DarkColorScheme = darkColorScheme(
+	primary = WordlyColors.Primary,
+	onPrimary = WordlyColors.OnPrimary,
+	primaryContainer = WordlyColors.DarkPrimaryContainer,
+	onPrimaryContainer = WordlyColors.DarkOnPrimaryContainer,
+	inversePrimary = WordlyColors.Primary,
+	secondary = WordlyColors.DarkSecondary,
+	onSecondary = WordlyColors.DarkOnSecondary,
+	secondaryContainer = WordlyColors.DarkSecondaryContainer,
+	onSecondaryContainer = WordlyColors.DarkSecondary,
+	tertiary = WordlyColors.DarkSuccess,
+	onTertiary = WordlyColors.DarkOnSecondary,
+	tertiaryContainer = WordlyColors.DarkWarning,
+	onTertiaryContainer = WordlyColors.DarkOnSecondary,
+	background = WordlyColors.DarkBackground,
+	onBackground = WordlyColors.DarkOnSurface,
+	surface = WordlyColors.DarkSurface,
+	onSurface = WordlyColors.DarkOnSurface,
+	surfaceVariant = WordlyColors.DarkSurfaceVariant,
+	onSurfaceVariant = WordlyColors.DarkOnSurfaceVariant,
+	surfaceBright = WordlyColors.OnPrimary,
+	outline = WordlyColors.DarkOutline,
+	error = WordlyColors.DarkError,
+	onError = WordlyColors.DarkOnSecondary,
+	surfaceContainerHigh = WordlyColors.DarkSurfaceVariant,
 )
 
 @Composable
 fun WordlyAndroidTheme(
 	darkTheme: Boolean = isSystemInDarkTheme(),
-	dynamicColor: Boolean = true,
 	content: @Composable () -> Unit,
 ) {
-	val colorScheme = when {
-		dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-			val context = LocalContext.current
-			if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-		}
-
-		darkTheme -> DarkColorScheme
-		else -> LightColorScheme
-	}
+	val colorScheme = if (darkTheme) DarkColorScheme else LightColorScheme
 
 	MaterialTheme(
 		colorScheme = colorScheme,
 		typography = Typography,
+		shapes = Shapes,
 		content = content,
 	)
 }

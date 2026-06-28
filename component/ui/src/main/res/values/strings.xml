@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="logo_icon_letter">W</string>
+	<string name="logo_app_name">Wordly</string>
+
+	<string name="common_label_email">Почта</string>
+	<string name="common_label_password">Пароль</string>
+	<string name="common_save">Сохранить</string>
+
+	<string name="auth_word_language_direction">EN → RU</string>
+	<string name="auth_word_play_pronunciation">Прослушать произношение</string>
+
+	<string name="auth_preview_resilience_word">resilience</string>
+	<string name="auth_preview_resilience_phonetic">/rɪˈzɪliəns/</string>
+	<string name="auth_preview_resilience_translation">стойкость</string>
+
+	<string name="auth_preview_serendipity_word">serendipity</string>
+	<string name="auth_preview_serendipity_phonetic">/ˌserənˈdɪpəti/</string>
+	<string name="auth_preview_serendipity_translation">случайность</string>
+
+	<string name="auth_preview_deploy_word">deploy</string>
+	<string name="auth_preview_deploy_translation">развёртывать</string>
+
+	<string name="auth_preview_eloquent_word">eloquent</string>
+	<string name="auth_preview_eloquent_phonetic">/ˈeləkwənt/</string>
+	<string name="auth_preview_eloquent_translation">красноречивый</string>
+</resources>

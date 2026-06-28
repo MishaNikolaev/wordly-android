@@ -17,6 +17,9 @@ class SignUpStoreFactory {
 					 initialState = SignUpStore.State(
 						 email = "",
 						 password = "",
+						 firstName = "",
+						 lastName = "",
+						 englishLevel = "",
 					 ),
 					 executorFactory = ::ExecutorImpl,
 					 reducer = ReducerImpl,
@@ -27,14 +30,23 @@ class SignUpStoreFactory {
 		data class ChangeEmail(val email: String) : Msg
 
 		data class ChangePassword(val password: String) : Msg
+
+		data class ChangeFirstName(val firstName: String) : Msg
+
+		data class ChangeLastName(val lastName: String) : Msg
+
+		data class ChangeEnglishLevel(val englishLevel: String) : Msg
 	}
 
 	private object ReducerImpl : Reducer<SignUpStore.State, Msg> {
 
 		override fun SignUpStore.State.reduce(msg: Msg): SignUpStore.State =
 			when (msg) {
-				is Msg.ChangeEmail    -> copy(email = msg.email)
-				is Msg.ChangePassword -> copy(password = msg.password)
+				is Msg.ChangeEmail        -> copy(email = msg.email)
+				is Msg.ChangePassword     -> copy(password = msg.password)
+				is Msg.ChangeFirstName    -> copy(firstName = msg.firstName)
+				is Msg.ChangeLastName     -> copy(lastName = msg.lastName)
+				is Msg.ChangeEnglishLevel -> copy(englishLevel = msg.englishLevel)
 			}
 	}
 
@@ -43,10 +55,13 @@ class SignUpStoreFactory {
 
 		override fun executeIntent(intent: SignUpStore.Intent) {
 			when (intent) {
-				is SignUpStore.Intent.ChangeEmail    -> dispatch(Msg.ChangeEmail(email = intent.email))
-				is SignUpStore.Intent.ChangePassword -> dispatch(Msg.ChangePassword(password = intent.password))
-				SignUpStore.Intent.Submit            -> Unit
-				SignUpStore.Intent.NavigateToSignIn  -> publish(SignUpStore.Label.OpenSignIn)
+				is SignUpStore.Intent.ChangeEmail        -> dispatch(Msg.ChangeEmail(email = intent.email))
+				is SignUpStore.Intent.ChangePassword     -> dispatch(Msg.ChangePassword(password = intent.password))
+				is SignUpStore.Intent.ChangeFirstName    -> dispatch(Msg.ChangeFirstName(firstName = intent.firstName))
+				is SignUpStore.Intent.ChangeLastName     -> dispatch(Msg.ChangeLastName(lastName = intent.lastName))
+				is SignUpStore.Intent.ChangeEnglishLevel -> dispatch(Msg.ChangeEnglishLevel(englishLevel = intent.englishLevel))
+				SignUpStore.Intent.Submit                -> Unit
+				SignUpStore.Intent.NavigateToSignIn      -> publish(SignUpStore.Label.OpenSignIn)
 			}
 		}
 	}

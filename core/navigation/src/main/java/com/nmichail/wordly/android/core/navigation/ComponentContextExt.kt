@@ -9,7 +9,7 @@ import kotlinx.coroutines.cancel
 
 fun ComponentContext.componentScope(): CoroutineScope = CoroutineScope(
 	Dispatchers.Main.immediate + SupervisorJob()
-).apply{
+).apply {
 	lifecycle.doOnDestroy {
 		cancel()
 	}
