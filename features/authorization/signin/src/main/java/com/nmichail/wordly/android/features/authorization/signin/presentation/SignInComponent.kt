@@ -20,6 +20,7 @@ interface SignInComponent {
 		operator fun invoke(
 			componentContext: ComponentContext,
 			onOpenSignUp: () -> Unit,
+			onOpenMainHost: () -> Unit,
 		): SignInComponent
 	}
 }

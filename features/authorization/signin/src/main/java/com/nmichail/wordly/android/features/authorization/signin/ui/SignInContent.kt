@@ -27,7 +27,6 @@ import com.nmichail.wordly.android.core.validation.DefaultValidationState
 import com.nmichail.wordly.android.features.authorization.signin.R
 import com.nmichail.wordly.android.features.authorization.signin.presentation.SignInComponent
 import com.nmichail.wordly.android.features.authorization.signin.presentation.SignInStore
-import com.nmichail.wordly.android.features.authorization.signin.presentation.areFieldsValid
 
 @Composable
 fun SignInContent(
@@ -64,6 +63,7 @@ private fun SignInForm(
 		title = stringResource(R.string.sign_in_title),
 		modifier = Modifier.padding(top = 16.dp),
 	)
+
 	TextField(
 		label = stringResource(ComponentR.string.common_label_email),
 		value = state.email.data,
@@ -73,6 +73,7 @@ private fun SignInForm(
 		errorMessage = stringResource(id = emailErrorMessage(state = state.email.validationState)),
 		modifier = Modifier.padding(top = 24.dp),
 	)
+
 	TextField(
 		label = stringResource(ComponentR.string.common_label_password),
 		value = state.password.data,
@@ -82,6 +83,7 @@ private fun SignInForm(
 		errorMessage = stringResource(id = passwordErrorMessage(state = state.password.validationState)),
 		modifier = Modifier.padding(top = 16.dp),
 	)
+
 	Box(
 		modifier = Modifier
 			.fillMaxWidth()
@@ -95,12 +97,15 @@ private fun SignInForm(
 			style = MaterialTheme.typography.labelMedium,
 		)
 	}
+
 	Button(
 		text = stringResource(R.string.sign_in_submit),
 		onClick = component::onSubmitClicked,
-		enabled = state.areFieldsValid(),
+		// TODO: Убрать потом это — enabled = state.areFieldsValid()
+		enabled = true,
 		modifier = Modifier.padding(top = 24.dp),
 	)
+
 	TextLink(
 		text = stringResource(R.string.sign_in_no_account),
 		onClick = component::onSignUpClicked,

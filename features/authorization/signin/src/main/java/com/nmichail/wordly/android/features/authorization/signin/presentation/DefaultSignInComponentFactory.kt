@@ -7,9 +7,11 @@ class DefaultSignInComponentFactory : SignInComponent.Factory {
 	override fun invoke(
 		componentContext: ComponentContext,
 		onOpenSignUp: () -> Unit,
+		onOpenMainHost: () -> Unit,
 	): SignInComponent =
 		DefaultSignInComponent(
 			componentContext = componentContext,
 			onOpenSignUp = onOpenSignUp,
+			onOpenMainHost = onOpenMainHost,
 		)
 }

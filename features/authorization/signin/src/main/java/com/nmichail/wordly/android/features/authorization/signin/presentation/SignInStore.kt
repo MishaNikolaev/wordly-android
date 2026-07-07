@@ -25,5 +25,7 @@ interface SignInStore : Store<SignInStore.Intent, SignInStore.State, SignInStore
 	sealed interface Label {
 
 		data object OpenSignUp : Label
+
+		data object OpenMainHost : Label
 	}
 }

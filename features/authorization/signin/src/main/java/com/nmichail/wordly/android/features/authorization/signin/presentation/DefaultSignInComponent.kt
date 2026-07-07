@@ -12,6 +12,7 @@ import kotlinx.coroutines.launch
 class DefaultSignInComponent(
 	componentContext: ComponentContext,
 	private val onOpenSignUp: () -> Unit,
+	private val onOpenMainHost: () -> Unit,
 ) : ComponentContext by componentContext,
 	SignInComponent {
 
@@ -24,6 +25,7 @@ class DefaultSignInComponent(
 			store.labels.collect { label ->
 				when (label) {
 					SignInStore.Label.OpenSignUp -> onOpenSignUp()
+					SignInStore.Label.OpenMainHost -> onOpenMainHost()
 				}
 			}
 		}

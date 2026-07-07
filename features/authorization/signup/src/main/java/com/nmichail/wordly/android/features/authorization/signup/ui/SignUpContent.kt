@@ -30,7 +30,6 @@ import com.nmichail.wordly.android.core.validation.notEmpty.NotEmptyValidationSt
 import com.nmichail.wordly.android.features.authorization.signup.R
 import com.nmichail.wordly.android.features.authorization.signup.presentation.SignUpComponent
 import com.nmichail.wordly.android.features.authorization.signup.presentation.SignUpStore
-import com.nmichail.wordly.android.features.authorization.signup.presentation.areFieldsValid
 
 @Composable
 fun SignUpContent(
@@ -94,7 +93,8 @@ private fun SignUpForm(
 	Button(
 		text = stringResource(R.string.sign_up_submit),
 		onClick = component::onSubmitClicked,
-		enabled = state.areFieldsValid(),
+		// TODO: Убрать потом это — enabled = state.areFieldsValid()
+		enabled = true,
 		modifier = Modifier.padding(top = 24.dp),
 	)
 	CaptionText(

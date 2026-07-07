@@ -11,7 +11,8 @@ plugins {
 private val libs = extensions.getByType<VersionCatalogsExtension>().named("libs")
 
 android {
-	namespace = "com.nmichail.wordly.android" + project.path.replace(":", ".")
+	namespace = "com.nmichail.wordly.android." +
+		projectDir.relativeTo(rootProject.projectDir).path.replace(File.separatorChar, '.')
 	compileSdk = libs.findVersion("project-compileSdk").get().requiredVersion.toInt()
 
 	packaging {

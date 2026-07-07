@@ -26,6 +26,10 @@ fun RootContent(
 					is RootComponent.Child.SignUp -> SignUpContent(
 						component = instance.component,
 					)
+
+					is RootComponent.Child.MainHost -> MainHostContent(
+						component = instance.component,
+					)
 				}
 			}
 		}

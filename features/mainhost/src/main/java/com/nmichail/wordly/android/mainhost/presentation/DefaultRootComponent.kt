@@ -5,6 +5,7 @@ import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.router.stack.ChildStack
 import com.arkivanov.decompose.router.stack.StackNavigation
 import com.arkivanov.decompose.router.stack.childStack
+import com.arkivanov.decompose.router.stack.navigate
 import com.arkivanov.decompose.router.stack.pop
 import com.arkivanov.decompose.router.stack.push
 import com.arkivanov.decompose.value.Value
@@ -36,6 +37,7 @@ class DefaultRootComponent(
 				val component = DefaultSignInComponent(
 					componentContext = componentContext,
 					onOpenSignUp = { navigation.push(Config.SignUp) },
+					onOpenMainHost = { navigation.navigate { listOf(Config.MainHost) } },
 				)
 				RootComponent.Child.SignIn(component)
 			}
@@ -47,6 +49,11 @@ class DefaultRootComponent(
 				)
 				RootComponent.Child.SignUp(component)
 			}
+
+			Config.MainHost -> {
+				val component = DefaultMainHostComponent(componentContext = componentContext)
+				RootComponent.Child.MainHost(component)
+			}
 		}
 	}
 
@@ -57,6 +64,9 @@ class DefaultRootComponent(
 
 		@Parcelize
 		data object SignUp : Config
+
+		@Parcelize
+		data object MainHost : Config
 	}
 }
 

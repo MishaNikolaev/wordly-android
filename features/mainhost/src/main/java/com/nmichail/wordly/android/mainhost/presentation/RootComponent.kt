@@ -15,6 +15,8 @@ interface RootComponent {
 		class SignIn(val component: SignInComponent) : Child
 
 		class SignUp(val component: SignUpComponent) : Child
+
+		class MainHost(val component: MainHostComponent) : Child
 	}
 
 	fun interface Factory {

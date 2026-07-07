@@ -9,7 +9,11 @@ dependencies {
 	implementation(libs.androidx.ui)
 	implementation(libs.androidx.material3)
 
-	implementation(projects.component.ui)
-	implementation(projects.features.authorization.signin)
-	implementation(projects.features.authorization.signup)
+	implementation(projects.ui)
+	implementation(projects.signin)
+	implementation(projects.signup)
+	implementation(projects.home)
+	implementation(projects.words)
+	implementation(projects.stats)
+	implementation(projects.profile)
 }

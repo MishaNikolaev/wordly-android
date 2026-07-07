@@ -9,7 +9,7 @@ project-namespace = "com.nmichail.wordly.android"
 jvmTarget = "17"
 
 kotlin = "2.0.21"
-agp = "8.12.0"
+agp = "8.9.2"
 detekt = "1.23.8"
 compose = "1.7.6"
 coreKtx = "1.15.0"

@@ -14,9 +14,9 @@ dependencies {
 	implementation(libs.androidx.material3)
 	implementation(libs.androidx.material.icons.extended)
 
-	implementation(projects.component.ui)
-	implementation(projects.core.navigation)
-	implementation(projects.core.validation)
+	implementation(projects.ui)
+	implementation(projects.navigation)
+	implementation(projects.validation)
 
 	testImplementation(libs.test.junit.api)
 	testImplementation(libs.test.junit.engine)

@@ -1,23 +1,45 @@
 val Modules = mapOf(
 	"APP" to ":app",
 	"FEATURE" to mapOf(
-		"MAIN_HOST" to ":features:mainhost",
-		"SIGN_IN" to ":features:authorization:signin",
-		"SIGN_UP" to ":features:authorization:signup",
+		"MAIN_HOST" to ":mainhost",
+		"HOME" to ":home",
+		"WORDS" to ":words",
+		"STATS" to ":stats",
+		"PROFILE" to ":profile",
+		"SIGN_IN" to ":signin",
+		"SIGN_UP" to ":signup",
 	),
 	"CORE" to mapOf(
-		"NAVIGATION" to ":core:navigation",
-		"NETWORK" to ":core:network",
-		"FAKE_NETWORK" to ":core:fakenetwork",
-		"VALIDATION" to ":core:validation",
-		"PREFERENCES" to ":core:preferences",
+		"NAVIGATION" to ":navigation",
+		"NETWORK" to ":network",
+		"FAKE_NETWORK" to ":fakenetwork",
+		"VALIDATION" to ":validation",
+		"PREFERENCES" to ":preferences",
 	),
 	"SHARED" to mapOf(
-		"CONVERTERS_DATE" to ":shared:converters:dateconverter",
+		"CONVERTERS_DATE" to ":dateconverter",
 	),
 	"COMPONENT" to mapOf(
-		"UI" to ":component:ui",
+		"UI" to ":ui",
 	),
+)
+
+private val ModuleDirs = mapOf(
+	":app" to "app",
+	":mainhost" to "features/mainhost",
+	":home" to "features/home",
+	":words" to "features/words",
+	":stats" to "features/stats",
+	":profile" to "features/profile",
+	":signin" to "features/authorization/signin",
+	":signup" to "features/authorization/signup",
+	":navigation" to "core/navigation",
+	":network" to "core/network",
+	":fakenetwork" to "core/fakenetwork",
+	":validation" to "core/validation",
+	":preferences" to "core/preferences",
+	":dateconverter" to "shared/converters/dateconverter",
+	":ui" to "component/ui",
 )
 
 fun unpackMapValues(map: Map<String, Any>, action: (String) -> Unit) {
@@ -30,9 +52,7 @@ fun unpackMapValues(map: Map<String, Any>, action: (String) -> Unit) {
 	}
 }
 
-fun nameToPath(name: String): String = name.drop(1).replace(":", "/")
-
 unpackMapValues(Modules) { moduleName ->
 	include(moduleName)
-	project(moduleName).projectDir = File(settingsDir, nameToPath(moduleName))
+	project(moduleName).projectDir = File(settingsDir, ModuleDirs.getValue(moduleName))
 }

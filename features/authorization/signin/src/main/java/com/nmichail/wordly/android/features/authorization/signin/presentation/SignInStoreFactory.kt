@@ -68,14 +68,8 @@ class SignInStoreFactory(
 			dispatch(Msg.ChangeEmail(email))
 			dispatch(Msg.ChangePassword(password))
 
-			if (
-				SignInStore.State(
-					email = email,
-					password = password,
-				).areFieldsValid()
-			) {
-				Unit
-			}
+			// TODO: Убрать потом это — переходить на главный экран только при валидных полях
+			publish(SignInStore.Label.OpenMainHost)
 		}
 	}
 }

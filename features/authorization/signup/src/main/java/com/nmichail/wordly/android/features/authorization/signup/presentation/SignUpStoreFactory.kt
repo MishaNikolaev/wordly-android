@@ -103,17 +103,8 @@ class SignUpStoreFactory(
 			dispatch(Msg.ChangeLastName(lastName))
 			dispatch(Msg.ChangeEnglishLevel(englishLevel))
 
-			if (
-				SignUpStore.State(
-					email = email,
-					password = password,
-					firstName = firstName,
-					lastName = lastName,
-					englishLevel = englishLevel,
-				).areFieldsValid()
-			) {
-				Unit
-			}
+			// TODO: Убрать потом это — переходить на логин только при валидных полях
+			publish(SignUpStore.Label.OpenSignIn)
 		}
 	}
 }
