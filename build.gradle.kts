@@ -30,9 +30,11 @@ gradle.projectsEvaluated {
 			project.pluginManager.hasPlugin("com.android.library") ||
 			project.pluginManager.hasPlugin("com.android.application")
 		) {
-			project.tasks.findByName("testDebugUnitTest")?.let { testTask ->
-				allUnitTests.configure { dependsOn(testTask) }
-			}
+			project.tasks
+				.matching { it.name == "testDebugUnitTest" }
+				.configureEach {
+					allUnitTests.configure { dependsOn(this@configureEach) }
+				}
 		}
 	}
 }
