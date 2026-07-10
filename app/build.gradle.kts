@@ -5,6 +5,8 @@ plugins {
 
 dependencies {
 	implementation(projects.mainhost)
+	implementation(projects.signin)
+	implementation(projects.signup)
 	implementation(projects.ui)
 
 	implementation(libs.decompose)

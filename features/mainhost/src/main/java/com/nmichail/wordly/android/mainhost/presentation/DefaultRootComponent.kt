@@ -9,12 +9,15 @@ import com.arkivanov.decompose.router.stack.navigate
 import com.arkivanov.decompose.router.stack.pop
 import com.arkivanov.decompose.router.stack.push
 import com.arkivanov.decompose.value.Value
-import com.nmichail.wordly.android.features.authorization.signin.presentation.DefaultSignInComponent
-import com.nmichail.wordly.android.features.authorization.signup.presentation.DefaultSignUpComponent
+import com.nmichail.wordly.android.features.authorization.signin.presentation.SignInComponent
+import com.nmichail.wordly.android.features.authorization.signup.presentation.SignUpComponent
 import kotlinx.parcelize.Parcelize
+import javax.inject.Inject
 
 class DefaultRootComponent(
 	componentContext: ComponentContext,
+	private val signInComponentFactory: SignInComponent.Factory,
+	private val signUpComponentFactory: SignUpComponent.Factory,
 ) : RootComponent, ComponentContext by componentContext {
 
 	private val navigation = StackNavigation<Config>()
@@ -34,7 +37,7 @@ class DefaultRootComponent(
 	): RootComponent.Child {
 		return when (config) {
 			Config.SignIn -> {
-				val component = DefaultSignInComponent(
+				val component = signInComponentFactory(
 					componentContext = componentContext,
 					onOpenSignUp = { navigation.push(Config.SignUp) },
 					onOpenMainHost = { navigation.navigate { listOf(Config.MainHost) } },
@@ -43,7 +46,7 @@ class DefaultRootComponent(
 			}
 
 			Config.SignUp -> {
-				val component = DefaultSignUpComponent(
+				val component = signUpComponentFactory(
 					componentContext = componentContext,
 					onOpenSignIn = navigation::pop,
 				)
@@ -70,8 +73,15 @@ class DefaultRootComponent(
 	}
 }
 
-class DefaultRootComponentFactory : RootComponent.Factory {
+class DefaultRootComponentFactory @Inject constructor(
+	private val signInComponentFactory: SignInComponent.Factory,
+	private val signUpComponentFactory: SignUpComponent.Factory,
+) : RootComponent.Factory {
 
 	override fun invoke(componentContext: ComponentContext): RootComponent =
-		DefaultRootComponent(componentContext = componentContext)
+		DefaultRootComponent(
+			componentContext = componentContext,
+			signInComponentFactory = signInComponentFactory,
+			signUpComponentFactory = signUpComponentFactory,
+		)
 }
