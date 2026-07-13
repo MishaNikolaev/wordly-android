@@ -5,4 +5,5 @@ plugins {
 dependencies {
 	implementation(libs.decompose)
 	implementation(libs.essenty.lifecycle.coroutines)
+	implementation(libs.mvikotlin)
 }

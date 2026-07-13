@@ -8,5 +8,5 @@ dependencies {
 	implementation(libs.androidx.material3)
 	implementation(libs.androidx.material.icons.extended)
 
-	implementation(projects.validation)
+	implementation(projects.core.validation)
 }
