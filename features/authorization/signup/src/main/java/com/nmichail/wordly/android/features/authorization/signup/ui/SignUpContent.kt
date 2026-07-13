@@ -2,16 +2,23 @@ package com.nmichail.wordly.android.features.authorization.signup.ui
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import com.nmichail.wordly.android.component.ui.R as ComponentR
 import com.nmichail.wordly.android.component.ui.components.AuthBackground
 import com.nmichail.wordly.android.component.ui.components.CaptionText
@@ -20,6 +27,8 @@ import com.nmichail.wordly.android.component.ui.components.Button
 import com.nmichail.wordly.android.component.ui.components.ScreenTitle
 import com.nmichail.wordly.android.component.ui.components.SignUpAuthHeader
 import com.nmichail.wordly.android.component.ui.components.TextField
+import com.nmichail.wordly.android.component.ui.components.snackbar.SnackBarHost
+import com.nmichail.wordly.android.component.ui.components.snackbar.showErrorSnackBar
 import com.nmichail.wordly.android.component.ui.validation.emailErrorMessage
 import com.nmichail.wordly.android.component.ui.validation.nameErrorMessage
 import com.nmichail.wordly.android.component.ui.validation.notEmptyErrorMessage
@@ -29,32 +38,69 @@ import com.nmichail.wordly.android.core.validation.name.NamePart
 import com.nmichail.wordly.android.core.validation.notEmpty.NotEmptyValidationState
 import com.nmichail.wordly.android.features.authorization.signup.R
 import com.nmichail.wordly.android.features.authorization.signup.presentation.SignUpComponent
+import com.nmichail.wordly.android.features.authorization.signup.presentation.SignUpError
 import com.nmichail.wordly.android.features.authorization.signup.presentation.SignUpStore
+import com.nmichail.wordly.android.features.authorization.signup.presentation.areFieldsValid
 
 @Composable
 fun SignUpContent(
 	component: SignUpComponent,
 	modifier: Modifier = Modifier,
 ) {
-	val state by component.model.collectAsState()
+	val state by component.model.subscribeAsState()
+	val snackBarHostState = remember { SnackbarHostState() }
+	val context = LocalContext.current
 
-	AuthBackground(
-		modifier = modifier,
-		header = {
-			Column(modifier = Modifier.padding(horizontal = 20.dp)) {
-				SignUpAuthHeader()
+	LaunchedEffect(component) {
+		component.errors.collect { error ->
+			when (error) {
+				SignUpError.RegistrationError -> {
+					showErrorSnackBar(
+						snackBarHostState = snackBarHostState,
+						message = context.getString(R.string.sign_up_registration_error),
+					)
+				}
+				SignUpError.NoConnection -> {
+					showErrorSnackBar(
+						snackBarHostState = snackBarHostState,
+						message = context.getString(R.string.sign_up_no_connection),
+					)
+				}
+				SignUpError.Unknown -> {
+					showErrorSnackBar(
+						snackBarHostState = snackBarHostState,
+						message = context.getString(R.string.sign_up_unknown_error),
+					)
+				}
 			}
-		},
-		content = {
-			Column(
-				modifier = Modifier
-					.padding(horizontal = 20.dp)
-					.padding(bottom = 32.dp),
-			) {
-				SignUpForm(state = state, component = component)
-			}
-		},
-	)
+		}
+	}
+
+	Scaffold(
+		modifier = modifier.fillMaxSize(),
+		containerColor = Color.Transparent,
+		snackbarHost = { SnackBarHost(snackBarHostState = snackBarHostState) },
+	) { paddingValues ->
+		AuthBackground(
+			modifier = Modifier
+				.fillMaxSize()
+				.padding(paddingValues),
+			header = {
+				Column(modifier = Modifier.padding(horizontal = 20.dp)) {
+					SignUpAuthHeader()
+				}
+			},
+			content = {
+				Column(
+					modifier = Modifier
+						.padding(horizontal = 20.dp)
+						.padding(bottom = 32.dp),
+				) {
+					SignUpForm(state = state, component = component)
+				}
+			},
+		)
+	}
 }
 
 @Composable
@@ -71,7 +117,7 @@ private fun SignUpForm(
 	TextField(
 		label = stringResource(ComponentR.string.common_label_email),
 		value = state.email.data,
-		onValueChange = component::onEmailChanged,
+		onValueChange = component::handleChangeEmail,
 		keyboardType = KeyboardType.Email,
 		errorVisible = state.email.validationState is DefaultValidationState.Invalid,
 		errorMessage = stringResource(id = emailErrorMessage(state = state.email.validationState)),
@@ -80,7 +126,7 @@ private fun SignUpForm(
 	TextField(
 		label = stringResource(ComponentR.string.common_label_password),
 		value = state.password.data,
-		onValueChange = component::onPasswordChanged,
+		onValueChange = component::handleChangePassword,
 		isPassword = true,
 		errorVisible = state.password.validationState is DefaultValidationState.Invalid,
 		errorMessage = stringResource(id = passwordErrorMessage(state = state.password.validationState)),
@@ -92,9 +138,8 @@ private fun SignUpForm(
 
 	Button(
 		text = stringResource(R.string.sign_up_submit),
-		onClick = component::onSubmitClicked,
-		// TODO: Убрать потом это — enabled = state.areFieldsValid()
-		enabled = true,
+		onClick = component::handleSubmit,
+		enabled = state.areFieldsValid(),
 		modifier = Modifier.padding(top = 24.dp),
 	)
 	CaptionText(
@@ -118,7 +163,7 @@ private fun SignUpNameFields(
 		TextField(
 			label = stringResource(R.string.sign_up_first_name_label),
 			value = state.firstName.data,
-			onValueChange = component::onFirstNameChanged,
+			onValueChange = component::handleChangeFirstName,
 			errorVisible = state.firstName.validationState is DefaultValidationState.Invalid,
 			errorMessage = stringResource(
 				id = nameErrorMessage(
@@ -133,7 +178,7 @@ private fun SignUpNameFields(
 		TextField(
 			label = stringResource(R.string.sign_up_last_name_label),
 			value = state.lastName.data,
-			onValueChange = component::onLastNameChanged,
+			onValueChange = component::handleChangeLastName,
 			errorVisible = state.lastName.validationState is DefaultValidationState.Invalid,
 			errorMessage = stringResource(
 				id = nameErrorMessage(
@@ -159,7 +204,7 @@ private fun SignUpEnglishLevelField(
 		label = stringResource(R.string.sign_up_english_level_label),
 		value = state.englishLevel.data,
 		options = englishLevels,
-		onValueChange = component::onEnglishLevelChanged,
+		onValueChange = component::handleChangeEnglishLevel,
 		errorVisible = state.englishLevel.validationState is NotEmptyValidationState.Invalid,
 		errorMessage = stringResource(id = notEmptyErrorMessage(state = state.englishLevel.validationState)),
 		modifier = Modifier.padding(top = 16.dp),

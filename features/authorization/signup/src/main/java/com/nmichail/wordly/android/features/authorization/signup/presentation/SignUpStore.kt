@@ -37,5 +37,13 @@ interface SignUpStore : Store<SignUpStore.Intent, SignUpStore.State, SignUpStore
 	sealed interface Label {
 
 		data object OpenSignIn : Label
+
+		data object OpenMainHost : Label
+
+		data object ShowRegistrationError : Label
+
+		data object ShowNoConnection : Label
+
+		data object ShowUnknownError : Label
 	}
 }

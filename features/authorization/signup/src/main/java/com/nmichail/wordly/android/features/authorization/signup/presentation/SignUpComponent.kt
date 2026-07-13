@@ -1,31 +1,34 @@
 package com.nmichail.wordly.android.features.authorization.signup.presentation
 
 import com.arkivanov.decompose.ComponentContext
-import kotlinx.coroutines.flow.StateFlow
+import com.arkivanov.decompose.value.Value
+import kotlinx.coroutines.flow.Flow
 
 interface SignUpComponent {
 
-	val model: StateFlow<SignUpStore.State>
+	val model: Value<SignUpStore.State>
 
-	fun onEmailChanged(email: String)
+	val errors: Flow<SignUpError>
 
-	fun onPasswordChanged(password: String)
+	fun handleChangeEmail(email: String)
 
-	fun onFirstNameChanged(firstName: String)
+	fun handleChangePassword(password: String)
 
-	fun onLastNameChanged(lastName: String)
+	fun handleChangeFirstName(firstName: String)
 
-	fun onEnglishLevelChanged(englishLevel: String)
+	fun handleChangeLastName(lastName: String)
 
-	fun onSubmitClicked()
+	fun handleChangeEnglishLevel(englishLevel: String)
 
-	fun onSignInClicked()
+	fun handleSubmit()
+
+	fun handleNavigateToSignIn()
 
 	fun interface Factory {
 
 		operator fun invoke(
 			componentContext: ComponentContext,
-			onOpenSignIn: () -> Unit,
+			signUpRouter: SignUpRouter,
 		): SignUpComponent
 	}
 }

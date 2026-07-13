@@ -3,24 +3,41 @@ package com.nmichail.wordly.android.features.authorization.signup.presentation
 import com.arkivanov.mvikotlin.core.store.Reducer
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.store.StoreFactory
-import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
 import com.arkivanov.mvikotlin.logging.store.LoggingStoreFactory
 import com.arkivanov.mvikotlin.main.store.DefaultStoreFactory
+import com.nmichail.wordly.android.component.presentation.BaseCoroutineExecutor
+import com.nmichail.wordly.android.core.preferences.domain.usecase.SaveAuthTokensUseCase
 import com.nmichail.wordly.android.core.validation.email.EmailValidationItem
 import com.nmichail.wordly.android.core.validation.email.ValidateEmailUseCase
+import com.nmichail.wordly.android.core.validation.email.isValid
 import com.nmichail.wordly.android.core.validation.name.NamePart
 import com.nmichail.wordly.android.core.validation.name.NameValidationItem
 import com.nmichail.wordly.android.core.validation.name.ValidateNameUseCase
+import com.nmichail.wordly.android.core.validation.name.isValid
 import com.nmichail.wordly.android.core.validation.notEmpty.NotEmptyValidationItem
 import com.nmichail.wordly.android.core.validation.notEmpty.ValidateNotEmptyUseCase
+import com.nmichail.wordly.android.core.validation.notEmpty.isValid
 import com.nmichail.wordly.android.core.validation.password.PasswordValidationItem
 import com.nmichail.wordly.android.core.validation.password.ValidatePasswordUseCase
+import com.nmichail.wordly.android.core.validation.password.isValid
+import com.nmichail.wordly.android.features.authorization.signup.domain.entity.SignUpForm
+import com.nmichail.wordly.android.features.authorization.signup.domain.usecase.SignUpUseCase
+import com.nmichail.wordly.android.shared.error.NetworkExceptionConverter
+import com.nmichail.wordly.android.shared.error.StatusCodes
+import com.nmichail.wordly.android.shared.error.messageIdOrNull
+import com.nmichail.wordly.android.shared.error.presentation.ErrorDelegate
+import com.nmichail.wordly.android.shared.error.presentation.HandleErrorResult
+import javax.inject.Inject
 
-class SignUpStoreFactory(
-	private val validateEmailUseCase: ValidateEmailUseCase = ValidateEmailUseCase(),
-	private val validatePasswordUseCase: ValidatePasswordUseCase = ValidatePasswordUseCase(),
-	private val validateNameUseCase: ValidateNameUseCase = ValidateNameUseCase(),
-	private val validateNotEmptyUseCase: ValidateNotEmptyUseCase = ValidateNotEmptyUseCase(),
+class SignUpStoreFactory @Inject constructor(
+	private val validateEmailUseCase: ValidateEmailUseCase,
+	private val validatePasswordUseCase: ValidatePasswordUseCase,
+	private val validateNameUseCase: ValidateNameUseCase,
+	private val validateNotEmptyUseCase: ValidateNotEmptyUseCase,
+	private val signUpUseCase: SignUpUseCase,
+	private val saveAuthTokensUseCase: SaveAuthTokensUseCase,
+	private val networkExceptionConverter: NetworkExceptionConverter,
+	private val errorDelegate: ErrorDelegate,
 ) {
 
 	private val storeFactory: StoreFactory = LoggingStoreFactory(DefaultStoreFactory())
@@ -59,7 +76,7 @@ class SignUpStoreFactory(
 	}
 
 	private inner class ExecutorImpl :
-		CoroutineExecutor<SignUpStore.Intent, Nothing, SignUpStore.State, Msg, SignUpStore.Label>() {
+		BaseCoroutineExecutor<SignUpStore.Intent, Nothing, SignUpStore.State, Msg, SignUpStore.Label>() {
 
 		override fun executeIntent(intent: SignUpStore.Intent) {
 			when (intent) {
@@ -103,8 +120,44 @@ class SignUpStoreFactory(
 			dispatch(Msg.ChangeLastName(lastName))
 			dispatch(Msg.ChangeEnglishLevel(englishLevel))
 
-			// TODO: Убрать потом это — переходить на логин только при валидных полях
-			publish(SignUpStore.Label.OpenSignIn)
+			if (!areFieldsValid(email, password, firstName, lastName, englishLevel)) return
+
+			launchTry {
+				val tokens = signUpUseCase(
+					SignUpForm(
+						email = email.data,
+						password = password.data,
+						firstName = firstName.data,
+						lastName = lastName.data,
+						englishLevel = englishLevel.data,
+					),
+				)
+				saveAuthTokensUseCase(tokens)
+				publish(SignUpStore.Label.OpenMainHost)
+			} catch(::handleSignUpError)
 		}
+
+		private fun handleSignUpError(error: Exception) {
+			val networkError = networkExceptionConverter.convert(error)
+			if (errorDelegate.handleError(networkError) == HandleErrorResult.HANDLED) return
+
+			when (networkError.messageIdOrNull()) {
+				StatusCodes.NO_CONNECTION.statusCode -> publish(SignUpStore.Label.ShowNoConnection)
+				else -> publish(SignUpStore.Label.ShowRegistrationError)
+			}
+		}
+
+		private fun areFieldsValid(
+			email: EmailValidationItem,
+			password: PasswordValidationItem,
+			firstName: NameValidationItem,
+			lastName: NameValidationItem,
+			englishLevel: NotEmptyValidationItem,
+		): Boolean =
+			email.isValid() &&
+				password.isValid() &&
+				firstName.isValid() &&
+				lastName.isValid() &&
+				englishLevel.isValid()
 	}
 }

@@ -7,13 +7,16 @@
 	<string name="sign_up_english_level_label">Уровень английского</string>
 	<string name="sign_up_submit">Зарегистрироваться</string>
 	<string name="sign_up_terms">Регистрируясь, вы принимаете условия использования</string>
+	<string name="sign_up_registration_error">Не удалось зарегистрироваться. Попробуйте ещё раз</string>
+	<string name="sign_up_no_connection">Нет соединения с интернетом</string>
+	<string name="sign_up_unknown_error">Что-то пошло не так. Попробуйте снова</string>
 
 	<string-array name="sign_up_english_levels">
-		<item>A1 - начинающий</item>
-		<item>A2 - любитель</item>
-		<item>B1 - средний</item>
-		<item>B2 - уверенный</item>
-		<item>C1 - продвинутый</item>
-		<item>C2 - профессионал</item>
+		<item>A1 — Начинающий</item>
+		<item>A2 — Любитель</item>
+		<item>B1 — Средний</item>
+		<item>B2 — Уверенный</item>
+		<item>C1 — Продвинутый</item>
+		<item>C2 — Профессионал</item>
 	</string-array>
 </resources>
