@@ -1,0 +1,25 @@
+package com.nmichail.wordly.android.core.preferences.di
+
+import com.google.gson.Gson
+import com.nmichail.wordly.android.core.preferences.data.repository.TokenRepositoryImpl
+import com.nmichail.wordly.android.core.preferences.domain.repository.TokenRepository
+import dagger.Binds
+import dagger.Module
+import dagger.Provides
+import javax.inject.Singleton
+
+@Module
+abstract class PreferencesModule {
+
+	@Binds
+	abstract fun bindTokenRepository(
+		impl: TokenRepositoryImpl,
+	): TokenRepository
+
+	companion object {
+
+		@Provides
+		@Singleton
+		fun provideGson(): Gson = Gson()
+	}
+}
