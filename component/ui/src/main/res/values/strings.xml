@@ -5,6 +5,8 @@
 
 	<string name="common_label_email">Почта</string>
 	<string name="common_label_password">Пароль</string>
+	<string name="common_password_show">Показать пароль</string>
+	<string name="common_password_hide">Скрыть пароль</string>
 	<string name="common_save">Сохранить</string>
 
 	<string name="auth_word_language_direction">EN → RU</string>

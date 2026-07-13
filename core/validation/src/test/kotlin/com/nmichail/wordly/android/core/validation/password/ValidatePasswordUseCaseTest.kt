@@ -11,7 +11,7 @@ import java.util.stream.Stream
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ValidatePasswordUseCaseTest {
 
-	private val validatePasswordUseCase = ValidatePasswordUseCase()
+	private val validatePasswordUseCase = ValidatePasswordUseCase(PasswordValidation())
 
 	@ParameterizedTest
 	@MethodSource("provide passwords")

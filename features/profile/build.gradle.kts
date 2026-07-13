@@ -7,5 +7,5 @@ dependencies {
 	implementation(libs.androidx.ui)
 	implementation(libs.androidx.material3)
 
-	implementation(projects.ui)
+	implementation(projects.component.ui)
 }

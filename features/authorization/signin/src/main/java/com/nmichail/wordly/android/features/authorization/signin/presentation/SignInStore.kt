@@ -27,5 +27,11 @@ interface SignInStore : Store<SignInStore.Intent, SignInStore.State, SignInStore
 		data object OpenSignUp : Label
 
 		data object OpenMainHost : Label
+
+		data object ShowInvalidCredentials : Label
+
+		data object ShowNoConnection : Label
+
+		data object ShowUnknownError : Label
 	}
 }

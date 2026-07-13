@@ -1,0 +1,52 @@
+---
+description: Domain use cases must delegate to repository or validation via Kotlin delegation
+globs: "**/domain/usecase/**/*.kt,**/core/validation/**/*UseCase.kt,**/core/validation/**/*Validation.kt"
+alwaysApply: false
+---
+
+# Use case delegate pattern
+
+Domain `*UseCase` is a thin entry point. It must not contain business logic in `invoke()` — delegate instead.
+
+## Repository use cases
+
+Delegate directly to a repository method:
+
+```kotlin
+class SignInUseCase @Inject constructor(
+    signInRepository: SignInRepository,
+) : suspend (SignInData) -> AuthTokens by signInRepository::signIn
+
+class ClearAuthTokensUseCase @Inject constructor(
+    tokenRepository: TokenRepository,
+) : () -> Unit by tokenRepository::clear
+```
+
+If mapping belongs in data layer, add a method on the repository (e.g. `getAccessToken()`), then delegate to it.
+
+## Validation use cases
+
+Put rules in an injectable `*Validation` class with `operator fun invoke`, delegate from `Validate*UseCase`:
+
+```kotlin
+class EmailValidation @Inject constructor() {
+    operator fun invoke(email: String): EmailValidationItem = ...
+}
+
+class ValidateEmailUseCase @Inject constructor(
+    emailValidation: EmailValidation,
+) : (String) -> EmailValidationItem by emailValidation::invoke
+```
+
+## Do not
+
+```kotlin
+// BAD — logic inside use case
+class SignInUseCase @Inject constructor(
+    private val repository: SignInRepository,
+) {
+    suspend operator fun invoke(data: SignInData) = repository.signIn(data)
+}
+```
+
+Reference: `cft_shift_android` (`SignInUseCase`, `ClearTokenUseCase`, `SaveTokenUseCase`).

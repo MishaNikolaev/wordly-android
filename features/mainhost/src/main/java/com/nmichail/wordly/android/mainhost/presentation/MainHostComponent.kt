@@ -7,7 +7,7 @@ interface MainHostComponent {
 
 	val stack: Value<ChildStack<*, Child>>
 
-	fun onTabSelected(tab: MainHostTab)
+	fun handleSelectTab(tab: MainHostTab)
 
 	sealed interface Child {
 

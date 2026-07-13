@@ -11,7 +11,7 @@ import java.util.stream.Stream
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ValidateEmailUseCaseTest {
 
-	private val validateEmailUseCase = ValidateEmailUseCase()
+	private val validateEmailUseCase = ValidateEmailUseCase(EmailValidation())
 
 	@ParameterizedTest
 	@MethodSource("provide emails")
@@ -34,6 +34,18 @@ class ValidateEmailUseCaseTest {
 			Arguments.of(
 				invalidEmail,
 				EmailValidationItem(invalidEmail, DefaultValidationState.Invalid(EmailInvalidState.INVALID_EMAIL)),
+			),
+			Arguments.of(
+				"user@g.c",
+				EmailValidationItem("user@g.c", DefaultValidationState.Invalid(EmailInvalidState.INVALID_EMAIL)),
+			),
+			Arguments.of(
+				"user@gmail.c",
+				EmailValidationItem("user@gmail.c", DefaultValidationState.Invalid(EmailInvalidState.INVALID_EMAIL)),
+			),
+			Arguments.of(
+				"user@.com",
+				EmailValidationItem("user@.com", DefaultValidationState.Invalid(EmailInvalidState.INVALID_EMAIL)),
 			),
 			Arguments.of(validEmail, EmailValidationItem(validEmail, DefaultValidationState.Valid)),
 			Arguments.of(

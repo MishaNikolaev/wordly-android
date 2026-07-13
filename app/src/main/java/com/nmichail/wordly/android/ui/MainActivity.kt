@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import com.arkivanov.decompose.defaultComponentContext
+import com.nmichail.wordly.android.BuildConfig
 import com.nmichail.wordly.android.di.appComponent
 import com.nmichail.wordly.android.mainhost.presentation.DefaultRootComponentFactory
 import com.nmichail.wordly.android.mainhost.ui.RootContent
@@ -23,7 +24,10 @@ class MainActivity : ComponentActivity() {
 		val rootComponent = rootComponentFactory(defaultComponentContext())
 
 		setContent {
-			RootContent(component = rootComponent)
+			RootContent(
+				component = rootComponent,
+				devEnabled = BuildConfig.DEV_ENABLED,
+			)
 		}
 	}
 }

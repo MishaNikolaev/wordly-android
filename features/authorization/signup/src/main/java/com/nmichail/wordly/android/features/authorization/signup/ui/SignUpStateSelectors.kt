@@ -1,0 +1,14 @@
+package com.nmichail.wordly.android.features.authorization.signup.ui
+
+import com.nmichail.wordly.android.core.validation.email.isValid
+import com.nmichail.wordly.android.core.validation.name.isValid
+import com.nmichail.wordly.android.core.validation.notEmpty.isValid
+import com.nmichail.wordly.android.core.validation.password.isValid
+import com.nmichail.wordly.android.features.authorization.signup.presentation.SignUpStore
+
+fun SignUpStore.State.areFieldsValid(): Boolean =
+	email.isValid()
+		&& password.isValid()
+		&& firstName.isValid()
+		&& lastName.isValid()
+		&& englishLevel.isValid()

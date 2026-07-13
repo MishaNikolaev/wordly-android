@@ -27,7 +27,7 @@ fun MainHostContent(
 		bottomBar = {
 			MainBottomBar(
 				selectedTab = selectedTab,
-				onTabSelected = component::onTabSelected,
+				onTabSelected = component::handleSelectTab,
 			)
 		},
 	) { innerPadding ->

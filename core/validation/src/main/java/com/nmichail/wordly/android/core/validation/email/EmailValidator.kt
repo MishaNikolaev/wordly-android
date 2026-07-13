@@ -2,7 +2,8 @@ package com.nmichail.wordly.android.core.validation.email
 
 internal object EmailValidator {
 
-	private const val VALID_EMAIL_REGEX_STRING = "^([a-z\\d]\\.?[_-]*)+[a-z\\d]@([a-z\\d]([-*]?[a-z\\d])*\\.)+[a-z\\d]+$"
+	private const val VALID_EMAIL_REGEX_STRING =
+		"^([a-z\\d]\\.?[_-]*)+[a-z\\d]@([a-z\\d]([-*]?[a-z\\d])*\\.)+[a-z]{2,}$"
 
 	private const val AT = '@'
 

@@ -34,6 +34,6 @@ dependencyResolutionManagement {
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
-rootProject.name = "wordly_android"
+rootProject.name = "WordlyAndroid"
 
 apply(from = "buildsystem/modules.gradle.kts")

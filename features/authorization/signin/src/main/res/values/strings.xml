@@ -2,6 +2,10 @@
 <resources>
 	<string name="sign_in_title">Авторизация</string>
 	<string name="sign_in_forgot_password">Забыли пароль?</string>
+	<string name="sign_in_network_selection">Выбор сети</string>
 	<string name="sign_in_submit">Авторизоваться</string>
 	<string name="sign_in_no_account">У меня нет аккаунта</string>
+	<string name="sign_in_invalid_credentials">Неверный email или пароль</string>
+	<string name="sign_in_no_connection">Нет соединения с интернетом</string>
+	<string name="sign_in_unknown_error">Что-то пошло не так. Попробуйте снова</string>
 </resources>
