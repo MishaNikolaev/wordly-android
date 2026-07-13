@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="fake_network_not_found_body">{"error":"NOT_FOUND"}</string>
+	<string name="mock_demo_email">demo@wordly.app</string>
+	<string name="mock_demo_password">12345678</string>
+</resources>
