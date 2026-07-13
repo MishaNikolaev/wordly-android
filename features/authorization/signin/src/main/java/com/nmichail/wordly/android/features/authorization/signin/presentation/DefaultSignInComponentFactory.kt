@@ -3,16 +3,17 @@ package com.nmichail.wordly.android.features.authorization.signin.presentation
 import com.arkivanov.decompose.ComponentContext
 import javax.inject.Inject
 
-class DefaultSignInComponentFactory @Inject constructor() : SignInComponent.Factory {
+class DefaultSignInComponentFactory @Inject constructor(
+	private val signInStoreFactory: SignInStoreFactory,
+) : SignInComponent.Factory {
 
 	override fun invoke(
 		componentContext: ComponentContext,
-		onOpenSignUp: () -> Unit,
-		onOpenMainHost: () -> Unit,
+		signInRouter: SignInRouter,
 	): SignInComponent =
 		DefaultSignInComponent(
 			componentContext = componentContext,
-			onOpenSignUp = onOpenSignUp,
-			onOpenMainHost = onOpenMainHost,
+			signInStoreFactory = signInStoreFactory,
+			signInRouter = signInRouter,
 		)
 }
