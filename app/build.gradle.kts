@@ -3,17 +3,42 @@ plugins {
 	alias(libs.plugins.ksp)
 }
 
+android {
+	flavorDimensions += "env"
+	productFlavors {
+		create("mock") {
+			dimension = "env"
+			applicationIdSuffix = ".mock"
+			versionNameSuffix = "-mock"
+			buildConfigField("boolean", "DEV_ENABLED", "true")
+		}
+		create("dev") {
+			dimension = "env"
+			versionNameSuffix = "-dev"
+			buildConfigField("boolean", "DEV_ENABLED", "true")
+		}
+	}
+}
+
 dependencies {
-	implementation(projects.mainhost)
-	implementation(projects.signin)
-	implementation(projects.signup)
-	implementation(projects.ui)
+	implementation(projects.features.mainhost)
+	implementation(projects.features.authorization.signin)
+	implementation(projects.features.authorization.signup)
+	implementation(projects.features.dev.networkselection)
+	implementation(projects.component.ui)
+	implementation(projects.core.network)
+	implementation(projects.core.preferences)
+	implementation(projects.core.fakenetwork)
+	implementation(projects.core.validation)
+	implementation(projects.shared.error)
 
 	implementation(libs.decompose)
 	implementation(libs.decompose.compose)
 
 	implementation(libs.dagger)
 	ksp(libs.dagger.compiler)
+	// Scabbard: Dagger graph SVG (requires GraphViz `dot` on PATH)
+	ksp(libs.scabbard.processor)
 
 	implementation(libs.androidx.core.ktx)
 	implementation(libs.androidx.lifecycle.runtime.ktx)
