@@ -37,8 +37,6 @@ dependencies {
 
 	implementation(libs.dagger)
 	ksp(libs.dagger.compiler)
-	// Scabbard: Dagger graph SVG (requires GraphViz `dot` on PATH)
-	ksp(libs.scabbard.processor)
 
 	implementation(libs.androidx.core.ktx)
 	implementation(libs.androidx.lifecycle.runtime.ktx)

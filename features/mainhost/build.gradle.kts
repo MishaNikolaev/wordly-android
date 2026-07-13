@@ -1,10 +1,13 @@
 plugins {
 	alias(libs.plugins.wordlyAndroidLibrary)
+	alias(libs.plugins.ksp)
 }
 
 dependencies {
 	implementation(libs.decompose)
 	implementation(libs.decompose.compose)
+	implementation(libs.dagger)
+	ksp(libs.dagger.compiler)
 	implementation(platform(libs.androidx.compose.bom))
 	implementation(libs.androidx.ui)
 	implementation(libs.androidx.material3)

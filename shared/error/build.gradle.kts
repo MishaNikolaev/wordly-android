@@ -9,7 +9,6 @@ dependencies {
 	implementation(libs.dagger)
 	implementation(projects.core.preferences)
 	ksp(libs.dagger.compiler)
-	ksp(libs.scabbard.processor)
 
 	testImplementation(projects.testutils)
 	testImplementation(libs.test.junit.engine)

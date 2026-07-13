@@ -7,5 +7,4 @@ dependencies {
 	implementation(libs.gson)
 	implementation(libs.dagger)
 	ksp(libs.dagger.compiler)
-	ksp(libs.scabbard.processor)
 }

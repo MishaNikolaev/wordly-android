@@ -17,7 +17,6 @@ dependencies {
 	implementation(libs.dagger)
 	implementation(libs.retrofit)
 	ksp(libs.dagger.compiler)
-	ksp(libs.scabbard.processor)
 
 	implementation(projects.component.ui)
 	implementation(projects.component.presentation)

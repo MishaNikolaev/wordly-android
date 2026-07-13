@@ -4,4 +4,3 @@ object NetworkConfig {
 
 	const val MOCK_BASE_URL = "https://mock.wordly.local/"
 }
-
