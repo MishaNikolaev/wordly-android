@@ -1,9 +1,10 @@
 package com.nmichail.wordly.android.core.validation.email
 
+import java.util.Locale
+
 internal object EmailValidator {
 
-	private const val VALID_EMAIL_REGEX_STRING =
-		"^([a-z\\d]\\.?[_-]*)+[a-z\\d]@([a-z\\d]([-*]?[a-z\\d])*\\.)+[a-z]{2,}$"
+	private const val VALID_EMAIL_REGEX_STRING = "^([a-z\\d]\\.?[_-]*)+[a-z\\d]@([a-z\\d]([-*]?[a-z\\d])*\\.)+[a-z\\d]+$"
 
 	private const val AT = '@'
 
@@ -19,7 +20,7 @@ internal object EmailValidator {
 	fun isEmailEmpty(email: String): Boolean = email.isEmpty()
 
 	fun isEmailInvalid(email: String): Boolean =
-		!VALID_EMAIL_REGEX_STRING.toRegex().matches(email.lowercase())
+		!email.lowercase(Locale.ROOT).matches(VALID_EMAIL_REGEX_STRING.toRegex())
 
 	fun isEmailLengthBeforeAtValid(email: String): Boolean =
 		if (email.contains(AT)) {
