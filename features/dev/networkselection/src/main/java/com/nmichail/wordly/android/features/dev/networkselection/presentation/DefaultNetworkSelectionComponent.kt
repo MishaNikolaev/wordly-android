@@ -3,7 +3,7 @@ package com.nmichail.wordly.android.features.dev.networkselection.presentation
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.value.Value
 import com.arkivanov.mvikotlin.core.instancekeeper.getStore
-import com.arkivanov.mvikotlin.extensions.coroutines.labels
+import com.arkivanov.mvikotlin.extensions.coroutines.labelsChannel
 import com.nmichail.wordly.android.component.presentation.launchTry
 import com.nmichail.wordly.android.core.navigation.asValue
 import com.nmichail.wordly.android.features.dev.networkselection.domain.entity.NetworkStand
@@ -22,7 +22,7 @@ internal class DefaultNetworkSelectionComponent(
 
 	init {
 		launchTry {
-			store.labels.collect { label ->
+			for (label in store.labelsChannel(lifecycle)) {
 				when (label) {
 					NetworkSelectionComponent.Label.NavigateBack -> onFinished()
 					NetworkSelectionComponent.Label.RestartApp -> networkSelectionRouter.restartApp()
