@@ -13,7 +13,7 @@ import com.nmichail.wordly.android.features.dev.networkselection.domain.usecase.
 import com.nmichail.wordly.android.features.dev.networkselection.domain.usecase.SetNetworkStandUseCase
 import javax.inject.Inject
 
-class NetworkSelectionStoreFactory @Inject constructor(
+internal class NetworkSelectionStoreFactory @Inject constructor(
 	private val getNetworkStandsUseCase: GetNetworkStandsUseCase,
 	private val getSelectedNetworkStandUseCase: GetSelectedNetworkStandUseCase,
 	private val setNetworkStandUseCase: SetNetworkStandUseCase,
@@ -25,9 +25,9 @@ class NetworkSelectionStoreFactory @Inject constructor(
 	fun create(): NetworkSelectionStore =
 		object :
 			NetworkSelectionStore,
-			Store<NetworkSelectionStore.Intent, NetworkSelectionStore.State, NetworkSelectionStore.Label> by storeFactory.create(
+			Store<NetworkSelectionStore.Intent, NetworkSelectionComponent.State, NetworkSelectionComponent.Label> by storeFactory.create(
 				name = "NetworkSelectionStore",
-				initialState = NetworkSelectionStore.State(
+				initialState = NetworkSelectionComponent.State(
 					stands = getNetworkStandsUseCase(),
 					selectedStand = getSelectedNetworkStandUseCase(),
 				),
@@ -40,9 +40,9 @@ class NetworkSelectionStoreFactory @Inject constructor(
 		data class StandSelected(val stand: NetworkStand) : Msg
 	}
 
-	private object ReducerImpl : Reducer<NetworkSelectionStore.State, Msg> {
+	private object ReducerImpl : Reducer<NetworkSelectionComponent.State, Msg> {
 
-		override fun NetworkSelectionStore.State.reduce(msg: Msg): NetworkSelectionStore.State =
+		override fun NetworkSelectionComponent.State.reduce(msg: Msg): NetworkSelectionComponent.State =
 			when (msg) {
 				is Msg.StandSelected -> copy(selectedStand = msg.stand)
 			}
@@ -52,15 +52,15 @@ class NetworkSelectionStoreFactory @Inject constructor(
 		BaseCoroutineExecutor<
 			NetworkSelectionStore.Intent,
 			Nothing,
-			NetworkSelectionStore.State,
+			NetworkSelectionComponent.State,
 			Msg,
-			NetworkSelectionStore.Label,
+			NetworkSelectionComponent.Label,
 		>() {
 
 		override fun executeIntent(intent: NetworkSelectionStore.Intent) {
 			when (intent) {
 				is NetworkSelectionStore.Intent.SelectStand -> handleSelectStand(intent.stand)
-				NetworkSelectionStore.Intent.NavigateBack -> publish(NetworkSelectionStore.Label.NavigateBack)
+				NetworkSelectionStore.Intent.NavigateBack -> publish(NetworkSelectionComponent.Label.NavigateBack)
 			}
 		}
 
@@ -70,7 +70,7 @@ class NetworkSelectionStoreFactory @Inject constructor(
 			setNetworkStandUseCase(stand)
 			clearAuthTokensUseCase()
 			dispatch(Msg.StandSelected(stand))
-			publish(NetworkSelectionStore.Label.RestartApp)
+			publish(NetworkSelectionComponent.Label.RestartApp)
 		}
 	}
 }

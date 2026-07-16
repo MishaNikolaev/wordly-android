@@ -16,14 +16,14 @@ class AreFieldsValidTest {
 
 	@Test
 	fun `all fields unverified EXPECT false`() {
-		val state = SignUpStore.State()
+		val state = SignUpComponent.State()
 
 		Assertions.assertEquals(false, state.areFieldsValid())
 	}
 
 	@Test
 	fun `all fields valid EXPECT true`() {
-		val state = SignUpStore.State(
+		val state = SignUpComponent.State(
 			email = EmailValidationItem(validationState = DefaultValidationState.Valid),
 			password = PasswordValidationItem(validationState = DefaultValidationState.Valid),
 			firstName = NameValidationItem(
@@ -42,7 +42,7 @@ class AreFieldsValidTest {
 
 	@Test
 	fun `english level invalid EXPECT false`() {
-		val state = SignUpStore.State(
+		val state = SignUpComponent.State(
 			email = EmailValidationItem(validationState = DefaultValidationState.Valid),
 			password = PasswordValidationItem(validationState = DefaultValidationState.Valid),
 			firstName = NameValidationItem(

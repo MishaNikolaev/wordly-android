@@ -38,8 +38,6 @@ import com.nmichail.wordly.android.core.validation.name.NamePart
 import com.nmichail.wordly.android.core.validation.notEmpty.NotEmptyValidationState
 import com.nmichail.wordly.android.features.authorization.signup.R
 import com.nmichail.wordly.android.features.authorization.signup.presentation.SignUpComponent
-import com.nmichail.wordly.android.features.authorization.signup.presentation.SignUpError
-import com.nmichail.wordly.android.features.authorization.signup.presentation.SignUpStore
 import com.nmichail.wordly.android.features.authorization.signup.presentation.areFieldsValid
 
 @Composable
@@ -52,26 +50,27 @@ fun SignUpContent(
 	val context = LocalContext.current
 
 	LaunchedEffect(component) {
-		component.errors.collect { error ->
-			when (error) {
-				SignUpError.RegistrationError -> {
+		for (label in component.labelsChannel()) {
+			when (label) {
+				SignUpComponent.Label.ShowRegistrationError -> {
 					showErrorSnackBar(
 						snackBarHostState = snackBarHostState,
 						message = context.getString(R.string.sign_up_registration_error),
 					)
 				}
-				SignUpError.NoConnection -> {
+				SignUpComponent.Label.ShowNoConnection -> {
 					showErrorSnackBar(
 						snackBarHostState = snackBarHostState,
 						message = context.getString(R.string.sign_up_no_connection),
 					)
 				}
-				SignUpError.Unknown -> {
+				SignUpComponent.Label.ShowUnknownError -> {
 					showErrorSnackBar(
 						snackBarHostState = snackBarHostState,
 						message = context.getString(R.string.sign_up_unknown_error),
 					)
 				}
+				else -> Unit
 			}
 		}
 	}
@@ -105,7 +104,7 @@ fun SignUpContent(
 
 @Composable
 private fun SignUpForm(
-	state: SignUpStore.State,
+	state: SignUpComponent.State,
 	component: SignUpComponent,
 ) {
 	ScreenTitle(
@@ -152,7 +151,7 @@ private fun SignUpForm(
 
 @Composable
 private fun SignUpNameFields(
-	state: SignUpStore.State,
+	state: SignUpComponent.State,
 	component: SignUpComponent,
 ) {
 	Row(
@@ -195,7 +194,7 @@ private fun SignUpNameFields(
 
 @Composable
 private fun SignUpEnglishLevelField(
-	state: SignUpStore.State,
+	state: SignUpComponent.State,
 	component: SignUpComponent,
 ) {
 	val englishLevels = stringArrayResource(R.array.sign_up_english_levels).toList()

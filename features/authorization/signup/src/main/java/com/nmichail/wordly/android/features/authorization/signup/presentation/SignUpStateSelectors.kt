@@ -5,7 +5,7 @@ import com.nmichail.wordly.android.core.validation.name.isValid
 import com.nmichail.wordly.android.core.validation.notEmpty.isValid
 import com.nmichail.wordly.android.core.validation.password.isValid
 
-fun SignUpStore.State.areFieldsValid(): Boolean =
+internal fun SignUpComponent.State.areFieldsValid(): Boolean =
 	email.isValid()
 		&& password.isValid()
 		&& firstName.isValid()

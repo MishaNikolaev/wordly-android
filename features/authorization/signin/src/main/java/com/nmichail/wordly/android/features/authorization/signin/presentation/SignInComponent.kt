@@ -2,13 +2,15 @@ package com.nmichail.wordly.android.features.authorization.signin.presentation
 
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.value.Value
-import kotlinx.coroutines.flow.Flow
+import com.nmichail.wordly.android.core.validation.email.EmailValidationItem
+import com.nmichail.wordly.android.core.validation.password.PasswordValidationItem
+import kotlinx.coroutines.channels.ReceiveChannel
 
 interface SignInComponent {
 
-	val model: Value<SignInStore.State>
+	val model: Value<State>
 
-	val errors: Flow<SignInError>
+	fun labelsChannel(): ReceiveChannel<Label>
 
 	fun handleChangeEmail(email: String)
 
@@ -19,6 +21,24 @@ interface SignInComponent {
 	fun handleNavigateToSignUp()
 
 	fun handleNavigateToNetworkSelection()
+
+	data class State(
+		val email: EmailValidationItem = EmailValidationItem(),
+		val password: PasswordValidationItem = PasswordValidationItem(),
+	)
+
+	sealed interface Label {
+
+		data object OpenSignUp : Label
+
+		data object OpenMainHost : Label
+
+		data object ShowInvalidCredentials : Label
+
+		data object ShowNoConnection : Label
+
+		data object ShowUnknownError : Label
+	}
 
 	fun interface Factory {
 

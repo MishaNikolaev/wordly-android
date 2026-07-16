@@ -1,6 +1,5 @@
 package com.nmichail.wordly.android.features.authorization.signin.presentation
 
-import app.cash.turbine.test
 import com.nmichail.wordly.android.core.preferences.domain.entity.AuthTokens
 import com.nmichail.wordly.android.core.preferences.domain.usecase.SaveAuthTokensUseCase
 import com.nmichail.wordly.android.core.testutils.InstantExecutorExtension
@@ -66,7 +65,7 @@ class DefaultSignInComponentTest {
 		message = "No connection",
 	)
 
-	private val initState = SignInStore.State()
+	private val initState = SignInComponent.State()
 
 	private lateinit var component: DefaultSignInComponent
 	private val model get() = component.model.value
@@ -159,11 +158,10 @@ class DefaultSignInComponentTest {
 		component.handleChangeEmail(email)
 		component.handleChangePassword(password)
 
-		component.errors.test {
-			component.handleSubmit()
+		val labelsChannel = component.labelsChannel()
+		component.handleSubmit()
 
-			assertEquals(SignInError.InvalidCredentials, awaitItem())
-		}
+		assertEquals(SignInComponent.Label.ShowInvalidCredentials, labelsChannel.receive())
 	}
 
 	@Test
@@ -175,10 +173,9 @@ class DefaultSignInComponentTest {
 		component.handleChangeEmail(email)
 		component.handleChangePassword(password)
 
-		component.errors.test {
-			component.handleSubmit()
+		val labelsChannel = component.labelsChannel()
+		component.handleSubmit()
 
-			assertEquals(SignInError.NoConnection, awaitItem())
-		}
+		assertEquals(SignInComponent.Label.ShowNoConnection, labelsChannel.receive())
 	}
 }

@@ -3,7 +3,7 @@ package com.nmichail.wordly.android.features.authorization.signin.presentation
 import com.arkivanov.decompose.ComponentContext
 import javax.inject.Inject
 
-class DefaultSignInComponentFactory @Inject constructor(
+internal class DefaultSignInComponentFactory @Inject constructor(
 	private val signInStoreFactory: SignInStoreFactory,
 ) : SignInComponent.Factory {
 

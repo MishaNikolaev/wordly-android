@@ -1,21 +1,9 @@
 package com.nmichail.wordly.android.features.authorization.signup.presentation
 
 import com.arkivanov.mvikotlin.core.store.Store
-import com.nmichail.wordly.android.core.validation.email.EmailValidationItem
-import com.nmichail.wordly.android.core.validation.name.NamePart
-import com.nmichail.wordly.android.core.validation.name.NameValidationItem
-import com.nmichail.wordly.android.core.validation.notEmpty.NotEmptyValidationItem
-import com.nmichail.wordly.android.core.validation.password.PasswordValidationItem
 
-interface SignUpStore : Store<SignUpStore.Intent, SignUpStore.State, SignUpStore.Label> {
-
-	data class State(
-		val email: EmailValidationItem = EmailValidationItem(),
-		val password: PasswordValidationItem = PasswordValidationItem(),
-		val firstName: NameValidationItem = NameValidationItem(namePart = NamePart.NAME),
-		val lastName: NameValidationItem = NameValidationItem(namePart = NamePart.SURNAME),
-		val englishLevel: NotEmptyValidationItem = NotEmptyValidationItem(),
-	)
+internal interface SignUpStore :
+	Store<SignUpStore.Intent, SignUpComponent.State, SignUpComponent.Label> {
 
 	sealed interface Intent {
 
@@ -32,18 +20,5 @@ interface SignUpStore : Store<SignUpStore.Intent, SignUpStore.State, SignUpStore
 		data object Submit : Intent
 
 		data object NavigateToSignIn : Intent
-	}
-
-	sealed interface Label {
-
-		data object OpenSignIn : Label
-
-		data object OpenMainHost : Label
-
-		data object ShowRegistrationError : Label
-
-		data object ShowNoConnection : Label
-
-		data object ShowUnknownError : Label
 	}
 }

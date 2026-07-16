@@ -9,7 +9,7 @@ import com.arkivanov.decompose.router.stack.childStack
 import com.arkivanov.decompose.value.Value
 import kotlinx.parcelize.Parcelize
 
-class DefaultMainHostComponent(
+internal class DefaultMainHostComponent(
 	componentContext: ComponentContext,
 ) : MainHostComponent, ComponentContext by componentContext {
 

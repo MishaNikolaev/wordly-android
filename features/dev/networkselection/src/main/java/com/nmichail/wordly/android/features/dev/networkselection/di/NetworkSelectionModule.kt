@@ -30,7 +30,7 @@ abstract class NetworkSelectionModule {
 	): MockRepository
 
 	@Binds
-	abstract fun bindNetworkSelectionComponentFactory(
+	internal abstract fun bindNetworkSelectionComponentFactory(
 		impl: DefaultNetworkSelectionComponentFactory,
 	): NetworkSelectionComponent.Factory
 }

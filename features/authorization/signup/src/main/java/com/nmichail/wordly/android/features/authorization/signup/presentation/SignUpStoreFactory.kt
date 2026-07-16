@@ -29,7 +29,7 @@ import com.nmichail.wordly.android.shared.error.presentation.ErrorDelegate
 import com.nmichail.wordly.android.shared.error.presentation.HandleErrorResult
 import javax.inject.Inject
 
-class SignUpStoreFactory @Inject constructor(
+internal class SignUpStoreFactory @Inject constructor(
 	private val validateEmailUseCase: ValidateEmailUseCase,
 	private val validatePasswordUseCase: ValidatePasswordUseCase,
 	private val validateNameUseCase: ValidateNameUseCase,
@@ -43,9 +43,9 @@ class SignUpStoreFactory @Inject constructor(
 	private val storeFactory: StoreFactory = LoggingStoreFactory(DefaultStoreFactory())
 
 	fun create(): SignUpStore = object : SignUpStore,
-		Store<SignUpStore.Intent, SignUpStore.State, SignUpStore.Label> by storeFactory.create(
+		Store<SignUpStore.Intent, SignUpComponent.State, SignUpComponent.Label> by storeFactory.create(
 			name = "SignUpStore",
-			initialState = SignUpStore.State(),
+			initialState = SignUpComponent.State(),
 			executorFactory = ::ExecutorImpl,
 			reducer = ReducerImpl,
 		) {}
@@ -63,9 +63,9 @@ class SignUpStoreFactory @Inject constructor(
 		data class ChangeEnglishLevel(val englishLevel: NotEmptyValidationItem) : Msg
 	}
 
-	private object ReducerImpl : Reducer<SignUpStore.State, Msg> {
+	private object ReducerImpl : Reducer<SignUpComponent.State, Msg> {
 
-		override fun SignUpStore.State.reduce(msg: Msg): SignUpStore.State =
+		override fun SignUpComponent.State.reduce(msg: Msg): SignUpComponent.State =
 			when (msg) {
 				is Msg.ChangeEmail -> copy(email = msg.email)
 				is Msg.ChangePassword -> copy(password = msg.password)
@@ -76,7 +76,7 @@ class SignUpStoreFactory @Inject constructor(
 	}
 
 	private inner class ExecutorImpl :
-		BaseCoroutineExecutor<SignUpStore.Intent, Nothing, SignUpStore.State, Msg, SignUpStore.Label>() {
+		BaseCoroutineExecutor<SignUpStore.Intent, Nothing, SignUpComponent.State, Msg, SignUpComponent.Label>() {
 
 		override fun executeIntent(intent: SignUpStore.Intent) {
 			when (intent) {
@@ -102,7 +102,7 @@ class SignUpStoreFactory @Inject constructor(
 
 				SignUpStore.Intent.Submit -> handleSubmit()
 
-				SignUpStore.Intent.NavigateToSignIn -> publish(SignUpStore.Label.OpenSignIn)
+				SignUpStore.Intent.NavigateToSignIn -> publish(SignUpComponent.Label.OpenSignIn)
 			}
 		}
 
@@ -133,7 +133,7 @@ class SignUpStoreFactory @Inject constructor(
 					),
 				)
 				saveAuthTokensUseCase(tokens)
-				publish(SignUpStore.Label.OpenMainHost)
+				publish(SignUpComponent.Label.OpenMainHost)
 			} catch(::handleSignUpError)
 		}
 
@@ -142,8 +142,8 @@ class SignUpStoreFactory @Inject constructor(
 			if (errorDelegate.handleError(networkError) == HandleErrorResult.HANDLED) return
 
 			when (networkError.messageIdOrNull()) {
-				StatusCodes.NO_CONNECTION.statusCode -> publish(SignUpStore.Label.ShowNoConnection)
-				else -> publish(SignUpStore.Label.ShowRegistrationError)
+				StatusCodes.NO_CONNECTION.statusCode -> publish(SignUpComponent.Label.ShowNoConnection)
+				else -> publish(SignUpComponent.Label.ShowRegistrationError)
 			}
 		}
 

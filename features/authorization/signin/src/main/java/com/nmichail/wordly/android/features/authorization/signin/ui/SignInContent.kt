@@ -42,8 +42,6 @@ import com.nmichail.wordly.android.component.ui.validation.passwordErrorMessage
 import com.nmichail.wordly.android.core.validation.DefaultValidationState
 import com.nmichail.wordly.android.features.authorization.signin.R
 import com.nmichail.wordly.android.features.authorization.signin.presentation.SignInComponent
-import com.nmichail.wordly.android.features.authorization.signin.presentation.SignInError
-import com.nmichail.wordly.android.features.authorization.signin.presentation.SignInStore
 import com.nmichail.wordly.android.features.authorization.signin.presentation.areFieldsValid
 
 @Composable
@@ -57,26 +55,27 @@ fun SignInContent(
 	val context = LocalContext.current
 
 	LaunchedEffect(component) {
-		component.errors.collect { error ->
-			when (error) {
-				SignInError.InvalidCredentials -> {
+		for (label in component.labelsChannel()) {
+			when (label) {
+				SignInComponent.Label.ShowInvalidCredentials -> {
 					showErrorSnackBar(
 						snackBarHostState = snackBarHostState,
 						message = context.getString(R.string.sign_in_invalid_credentials),
 					)
 				}
-				SignInError.NoConnection -> {
+				SignInComponent.Label.ShowNoConnection -> {
 					showErrorSnackBar(
 						snackBarHostState = snackBarHostState,
 						message = context.getString(R.string.sign_in_no_connection),
 					)
 				}
-				SignInError.Unknown -> {
+				SignInComponent.Label.ShowUnknownError -> {
 					showErrorSnackBar(
 						snackBarHostState = snackBarHostState,
 						message = context.getString(R.string.sign_in_unknown_error),
 					)
 				}
+				else -> Unit
 			}
 		}
 	}
@@ -114,7 +113,7 @@ fun SignInContent(
 
 @Composable
 private fun SignInForm(
-	state: SignInStore.State,
+	state: SignInComponent.State,
 	component: SignInComponent,
 	devEnabled: Boolean,
 ) {

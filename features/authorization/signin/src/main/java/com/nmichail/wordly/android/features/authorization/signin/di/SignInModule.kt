@@ -21,7 +21,7 @@ abstract class SignInModule {
 	): SignInRepository
 
 	@Binds
-	abstract fun bindSignInComponentFactory(
+	internal abstract fun bindSignInComponentFactory(
 		impl: DefaultSignInComponentFactory,
 	): SignInComponent.Factory
 

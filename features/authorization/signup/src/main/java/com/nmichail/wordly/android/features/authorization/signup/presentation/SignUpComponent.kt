@@ -2,13 +2,18 @@ package com.nmichail.wordly.android.features.authorization.signup.presentation
 
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.value.Value
-import kotlinx.coroutines.flow.Flow
+import com.nmichail.wordly.android.core.validation.email.EmailValidationItem
+import com.nmichail.wordly.android.core.validation.name.NamePart
+import com.nmichail.wordly.android.core.validation.name.NameValidationItem
+import com.nmichail.wordly.android.core.validation.notEmpty.NotEmptyValidationItem
+import com.nmichail.wordly.android.core.validation.password.PasswordValidationItem
+import kotlinx.coroutines.channels.ReceiveChannel
 
 interface SignUpComponent {
 
-	val model: Value<SignUpStore.State>
+	val model: Value<State>
 
-	val errors: Flow<SignUpError>
+	fun labelsChannel(): ReceiveChannel<Label>
 
 	fun handleChangeEmail(email: String)
 
@@ -23,6 +28,27 @@ interface SignUpComponent {
 	fun handleSubmit()
 
 	fun handleNavigateToSignIn()
+
+	data class State(
+		val email: EmailValidationItem = EmailValidationItem(),
+		val password: PasswordValidationItem = PasswordValidationItem(),
+		val firstName: NameValidationItem = NameValidationItem(namePart = NamePart.NAME),
+		val lastName: NameValidationItem = NameValidationItem(namePart = NamePart.SURNAME),
+		val englishLevel: NotEmptyValidationItem = NotEmptyValidationItem(),
+	)
+
+	sealed interface Label {
+
+		data object OpenSignIn : Label
+
+		data object OpenMainHost : Label
+
+		data object ShowRegistrationError : Label
+
+		data object ShowNoConnection : Label
+
+		data object ShowUnknownError : Label
+	}
 
 	fun interface Factory {
 

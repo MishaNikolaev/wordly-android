@@ -1,6 +1,5 @@
 package com.nmichail.wordly.android.features.authorization.signup.presentation
 
-import app.cash.turbine.test
 import com.nmichail.wordly.android.core.preferences.domain.entity.AuthTokens
 import com.nmichail.wordly.android.core.preferences.domain.usecase.SaveAuthTokensUseCase
 import com.nmichail.wordly.android.core.testutils.InstantExecutorExtension
@@ -92,7 +91,7 @@ class DefaultSignUpComponentTest {
 		message = "No connection",
 	)
 
-	private val initState = SignUpStore.State()
+	private val initState = SignUpComponent.State()
 
 	private lateinit var component: DefaultSignUpComponent
 	private val model get() = component.model.value
@@ -189,11 +188,10 @@ class DefaultSignUpComponentTest {
 		component.handleChangeLastName(lastName)
 		component.handleChangeEnglishLevel(englishLevel)
 
-		component.errors.test {
-			component.handleSubmit()
+		val labelsChannel = component.labelsChannel()
+		component.handleSubmit()
 
-			assertEquals(SignUpError.RegistrationError, awaitItem())
-		}
+		assertEquals(SignUpComponent.Label.ShowRegistrationError, labelsChannel.receive())
 	}
 
 	@Test
@@ -211,10 +209,9 @@ class DefaultSignUpComponentTest {
 		component.handleChangeLastName(lastName)
 		component.handleChangeEnglishLevel(englishLevel)
 
-		component.errors.test {
-			component.handleSubmit()
+		val labelsChannel = component.labelsChannel()
+		component.handleSubmit()
 
-			assertEquals(SignUpError.NoConnection, awaitItem())
-		}
+		assertEquals(SignUpComponent.Label.ShowNoConnection, labelsChannel.receive())
 	}
 }
