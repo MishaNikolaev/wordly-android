@@ -30,7 +30,6 @@ internal class DefaultSignInComponent(
 				when (label) {
 					SignInComponent.Label.OpenSignUp -> signInRouter.navigateToSignUp()
 					SignInComponent.Label.OpenMainHost -> signInRouter.navigateToMain()
-					else -> Unit
 				}
 			}
 		} catch {
@@ -55,6 +54,11 @@ internal class DefaultSignInComponent(
 	}
 
 	override fun handleNavigateToNetworkSelection() {
+		if (store.state.isSubmitting) return
 		signInRouter.navigateToNetworkSelection()
+	}
+
+	override fun handleErrorShown() {
+		store.accept(SignInStore.Intent.ErrorShown)
 	}
 }

@@ -2,7 +2,6 @@ package com.nmichail.wordly.android.di
 
 import android.app.Application
 import com.nmichail.wordly.android.WordlyApplication
-import com.nmichail.wordly.android.core.network.di.AuthModule
 import com.nmichail.wordly.android.core.preferences.di.PreferencesModule
 import com.nmichail.wordly.android.features.authorization.signin.di.SignInModule
 import com.nmichail.wordly.android.features.authorization.signup.di.SignUpModule
@@ -20,7 +19,6 @@ import javax.inject.Singleton
 		AppModule::class,
 		NetworkModule::class,
 		PreferencesModule::class,
-		AuthModule::class,
 		SignInModule::class,
 		SignUpModule::class,
 		NetworkSelectionModule::class,

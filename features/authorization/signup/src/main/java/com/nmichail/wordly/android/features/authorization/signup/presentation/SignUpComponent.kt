@@ -29,25 +29,32 @@ interface SignUpComponent {
 
 	fun handleNavigateToSignIn()
 
+	fun handleOpenTermsOfUse()
+
+	fun handleErrorShown()
+
 	data class State(
 		val email: EmailValidationItem = EmailValidationItem(),
 		val password: PasswordValidationItem = PasswordValidationItem(),
 		val firstName: NameValidationItem = NameValidationItem(namePart = NamePart.NAME),
 		val lastName: NameValidationItem = NameValidationItem(namePart = NamePart.SURNAME),
 		val englishLevel: NotEmptyValidationItem = NotEmptyValidationItem(),
+		val isSubmitting: Boolean = false,
+		val error: Error? = null,
 	)
+
+	sealed interface Error {
+
+		data object RegistrationFailed : Error
+
+		data object NoConnection : Error
+	}
 
 	sealed interface Label {
 
 		data object OpenSignIn : Label
 
 		data object OpenMainHost : Label
-
-		data object ShowRegistrationError : Label
-
-		data object ShowNoConnection : Label
-
-		data object ShowUnknownError : Label
 	}
 
 	fun interface Factory {

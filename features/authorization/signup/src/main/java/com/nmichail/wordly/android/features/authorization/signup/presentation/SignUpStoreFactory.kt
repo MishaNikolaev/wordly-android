@@ -27,6 +27,7 @@ import com.nmichail.wordly.android.shared.error.StatusCodes
 import com.nmichail.wordly.android.shared.error.messageIdOrNull
 import com.nmichail.wordly.android.shared.error.presentation.ErrorDelegate
 import com.nmichail.wordly.android.shared.error.presentation.HandleErrorResult
+import kotlinx.coroutines.CancellationException
 import javax.inject.Inject
 
 internal class SignUpStoreFactory @Inject constructor(
@@ -61,6 +62,10 @@ internal class SignUpStoreFactory @Inject constructor(
 		data class ChangeLastName(val lastName: NameValidationItem) : Msg
 
 		data class ChangeEnglishLevel(val englishLevel: NotEmptyValidationItem) : Msg
+
+		data class SetSubmitting(val isSubmitting: Boolean) : Msg
+
+		data class SetError(val error: SignUpComponent.Error?) : Msg
 	}
 
 	private object ReducerImpl : Reducer<SignUpComponent.State, Msg> {
@@ -72,6 +77,8 @@ internal class SignUpStoreFactory @Inject constructor(
 				is Msg.ChangeFirstName -> copy(firstName = msg.firstName)
 				is Msg.ChangeLastName -> copy(lastName = msg.lastName)
 				is Msg.ChangeEnglishLevel -> copy(englishLevel = msg.englishLevel)
+				is Msg.SetSubmitting -> copy(isSubmitting = msg.isSubmitting)
+				is Msg.SetError -> copy(error = msg.error)
 			}
 	}
 
@@ -102,11 +109,19 @@ internal class SignUpStoreFactory @Inject constructor(
 
 				SignUpStore.Intent.Submit -> handleSubmit()
 
-				SignUpStore.Intent.NavigateToSignIn -> publish(SignUpComponent.Label.OpenSignIn)
+				SignUpStore.Intent.NavigateToSignIn -> {
+					if (!state().isSubmitting) {
+						publish(SignUpComponent.Label.OpenSignIn)
+					}
+				}
+
+				SignUpStore.Intent.ErrorShown -> dispatch(Msg.SetError(error = null))
 			}
 		}
 
 		private fun handleSubmit() {
+			if (state().isSubmitting) return
+
 			val currentState = state()
 			val email = validateEmailUseCase(currentState.email.data.trim())
 			val password = validatePasswordUseCase(currentState.password.data)
@@ -119,32 +134,46 @@ internal class SignUpStoreFactory @Inject constructor(
 			dispatch(Msg.ChangeFirstName(firstName))
 			dispatch(Msg.ChangeLastName(lastName))
 			dispatch(Msg.ChangeEnglishLevel(englishLevel))
+			dispatch(Msg.SetError(error = null))
 
 			if (!areFieldsValid(email, password, firstName, lastName, englishLevel)) return
 
+			dispatch(Msg.SetSubmitting(isSubmitting = true))
 			launchTry {
-				val tokens = signUpUseCase(
-					SignUpForm(
-						email = email.data,
-						password = password.data,
-						firstName = firstName.data,
-						lastName = lastName.data,
-						englishLevel = englishLevel.data,
-					),
-				)
-				saveAuthTokensUseCase(tokens)
-				publish(SignUpComponent.Label.OpenMainHost)
-			} catch(::handleSignUpError)
+				try {
+					val tokens = signUpUseCase(
+						SignUpForm(
+							email = email.data,
+							password = password.data,
+							firstName = firstName.data,
+							lastName = lastName.data,
+							englishLevel = englishLevel.data,
+						),
+					)
+					saveAuthTokensUseCase(tokens)
+					publish(SignUpComponent.Label.OpenMainHost)
+				} catch (error: CancellationException) {
+					throw error
+				} catch (error: Exception) {
+					handleSignUpError(error)
+				} finally {
+					dispatch(Msg.SetSubmitting(isSubmitting = false))
+				}
+			} catch { error ->
+				dispatch(Msg.SetSubmitting(isSubmitting = false))
+				handleSignUpError(error)
+			}
 		}
 
 		private fun handleSignUpError(error: Exception) {
 			val networkError = networkExceptionConverter.convert(error)
 			if (errorDelegate.handleError(networkError) == HandleErrorResult.HANDLED) return
 
-			when (networkError.messageIdOrNull()) {
-				StatusCodes.NO_CONNECTION.statusCode -> publish(SignUpComponent.Label.ShowNoConnection)
-				else -> publish(SignUpComponent.Label.ShowRegistrationError)
+			val uiError = when (networkError.messageIdOrNull()) {
+				StatusCodes.NO_CONNECTION.statusCode -> SignUpComponent.Error.NoConnection
+				else -> SignUpComponent.Error.RegistrationFailed
 			}
+			dispatch(Msg.SetError(error = uiError))
 		}
 
 		private fun areFieldsValid(

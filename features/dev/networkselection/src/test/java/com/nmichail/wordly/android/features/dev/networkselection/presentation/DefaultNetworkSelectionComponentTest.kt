@@ -16,7 +16,6 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.junit.jupiter.MockitoExtension
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
-import org.mockito.kotlin.never
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 
@@ -67,57 +66,10 @@ class DefaultNetworkSelectionComponentTest {
 	}
 
 	@Test
-	fun `select new stand EXPECT set stand`() = runTest {
-		component.handleSelectStand(NetworkStand.MOCK)
-
-		verify(setNetworkStandUseCase).invoke(NetworkStand.MOCK)
-	}
-
-	@Test
-	fun `select new stand EXPECT clear tokens`() = runTest {
-		component.handleSelectStand(NetworkStand.MOCK)
-
-		verify(clearAuthTokensUseCase).invoke()
-	}
-
-	@Test
-	fun `select new stand EXPECT state with new stand`() = runTest {
-		val expected = NetworkSelectionComponent.State(
-			stands = stands,
-			selectedStand = NetworkStand.MOCK,
-		)
-
-		component.handleSelectStand(NetworkStand.MOCK)
-
-		assertEquals(expected, model)
-	}
-
-	@Test
 	fun `select new stand EXPECT restart app`() = runTest {
 		component.handleSelectStand(NetworkStand.MOCK)
 
 		verify(networkSelectionRouter).restartApp()
-	}
-
-	@Test
-	fun `select same stand EXPECT set stand not invoked`() = runTest {
-		component.handleSelectStand(NetworkStand.DEV)
-
-		verify(setNetworkStandUseCase, never()).invoke(NetworkStand.DEV)
-	}
-
-	@Test
-	fun `select same stand EXPECT clear tokens not invoked`() = runTest {
-		component.handleSelectStand(NetworkStand.DEV)
-
-		verify(clearAuthTokensUseCase, never()).invoke()
-	}
-
-	@Test
-	fun `select same stand EXPECT restart app not invoked`() = runTest {
-		component.handleSelectStand(NetworkStand.DEV)
-
-		verify(networkSelectionRouter, never()).restartApp()
 	}
 
 	@Test

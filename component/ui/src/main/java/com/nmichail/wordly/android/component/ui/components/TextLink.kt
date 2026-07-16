@@ -14,6 +14,7 @@ fun TextLink(
 	text: String,
 	onClick: () -> Unit,
 	modifier: Modifier = Modifier,
+	enabled: Boolean = true,
 	textAlign: TextAlign = TextAlign.Center,
 	style: TextStyle = MaterialTheme.typography.labelLarge,
 	color: Color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -21,11 +22,12 @@ fun TextLink(
 	TextButton(
 		onClick = onClick,
 		modifier = modifier,
+		enabled = enabled,
 	) {
 		Text(
 			text = text,
 			style = style,
-			color = color,
+			color = if (enabled) color else color.copy(alpha = 0.4f),
 			textAlign = textAlign,
 		)
 	}

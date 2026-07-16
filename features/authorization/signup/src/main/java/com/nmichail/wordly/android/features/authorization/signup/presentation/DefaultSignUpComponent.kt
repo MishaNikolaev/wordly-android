@@ -30,7 +30,6 @@ internal class DefaultSignUpComponent(
 				when (label) {
 					SignUpComponent.Label.OpenSignIn -> signUpRouter.navigateToSignIn()
 					SignUpComponent.Label.OpenMainHost -> signUpRouter.navigateToMain()
-					else -> Unit
 				}
 			}
 		} catch {
@@ -64,5 +63,13 @@ internal class DefaultSignUpComponent(
 
 	override fun handleNavigateToSignIn() {
 		store.accept(SignUpStore.Intent.NavigateToSignIn)
+	}
+
+	override fun handleOpenTermsOfUse() {
+		signUpRouter.openTermsOfUse()
+	}
+
+	override fun handleErrorShown() {
+		store.accept(SignUpStore.Intent.ErrorShown)
 	}
 }

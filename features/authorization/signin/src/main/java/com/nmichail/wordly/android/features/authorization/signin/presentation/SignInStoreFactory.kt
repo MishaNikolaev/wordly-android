@@ -20,6 +20,7 @@ import com.nmichail.wordly.android.shared.error.StatusCodes
 import com.nmichail.wordly.android.shared.error.messageIdOrNull
 import com.nmichail.wordly.android.shared.error.presentation.ErrorDelegate
 import com.nmichail.wordly.android.shared.error.presentation.HandleErrorResult
+import kotlinx.coroutines.CancellationException
 import javax.inject.Inject
 
 internal class SignInStoreFactory @Inject constructor(
@@ -46,6 +47,10 @@ internal class SignInStoreFactory @Inject constructor(
 		data class ChangeEmail(val email: EmailValidationItem) : Msg
 
 		data class ChangePassword(val password: PasswordValidationItem) : Msg
+
+		data class SetSubmitting(val isSubmitting: Boolean) : Msg
+
+		data class SetError(val error: SignInComponent.Error?) : Msg
 	}
 
 	private object ReducerImpl : Reducer<SignInComponent.State, Msg> {
@@ -54,6 +59,8 @@ internal class SignInStoreFactory @Inject constructor(
 			when (msg) {
 				is Msg.ChangeEmail -> copy(email = msg.email)
 				is Msg.ChangePassword -> copy(password = msg.password)
+				is Msg.SetSubmitting -> copy(isSubmitting = msg.isSubmitting)
+				is Msg.SetError -> copy(error = msg.error)
 			}
 	}
 
@@ -72,44 +79,66 @@ internal class SignInStoreFactory @Inject constructor(
 
 				SignInStore.Intent.Submit -> handleSubmit()
 
-				SignInStore.Intent.NavigateToSignUp -> publish(SignInComponent.Label.OpenSignUp)
+				SignInStore.Intent.NavigateToSignUp -> {
+					if (!state().isSubmitting) {
+						publish(SignInComponent.Label.OpenSignUp)
+					}
+				}
+
+				SignInStore.Intent.ErrorShown -> dispatch(Msg.SetError(error = null))
 			}
 		}
 
 		private fun handleSubmit() {
+			if (state().isSubmitting) return
+
 			val currentState = state()
 			val email = validateEmailUseCase(currentState.email.data.trim())
 			val password = validatePasswordUseCase(currentState.password.data)
 			dispatch(Msg.ChangeEmail(email))
 			dispatch(Msg.ChangePassword(password))
+			dispatch(Msg.SetError(error = null))
 
 			if (!email.isValid() || !password.isValid()) return
 
+			dispatch(Msg.SetSubmitting(isSubmitting = true))
 			launchTry {
-				val tokens = signInUseCase(
-					SignInData(
-						email = email.data,
-						password = password.data,
-					),
-				)
-				saveAuthTokensUseCase(tokens)
-				publish(SignInComponent.Label.OpenMainHost)
-			} catch(::handleSignInError)
+				try {
+					val tokens = signInUseCase(
+						SignInData(
+							email = email.data,
+							password = password.data,
+						),
+					)
+					saveAuthTokensUseCase(tokens)
+					publish(SignInComponent.Label.OpenMainHost)
+				} catch (error: CancellationException) {
+					throw error
+				} catch (error: Exception) {
+					handleSignInError(error)
+				} finally {
+					dispatch(Msg.SetSubmitting(isSubmitting = false))
+				}
+			} catch { error ->
+				dispatch(Msg.SetSubmitting(isSubmitting = false))
+				handleSignInError(error)
+			}
 		}
 
 		private fun handleSignInError(error: Exception) {
 			val networkError = networkExceptionConverter.convert(error)
 			if (errorDelegate.handleError(networkError) == HandleErrorResult.HANDLED) return
 
-			when (networkError.messageIdOrNull()) {
+			val uiError = when (networkError.messageIdOrNull()) {
 				StatusCodes.NEEDS_AUTHORIZATION.statusCode,
 				StatusCodes.AUTHORIZATION_FAILED.statusCode,
-				-> publish(SignInComponent.Label.ShowInvalidCredentials)
+				-> SignInComponent.Error.InvalidCredentials
 
-				StatusCodes.NO_CONNECTION.statusCode -> publish(SignInComponent.Label.ShowNoConnection)
+				StatusCodes.NO_CONNECTION.statusCode -> SignInComponent.Error.NoConnection
 
-				else -> publish(SignInComponent.Label.ShowUnknownError)
+				else -> SignInComponent.Error.Unknown
 			}
+			dispatch(Msg.SetError(error = uiError))
 		}
 	}
 }
