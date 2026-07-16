@@ -1,13 +1,12 @@
 package com.nmichail.wordly.android.mainhost.presentation
 
-import android.os.Parcelable
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.router.stack.ChildStack
 import com.arkivanov.decompose.router.stack.StackNavigation
 import com.arkivanov.decompose.router.stack.bringToFront
 import com.arkivanov.decompose.router.stack.childStack
 import com.arkivanov.decompose.value.Value
-import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
 internal class DefaultMainHostComponent(
 	componentContext: ComponentContext,
@@ -17,9 +16,8 @@ internal class DefaultMainHostComponent(
 
 	override val stack: Value<ChildStack<*, MainHostComponent.Child>> = childStack(
 		source = navigation,
+		serializer = MainHostConfig.serializer(),
 		initialStack = { listOf(MainHostConfig.Home) },
-		saveStack = { null },
-		restoreStack = { null },
 		handleBackButton = true,
 		childFactory = ::child,
 	)
@@ -40,18 +38,19 @@ internal class DefaultMainHostComponent(
 		}
 }
 
-private sealed interface MainHostConfig : Parcelable {
+@Serializable
+private sealed interface MainHostConfig {
 
-	@Parcelize
+	@Serializable
 	data object Home : MainHostConfig
 
-	@Parcelize
+	@Serializable
 	data object Words : MainHostConfig
 
-	@Parcelize
+	@Serializable
 	data object Stats : MainHostConfig
 
-	@Parcelize
+	@Serializable
 	data object Profile : MainHostConfig
 }
 
