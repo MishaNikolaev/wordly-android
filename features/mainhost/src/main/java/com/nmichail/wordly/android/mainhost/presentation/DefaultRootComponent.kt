@@ -93,6 +93,10 @@ internal class DefaultRootComponent(
 					override fun navigateToMain() {
 						navigation.navigate { listOf(Config.MainHost) }
 					}
+
+					override fun openTermsOfUse() {
+						// TODO: открыть условия использования по диплинку
+					}
 				}
 				val component = signUpComponentFactory(
 					componentContext = componentContext,

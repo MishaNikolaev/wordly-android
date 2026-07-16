@@ -160,33 +160,31 @@ class SignInStoreTest {
 	}
 
 	@Test
-	fun `submit with invalid credentials EXPECT invalid credentials label`() = runTest {
+	fun `submit with invalid credentials EXPECT invalid credentials error`() = runTest {
 		whenever(validateEmailUseCase(email)) doReturn emailValidItem
 		whenever(validatePasswordUseCase(password)) doReturn passwordValidItem
 		whenever(signInUseCase(signInData)) doThrowSafe exception
 		whenever(networkExceptionConverter.convert(exception)) doReturn invalidCredentialsError
 		store.accept(SignInStore.Intent.ChangeEmail(email))
 		store.accept(SignInStore.Intent.ChangePassword(password))
-		val labelsChannel = store.labelsChannel(lifecycle)
 
 		store.accept(SignInStore.Intent.Submit)
 
-		assertEquals(SignInComponent.Label.ShowInvalidCredentials, labelsChannel.receive())
+		assertEquals(SignInComponent.Error.InvalidCredentials, store.state.error)
 	}
 
 	@Test
-	fun `submit with no connection EXPECT no connection label`() = runTest {
+	fun `submit with no connection EXPECT no connection error`() = runTest {
 		whenever(validateEmailUseCase(email)) doReturn emailValidItem
 		whenever(validatePasswordUseCase(password)) doReturn passwordValidItem
 		whenever(signInUseCase(signInData)) doThrowSafe exception
 		whenever(networkExceptionConverter.convert(exception)) doReturn noConnectionError
 		store.accept(SignInStore.Intent.ChangeEmail(email))
 		store.accept(SignInStore.Intent.ChangePassword(password))
-		val labelsChannel = store.labelsChannel(lifecycle)
 
 		store.accept(SignInStore.Intent.Submit)
 
-		assertEquals(SignInComponent.Label.ShowNoConnection, labelsChannel.receive())
+		assertEquals(SignInComponent.Error.NoConnection, store.state.error)
 	}
 	private fun createStore(): SignInStore =
 		SignInStoreFactory(

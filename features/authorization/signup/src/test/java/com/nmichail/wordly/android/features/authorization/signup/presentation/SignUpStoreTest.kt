@@ -205,7 +205,7 @@ class SignUpStoreTest {
 	}
 
 	@Test
-	fun `submit with registration error EXPECT registration error label`() = runTest {
+	fun `submit with registration error EXPECT registration error in state`() = runTest {
 		whenever(validateEmailUseCase(email)) doReturn emailValidItem
 		whenever(validatePasswordUseCase(password)) doReturn passwordValidItem
 		whenever(validateNameUseCase(firstName, NamePart.NAME)) doReturn firstNameValidItem
@@ -218,15 +218,14 @@ class SignUpStoreTest {
 		store.accept(SignUpStore.Intent.ChangeEnglishLevel(englishLevel))
 		whenever(signUpUseCase(signUpForm)) doThrowSafe exception
 		whenever(networkExceptionConverter.convert(exception)) doReturn NetworkException.Unknown
-		val labelsChannel = store.labelsChannel(lifecycle)
 
 		store.accept(SignUpStore.Intent.Submit)
 
-		assertEquals(SignUpComponent.Label.ShowRegistrationError, labelsChannel.receive())
+		assertEquals(SignUpComponent.Error.RegistrationFailed, store.state.error)
 	}
 
 	@Test
-	fun `submit with no connection EXPECT no connection label`() = runTest {
+	fun `submit with no connection EXPECT no connection error in state`() = runTest {
 		whenever(validateEmailUseCase(email)) doReturn emailValidItem
 		whenever(validatePasswordUseCase(password)) doReturn passwordValidItem
 		whenever(validateNameUseCase(firstName, NamePart.NAME)) doReturn firstNameValidItem
@@ -239,11 +238,10 @@ class SignUpStoreTest {
 		store.accept(SignUpStore.Intent.ChangeEnglishLevel(englishLevel))
 		whenever(signUpUseCase(signUpForm)) doThrowSafe exception
 		whenever(networkExceptionConverter.convert(exception)) doReturn noConnectionError
-		val labelsChannel = store.labelsChannel(lifecycle)
 
 		store.accept(SignUpStore.Intent.Submit)
 
-		assertEquals(SignUpComponent.Label.ShowNoConnection, labelsChannel.receive())
+		assertEquals(SignUpComponent.Error.NoConnection, store.state.error)
 	}
 }
 

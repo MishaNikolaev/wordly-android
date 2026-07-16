@@ -22,22 +22,29 @@ interface SignInComponent {
 
 	fun handleNavigateToNetworkSelection()
 
+	fun handleErrorShown()
+
 	data class State(
 		val email: EmailValidationItem = EmailValidationItem(),
 		val password: PasswordValidationItem = PasswordValidationItem(),
+		val isSubmitting: Boolean = false,
+		val error: Error? = null,
 	)
+
+	sealed interface Error {
+
+		data object InvalidCredentials : Error
+
+		data object NoConnection : Error
+
+		data object Unknown : Error
+	}
 
 	sealed interface Label {
 
 		data object OpenSignUp : Label
 
 		data object OpenMainHost : Label
-
-		data object ShowInvalidCredentials : Label
-
-		data object ShowNoConnection : Label
-
-		data object ShowUnknownError : Label
 	}
 
 	fun interface Factory {

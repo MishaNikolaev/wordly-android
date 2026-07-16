@@ -20,5 +20,7 @@ internal interface SignUpStore :
 		data object Submit : Intent
 
 		data object NavigateToSignIn : Intent
+
+		data object ErrorShown : Intent
 	}
 }

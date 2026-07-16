@@ -29,7 +29,7 @@ internal class DefaultNetworkSelectionComponent(
 				}
 			}
 		} catch {
-			// ignored — same as cft_shift: navigation side-effects should not crash the store
+			// ignored
 		}
 	}
 
