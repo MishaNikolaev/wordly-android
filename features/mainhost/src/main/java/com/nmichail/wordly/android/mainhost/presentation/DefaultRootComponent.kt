@@ -21,10 +21,11 @@ import com.nmichail.wordly.android.shared.error.presentation.ErrorLogoutRouter
 import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
 
-class DefaultRootComponent(
+internal class DefaultRootComponent(
 	componentContext: ComponentContext,
 	private val signInComponentFactory: SignInComponent.Factory,
 	private val signUpComponentFactory: SignUpComponent.Factory,
+	private val mainHostComponentFactory: MainHostComponent.Factory,
 	private val networkSelectionComponentFactory: NetworkSelectionComponent.Factory,
 	private val isAuthTokensExistUseCase: IsAuthTokensExistUseCase,
 	private val errorLogoutRouter: ErrorLogoutRouter,
@@ -103,7 +104,7 @@ class DefaultRootComponent(
 			}
 
 			Config.MainHost -> {
-				val component = DefaultMainHostComponent(componentContext = componentContext)
+				val component = mainHostComponentFactory(componentContext = componentContext)
 				RootComponent.Child.MainHost(component)
 			}
 
@@ -133,9 +134,10 @@ class DefaultRootComponent(
 	}
 }
 
-class DefaultRootComponentFactory @Inject constructor(
+internal class DefaultRootComponentFactory @Inject constructor(
 	private val signInComponentFactory: SignInComponent.Factory,
 	private val signUpComponentFactory: SignUpComponent.Factory,
+	private val mainHostComponentFactory: MainHostComponent.Factory,
 	private val networkSelectionComponentFactory: NetworkSelectionComponent.Factory,
 	private val isAuthTokensExistUseCase: IsAuthTokensExistUseCase,
 	private val errorLogoutRouter: ErrorLogoutRouter,
@@ -146,6 +148,7 @@ class DefaultRootComponentFactory @Inject constructor(
 			componentContext = componentContext,
 			signInComponentFactory = signInComponentFactory,
 			signUpComponentFactory = signUpComponentFactory,
+			mainHostComponentFactory = mainHostComponentFactory,
 			networkSelectionComponentFactory = networkSelectionComponentFactory,
 			isAuthTokensExistUseCase = isAuthTokensExistUseCase,
 			errorLogoutRouter = errorLogoutRouter,

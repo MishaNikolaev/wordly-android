@@ -5,16 +5,21 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import com.arkivanov.decompose.defaultComponentContext
-import com.nmichail.wordly.android.BuildConfig
 import com.nmichail.wordly.android.di.appComponent
-import com.nmichail.wordly.android.mainhost.presentation.DefaultRootComponentFactory
+import com.nmichail.wordly.android.features.authorization.signin.di.DevEnabled
+import com.nmichail.wordly.android.mainhost.presentation.RootComponent
 import com.nmichail.wordly.android.mainhost.ui.RootContent
 import javax.inject.Inject
 
 class MainActivity : ComponentActivity() {
 
 	@Inject
-	lateinit var rootComponentFactory: DefaultRootComponentFactory
+	lateinit var rootComponentFactory: RootComponent.Factory
+
+	@JvmField
+	@Inject
+	@DevEnabled
+	var devEnabled: Boolean = false
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
@@ -26,7 +31,7 @@ class MainActivity : ComponentActivity() {
 		setContent {
 			RootContent(
 				component = rootComponent,
-				devEnabled = BuildConfig.DEV_ENABLED,
+				devEnabled = devEnabled,
 			)
 		}
 	}

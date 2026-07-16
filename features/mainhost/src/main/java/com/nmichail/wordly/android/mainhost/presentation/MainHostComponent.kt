@@ -1,5 +1,6 @@
 package com.nmichail.wordly.android.mainhost.presentation
 
+import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.router.stack.ChildStack
 import com.arkivanov.decompose.value.Value
 
@@ -18,6 +19,11 @@ interface MainHostComponent {
 		data object Stats : Child
 
 		data object Profile : Child
+	}
+
+	fun interface Factory {
+
+		operator fun invoke(componentContext: ComponentContext): MainHostComponent
 	}
 }
 

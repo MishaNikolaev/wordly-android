@@ -3,7 +3,7 @@ package com.nmichail.wordly.android.features.dev.networkselection.presentation
 import com.arkivanov.decompose.ComponentContext
 import javax.inject.Inject
 
-class DefaultNetworkSelectionComponentFactory @Inject constructor(
+internal class DefaultNetworkSelectionComponentFactory @Inject constructor(
 	private val networkSelectionStoreFactory: NetworkSelectionStoreFactory,
 	private val networkSelectionRouter: NetworkSelectionRouter,
 ) : NetworkSelectionComponent.Factory {

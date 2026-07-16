@@ -8,7 +8,7 @@ import com.nmichail.wordly.android.component.presentation.launchTry
 import com.nmichail.wordly.android.core.navigation.asValue
 import com.nmichail.wordly.android.features.dev.networkselection.domain.entity.NetworkStand
 
-class DefaultNetworkSelectionComponent(
+internal class DefaultNetworkSelectionComponent(
 	componentContext: ComponentContext,
 	private val networkSelectionStoreFactory: NetworkSelectionStoreFactory,
 	private val onFinished: () -> Unit,
@@ -24,8 +24,8 @@ class DefaultNetworkSelectionComponent(
 		launchTry {
 			store.labels.collect { label ->
 				when (label) {
-					NetworkSelectionStore.Label.NavigateBack -> onFinished()
-					NetworkSelectionStore.Label.RestartApp -> networkSelectionRouter.restartApp()
+					NetworkSelectionComponent.Label.NavigateBack -> onFinished()
+					NetworkSelectionComponent.Label.RestartApp -> networkSelectionRouter.restartApp()
 				}
 			}
 		} catch {
@@ -33,7 +33,7 @@ class DefaultNetworkSelectionComponent(
 		}
 	}
 
-	override val model: Value<NetworkSelectionStore.State> = store.asValue()
+	override val model: Value<NetworkSelectionComponent.State> = store.asValue()
 
 	override fun handleSelectStand(stand: NetworkStand) {
 		store.accept(NetworkSelectionStore.Intent.SelectStand(stand))

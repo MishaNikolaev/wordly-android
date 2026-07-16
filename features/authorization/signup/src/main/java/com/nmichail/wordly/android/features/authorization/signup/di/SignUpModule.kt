@@ -21,7 +21,7 @@ abstract class SignUpModule {
 	): SignUpRepository
 
 	@Binds
-	abstract fun bindSignUpComponentFactory(
+	internal abstract fun bindSignUpComponentFactory(
 		impl: DefaultSignUpComponentFactory,
 	): SignUpComponent.Factory
 

@@ -3,14 +3,12 @@ package com.nmichail.wordly.android.features.authorization.signin.presentation
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.value.Value
 import com.arkivanov.mvikotlin.core.instancekeeper.getStore
-import com.arkivanov.mvikotlin.extensions.coroutines.labels
+import com.arkivanov.mvikotlin.extensions.coroutines.labelsChannel
 import com.nmichail.wordly.android.component.presentation.launchTry
 import com.nmichail.wordly.android.core.navigation.asValue
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.channels.ReceiveChannel
 
-class DefaultSignInComponent(
+internal class DefaultSignInComponent(
 	componentContext: ComponentContext,
 	private val signInStoreFactory: SignInStoreFactory,
 	private val signInRouter: SignInRouter,
@@ -21,21 +19,18 @@ class DefaultSignInComponent(
 		signInStoreFactory.create()
 	}
 
-	private val errorEvents = MutableSharedFlow<SignInError>(extraBufferCapacity = 1)
+	override val model: Value<SignInComponent.State> = store.asValue()
 
-	override val model: Value<SignInStore.State> = store.asValue()
-
-	override val errors: Flow<SignInError> = errorEvents.asSharedFlow()
+	override fun labelsChannel(): ReceiveChannel<SignInComponent.Label> =
+		store.labelsChannel(lifecycle)
 
 	init {
 		launchTry {
-			store.labels.collect { label ->
+			for (label in store.labelsChannel(lifecycle)) {
 				when (label) {
-					SignInStore.Label.OpenSignUp -> signInRouter.navigateToSignUp()
-					SignInStore.Label.OpenMainHost -> signInRouter.navigateToMain()
-					SignInStore.Label.ShowInvalidCredentials -> errorEvents.emit(SignInError.InvalidCredentials)
-					SignInStore.Label.ShowNoConnection -> errorEvents.emit(SignInError.NoConnection)
-					SignInStore.Label.ShowUnknownError -> errorEvents.emit(SignInError.Unknown)
+					SignInComponent.Label.OpenSignUp -> signInRouter.navigateToSignUp()
+					SignInComponent.Label.OpenMainHost -> signInRouter.navigateToMain()
+					else -> Unit
 				}
 			}
 		} catch {

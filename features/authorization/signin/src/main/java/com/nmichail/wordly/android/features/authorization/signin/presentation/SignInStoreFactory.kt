@@ -22,7 +22,7 @@ import com.nmichail.wordly.android.shared.error.presentation.ErrorDelegate
 import com.nmichail.wordly.android.shared.error.presentation.HandleErrorResult
 import javax.inject.Inject
 
-class SignInStoreFactory @Inject constructor(
+internal class SignInStoreFactory @Inject constructor(
 	private val validateEmailUseCase: ValidateEmailUseCase,
 	private val validatePasswordUseCase: ValidatePasswordUseCase,
 	private val signInUseCase: SignInUseCase,
@@ -34,9 +34,9 @@ class SignInStoreFactory @Inject constructor(
 	private val storeFactory: StoreFactory = LoggingStoreFactory(DefaultStoreFactory())
 
 	fun create(): SignInStore = object : SignInStore,
-		Store<SignInStore.Intent, SignInStore.State, SignInStore.Label> by storeFactory.create(
+		Store<SignInStore.Intent, SignInComponent.State, SignInComponent.Label> by storeFactory.create(
 			name = "SignInStore",
-			initialState = SignInStore.State(),
+			initialState = SignInComponent.State(),
 			executorFactory = ::ExecutorImpl,
 			reducer = ReducerImpl,
 		) {}
@@ -48,9 +48,9 @@ class SignInStoreFactory @Inject constructor(
 		data class ChangePassword(val password: PasswordValidationItem) : Msg
 	}
 
-	private object ReducerImpl : Reducer<SignInStore.State, Msg> {
+	private object ReducerImpl : Reducer<SignInComponent.State, Msg> {
 
-		override fun SignInStore.State.reduce(msg: Msg): SignInStore.State =
+		override fun SignInComponent.State.reduce(msg: Msg): SignInComponent.State =
 			when (msg) {
 				is Msg.ChangeEmail -> copy(email = msg.email)
 				is Msg.ChangePassword -> copy(password = msg.password)
@@ -58,7 +58,7 @@ class SignInStoreFactory @Inject constructor(
 	}
 
 	private inner class ExecutorImpl :
-		BaseCoroutineExecutor<SignInStore.Intent, Nothing, SignInStore.State, Msg, SignInStore.Label>() {
+		BaseCoroutineExecutor<SignInStore.Intent, Nothing, SignInComponent.State, Msg, SignInComponent.Label>() {
 
 		override fun executeIntent(intent: SignInStore.Intent) {
 			when (intent) {
@@ -72,7 +72,7 @@ class SignInStoreFactory @Inject constructor(
 
 				SignInStore.Intent.Submit -> handleSubmit()
 
-				SignInStore.Intent.NavigateToSignUp -> publish(SignInStore.Label.OpenSignUp)
+				SignInStore.Intent.NavigateToSignUp -> publish(SignInComponent.Label.OpenSignUp)
 			}
 		}
 
@@ -93,7 +93,7 @@ class SignInStoreFactory @Inject constructor(
 					),
 				)
 				saveAuthTokensUseCase(tokens)
-				publish(SignInStore.Label.OpenMainHost)
+				publish(SignInComponent.Label.OpenMainHost)
 			} catch(::handleSignInError)
 		}
 
@@ -104,11 +104,11 @@ class SignInStoreFactory @Inject constructor(
 			when (networkError.messageIdOrNull()) {
 				StatusCodes.NEEDS_AUTHORIZATION.statusCode,
 				StatusCodes.AUTHORIZATION_FAILED.statusCode,
-				-> publish(SignInStore.Label.ShowInvalidCredentials)
+				-> publish(SignInComponent.Label.ShowInvalidCredentials)
 
-				StatusCodes.NO_CONNECTION.statusCode -> publish(SignInStore.Label.ShowNoConnection)
+				StatusCodes.NO_CONNECTION.statusCode -> publish(SignInComponent.Label.ShowNoConnection)
 
-				else -> publish(SignInStore.Label.ShowUnknownError)
+				else -> publish(SignInComponent.Label.ShowUnknownError)
 			}
 		}
 	}
