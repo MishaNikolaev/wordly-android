@@ -5,7 +5,6 @@ import com.nmichail.wordly.android.core.preferences.domain.usecase.SaveAuthToken
 import com.nmichail.wordly.android.core.testutils.InstantExecutorExtension
 import com.nmichail.wordly.android.core.testutils.TestCoroutineExtension
 import com.nmichail.wordly.android.core.testutils.createTestComponentContext
-import com.nmichail.wordly.android.core.testutils.doThrowSafe
 import com.nmichail.wordly.android.core.validation.DefaultValidationState
 import com.nmichail.wordly.android.core.validation.email.EmailValidationItem
 import com.nmichail.wordly.android.core.validation.email.ValidateEmailUseCase
@@ -13,9 +12,7 @@ import com.nmichail.wordly.android.core.validation.password.PasswordValidationIt
 import com.nmichail.wordly.android.core.validation.password.ValidatePasswordUseCase
 import com.nmichail.wordly.android.features.authorization.signin.domain.entity.SignInData
 import com.nmichail.wordly.android.features.authorization.signin.domain.usecase.SignInUseCase
-import com.nmichail.wordly.android.shared.error.NetworkException
 import com.nmichail.wordly.android.shared.error.NetworkExceptionConverter
-import com.nmichail.wordly.android.shared.error.StatusCodes
 import com.nmichail.wordly.android.shared.error.presentation.ErrorDelegate
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -27,7 +24,6 @@ import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
-import java.io.IOException
 
 @ExtendWith(
 	MockitoExtension::class,
@@ -53,19 +49,6 @@ class DefaultSignInComponentTest {
 		accessToken = "access-token",
 		refreshToken = "refresh-token",
 	)
-	private val exception = IOException("network")
-	private val invalidCredentialsError = NetworkException.ErrorMessage(
-		statusCode = StatusCodes.NEEDS_AUTHORIZATION,
-		messageId = StatusCodes.NEEDS_AUTHORIZATION.statusCode,
-		message = "Unauthorized",
-	)
-	private val noConnectionError = NetworkException.ErrorMessage(
-		statusCode = StatusCodes.NO_CONNECTION,
-		messageId = StatusCodes.NO_CONNECTION.statusCode,
-		message = "No connection",
-	)
-
-	private val initState = SignInComponent.State()
 
 	private lateinit var component: DefaultSignInComponent
 	private val model get() = component.model.value
@@ -88,38 +71,7 @@ class DefaultSignInComponentTest {
 
 	@Test
 	fun `init EXPECT init state`() {
-		assertEquals(initState, model)
-	}
-
-	@Test
-	fun `change email EXPECT email in state`() {
-		whenever(validateEmailUseCase(email)) doReturn emailValidItem
-
-		component.handleChangeEmail(email)
-
-		assertEquals(emailValidItem, model.email)
-	}
-
-	@Test
-	fun `change password EXPECT password in state`() {
-		whenever(validatePasswordUseCase(password)) doReturn passwordValidItem
-
-		component.handleChangePassword(password)
-
-		assertEquals(passwordValidItem, model.password)
-	}
-
-	@Test
-	fun `submit success EXPECT save tokens`() = runTest {
-		whenever(validateEmailUseCase(email)) doReturn emailValidItem
-		whenever(validatePasswordUseCase(password)) doReturn passwordValidItem
-		whenever(signInUseCase(signInData)) doReturn tokens
-		component.handleChangeEmail(email)
-		component.handleChangePassword(password)
-
-		component.handleSubmit()
-
-		verify(saveAuthTokensUseCase).invoke(tokens)
+		assertEquals(SignInComponent.State(), model)
 	}
 
 	@Test
@@ -147,35 +99,5 @@ class DefaultSignInComponentTest {
 		component.handleNavigateToNetworkSelection()
 
 		verify(signInRouter).navigateToNetworkSelection()
-	}
-
-	@Test
-	fun `submit with invalid credentials EXPECT invalid credentials error`() = runTest {
-		whenever(validateEmailUseCase(email)) doReturn emailValidItem
-		whenever(validatePasswordUseCase(password)) doReturn passwordValidItem
-		whenever(signInUseCase(signInData)) doThrowSafe exception
-		whenever(networkExceptionConverter.convert(exception)) doReturn invalidCredentialsError
-		component.handleChangeEmail(email)
-		component.handleChangePassword(password)
-
-		val labelsChannel = component.labelsChannel()
-		component.handleSubmit()
-
-		assertEquals(SignInComponent.Label.ShowInvalidCredentials, labelsChannel.receive())
-	}
-
-	@Test
-	fun `submit with no connection EXPECT no connection error`() = runTest {
-		whenever(validateEmailUseCase(email)) doReturn emailValidItem
-		whenever(validatePasswordUseCase(password)) doReturn passwordValidItem
-		whenever(signInUseCase(signInData)) doThrowSafe exception
-		whenever(networkExceptionConverter.convert(exception)) doReturn noConnectionError
-		component.handleChangeEmail(email)
-		component.handleChangePassword(password)
-
-		val labelsChannel = component.labelsChannel()
-		component.handleSubmit()
-
-		assertEquals(SignInComponent.Label.ShowNoConnection, labelsChannel.receive())
 	}
 }

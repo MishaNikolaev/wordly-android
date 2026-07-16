@@ -11,3 +11,9 @@ fun createTestComponentContext(): ComponentContext {
 	lifecycle.resume()
 	return componentContext
 }
+
+fun createTestLifecycle(): LifecycleRegistry {
+	val lifecycle = LifecycleRegistry()
+	lifecycle.resume()
+	return lifecycle
+}
