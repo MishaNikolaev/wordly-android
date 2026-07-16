@@ -2,6 +2,7 @@ package com.nmichail.wordly.android.features.authorization.signup.ui
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -21,12 +22,13 @@ import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import com.nmichail.wordly.android.component.ui.R as ComponentR
 import com.nmichail.wordly.android.component.ui.components.AuthBackground
-import com.nmichail.wordly.android.component.ui.components.CaptionText
 import com.nmichail.wordly.android.component.ui.components.SelectionField
 import com.nmichail.wordly.android.component.ui.components.Button
+import com.nmichail.wordly.android.component.ui.components.LinkedText
 import com.nmichail.wordly.android.component.ui.components.ScreenTitle
 import com.nmichail.wordly.android.component.ui.components.SignUpAuthHeader
 import com.nmichail.wordly.android.component.ui.components.TextField
+import com.nmichail.wordly.android.component.ui.components.TextLink
 import com.nmichail.wordly.android.component.ui.components.snackbar.SnackBarHost
 import com.nmichail.wordly.android.component.ui.components.snackbar.showErrorSnackBar
 import com.nmichail.wordly.android.component.ui.validation.emailErrorMessage
@@ -49,41 +51,27 @@ fun SignUpContent(
 	val snackBarHostState = remember { SnackbarHostState() }
 	val context = LocalContext.current
 
-	LaunchedEffect(component) {
-		for (label in component.labelsChannel()) {
-			when (label) {
-				SignUpComponent.Label.ShowRegistrationError -> {
-					showErrorSnackBar(
-						snackBarHostState = snackBarHostState,
-						message = context.getString(R.string.sign_up_registration_error),
-					)
-				}
-				SignUpComponent.Label.ShowNoConnection -> {
-					showErrorSnackBar(
-						snackBarHostState = snackBarHostState,
-						message = context.getString(R.string.sign_up_no_connection),
-					)
-				}
-				SignUpComponent.Label.ShowUnknownError -> {
-					showErrorSnackBar(
-						snackBarHostState = snackBarHostState,
-						message = context.getString(R.string.sign_up_unknown_error),
-					)
-				}
-				else -> Unit
-			}
+	LaunchedEffect(state.error) {
+		val error = state.error ?: return@LaunchedEffect
+		val message = when (error) {
+			SignUpComponent.Error.RegistrationFailed -> context.getString(R.string.sign_up_registration_error)
+			SignUpComponent.Error.NoConnection -> context.getString(R.string.sign_up_no_connection)
 		}
+		showErrorSnackBar(
+			snackBarHostState = snackBarHostState,
+			message = message,
+		)
+		component.handleErrorShown()
 	}
 
 	Scaffold(
 		modifier = modifier.fillMaxSize(),
 		containerColor = Color.Transparent,
+		contentWindowInsets = WindowInsets(0, 0, 0, 0),
 		snackbarHost = { SnackBarHost(snackBarHostState = snackBarHostState) },
-	) { paddingValues ->
+	) {
 		AuthBackground(
-			modifier = Modifier
-				.fillMaxSize()
-				.padding(paddingValues),
+			modifier = Modifier.fillMaxSize(),
 			header = {
 				Column(modifier = Modifier.padding(horizontal = 20.dp)) {
 					SignUpAuthHeader()
@@ -109,7 +97,6 @@ private fun SignUpForm(
 ) {
 	ScreenTitle(
 		title = stringResource(R.string.sign_up_title),
-		subtitle = stringResource(R.string.sign_up_subtitle),
 		modifier = Modifier.padding(top = 16.dp),
 	)
 
@@ -139,13 +126,24 @@ private fun SignUpForm(
 		text = stringResource(R.string.sign_up_submit),
 		onClick = component::handleSubmit,
 		enabled = state.areFieldsValid(),
+		loading = state.isSubmitting,
 		modifier = Modifier.padding(top = 24.dp),
 	)
-	CaptionText(
+	LinkedText(
 		text = stringResource(R.string.sign_up_terms),
+		linkText = stringResource(R.string.sign_up_terms_link),
+		onLinkClick = { component.handleOpenTermsOfUse() },
 		modifier = Modifier
 			.fillMaxWidth()
 			.padding(top = 20.dp),
+	)
+	TextLink(
+		text = stringResource(R.string.sign_up_has_account),
+		onClick = component::handleNavigateToSignIn,
+		enabled = !state.isSubmitting,
+		modifier = Modifier
+			.fillMaxWidth()
+			.padding(top = 12.dp),
 	)
 }
 
@@ -197,13 +195,20 @@ private fun SignUpEnglishLevelField(
 	state: SignUpComponent.State,
 	component: SignUpComponent,
 ) {
-	val englishLevels = stringArrayResource(R.array.sign_up_english_levels).toList()
+	val englishLevelCodes = stringArrayResource(R.array.sign_up_english_level_codes).toList()
+	val englishLevelLabels = stringArrayResource(R.array.sign_up_english_levels).toList()
+	val selectedLabel = englishLevelLabels.getOrElse(englishLevelCodes.indexOf(state.englishLevel.data)) { "" }
 
 	SelectionField(
 		label = stringResource(R.string.sign_up_english_level_label),
-		value = state.englishLevel.data,
-		options = englishLevels,
-		onValueChange = component::handleChangeEnglishLevel,
+		value = selectedLabel,
+		options = englishLevelLabels,
+		onValueChange = { label ->
+			val index = englishLevelLabels.indexOf(label)
+			if (index >= 0) {
+				component.handleChangeEnglishLevel(englishLevelCodes[index])
+			}
+		},
 		errorVisible = state.englishLevel.validationState is NotEmptyValidationState.Invalid,
 		errorMessage = stringResource(id = notEmptyErrorMessage(state = state.englishLevel.validationState)),
 		modifier = Modifier.padding(top = 16.dp),
