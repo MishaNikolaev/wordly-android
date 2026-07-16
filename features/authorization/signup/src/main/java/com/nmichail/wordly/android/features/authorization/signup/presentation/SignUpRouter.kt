@@ -5,4 +5,6 @@ interface SignUpRouter {
 	fun navigateToSignIn()
 
 	fun navigateToMain()
+
+	fun openTermsOfUse()
 }

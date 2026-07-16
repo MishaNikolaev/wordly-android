@@ -132,4 +132,11 @@ class DefaultSignUpComponentTest {
 
 		verify(signUpRouter).navigateToSignIn()
 	}
+
+	@Test
+	fun `open terms of use EXPECT open terms`() {
+		component.handleOpenTermsOfUse()
+
+		verify(signUpRouter).openTermsOfUse()
+	}
 }
