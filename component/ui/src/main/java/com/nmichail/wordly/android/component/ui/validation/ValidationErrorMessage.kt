@@ -17,9 +17,10 @@ fun emailErrorMessage(state: DefaultValidationState): Int {
 
 	return when (state.invalidState) {
 		EmailInvalidState.EMPTY_EMAIL -> R.string.validation_error_empty_email
-		EmailInvalidState.INVALID_LENGTH_BEFORE_AT_SIGN -> R.string.validation_error_invalid_length_before_at_email
-		EmailInvalidState.INVALID_LENGTH -> R.string.validation_error_invalid_length_email
-		EmailInvalidState.INVALID_EMAIL -> R.string.validation_error_invalid_email
+		EmailInvalidState.INVALID_LENGTH_BEFORE_AT_SIGN,
+		EmailInvalidState.INVALID_LENGTH,
+		EmailInvalidState.INVALID_EMAIL,
+		-> R.string.validation_error_invalid_email
 		else -> R.string.empty
 	}
 }
@@ -46,8 +47,8 @@ fun nameErrorMessage(state: DefaultValidationState, namePart: NamePart): Int {
 
 	return when (state.invalidState) {
 		NameInvalidState.EMPTY_NAME -> nameEmptyErrorMessage(namePart)
-		NameInvalidState.INVALID_MIN_LENGTH -> R.string.validation_error_invalid_min_length_name
-		NameInvalidState.INVALID_MAX_LENGTH -> R.string.validation_error_invalid_max_length_name
+		NameInvalidState.INVALID_MIN_LENGTH -> nameShortErrorMessage(namePart)
+		NameInvalidState.INVALID_MAX_LENGTH -> nameLongErrorMessage(namePart)
 		NameInvalidState.INVALID_NAME -> R.string.validation_error_invalid_name
 		else -> R.string.empty
 	}
@@ -58,6 +59,20 @@ private fun nameEmptyErrorMessage(namePart: NamePart): Int =
 	when (namePart) {
 		NamePart.NAME -> R.string.validation_error_empty_first_name
 		NamePart.SURNAME -> R.string.validation_error_empty_last_name
+	}
+
+@Composable
+private fun nameShortErrorMessage(namePart: NamePart): Int =
+	when (namePart) {
+		NamePart.NAME -> R.string.validation_error_short_first_name
+		NamePart.SURNAME -> R.string.validation_error_short_last_name
+	}
+
+@Composable
+private fun nameLongErrorMessage(namePart: NamePart): Int =
+	when (namePart) {
+		NamePart.NAME -> R.string.validation_error_long_first_name
+		NamePart.SURNAME -> R.string.validation_error_long_last_name
 	}
 
 @Composable

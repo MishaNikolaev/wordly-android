@@ -29,17 +29,17 @@
 
 	<string name="empty" />
 
-	<string name="validation_error_empty">Это поле не может быть пустым</string>
-	<string name="validation_error_empty_email">Укажите почту</string>
-	<string name="validation_error_invalid_email">Некорректная почта</string>
-	<string name="validation_error_invalid_length_email">Длина почты должна быть от 3 до 320 символов</string>
-	<string name="validation_error_invalid_length_before_at_email">Длина почты до @ должна быть от 1 до 64 символов</string>
-	<string name="validation_error_empty_password">Укажите пароль</string>
-	<string name="validation_error_invalid_min_length_password">Минимальная длина пароля: 8 символов</string>
-	<string name="validation_error_invalid_max_length_password">Превышена максимальная длина пароля</string>
-	<string name="validation_error_empty_first_name">Укажите имя</string>
-	<string name="validation_error_empty_last_name">Укажите фамилию</string>
-	<string name="validation_error_invalid_name">Поле может содержать только латинские буквы и дефис</string>
-	<string name="validation_error_invalid_min_length_name">Минимальное количество символов: 2</string>
-	<string name="validation_error_invalid_max_length_name">Превышено максимальное количество символов</string>
+	<string name="validation_error_empty">Обязательное поле</string>
+	<string name="validation_error_empty_email">Введите email</string>
+	<string name="validation_error_invalid_email">Некорректный email</string>
+	<string name="validation_error_empty_password">Введите пароль</string>
+	<string name="validation_error_invalid_min_length_password">Не меньше 8 символов</string>
+	<string name="validation_error_invalid_max_length_password">Слишком длинный пароль</string>
+	<string name="validation_error_empty_first_name">Введите имя</string>
+	<string name="validation_error_empty_last_name">Введите фамилию</string>
+	<string name="validation_error_invalid_name">Только латинские буквы</string>
+	<string name="validation_error_short_first_name">Слишком короткое имя</string>
+	<string name="validation_error_short_last_name">Слишком короткая фамилия</string>
+	<string name="validation_error_long_first_name">Слишком длинное имя</string>
+	<string name="validation_error_long_last_name">Слишком длинная фамилия</string>
 </resources>
