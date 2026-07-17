@@ -1,0 +1,46 @@
+package com.nmichail.wordly.android.features.review.presentation
+
+import com.arkivanov.decompose.ComponentContext
+import com.arkivanov.decompose.value.Value
+import com.arkivanov.mvikotlin.core.instancekeeper.getStore
+import com.arkivanov.mvikotlin.extensions.coroutines.labelsChannel
+import com.nmichail.wordly.android.component.presentation.launchTry
+import com.nmichail.wordly.android.core.navigation.asValue
+
+internal class DefaultReviewComponent(
+	componentContext: ComponentContext,
+	reviewStoreFactory: ReviewStoreFactory,
+	private val reviewRouter: ReviewRouter,
+) : ComponentContext by componentContext,
+	ReviewComponent {
+
+	private val store: ReviewStore = instanceKeeper.getStore {
+		reviewStoreFactory.create()
+	}
+
+	override val model: Value<ReviewComponent.State> = store.asValue()
+
+	init {
+		launchTry {
+			for (label in store.labelsChannel(lifecycle)) {
+				when (label) {
+					ReviewComponent.Label.Close -> reviewRouter.navigateBack()
+				}
+			}
+		} catch {
+			// ignored
+		}
+	}
+
+	override fun handleClose() {
+		store.accept(ReviewStore.Intent.Close)
+	}
+
+	override fun handlePlayAudio() {
+		store.accept(ReviewStore.Intent.PlayAudio)
+	}
+
+	override fun handleSelectOption(optionId: String) {
+		store.accept(ReviewStore.Intent.SelectOption(optionId = optionId))
+	}
+}

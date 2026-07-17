@@ -2,7 +2,10 @@ package com.nmichail.wordly.android.mainhost.ui
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Badge
+import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -23,66 +26,81 @@ fun MainBottomBar(
 	selectedTab: MainHostTab,
 	onTabSelected: (MainHostTab) -> Unit,
 	modifier: Modifier = Modifier,
+	badges: Map<MainHostTab, Int> = emptyMap(),
 ) {
-	val items = listOf(
-		BottomBarItem(
-			tab = MainHostTab.Home,
-			labelResId = R.string.bottom_nav_learn,
-			iconResId = R.drawable.learning,
-		),
-		BottomBarItem(
-			tab = MainHostTab.Words,
-			labelResId = R.string.bottom_nav_words,
-			iconResId = R.drawable.words,
-		),
-		BottomBarItem(
-			tab = MainHostTab.Stats,
-			labelResId = R.string.bottom_nav_stats,
-			iconResId = R.drawable.stats,
-		),
-		BottomBarItem(
-			tab = MainHostTab.Profile,
-			labelResId = R.string.bottom_nav_profile,
-			iconResId = R.drawable.profile,
-		),
-	)
-
 	NavigationBar(
 		modifier = modifier,
-		containerColor = MaterialTheme.colorScheme.background,
+		containerColor = MaterialTheme.colorScheme.surface,
 		contentColor = MaterialTheme.colorScheme.secondary,
 	) {
-		items.forEach { item ->
-			val selected = selectedTab == item.tab
-			val colorScheme = MaterialTheme.colorScheme
-
-			NavigationBarItem(
-				selected = selected,
+		bottomBarItems().forEach { item ->
+			BottomBarNavigationItem(
+				item = item,
+				selected = selectedTab == item.tab,
+				badgeCount = badges[item.tab],
 				onClick = { onTabSelected(item.tab) },
-				icon = {
-					Icon(
-						painter = painterResource(item.iconResId),
-						contentDescription = stringResource(item.labelResId),
-						modifier = Modifier.size(27.dp),
-					)
-				},
-				label = {
-					Text(
-						text = stringResource(item.labelResId),
-						style = MaterialTheme.typography.labelSmall.copy(fontSize = 11.sp),
-					)
-				},
-				colors = NavigationBarItemDefaults.colors(
-					selectedIconColor = colorScheme.secondary,
-					selectedTextColor = colorScheme.secondary,
-					unselectedIconColor = colorScheme.onSurfaceVariant,
-					unselectedTextColor = colorScheme.onSurfaceVariant,
-					indicatorColor = colorScheme.background,
-				),
 			)
 		}
 	}
 }
+
+@Composable
+private fun RowScope.BottomBarNavigationItem(
+	item: BottomBarItem,
+	selected: Boolean,
+	badgeCount: Int?,
+	onClick: () -> Unit,
+) {
+	val colorScheme = MaterialTheme.colorScheme
+
+	NavigationBarItem(
+		selected = selected,
+		onClick = onClick,
+		icon = {
+			BadgedBox(
+				badge = {
+					if (badgeCount != null && badgeCount > 0) {
+						Badge(
+							containerColor = colorScheme.error,
+							contentColor = colorScheme.onError,
+						) {
+							Text(
+								text = badgeCount.toString(),
+								style = MaterialTheme.typography.labelSmall.copy(fontSize = 10.sp),
+							)
+						}
+					}
+				},
+			) {
+				Icon(
+					painter = painterResource(item.iconResId),
+					contentDescription = stringResource(item.labelResId),
+					modifier = Modifier.size(27.dp),
+				)
+			}
+		},
+		label = {
+			Text(
+				text = stringResource(item.labelResId),
+				style = MaterialTheme.typography.labelSmall.copy(fontSize = 11.sp),
+			)
+		},
+		colors = NavigationBarItemDefaults.colors(
+			selectedIconColor = colorScheme.secondary,
+			selectedTextColor = colorScheme.secondary,
+			unselectedIconColor = colorScheme.onSurfaceVariant,
+			unselectedTextColor = colorScheme.onSurfaceVariant,
+			indicatorColor = colorScheme.surface,
+		),
+	)
+}
+
+private fun bottomBarItems(): List<BottomBarItem> = listOf(
+	BottomBarItem(MainHostTab.Home, R.string.bottom_nav_learn, R.drawable.learning),
+	BottomBarItem(MainHostTab.Words, R.string.bottom_nav_words, R.drawable.words),
+	BottomBarItem(MainHostTab.Stats, R.string.bottom_nav_stats, R.drawable.stats),
+	BottomBarItem(MainHostTab.Profile, R.string.bottom_nav_profile, R.drawable.profile),
+)
 
 private data class BottomBarItem(
 	val tab: MainHostTab,

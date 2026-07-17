@@ -23,6 +23,10 @@ object WordlyColors {
 	val LightError = Color(0xFFE5484D)
 	val LightSuccess = Color(0xFF16B364)
 	val LightWarning = Color(0xFFE08A00)
+	val Streak = Color(0xFFFF9500)
+	val StreakContainer = Color(0xFFFFF2DD)
+	val ReviewAccent = Color(0xFF8A6D00)
+	val ReviewAccentContainer = Color(0xFFFFFBEB)
 
 	val DarkPrimaryContainer = Color(0xFF4A3D00)
 	val DarkOnPrimaryContainer = Color(0xFFFFEE8F)

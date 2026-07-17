@@ -107,8 +107,8 @@ fun WordCard(
 		WordCardTopBar(
 			languageDirection = languageDirection,
 			iconTint = colorScheme.onSurfaceVariant,
-			badgeBackground = colorScheme.primaryContainer,
-			badgeText = colorScheme.inversePrimary,
+			chipBackground = colorScheme.primaryContainer,
+			chipText = colorScheme.inversePrimary,
 			onPlayClick = onPlayClick,
 		)
 		Box(
@@ -131,8 +131,8 @@ fun WordCard(
 private fun WordCardTopBar(
 	languageDirection: String,
 	iconTint: Color,
-	badgeBackground: Color,
-	badgeText: Color,
+	chipBackground: Color,
+	chipText: Color,
 	onPlayClick: (() -> Unit)?,
 ) {
 	Row(
@@ -144,10 +144,10 @@ private fun WordCardTopBar(
 			text = languageDirection,
 			style = MaterialTheme.typography.labelSmall,
 			fontWeight = FontWeight.Bold,
-			color = badgeText,
+			color = chipText,
 			modifier = Modifier
 				.clip(RoundedCornerShape(8.dp))
-				.background(badgeBackground)
+				.background(chipBackground)
 				.padding(horizontal = 8.dp, vertical = 4.dp),
 		)
 		if (onPlayClick != null) {

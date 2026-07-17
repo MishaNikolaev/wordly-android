@@ -1,0 +1,15 @@
+{
+  "streakDays": 7,
+  "wordsToReview": 12,
+  "estimatedMinutes": 4,
+  "reviewStreakDays": 7,
+  "trainings": [
+    "cards",
+    "constructor",
+    "listening",
+    "songs",
+    "movies",
+    "books"
+  ],
+  "completedDayOffsets": [-3, -2, -1, -10, -15, -20, -25, -32, -40, -45]
+}
