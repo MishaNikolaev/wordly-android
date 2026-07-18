@@ -40,6 +40,33 @@ internal fun get(context: Context, uri: Uri, response: Response.Builder): Respon
 			body = context.getJson(R.raw.get_home),
 		)
 
-		else -> response.error404(context)
+		else -> {
+			val newsId = path.removePrefix("/api/news/").takeIf {
+				path.startsWith("/api/news/") && it.isNotEmpty() && !it.contains('/')
+			}
+			if (newsId != null) {
+				val newsBody = newsJson(context, newsId)
+				if (newsBody != null) {
+					response.create(
+						description = "News detail",
+						body = newsBody,
+					)
+				} else {
+					response.error404(context)
+				}
+			} else {
+				response.error404(context)
+			}
+		}
 	}
+}
+
+private fun newsJson(context: Context, newsId: String): String? {
+	val rawId = when (newsId) {
+		"phrasal-verbs" -> R.raw.get_news_phrasal_verbs
+		"spaced-repetition" -> R.raw.get_news_spaced_repetition
+		"listening-tip" -> R.raw.get_news_listening_tip
+		else -> return null
+	}
+	return context.getJson(rawId)
 }

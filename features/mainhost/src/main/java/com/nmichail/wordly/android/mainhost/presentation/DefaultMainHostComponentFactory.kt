@@ -2,7 +2,7 @@ package com.nmichail.wordly.android.mainhost.presentation
 
 import com.arkivanov.decompose.ComponentContext
 import com.nmichail.wordly.android.features.home.presentation.HomeComponent
-import com.nmichail.wordly.android.features.home.presentation.NewsDetailComponent
+import com.nmichail.wordly.android.features.news.presentation.NewsDetailComponent
 import com.nmichail.wordly.android.features.review.presentation.ReviewComponent
 import javax.inject.Inject
 

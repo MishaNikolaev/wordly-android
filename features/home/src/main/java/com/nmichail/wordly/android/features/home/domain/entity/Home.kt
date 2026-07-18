@@ -1,5 +1,7 @@
 package com.nmichail.wordly.android.features.home.domain.entity
 
+import com.nmichail.wordly.android.features.news.domain.entity.News
+
 data class Home(
 	val firstName: String,
 	val streakDays: Int,

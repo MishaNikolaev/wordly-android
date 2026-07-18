@@ -83,6 +83,11 @@
 	<string name="home_trainings_section">Тренировки</string>
 	<string name="home_news_section">Новости об английском</string>
 	<string name="news_detail_back">Назад</string>
+	<string name="news_detail_bookmark">В закладки</string>
+	<string name="news_detail_share">Поделиться</string>
+	<string name="news_detail_category">Новости об английском</string>
+	<string name="news_detail_reading_minutes">%d мин чтения</string>
+	<string name="news_detail_author_meta">%1$s · %2$s</string>
 
 	<string name="home_training_cards_title">Карточки</string>
 	<string name="home_training_cards_subtitle">слова по темам</string>

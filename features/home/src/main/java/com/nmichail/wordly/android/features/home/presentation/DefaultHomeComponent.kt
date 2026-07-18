@@ -6,8 +6,8 @@ import com.arkivanov.mvikotlin.core.instancekeeper.getStore
 import com.arkivanov.mvikotlin.extensions.coroutines.labelsChannel
 import com.nmichail.wordly.android.component.presentation.launchTry
 import com.nmichail.wordly.android.core.navigation.asValue
-import com.nmichail.wordly.android.features.home.domain.entity.News
 import com.nmichail.wordly.android.features.home.domain.entity.Training
+import com.nmichail.wordly.android.features.news.domain.entity.News
 
 internal class DefaultHomeComponent(
 	componentContext: ComponentContext,

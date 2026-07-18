@@ -38,10 +38,10 @@ import com.nmichail.wordly.android.component.ui.components.WeekDayStatusId
 import com.nmichail.wordly.android.component.ui.components.WeekProgressCard
 import com.nmichail.wordly.android.component.ui.components.homeGreeting
 import com.nmichail.wordly.android.features.home.domain.entity.MonthDayStatus
-import com.nmichail.wordly.android.features.home.domain.entity.WeekDayStatus
-import com.nmichail.wordly.android.features.home.domain.entity.News
 import com.nmichail.wordly.android.features.home.domain.entity.Training
+import com.nmichail.wordly.android.features.home.domain.entity.WeekDayStatus
 import com.nmichail.wordly.android.features.home.presentation.HomeComponent
+import com.nmichail.wordly.android.features.news.domain.entity.News
 import java.time.DayOfWeek
 
 @Composable
