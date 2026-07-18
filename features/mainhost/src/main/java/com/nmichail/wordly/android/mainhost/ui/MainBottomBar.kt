@@ -1,11 +1,13 @@
 package com.nmichail.wordly.android.mainhost.ui
 
-import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Badge
-import androidx.compose.material3.BadgedBox
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Article
+import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.MenuBook
+import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -14,30 +16,30 @@ import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.nmichail.wordly.android.features.mainhost.R
 import com.nmichail.wordly.android.mainhost.presentation.MainHostTab
 
+private val BottomBarIconSize = 24.dp
+
 @Composable
 fun MainBottomBar(
 	selectedTab: MainHostTab,
 	onTabSelected: (MainHostTab) -> Unit,
 	modifier: Modifier = Modifier,
-	badges: Map<MainHostTab, Int> = emptyMap(),
 ) {
 	NavigationBar(
 		modifier = modifier,
 		containerColor = MaterialTheme.colorScheme.surface,
-		contentColor = MaterialTheme.colorScheme.secondary,
+		contentColor = MaterialTheme.colorScheme.primary,
 	) {
 		bottomBarItems().forEach { item ->
 			BottomBarNavigationItem(
 				item = item,
 				selected = selectedTab == item.tab,
-				badgeCount = badges[item.tab],
 				onClick = { onTabSelected(item.tab) },
 			)
 		}
@@ -48,7 +50,6 @@ fun MainBottomBar(
 private fun RowScope.BottomBarNavigationItem(
 	item: BottomBarItem,
 	selected: Boolean,
-	badgeCount: Int?,
 	onClick: () -> Unit,
 ) {
 	val colorScheme = MaterialTheme.colorScheme
@@ -57,27 +58,11 @@ private fun RowScope.BottomBarNavigationItem(
 		selected = selected,
 		onClick = onClick,
 		icon = {
-			BadgedBox(
-				badge = {
-					if (badgeCount != null && badgeCount > 0) {
-						Badge(
-							containerColor = colorScheme.error,
-							contentColor = colorScheme.onError,
-						) {
-							Text(
-								text = badgeCount.toString(),
-								style = MaterialTheme.typography.labelSmall.copy(fontSize = 10.sp),
-							)
-						}
-					}
-				},
-			) {
-				Icon(
-					painter = painterResource(item.iconResId),
-					contentDescription = stringResource(item.labelResId),
-					modifier = Modifier.size(27.dp),
-				)
-			}
+			Icon(
+				imageVector = item.icon,
+				contentDescription = stringResource(item.labelResId),
+				modifier = Modifier.size(BottomBarIconSize),
+			)
 		},
 		label = {
 			Text(
@@ -86,24 +71,24 @@ private fun RowScope.BottomBarNavigationItem(
 			)
 		},
 		colors = NavigationBarItemDefaults.colors(
-			selectedIconColor = colorScheme.secondary,
-			selectedTextColor = colorScheme.secondary,
+			selectedIconColor = colorScheme.primary,
+			selectedTextColor = colorScheme.primary,
 			unselectedIconColor = colorScheme.onSurfaceVariant,
 			unselectedTextColor = colorScheme.onSurfaceVariant,
-			indicatorColor = colorScheme.surface,
+			indicatorColor = colorScheme.primaryContainer,
 		),
 	)
 }
 
 private fun bottomBarItems(): List<BottomBarItem> = listOf(
-	BottomBarItem(MainHostTab.Home, R.string.bottom_nav_learn, R.drawable.learning),
-	BottomBarItem(MainHostTab.Words, R.string.bottom_nav_words, R.drawable.words),
-	BottomBarItem(MainHostTab.Stats, R.string.bottom_nav_stats, R.drawable.stats),
-	BottomBarItem(MainHostTab.Profile, R.string.bottom_nav_profile, R.drawable.profile),
+	BottomBarItem(MainHostTab.Home, R.string.bottom_nav_learn, Icons.Outlined.Home),
+	BottomBarItem(MainHostTab.Words, R.string.bottom_nav_words, Icons.Outlined.MenuBook),
+	BottomBarItem(MainHostTab.Stats, R.string.bottom_nav_materials, Icons.Outlined.Article),
+	BottomBarItem(MainHostTab.Profile, R.string.bottom_nav_profile, Icons.Outlined.Person),
 )
 
 private data class BottomBarItem(
 	val tab: MainHostTab,
 	@StringRes val labelResId: Int,
-	@DrawableRes val iconResId: Int,
+	val icon: ImageVector,
 )

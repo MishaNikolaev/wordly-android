@@ -15,10 +15,7 @@ import com.nmichail.wordly.android.features.review.ui.ReviewContent
 import com.nmichail.wordly.android.features.stats.ui.StatsContent
 import com.nmichail.wordly.android.features.words.ui.WordContent
 import com.nmichail.wordly.android.mainhost.presentation.MainHostComponent
-import com.nmichail.wordly.android.mainhost.presentation.MainHostTab
 import com.nmichail.wordly.android.mainhost.presentation.toTab
-
-private const val HOME_TAB_BADGE_COUNT = 12
 
 @Composable
 fun MainHostContent(
@@ -38,7 +35,6 @@ fun MainHostContent(
 				MainBottomBar(
 					selectedTab = selectedTab,
 					onTabSelected = component::handleSelectTab,
-					badges = mapOf(MainHostTab.Home to HOME_TAB_BADGE_COUNT),
 				)
 			}
 		},
