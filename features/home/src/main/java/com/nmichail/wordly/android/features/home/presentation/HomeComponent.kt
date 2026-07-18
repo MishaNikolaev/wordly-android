@@ -3,9 +3,9 @@ package com.nmichail.wordly.android.features.home.presentation
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.value.Value
 import com.nmichail.wordly.android.features.home.domain.entity.MonthDay
-import com.nmichail.wordly.android.features.home.domain.entity.News
 import com.nmichail.wordly.android.features.home.domain.entity.Training
 import com.nmichail.wordly.android.features.home.domain.entity.WeekDay
+import com.nmichail.wordly.android.features.news.domain.entity.News
 
 interface HomeComponent {
 

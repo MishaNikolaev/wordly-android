@@ -1,6 +1,6 @@
 package com.nmichail.wordly.android.features.home.presentation
 
-import com.nmichail.wordly.android.features.home.domain.entity.News
+import com.nmichail.wordly.android.features.news.domain.entity.News
 
 interface HomeRouter {
 

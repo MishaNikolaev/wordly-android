@@ -9,7 +9,7 @@ import androidx.compose.ui.Modifier
 import com.arkivanov.decompose.extensions.compose.stack.Children
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import com.nmichail.wordly.android.features.home.ui.HomeContent
-import com.nmichail.wordly.android.features.home.ui.components.NewsDetailContent
+import com.nmichail.wordly.android.features.news.ui.NewsDetailContent
 import com.nmichail.wordly.android.features.profile.ui.ProfileContent
 import com.nmichail.wordly.android.features.review.ui.ReviewContent
 import com.nmichail.wordly.android.features.stats.ui.StatsContent

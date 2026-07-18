@@ -4,7 +4,7 @@ import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.router.stack.ChildStack
 import com.arkivanov.decompose.value.Value
 import com.nmichail.wordly.android.features.home.presentation.HomeComponent
-import com.nmichail.wordly.android.features.home.presentation.NewsDetailComponent
+import com.nmichail.wordly.android.features.news.presentation.NewsDetailComponent
 import com.nmichail.wordly.android.features.review.presentation.ReviewComponent
 
 interface MainHostComponent {

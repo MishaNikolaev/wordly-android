@@ -9,10 +9,11 @@ import com.arkivanov.decompose.router.stack.childStack
 import com.arkivanov.decompose.router.stack.pop
 import com.arkivanov.decompose.router.stack.push
 import com.arkivanov.decompose.value.Value
-import com.nmichail.wordly.android.features.home.domain.entity.News
 import com.nmichail.wordly.android.features.home.presentation.HomeComponent
 import com.nmichail.wordly.android.features.home.presentation.HomeRouter
-import com.nmichail.wordly.android.features.home.presentation.NewsDetailComponent
+import com.nmichail.wordly.android.features.news.domain.entity.News
+import com.nmichail.wordly.android.features.news.presentation.NewsDetailComponent
+import com.nmichail.wordly.android.features.news.presentation.NewsDetailRouter
 import com.nmichail.wordly.android.features.review.presentation.ReviewComponent
 import com.nmichail.wordly.android.features.review.presentation.ReviewRouter
 import kotlinx.serialization.Serializable
@@ -51,15 +52,7 @@ internal class DefaultMainHostComponent(
 					}
 
 					override fun navigateToNews(news: News) {
-						navigation.push(
-							MainHostConfig.NewsDetail(
-								id = news.id,
-								title = news.title,
-								subtitle = news.subtitle,
-								body = news.body,
-								publishedAt = news.publishedAt,
-							),
-						)
+						navigation.push(MainHostConfig.NewsDetail(newsId = news.id))
 					}
 				}
 				MainHostComponent.Child.Home(
@@ -86,17 +79,16 @@ internal class DefaultMainHostComponent(
 				)
 			}
 			is MainHostConfig.NewsDetail -> {
+				val newsDetailRouter = object : NewsDetailRouter {
+					override fun navigateBack() {
+						navigation.pop()
+					}
+				}
 				MainHostComponent.Child.NewsDetail(
 					component = newsDetailComponentFactory(
 						componentContext = componentContext,
-						news = News(
-							id = config.id,
-							title = config.title,
-							subtitle = config.subtitle,
-							body = config.body,
-							publishedAt = config.publishedAt,
-						),
-						onBack = { navigation.pop() },
+						newsId = config.newsId,
+						newsDetailRouter = newsDetailRouter,
 					),
 				)
 			}
@@ -123,11 +115,7 @@ private sealed interface MainHostConfig {
 
 	@Serializable
 	data class NewsDetail(
-		val id: String,
-		val title: String,
-		val subtitle: String,
-		val body: String,
-		val publishedAt: String,
+		val newsId: String,
 	) : MainHostConfig
 }
 

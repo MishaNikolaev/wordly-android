@@ -4,8 +4,8 @@ import com.nmichail.wordly.android.features.home.data.dto.HomeResponse
 import com.nmichail.wordly.android.features.home.data.dto.NewsResponse
 import com.nmichail.wordly.android.features.home.data.dto.TrainingResponse
 import com.nmichail.wordly.android.features.home.domain.entity.Home
-import com.nmichail.wordly.android.features.home.domain.entity.News
 import com.nmichail.wordly.android.features.home.domain.entity.Training
+import com.nmichail.wordly.android.features.news.domain.entity.News
 
 internal fun HomeResponse.toEntity(): Home =
 	Home(
@@ -31,6 +31,9 @@ private fun NewsResponse.toEntity(): News =
 		id = id,
 		title = title,
 		subtitle = subtitle,
-		body = body,
 		publishedAt = publishedAt,
+		readingMinutes = readingMinutes,
+		author = author,
+		imageUrl = imageUrl,
+		content = emptyList(),
 	)

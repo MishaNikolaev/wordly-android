@@ -28,6 +28,7 @@ enum class StatusChipStyle {
 	Accent,
 	Warm,
 	Streak,
+	OnMedia,
 }
 
 @Composable
@@ -101,6 +102,11 @@ private fun chipColors(style: StatusChipStyle): ChipColors {
 			},
 			content = colorScheme.primary,
 			icon = colorScheme.primary,
+		)
+		StatusChipStyle.OnMedia -> ChipColors(
+			background = Color.White.copy(alpha = 0.22f),
+			content = Color.White,
+			icon = Color.White,
 		)
 	}
 }

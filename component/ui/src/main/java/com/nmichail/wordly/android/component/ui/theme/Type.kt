@@ -116,4 +116,17 @@ object WordlyTypography {
 		fontSize = 12.sp,
 		lineHeight = 16.sp,
 	)
+
+	val newsDetailTitle = TextStyle(
+		fontWeight = FontWeight.Bold,
+		fontSize = 26.sp,
+		lineHeight = 32.sp,
+	)
+
+	val newsDetailCategory = TextStyle(
+		fontWeight = FontWeight.SemiBold,
+		fontSize = 11.sp,
+		lineHeight = 14.sp,
+		letterSpacing = 1.2.sp,
+	)
 }
