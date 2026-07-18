@@ -35,6 +35,11 @@ internal fun get(context: Context, uri: Uri, response: Response.Builder): Respon
 			body = context.getJson(R.raw.profile_ok),
 		)
 
+		"/api/gateway/home" -> response.create(
+			description = "Home screen",
+			body = context.getJson(R.raw.get_home),
+		)
+
 		else -> response.error404(context)
 	}
 }

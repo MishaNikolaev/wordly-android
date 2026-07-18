@@ -61,7 +61,7 @@ fun AuthPreviewWordCard(
 					ambientColor = AUTH_PREVIEW_CARD_SHADOW_COLOR,
 					spotColor = AUTH_PREVIEW_CARD_SHADOW_COLOR,
 				)
-				.background(colorScheme.surfaceBright, AUTH_PREVIEW_WORD_CARD_SHAPE)
+				.background(colorScheme.surface, AUTH_PREVIEW_WORD_CARD_SHAPE)
 				.padding(horizontal = 16.dp, vertical = 10.dp),
 		) {
 			Text(
@@ -101,14 +101,14 @@ fun WordCard(
 				shadowElevation = shadowElevationPx
 				rotationZ = rotation
 			}
-			.background(colorScheme.surfaceBright, WORD_CARD_SHAPE)
+			.background(colorScheme.surface, WORD_CARD_SHAPE)
 			.padding(horizontal = 12.dp, vertical = 12.dp),
 	) {
 		WordCardTopBar(
 			languageDirection = languageDirection,
 			iconTint = colorScheme.onSurfaceVariant,
-			badgeBackground = colorScheme.primaryContainer,
-			badgeText = colorScheme.inversePrimary,
+			chipBackground = colorScheme.primaryContainer,
+			chipText = colorScheme.inversePrimary,
 			onPlayClick = onPlayClick,
 		)
 		Box(
@@ -131,8 +131,8 @@ fun WordCard(
 private fun WordCardTopBar(
 	languageDirection: String,
 	iconTint: Color,
-	badgeBackground: Color,
-	badgeText: Color,
+	chipBackground: Color,
+	chipText: Color,
 	onPlayClick: (() -> Unit)?,
 ) {
 	Row(
@@ -144,10 +144,10 @@ private fun WordCardTopBar(
 			text = languageDirection,
 			style = MaterialTheme.typography.labelSmall,
 			fontWeight = FontWeight.Bold,
-			color = badgeText,
+			color = chipText,
 			modifier = Modifier
 				.clip(RoundedCornerShape(8.dp))
-				.background(badgeBackground)
+				.background(chipBackground)
 				.padding(horizontal = 8.dp, vertical = 4.dp),
 		)
 		if (onPlayClick != null) {
@@ -157,11 +157,6 @@ private fun WordCardTopBar(
 			) {
 				WordCardSpeakerIcon(tint = iconTint)
 			}
-		} else {
-			WordCardSpeakerIcon(
-				tint = iconTint,
-				modifier = Modifier.size(16.dp),
-			)
 		}
 	}
 }

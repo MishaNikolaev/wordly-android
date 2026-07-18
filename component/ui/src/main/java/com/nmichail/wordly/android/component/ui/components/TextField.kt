@@ -5,8 +5,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Email
-import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material.icons.outlined.Visibility
 import androidx.compose.material.icons.outlined.VisibilityOff
 import androidx.compose.material3.Icon
@@ -22,7 +20,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -42,7 +39,6 @@ fun TextField(
 	errorMessage: String = "",
 ) {
 	var passwordVisible by remember { mutableStateOf(false) }
-	val leadingIcon = textFieldLeadingIcon(isPassword = isPassword, keyboardType = keyboardType)
 
 	Column(modifier = modifier.fillMaxWidth()) {
 		Text(
@@ -55,21 +51,12 @@ fun TextField(
 			value = value,
 			onValueChange = onValueChange,
 			modifier = Modifier.fillMaxWidth(),
-			leadingIcon = leadingIcon?.let { icon ->
-				{
-					Icon(
-						imageVector = icon,
-						contentDescription = null,
-						tint = MaterialTheme.colorScheme.onSurfaceVariant,
-					)
-				}
-			},
 			trailingIcon = passwordTrailingIcon(
 				isPassword = isPassword,
 				passwordVisible = passwordVisible,
 				onToggle = { passwordVisible = !passwordVisible },
 			),
-			shape = MaterialTheme.shapes.small,
+			shape = MaterialTheme.shapes.extraSmall,
 			singleLine = true,
 			isError = errorVisible,
 			supportingText = fieldErrorText(errorMessage),
@@ -84,16 +71,6 @@ fun TextField(
 		)
 	}
 }
-
-private fun textFieldLeadingIcon(
-	isPassword: Boolean,
-	keyboardType: KeyboardType,
-): ImageVector? =
-	when {
-		isPassword                         -> Icons.Outlined.Lock
-		keyboardType == KeyboardType.Email -> Icons.Outlined.Email
-		else                               -> null
-	}
 
 @Composable
 private fun passwordTrailingIcon(
@@ -149,9 +126,9 @@ private fun PasswordVisibilityToggle(
 @Composable
 private fun textFieldColors(): TextFieldColors =
 	OutlinedTextFieldDefaults.colors(
-		focusedContainerColor = MaterialTheme.colorScheme.background,
-		unfocusedContainerColor = MaterialTheme.colorScheme.background,
-		disabledContainerColor = MaterialTheme.colorScheme.background,
+		focusedContainerColor = MaterialTheme.colorScheme.surface,
+		unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+		disabledContainerColor = MaterialTheme.colorScheme.surface,
 		focusedBorderColor = MaterialTheme.colorScheme.primary,
 		unfocusedBorderColor = MaterialTheme.colorScheme.outline,
 		errorBorderColor = MaterialTheme.colorScheme.error,

@@ -86,4 +86,34 @@ object WordlyTypography {
 		fontSize = 12.sp,
 		lineHeight = 16.sp,
 	)
+
+	val homeScreenTitle = TextStyle(
+		fontWeight = FontWeight.Bold,
+		fontSize = 24.sp,
+		lineHeight = 32.sp,
+	)
+
+	val dailyReviewCount = TextStyle(
+		fontWeight = FontWeight.Black,
+		fontSize = 56.sp,
+		lineHeight = 56.sp,
+	)
+
+	val dailyReviewCountLabel = TextStyle(
+		fontWeight = FontWeight.Bold,
+		fontSize = 18.sp,
+		lineHeight = 22.sp,
+	)
+
+	val trainingTileTitle = TextStyle(
+		fontWeight = FontWeight.Bold,
+		fontSize = 17.sp,
+		lineHeight = 22.sp,
+	)
+
+	val trainingTileSubtitle = TextStyle(
+		fontWeight = FontWeight.Normal,
+		fontSize = 12.sp,
+		lineHeight = 16.sp,
+	)
 }

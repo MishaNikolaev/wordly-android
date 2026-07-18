@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="review_task_choose_translation">Выбери перевод</string>
+	<string name="review_close_content_description">Закрыть</string>
+	<string name="review_play_audio_content_description">Произношение</string>
+	<string name="review_progress_format">%1$d/%2$d</string>
+</resources>
