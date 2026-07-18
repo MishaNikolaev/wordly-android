@@ -1,12 +1,19 @@
 package com.nmichail.wordly.android.features.home.domain.entity
 
 data class Home(
+	val firstName: String,
 	val streakDays: Int,
 	val wordsToReview: Int,
 	val estimatedMinutes: Int,
 	val reviewStreakDays: Int,
 	val trainings: List<Training>,
-	val weekDays: List<WeekDay>,
+	val news: List<News>,
 	val completedDayOffsets: List<Int>,
-	val month: Month,
+	val weekDays: List<WeekDay> = emptyList(),
+	val month: Month = Month(
+		title = "",
+		days = emptyList(),
+		activeDays = 0,
+		completionPercent = 0,
+	),
 )

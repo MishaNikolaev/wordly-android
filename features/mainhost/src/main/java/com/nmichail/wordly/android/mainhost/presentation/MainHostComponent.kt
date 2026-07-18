@@ -4,6 +4,7 @@ import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.router.stack.ChildStack
 import com.arkivanov.decompose.value.Value
 import com.nmichail.wordly.android.features.home.presentation.HomeComponent
+import com.nmichail.wordly.android.features.home.presentation.NewsDetailComponent
 import com.nmichail.wordly.android.features.review.presentation.ReviewComponent
 
 interface MainHostComponent {
@@ -23,6 +24,8 @@ interface MainHostComponent {
 		data object Profile : Child
 
 		data class Review(val component: ReviewComponent) : Child
+
+		data class NewsDetail(val component: NewsDetailComponent) : Child
 	}
 
 	fun interface Factory {

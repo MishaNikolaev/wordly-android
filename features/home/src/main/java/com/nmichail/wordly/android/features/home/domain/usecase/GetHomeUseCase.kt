@@ -14,17 +14,11 @@ class GetHomeUseCase @Inject constructor(
 ) {
 
 	suspend operator fun invoke(): Home {
-		val payload = homeRepository.getHome()
-		val completedOffsets = payload.completedDayOffsets.toSet()
+		val home = homeRepository.getHome()
+		val completedOffsets = home.completedDayOffsets.toSet()
 
-		return Home(
-			streakDays = payload.streakDays,
-			wordsToReview = payload.wordsToReview,
-			estimatedMinutes = payload.estimatedMinutes,
-			reviewStreakDays = payload.reviewStreakDays,
-			trainings = payload.trainings,
+		return home.copy(
 			weekDays = getWeekDaysUseCase(completedOffsets = completedOffsets),
-			completedDayOffsets = payload.completedDayOffsets,
 			month = getMonthUseCase(
 				yearMonth = YearMonth.now(clock),
 				completedOffsets = completedOffsets,

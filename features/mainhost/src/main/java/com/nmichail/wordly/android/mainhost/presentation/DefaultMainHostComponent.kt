@@ -9,8 +9,10 @@ import com.arkivanov.decompose.router.stack.childStack
 import com.arkivanov.decompose.router.stack.pop
 import com.arkivanov.decompose.router.stack.push
 import com.arkivanov.decompose.value.Value
+import com.nmichail.wordly.android.features.home.domain.entity.News
 import com.nmichail.wordly.android.features.home.presentation.HomeComponent
 import com.nmichail.wordly.android.features.home.presentation.HomeRouter
+import com.nmichail.wordly.android.features.home.presentation.NewsDetailComponent
 import com.nmichail.wordly.android.features.review.presentation.ReviewComponent
 import com.nmichail.wordly.android.features.review.presentation.ReviewRouter
 import kotlinx.serialization.Serializable
@@ -19,6 +21,7 @@ internal class DefaultMainHostComponent(
 	componentContext: ComponentContext,
 	private val homeComponentFactory: HomeComponent.Factory,
 	private val reviewComponentFactory: ReviewComponent.Factory,
+	private val newsDetailComponentFactory: NewsDetailComponent.Factory,
 ) : MainHostComponent, ComponentContext by componentContext {
 
 	private val navigation = StackNavigation<MainHostConfig>()
@@ -46,6 +49,18 @@ internal class DefaultMainHostComponent(
 					override fun navigateToReview() {
 						navigation.push(MainHostConfig.Review)
 					}
+
+					override fun navigateToNews(news: News) {
+						navigation.push(
+							MainHostConfig.NewsDetail(
+								id = news.id,
+								title = news.title,
+								subtitle = news.subtitle,
+								body = news.body,
+								publishedAt = news.publishedAt,
+							),
+						)
+					}
 				}
 				MainHostComponent.Child.Home(
 					component = homeComponentFactory(
@@ -70,6 +85,21 @@ internal class DefaultMainHostComponent(
 					),
 				)
 			}
+			is MainHostConfig.NewsDetail -> {
+				MainHostComponent.Child.NewsDetail(
+					component = newsDetailComponentFactory(
+						componentContext = componentContext,
+						news = News(
+							id = config.id,
+							title = config.title,
+							subtitle = config.subtitle,
+							body = config.body,
+							publishedAt = config.publishedAt,
+						),
+						onBack = { navigation.pop() },
+					),
+				)
+			}
 		}
 }
 
@@ -90,6 +120,15 @@ private sealed interface MainHostConfig {
 
 	@Serializable
 	data object Review : MainHostConfig
+
+	@Serializable
+	data class NewsDetail(
+		val id: String,
+		val title: String,
+		val subtitle: String,
+		val body: String,
+		val publishedAt: String,
+	) : MainHostConfig
 }
 
 private fun MainHostTab.toConfig(): MainHostConfig =
@@ -107,4 +146,5 @@ fun MainHostComponent.Child.toTab(): MainHostTab? =
 		MainHostComponent.Child.Stats -> MainHostTab.Stats
 		MainHostComponent.Child.Profile -> MainHostTab.Profile
 		is MainHostComponent.Child.Review -> null
+		is MainHostComponent.Child.NewsDetail -> null
 	}

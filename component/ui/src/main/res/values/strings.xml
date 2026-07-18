@@ -44,6 +44,12 @@
 	<string name="validation_error_long_first_name">Слишком длинное имя</string>
 	<string name="validation_error_long_last_name">Слишком длинная фамилия</string>
 
+	<string name="home_screen_title">Учиться</string>
+	<string name="home_greeting_morning">Доброе утро, %1$s</string>
+	<string name="home_greeting_day">Добрый день, %1$s</string>
+	<string name="home_greeting_evening">Добрый вечер, %1$s</string>
+	<string name="home_greeting_night">Доброй ночи, %1$s</string>
+
 	<string name="home_day_mon">Пн</string>
 	<string name="home_day_tue">Вт</string>
 	<string name="home_day_wed">Ср</string>
@@ -75,6 +81,8 @@
 	</plurals>
 
 	<string name="home_trainings_section">Тренировки</string>
+	<string name="home_news_section">Новости об английском</string>
+	<string name="news_detail_back">Назад</string>
 
 	<string name="home_training_cards_title">Карточки</string>
 	<string name="home_training_cards_subtitle">слова по темам</string>
@@ -91,6 +99,8 @@
 
 	<string name="calendar_title">Активность</string>
 	<string name="calendar_close">Закрыть</string>
+	<string name="calendar_done">Готово</string>
+	<string name="calendar_today">Сегодня</string>
 	<string name="calendar_previous_month">Предыдущий месяц</string>
 	<string name="calendar_next_month">Следующий месяц</string>
 	<string name="calendar_legend_completed">занимался</string>

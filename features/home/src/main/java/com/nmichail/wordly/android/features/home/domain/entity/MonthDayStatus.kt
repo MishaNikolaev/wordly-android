@@ -1,8 +1,8 @@
 package com.nmichail.wordly.android.features.home.domain.entity
 
-enum class WeekDayStatus {
+enum class MonthDayStatus {
 	Completed,
-	Today,
 	Missed,
-	Upcoming,
+	Today,
+	Inactive,
 }

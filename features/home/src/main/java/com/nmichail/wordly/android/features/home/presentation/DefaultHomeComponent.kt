@@ -6,6 +6,7 @@ import com.arkivanov.mvikotlin.core.instancekeeper.getStore
 import com.arkivanov.mvikotlin.extensions.coroutines.labelsChannel
 import com.nmichail.wordly.android.component.presentation.launchTry
 import com.nmichail.wordly.android.core.navigation.asValue
+import com.nmichail.wordly.android.features.home.domain.entity.News
 import com.nmichail.wordly.android.features.home.domain.entity.Training
 
 internal class DefaultHomeComponent(
@@ -27,6 +28,7 @@ internal class DefaultHomeComponent(
 				when (label) {
 					HomeComponent.Label.StartReview -> homeRouter.navigateToReview()
 					is HomeComponent.Label.OpenTraining -> Unit
+					is HomeComponent.Label.OpenNews -> homeRouter.navigateToNews(news = label.news)
 				}
 			}
 		} catch {
@@ -50,11 +52,19 @@ internal class DefaultHomeComponent(
 		store.accept(HomeStore.Intent.NextMonth)
 	}
 
+	override fun handleGoToCurrentMonth() {
+		store.accept(HomeStore.Intent.GoToCurrentMonth)
+	}
+
 	override fun handleStartReview() {
 		store.accept(HomeStore.Intent.StartReview)
 	}
 
 	override fun handleOpenTraining(training: Training) {
 		store.accept(HomeStore.Intent.OpenTraining(training = training))
+	}
+
+	override fun handleOpenNews(news: News) {
+		store.accept(HomeStore.Intent.OpenNews(news = news))
 	}
 }

@@ -5,6 +5,6 @@ import retrofit2.http.GET
 
 interface HomeApi {
 
-	@GET("/api/gateway/home")
+	@GET("/api/home")
 	suspend fun getHome(): HomeResponse
 }

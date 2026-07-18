@@ -29,12 +29,14 @@ internal class HomeStoreFactory @Inject constructor(
 			Store<HomeStore.Intent, HomeComponent.State, HomeComponent.Label> by storeFactory.create(
 				name = "HomeStore",
 				initialState = HomeComponent.State(
+					firstName = "",
 					streakDays = 0,
 					weekDays = emptyList(),
 					wordsToReview = 0,
 					estimatedMinutes = 0,
 					reviewStreakDays = 0,
 					trainings = emptyList(),
+					news = emptyList(),
 					monthTitle = "",
 					monthDays = emptyList(),
 					monthActiveDays = 0,
@@ -67,12 +69,14 @@ internal class HomeStoreFactory @Inject constructor(
 		override fun HomeComponent.State.reduce(msg: Msg): HomeComponent.State =
 			when (msg) {
 				is Msg.HomeLoaded -> copy(
+					firstName = msg.home.firstName,
 					streakDays = msg.home.streakDays,
 					weekDays = msg.home.weekDays,
 					wordsToReview = msg.home.wordsToReview,
 					estimatedMinutes = msg.home.estimatedMinutes,
 					reviewStreakDays = msg.home.reviewStreakDays,
 					trainings = msg.home.trainings,
+					news = msg.home.news,
 				).withMonth(msg.home.month)
 				is Msg.CalendarMonthChanged -> withMonth(msg.month)
 				Msg.ShowCalendar -> copy(isCalendarVisible = true)
@@ -117,9 +121,13 @@ internal class HomeStoreFactory @Inject constructor(
 				HomeStore.Intent.DismissMonth -> dispatch(Msg.HideCalendar)
 				HomeStore.Intent.PreviousMonth -> shiftMonth(months = -1)
 				HomeStore.Intent.NextMonth -> shiftMonth(months = 1)
+				HomeStore.Intent.GoToCurrentMonth -> showCurrentMonth()
 				HomeStore.Intent.StartReview -> publish(HomeComponent.Label.StartReview)
 				is HomeStore.Intent.OpenTraining -> {
 					publish(HomeComponent.Label.OpenTraining(training = intent.training))
+				}
+				is HomeStore.Intent.OpenNews -> {
+					publish(HomeComponent.Label.OpenNews(news = intent.news))
 				}
 			}
 		}
