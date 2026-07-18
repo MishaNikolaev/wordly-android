@@ -35,11 +35,11 @@ private val LightColorScheme = lightColorScheme(
 )
 
 private val DarkColorScheme = darkColorScheme(
-	primary = WordlyColors.Primary,
-	onPrimary = WordlyColors.OnPrimary,
+	primary = WordlyColors.DarkPrimary,
+	onPrimary = WordlyColors.DarkOnPrimary,
 	primaryContainer = WordlyColors.DarkPrimaryContainer,
 	onPrimaryContainer = WordlyColors.DarkOnPrimaryContainer,
-	inversePrimary = WordlyColors.Primary,
+	inversePrimary = WordlyColors.DarkPrimary,
 	secondary = WordlyColors.DarkSecondary,
 	onSecondary = WordlyColors.DarkOnSecondary,
 	secondaryContainer = WordlyColors.DarkSecondaryContainer,

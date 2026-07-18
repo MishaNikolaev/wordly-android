@@ -1,16 +1,15 @@
 package com.nmichail.wordly.android.features.home.domain.usecase
 
+import com.nmichail.wordly.android.features.home.domain.entity.MonthDayStatus
 import com.nmichail.wordly.android.features.home.domain.entity.Month
 import com.nmichail.wordly.android.features.home.domain.entity.MonthDay
-import com.nmichail.wordly.android.features.home.domain.entity.MonthDayStatus
-import com.nmichail.wordly.android.features.home.domain.entity.MonthDayStatusId
 import java.time.Clock
+import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 import java.util.Locale
-import java.time.DayOfWeek as JavaDayOfWeek
 import javax.inject.Inject
 
 class GetMonthUseCase @Inject constructor(
@@ -30,9 +29,9 @@ class GetMonthUseCase @Inject constructor(
 			today = today,
 			completedOffsets = completedOffsets,
 		)
-		val activeDays = days.count { it?.status?.id == MonthDayStatusId.Completed }
+		val activeDays = days.count { it?.status == MonthDayStatus.Completed }
 		val elapsedDays = days.count { day ->
-			day != null && day.status.id != MonthDayStatusId.Inactive
+			day != null && day.status != MonthDayStatus.Inactive
 		}
 
 		return Month(
@@ -54,7 +53,7 @@ class GetMonthUseCase @Inject constructor(
 		completedOffsets: Set<Int>,
 	): List<MonthDay?> {
 		val firstDay = yearMonth.atDay(1)
-		val leadingEmpty = firstDay.dayOfWeek.value - JavaDayOfWeek.MONDAY.value
+		val leadingEmpty = firstDay.dayOfWeek.value - DayOfWeek.MONDAY.value
 		val days = ArrayList<MonthDay?>(leadingEmpty + yearMonth.lengthOfMonth())
 
 		repeat(leadingEmpty) {
@@ -87,9 +86,9 @@ class GetMonthUseCase @Inject constructor(
 		completedOffsets: Set<Int>,
 	): MonthDayStatus =
 		when {
-			date == today -> MonthDayStatus(id = MonthDayStatusId.Today)
-			date.isAfter(today) -> MonthDayStatus(id = MonthDayStatusId.Inactive)
-			offsetFromToday in completedOffsets -> MonthDayStatus(id = MonthDayStatusId.Completed)
-			else -> MonthDayStatus(id = MonthDayStatusId.Missed)
+			date == today -> MonthDayStatus.Today
+			date.isAfter(today) -> MonthDayStatus.Inactive
+			offsetFromToday in completedOffsets -> MonthDayStatus.Completed
+			else -> MonthDayStatus.Missed
 		}
 }

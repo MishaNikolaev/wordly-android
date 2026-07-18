@@ -3,6 +3,7 @@
 package com.nmichail.wordly.android.component.ui.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
@@ -18,9 +19,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.nmichail.wordly.android.component.ui.theme.WordlyColors
 
 private val PillShape = RoundedCornerShape(percent = 50)
+private val DarkChipScrim = Color.Black.copy(alpha = 0.55f)
 
 enum class StatusChipStyle {
 	Neutral,
@@ -56,7 +57,11 @@ fun StatusChip(
 		Text(
 			text = text,
 			style = MaterialTheme.typography.labelSmall,
-			fontWeight = FontWeight.Medium,
+			fontWeight = if (style == StatusChipStyle.Accent) {
+				FontWeight.SemiBold
+			} else {
+				FontWeight.Medium
+			},
 			color = colors.content,
 		)
 	}
@@ -65,23 +70,37 @@ fun StatusChip(
 @Composable
 private fun chipColors(style: StatusChipStyle): ChipColors {
 	val colorScheme = MaterialTheme.colorScheme
+	val dark = isSystemInDarkTheme()
+
 	return when (style) {
 		StatusChipStyle.Neutral -> ChipColors(
-			background = colorScheme.surfaceVariant,
-			content = colorScheme.onSurfaceVariant,
-			icon = colorScheme.onSurfaceVariant,
+			background = if (dark) DarkChipScrim else colorScheme.surface,
+			content = if (dark) colorScheme.onSurface else colorScheme.onSurfaceVariant,
+			icon = if (dark) colorScheme.onSurface else colorScheme.onSurfaceVariant,
 		)
-		StatusChipStyle.Accent -> ChipColors(
-			background = WordlyColors.ReviewAccentContainer,
-			content = WordlyColors.ReviewAccent,
-			icon = WordlyColors.ReviewAccent,
-		)
+		StatusChipStyle.Accent -> if (dark) {
+			ChipColors(
+				background = DarkChipScrim,
+				content = colorScheme.onPrimaryContainer,
+				icon = colorScheme.onPrimaryContainer,
+			)
+		} else {
+			ChipColors(
+				background = colorScheme.primaryContainer,
+				content = colorScheme.onPrimaryContainer,
+				icon = colorScheme.onPrimaryContainer,
+			)
+		}
 		StatusChipStyle.Warm,
 		StatusChipStyle.Streak,
 		-> ChipColors(
-			background = WordlyColors.StreakContainer,
-			content = WordlyColors.Streak,
-			icon = WordlyColors.Streak,
+			background = if (dark) {
+				colorScheme.primaryContainer
+			} else {
+				colorScheme.primary.copy(alpha = 0.12f)
+			},
+			content = colorScheme.primary,
+			icon = colorScheme.primary,
 		)
 	}
 }

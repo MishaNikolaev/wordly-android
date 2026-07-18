@@ -1,8 +1,8 @@
 package com.nmichail.wordly.android.features.home.domain.repository
 
-import com.nmichail.wordly.android.features.home.domain.entity.HomePayload
+import com.nmichail.wordly.android.features.home.domain.entity.Home
 
 interface HomeRepository {
 
-	suspend fun getHome(): HomePayload
+	suspend fun getHome(): Home
 }
