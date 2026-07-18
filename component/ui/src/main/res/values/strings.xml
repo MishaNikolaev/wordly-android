@@ -21,6 +21,7 @@
 	<string name="auth_preview_serendipity_translation">случайность</string>
 
 	<string name="auth_preview_deploy_word">deploy</string>
+	<string name="auth_preview_deploy_phonetic">/dɪˈplɔɪ/</string>
 	<string name="auth_preview_deploy_translation">развёртывать</string>
 
 	<string name="auth_preview_eloquent_word">eloquent</string>
@@ -37,7 +38,7 @@
 	<string name="validation_error_invalid_max_length_password">Слишком длинный пароль</string>
 	<string name="validation_error_empty_first_name">Введите имя</string>
 	<string name="validation_error_empty_last_name">Введите фамилию</string>
-	<string name="validation_error_invalid_name">Только латинские буквы</string>
+	<string name="validation_error_invalid_name">Только русские буквы</string>
 	<string name="validation_error_short_first_name">Слишком короткое имя</string>
 	<string name="validation_error_short_last_name">Слишком короткая фамилия</string>
 	<string name="validation_error_long_first_name">Слишком длинное имя</string>

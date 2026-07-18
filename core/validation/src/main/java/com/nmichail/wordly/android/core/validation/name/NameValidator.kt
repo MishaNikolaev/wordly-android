@@ -2,7 +2,7 @@ package com.nmichail.wordly.android.core.validation.name
 
 internal object NameValidator {
 
-	private const val VALID_CHAR_REGEX_STRING = "^[a-zA-Z\\-]+$"
+	private const val VALID_CHAR_REGEX_STRING = "^[а-яА-ЯёЁ\\-]+$"
 	private const val BLANK_START_REGEX_STRING = "^[-\\s]+.*"
 	private const val BLANK_END_REGEX_STRING = ".*[-\\s]+$"
 	private const val SPACE_REGEX_STRING = ".*\\s.*"

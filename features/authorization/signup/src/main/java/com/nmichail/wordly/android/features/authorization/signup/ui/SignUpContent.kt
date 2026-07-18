@@ -18,14 +18,15 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import com.nmichail.wordly.android.component.ui.R as ComponentR
 import com.nmichail.wordly.android.component.ui.components.AuthBackground
-import com.nmichail.wordly.android.component.ui.components.SelectionField
 import com.nmichail.wordly.android.component.ui.components.Button
 import com.nmichail.wordly.android.component.ui.components.LinkedText
 import com.nmichail.wordly.android.component.ui.components.ScreenTitle
+import com.nmichail.wordly.android.component.ui.components.SelectionField
 import com.nmichail.wordly.android.component.ui.components.SignUpAuthHeader
 import com.nmichail.wordly.android.component.ui.components.TextField
 import com.nmichail.wordly.android.component.ui.components.TextLink
@@ -72,19 +73,15 @@ fun SignUpContent(
 	) {
 		AuthBackground(
 			modifier = Modifier.fillMaxSize(),
-			header = {
-				Column(modifier = Modifier.padding(horizontal = 20.dp)) {
-					SignUpAuthHeader()
-				}
-			},
+			header = { SignUpAuthHeader() },
 			content = {
-				Column(
+				SignUpForm(
+					state = state,
+					component = component,
 					modifier = Modifier
 						.padding(horizontal = 20.dp)
-						.padding(bottom = 32.dp),
-				) {
-					SignUpForm(state = state, component = component)
-				}
+						.padding(top = 28.dp, bottom = 32.dp),
+				)
 			},
 		)
 	}
@@ -94,57 +91,61 @@ fun SignUpContent(
 private fun SignUpForm(
 	state: SignUpComponent.State,
 	component: SignUpComponent,
+	modifier: Modifier = Modifier,
 ) {
-	ScreenTitle(
-		title = stringResource(R.string.sign_up_title),
-		modifier = Modifier.padding(top = 16.dp),
-	)
+	Column(modifier = modifier.fillMaxWidth()) {
+		ScreenTitle(
+			title = stringResource(R.string.sign_up_title),
+			subtitle = stringResource(R.string.sign_up_subtitle),
+			textAlign = TextAlign.Start,
+		)
 
-	TextField(
-		label = stringResource(ComponentR.string.common_label_email),
-		value = state.email.data,
-		onValueChange = component::handleChangeEmail,
-		keyboardType = KeyboardType.Email,
-		errorVisible = state.email.validationState is DefaultValidationState.Invalid,
-		errorMessage = stringResource(id = emailErrorMessage(state = state.email.validationState)),
-		modifier = Modifier.padding(top = 24.dp),
-	)
-	TextField(
-		label = stringResource(ComponentR.string.common_label_password),
-		value = state.password.data,
-		onValueChange = component::handleChangePassword,
-		isPassword = true,
-		errorVisible = state.password.validationState is DefaultValidationState.Invalid,
-		errorMessage = stringResource(id = passwordErrorMessage(state = state.password.validationState)),
-		modifier = Modifier.padding(top = 16.dp),
-	)
+		TextField(
+			label = stringResource(ComponentR.string.common_label_email),
+			value = state.email.data,
+			onValueChange = component::handleChangeEmail,
+			keyboardType = KeyboardType.Email,
+			errorVisible = state.email.validationState is DefaultValidationState.Invalid,
+			errorMessage = stringResource(id = emailErrorMessage(state = state.email.validationState)),
+			modifier = Modifier.padding(top = 24.dp),
+		)
+		TextField(
+			label = stringResource(ComponentR.string.common_label_password),
+			value = state.password.data,
+			onValueChange = component::handleChangePassword,
+			isPassword = true,
+			errorVisible = state.password.validationState is DefaultValidationState.Invalid,
+			errorMessage = stringResource(id = passwordErrorMessage(state = state.password.validationState)),
+			modifier = Modifier.padding(top = 16.dp),
+		)
 
-	SignUpNameFields(state = state, component = component)
-	SignUpEnglishLevelField(state = state, component = component)
+		SignUpNameFields(state = state, component = component)
+		SignUpEnglishLevelField(state = state, component = component)
 
-	Button(
-		text = stringResource(R.string.sign_up_submit),
-		onClick = component::handleSubmit,
-		enabled = state.areFieldsValid(),
-		loading = state.isSubmitting,
-		modifier = Modifier.padding(top = 24.dp),
-	)
-	LinkedText(
-		text = stringResource(R.string.sign_up_terms),
-		linkText = stringResource(R.string.sign_up_terms_link),
-		onLinkClick = { component.handleOpenTermsOfUse() },
-		modifier = Modifier
-			.fillMaxWidth()
-			.padding(top = 20.dp),
-	)
-	TextLink(
-		text = stringResource(R.string.sign_up_has_account),
-		onClick = component::handleNavigateToSignIn,
-		enabled = !state.isSubmitting,
-		modifier = Modifier
-			.fillMaxWidth()
-			.padding(top = 12.dp),
-	)
+		Button(
+			text = stringResource(R.string.sign_up_submit),
+			onClick = component::handleSubmit,
+			enabled = state.areFieldsValid(),
+			loading = state.isSubmitting,
+			modifier = Modifier.padding(top = 24.dp),
+		)
+		LinkedText(
+			text = stringResource(R.string.sign_up_terms),
+			linkText = stringResource(R.string.sign_up_terms_link),
+			onLinkClick = { component.handleOpenTermsOfUse() },
+			modifier = Modifier
+				.fillMaxWidth()
+				.padding(top = 20.dp),
+		)
+		TextLink(
+			text = stringResource(R.string.sign_up_has_account),
+			onClick = component::handleNavigateToSignIn,
+			enabled = !state.isSubmitting,
+			modifier = Modifier
+				.fillMaxWidth()
+				.padding(top = 4.dp),
+		)
+	}
 }
 
 @Composable

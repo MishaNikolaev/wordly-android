@@ -61,7 +61,7 @@ fun AuthPreviewWordCard(
 					ambientColor = AUTH_PREVIEW_CARD_SHADOW_COLOR,
 					spotColor = AUTH_PREVIEW_CARD_SHADOW_COLOR,
 				)
-				.background(colorScheme.surfaceBright, AUTH_PREVIEW_WORD_CARD_SHAPE)
+				.background(colorScheme.surface, AUTH_PREVIEW_WORD_CARD_SHAPE)
 				.padding(horizontal = 16.dp, vertical = 10.dp),
 		) {
 			Text(
@@ -101,7 +101,7 @@ fun WordCard(
 				shadowElevation = shadowElevationPx
 				rotationZ = rotation
 			}
-			.background(colorScheme.surfaceBright, WORD_CARD_SHAPE)
+			.background(colorScheme.surface, WORD_CARD_SHAPE)
 			.padding(horizontal = 12.dp, vertical = 12.dp),
 	) {
 		WordCardTopBar(
@@ -157,11 +157,6 @@ private fun WordCardTopBar(
 			) {
 				WordCardSpeakerIcon(tint = iconTint)
 			}
-		} else {
-			WordCardSpeakerIcon(
-				tint = iconTint,
-				modifier = Modifier.size(16.dp),
-			)
 		}
 	}
 }

@@ -11,6 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.nmichail.wordly.android.component.ui.theme.WordlyColors
 
 @Composable
 fun Button(
@@ -24,20 +25,20 @@ fun Button(
 		onClick = onClick,
 		modifier = modifier
 			.fillMaxWidth()
-			.height(48.dp),
+			.height(52.dp),
 		enabled = enabled && !loading,
-		shape = MaterialTheme.shapes.medium,
+		shape = MaterialTheme.shapes.small,
 		colors = ButtonDefaults.buttonColors(
-			containerColor = MaterialTheme.colorScheme.primary,
-			contentColor = MaterialTheme.colorScheme.onPrimary,
-			disabledContainerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.4f),
-			disabledContentColor = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.6f),
+			containerColor = WordlyColors.Primary,
+			contentColor = WordlyColors.OnPrimary,
+			disabledContainerColor = WordlyColors.Primary.copy(alpha = 0.4f),
+			disabledContentColor = WordlyColors.OnPrimary.copy(alpha = 0.6f),
 		),
 	) {
 		if (loading) {
 			CircularProgressIndicator(
 				modifier = Modifier.size(24.dp),
-				color = MaterialTheme.colorScheme.onPrimary,
+				color = WordlyColors.OnPrimary,
 				strokeWidth = 2.dp,
 			)
 		} else {

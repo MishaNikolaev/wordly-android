@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<string name="sign_up_title">Регистрация</string>
+	<string name="sign_up_subtitle">Нужно зарегистрироваться, прежде чем пользоваться приложением</string>
 	<string name="sign_up_first_name_label">Имя</string>
 	<string name="sign_up_last_name_label">Фамилия</string>
 	<string name="sign_up_english_level_label">Уровень английского</string>
 	<string name="sign_up_submit">Зарегистрироваться</string>
-	<string name="sign_up_has_account">У меня уже есть аккаунт</string>
+	<string name="sign_up_has_account">Уже есть аккаунт? Войти</string>
 	<string name="sign_up_terms">Регистрируясь, вы принимаете условия использования</string>
 	<string name="sign_up_terms_link">условия использования</string>
 	<string name="sign_up_registration_error">Не удалось зарегистрироваться. Попробуйте ещё раз</string>

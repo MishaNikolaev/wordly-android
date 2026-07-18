@@ -87,7 +87,7 @@ private fun SelectionFieldInput(
 					tint = MaterialTheme.colorScheme.onSurfaceVariant,
 				)
 			},
-			shape = MaterialTheme.shapes.small,
+			shape = MaterialTheme.shapes.extraSmall,
 			colors = selectionFieldColors(),
 		)
 		Box(
@@ -118,9 +118,9 @@ private fun fieldErrorText(errorMessage: String): (@Composable () -> Unit)? =
 @Composable
 private fun selectionFieldColors() =
 	OutlinedTextFieldDefaults.colors(
-		focusedContainerColor = MaterialTheme.colorScheme.background,
-		unfocusedContainerColor = MaterialTheme.colorScheme.background,
-		disabledContainerColor = MaterialTheme.colorScheme.background,
+		focusedContainerColor = MaterialTheme.colorScheme.surface,
+		unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+		disabledContainerColor = MaterialTheme.colorScheme.surface,
 		focusedBorderColor = MaterialTheme.colorScheme.primary,
 		unfocusedBorderColor = MaterialTheme.colorScheme.outline,
 		errorBorderColor = MaterialTheme.colorScheme.error,

@@ -18,10 +18,11 @@ import androidx.compose.ui.unit.dp
 import com.nmichail.wordly.android.component.ui.R
 
 private val AUTH_PREVIEW_CARDS_WIDTH = 296.dp
-private val AUTH_PREVIEW_CARDS_HEIGHT = 144.dp
+private val AUTH_PREVIEW_CARDS_HEIGHT = 164.dp
+private val AUTH_PREVIEW_SERENDIPITY_OFFSET_X = (-10).dp
 private val AUTH_PREVIEW_DEPLOY_CARD_OFFSET_X = 22.dp
-private val AUTH_PREVIEW_DEPLOY_CARD_OFFSET_Y = (-4).dp
-private val AUTH_PREVIEW_RESILIENCE_CARD_OFFSET_Y = (-2).dp
+private val AUTH_PREVIEW_DEPLOY_CARD_OFFSET_Y = (-14).dp
+private val AUTH_PREVIEW_RESILIENCE_CARD_OFFSET_Y = (-16).dp
 
 @Composable
 fun SignUpAuthHeader(
@@ -30,7 +31,8 @@ fun SignUpAuthHeader(
 	Column(
 		modifier = modifier
 			.fillMaxWidth()
-			.padding(bottom = 24.dp),
+			.padding(horizontal = 20.dp)
+			.padding(top = 12.dp, bottom = 28.dp),
 		horizontalAlignment = Alignment.Start,
 	) {
 		Logo()
@@ -38,12 +40,11 @@ fun SignUpAuthHeader(
 			modifier = Modifier
 				.fillMaxWidth()
 				.padding(top = 20.dp)
-				.padding(horizontal = 16.dp),
+				.graphicsLayer { clip = false },
 			contentAlignment = Alignment.TopCenter,
 		) {
 			Box(
 				modifier = Modifier
-					.graphicsLayer { clip = false }
 					.width(AUTH_PREVIEW_CARDS_WIDTH)
 					.height(AUTH_PREVIEW_CARDS_HEIGHT)
 					.padding(vertical = 8.dp),
@@ -51,8 +52,10 @@ fun SignUpAuthHeader(
 				AuthPreviewWordCard(
 					word = stringResource(R.string.auth_preview_serendipity_word),
 					translation = stringResource(R.string.auth_preview_serendipity_translation),
-					modifier = Modifier.align(Alignment.TopStart),
-					rotation = -8f,
+					modifier = Modifier
+						.align(Alignment.TopStart)
+						.offset(x = AUTH_PREVIEW_SERENDIPITY_OFFSET_X),
+					rotation = 10f,
 				)
 				AuthPreviewWordCard(
 					word = stringResource(R.string.auth_preview_deploy_word),
@@ -63,7 +66,7 @@ fun SignUpAuthHeader(
 							x = AUTH_PREVIEW_DEPLOY_CARD_OFFSET_X,
 							y = AUTH_PREVIEW_DEPLOY_CARD_OFFSET_Y,
 						),
-					rotation = 6f,
+					rotation = -14f,
 				)
 				AuthPreviewWordCard(
 					word = stringResource(R.string.auth_preview_resilience_word),
@@ -71,6 +74,7 @@ fun SignUpAuthHeader(
 					modifier = Modifier
 						.align(Alignment.BottomCenter)
 						.offset(y = AUTH_PREVIEW_RESILIENCE_CARD_OFFSET_Y),
+					rotation = 0f,
 				)
 			}
 		}
