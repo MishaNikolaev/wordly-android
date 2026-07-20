@@ -9,7 +9,7 @@ internal interface NewsDetailStore :
 
 		data object Back : Intent
 
-		data object Share : Intent
+		data object Retry : Intent
 
 		data object Bookmark : Intent
 	}
