@@ -36,6 +36,10 @@ internal class DefaultHomeComponent(
 		}
 	}
 
+	override fun handleRetry() {
+		store.accept(HomeStore.Intent.Retry)
+	}
+
 	override fun handleOpenMonth() {
 		store.accept(HomeStore.Intent.OpenMonth)
 	}

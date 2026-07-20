@@ -6,6 +6,7 @@ import com.arkivanov.mvikotlin.core.instancekeeper.getStore
 import com.arkivanov.mvikotlin.extensions.coroutines.labelsChannel
 import com.nmichail.wordly.android.component.presentation.launchTry
 import com.nmichail.wordly.android.core.navigation.asValue
+import kotlinx.coroutines.channels.ReceiveChannel
 
 internal class DefaultNewsDetailComponent(
 	componentContext: ComponentContext,
@@ -21,11 +22,18 @@ internal class DefaultNewsDetailComponent(
 
 	override val model: Value<NewsDetailComponent.State> = store.asValue()
 
+	override fun labelsChannel(): ReceiveChannel<NewsDetailComponent.Label> =
+		store.labelsChannel(lifecycle)
+
 	init {
 		launchTry {
 			for (label in store.labelsChannel(lifecycle)) {
 				when (label) {
 					NewsDetailComponent.Label.Close -> newsDetailRouter.navigateBack()
+					NewsDetailComponent.Label.NoConnection,
+					NewsDetailComponent.Label.NotFound,
+					NewsDetailComponent.Label.UnknownError,
+					-> Unit
 				}
 			}
 		} catch {
@@ -37,8 +45,8 @@ internal class DefaultNewsDetailComponent(
 		store.accept(NewsDetailStore.Intent.Back)
 	}
 
-	override fun handleShare() {
-		store.accept(NewsDetailStore.Intent.Share)
+	override fun handleRetry() {
+		store.accept(NewsDetailStore.Intent.Retry)
 	}
 
 	override fun handleBookmark() {

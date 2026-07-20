@@ -7,8 +7,8 @@ data class NewsResponse(
 	val publishedAt: String,
 	val readingMinutes: Int,
 	val author: String,
-	val imageUrl: String? = null,
-	val content: List<NewsContentBlockResponse> = emptyList(),
+	val imageUrl: String?,
+	val content: List<NewsContentBlockResponse>,
 )
 
 data class NewsContentBlockResponse(

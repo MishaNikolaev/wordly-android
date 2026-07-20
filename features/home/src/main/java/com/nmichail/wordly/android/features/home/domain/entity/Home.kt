@@ -11,11 +11,4 @@ data class Home(
 	val trainings: List<Training>,
 	val news: List<News>,
 	val completedDayOffsets: List<Int>,
-	val weekDays: List<WeekDay> = emptyList(),
-	val month: Month = Month(
-		title = "",
-		days = emptyList(),
-		activeDays = 0,
-		completionPercent = 0,
-	),
 )

@@ -3,6 +3,7 @@ package com.nmichail.wordly.android.features.home.ui
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -16,15 +17,20 @@ import androidx.compose.material.icons.outlined.MenuBook
 import androidx.compose.material.icons.outlined.Movie
 import androidx.compose.material.icons.outlined.MusicNote
 import androidx.compose.material.icons.outlined.Style
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import com.nmichail.wordly.android.component.ui.R as ComponentR
+import com.nmichail.wordly.android.component.ui.components.Button
 import com.nmichail.wordly.android.component.ui.components.CalendarDay
 import com.nmichail.wordly.android.component.ui.components.CalendarDayStatusId
 import com.nmichail.wordly.android.component.ui.components.CalendarDialog
@@ -37,10 +43,11 @@ import com.nmichail.wordly.android.component.ui.components.WeekDayIndicator
 import com.nmichail.wordly.android.component.ui.components.WeekDayStatusId
 import com.nmichail.wordly.android.component.ui.components.WeekProgressCard
 import com.nmichail.wordly.android.component.ui.components.homeGreeting
-import com.nmichail.wordly.android.features.home.domain.entity.MonthDayStatus
+import com.nmichail.wordly.android.features.home.R
 import com.nmichail.wordly.android.features.home.domain.entity.Training
-import com.nmichail.wordly.android.features.home.domain.entity.WeekDayStatus
 import com.nmichail.wordly.android.features.home.presentation.HomeComponent
+import com.nmichail.wordly.android.features.home.presentation.calendar.MonthDayStatus
+import com.nmichail.wordly.android.features.home.presentation.calendar.WeekDayStatus
 import com.nmichail.wordly.android.features.news.domain.entity.News
 import java.time.DayOfWeek
 
@@ -51,6 +58,72 @@ fun HomeContent(
 ) {
 	val state by component.model.subscribeAsState()
 
+	when (val currentState = state) {
+		HomeComponent.State.Loading -> {
+			Box(
+				modifier = modifier
+					.fillMaxSize()
+					.background(MaterialTheme.colorScheme.background),
+				contentAlignment = Alignment.Center,
+			) {
+				CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
+			}
+		}
+		HomeComponent.State.Error -> {
+			HomeError(
+				onRetryClick = component::handleRetry,
+				modifier = modifier.fillMaxSize(),
+			)
+		}
+		is HomeComponent.State.Content -> {
+			HomeLoaded(
+				state = currentState,
+				component = component,
+				modifier = modifier,
+			)
+		}
+	}
+}
+
+@Composable
+private fun HomeError(
+	onRetryClick: () -> Unit,
+	modifier: Modifier = Modifier,
+) {
+	Column(
+		modifier = modifier
+			.background(MaterialTheme.colorScheme.background)
+			.padding(horizontal = 24.dp),
+		verticalArrangement = Arrangement.Center,
+		horizontalAlignment = Alignment.CenterHorizontally,
+	) {
+		Text(
+			text = stringResource(R.string.home_error_title),
+			style = MaterialTheme.typography.titleMedium,
+			color = MaterialTheme.colorScheme.onSurface,
+			textAlign = TextAlign.Center,
+		)
+		Text(
+			text = stringResource(R.string.home_error_description),
+			style = MaterialTheme.typography.bodyMedium,
+			color = MaterialTheme.colorScheme.onSurfaceVariant,
+			textAlign = TextAlign.Center,
+			modifier = Modifier.padding(top = 8.dp),
+		)
+		Button(
+			text = stringResource(R.string.home_retry),
+			onClick = onRetryClick,
+			modifier = Modifier.padding(top = 24.dp),
+		)
+	}
+}
+
+@Composable
+private fun HomeLoaded(
+	state: HomeComponent.State.Content,
+	component: HomeComponent,
+	modifier: Modifier = Modifier,
+) {
 	Column(
 		modifier = modifier
 			.fillMaxSize()
@@ -102,7 +175,7 @@ fun HomeContent(
 
 @Composable
 private fun HomeCalendarDialog(
-	state: HomeComponent.State,
+	state: HomeComponent.State.Content,
 	component: HomeComponent,
 ) {
 	CalendarDialog(

@@ -9,6 +9,8 @@ internal interface HomeStore :
 
 	sealed interface Intent {
 
+		data object Retry : Intent
+
 		data object OpenMonth : Intent
 
 		data object DismissMonth : Intent

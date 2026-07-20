@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.outlined.BookmarkBorder
 import androidx.compose.material.icons.outlined.CalendarToday
 import androidx.compose.material.icons.outlined.Schedule
@@ -76,6 +77,7 @@ fun NewsDetailTopBar(
 	onBackClick: () -> Unit,
 	onBookmarkClick: () -> Unit,
 	modifier: Modifier = Modifier,
+	isBookmarked: Boolean = false,
 ) {
 	Row(
 		modifier = modifier
@@ -95,7 +97,11 @@ fun NewsDetailTopBar(
 		}
 		HeroIconButton(onClick = onBookmarkClick) {
 			Icon(
-				imageVector = Icons.Outlined.BookmarkBorder,
+				imageVector = if (isBookmarked) {
+					Icons.Filled.Bookmark
+				} else {
+					Icons.Outlined.BookmarkBorder
+				},
 				contentDescription = stringResource(R.string.news_detail_bookmark),
 				tint = Color.White,
 				modifier = Modifier.size(22.dp),

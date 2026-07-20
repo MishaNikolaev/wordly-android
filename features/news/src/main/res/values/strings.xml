@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string name="news_detail_back">Назад</string>
+	<string name="news_detail_retry">Повторить</string>
+	<string name="news_detail_error_title">Что-то пошло не так</string>
+	<string name="news_detail_error_description">Не удалось загрузить новость. Попробуйте ещё раз.</string>
+	<string name="news_detail_error_no_connection">Нет соединения. Проверьте интернет и попробуйте снова.</string>
+	<string name="news_detail_error_not_found">Новость не найдена.</string>
+	<string name="news_detail_error_unknown">Не удалось загрузить новость. Попробуйте ещё раз.</string>
 </resources>
