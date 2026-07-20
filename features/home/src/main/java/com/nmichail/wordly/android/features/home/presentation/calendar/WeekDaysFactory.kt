@@ -1,7 +1,5 @@
-package com.nmichail.wordly.android.features.home.domain.usecase
+package com.nmichail.wordly.android.features.home.presentation.calendar
 
-import com.nmichail.wordly.android.features.home.domain.entity.WeekDay
-import com.nmichail.wordly.android.features.home.domain.entity.WeekDayStatus
 import java.time.Clock
 import java.time.DayOfWeek
 import java.time.LocalDate
@@ -11,7 +9,7 @@ import javax.inject.Inject
 
 private const val DAYS_IN_WEEK = 7
 
-class GetWeekDaysUseCase @Inject constructor(
+class WeekDaysFactory @Inject constructor(
 	private val clock: Clock,
 ) {
 

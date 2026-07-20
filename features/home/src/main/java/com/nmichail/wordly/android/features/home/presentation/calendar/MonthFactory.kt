@@ -1,8 +1,5 @@
-package com.nmichail.wordly.android.features.home.domain.usecase
+package com.nmichail.wordly.android.features.home.presentation.calendar
 
-import com.nmichail.wordly.android.features.home.domain.entity.MonthDayStatus
-import com.nmichail.wordly.android.features.home.domain.entity.Month
-import com.nmichail.wordly.android.features.home.domain.entity.MonthDay
 import java.time.Clock
 import java.time.DayOfWeek
 import java.time.LocalDate
@@ -12,7 +9,7 @@ import java.time.temporal.ChronoUnit
 import java.util.Locale
 import javax.inject.Inject
 
-class GetMonthUseCase @Inject constructor(
+class MonthFactory @Inject constructor(
 	private val clock: Clock,
 ) {
 

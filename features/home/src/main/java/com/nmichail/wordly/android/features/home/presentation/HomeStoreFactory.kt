@@ -7,17 +7,20 @@ import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.logging.store.LoggingStoreFactory
 import com.arkivanov.mvikotlin.main.store.DefaultStoreFactory
 import com.nmichail.wordly.android.component.presentation.BaseCoroutineExecutor
-import com.nmichail.wordly.android.features.home.domain.entity.Month
 import com.nmichail.wordly.android.features.home.domain.entity.Home
-import com.nmichail.wordly.android.features.home.domain.usecase.GetMonthUseCase
 import com.nmichail.wordly.android.features.home.domain.usecase.GetHomeUseCase
+import com.nmichail.wordly.android.features.home.presentation.calendar.Month
+import com.nmichail.wordly.android.features.home.presentation.calendar.MonthFactory
+import com.nmichail.wordly.android.features.home.presentation.calendar.WeekDay
+import com.nmichail.wordly.android.features.home.presentation.calendar.WeekDaysFactory
 import java.time.Clock
 import java.time.YearMonth
 import javax.inject.Inject
 
 internal class HomeStoreFactory @Inject constructor(
 	private val getHomeUseCase: GetHomeUseCase,
-	private val getMonthUseCase: GetMonthUseCase,
+	private val weekDaysFactory: WeekDaysFactory,
+	private val monthFactory: MonthFactory,
 	private val clock: Clock,
 ) {
 
@@ -28,21 +31,7 @@ internal class HomeStoreFactory @Inject constructor(
 			HomeStore,
 			Store<HomeStore.Intent, HomeComponent.State, HomeComponent.Label> by storeFactory.create(
 				name = "HomeStore",
-				initialState = HomeComponent.State(
-					firstName = "",
-					streakDays = 0,
-					weekDays = emptyList(),
-					wordsToReview = 0,
-					estimatedMinutes = 0,
-					reviewStreakDays = 0,
-					trainings = emptyList(),
-					news = emptyList(),
-					monthTitle = "",
-					monthDays = emptyList(),
-					monthActiveDays = 0,
-					monthCompletionPercent = 0,
-					isCalendarVisible = false,
-				),
+				initialState = HomeComponent.State.Loading,
 				bootstrapper = SimpleBootstrapper(Action.Load),
 				executorFactory = ::ExecutorImpl,
 				reducer = ReducerImpl,
@@ -55,37 +44,67 @@ internal class HomeStoreFactory @Inject constructor(
 
 	private sealed interface Msg {
 
-		data class HomeLoaded(val home: Home) : Msg
+		data object Loading : Msg
+
+		data class HomeLoaded(
+			val home: Home,
+			val weekDays: List<WeekDay>,
+			val month: Month,
+		) : Msg
 
 		data class CalendarMonthChanged(val month: Month) : Msg
 
 		data object ShowCalendar : Msg
 
 		data object HideCalendar : Msg
+
+		data object SetError : Msg
 	}
 
 	private object ReducerImpl : Reducer<HomeComponent.State, Msg> {
 
 		override fun HomeComponent.State.reduce(msg: Msg): HomeComponent.State =
 			when (msg) {
-				is Msg.HomeLoaded -> copy(
+				Msg.Loading -> HomeComponent.State.Loading
+				is Msg.HomeLoaded -> HomeComponent.State.Content(
 					firstName = msg.home.firstName,
 					streakDays = msg.home.streakDays,
-					weekDays = msg.home.weekDays,
+					weekDays = msg.weekDays,
 					wordsToReview = msg.home.wordsToReview,
 					estimatedMinutes = msg.home.estimatedMinutes,
 					reviewStreakDays = msg.home.reviewStreakDays,
 					trainings = msg.home.trainings,
 					news = msg.home.news,
-				).withMonth(msg.home.month)
-				is Msg.CalendarMonthChanged -> withMonth(msg.month)
-				Msg.ShowCalendar -> copy(isCalendarVisible = true)
-				Msg.HideCalendar -> copy(isCalendarVisible = false)
+					monthTitle = msg.month.title,
+					monthDays = msg.month.days,
+					monthActiveDays = msg.month.activeDays,
+					monthCompletionPercent = msg.month.completionPercent,
+					isCalendarVisible = false,
+				)
+				is Msg.CalendarMonthChanged -> when (this) {
+					is HomeComponent.State.Content -> withMonth(msg.month)
+					HomeComponent.State.Loading,
+					HomeComponent.State.Error,
+					-> this
+				}
+				Msg.ShowCalendar -> when (this) {
+					is HomeComponent.State.Content -> copy(isCalendarVisible = true)
+					HomeComponent.State.Loading,
+					HomeComponent.State.Error,
+					-> this
+				}
+				Msg.HideCalendar -> when (this) {
+					is HomeComponent.State.Content -> copy(isCalendarVisible = false)
+					HomeComponent.State.Loading,
+					HomeComponent.State.Error,
+					-> this
+				}
+				Msg.SetError -> HomeComponent.State.Error
 			}
 
-		private fun HomeComponent.State.withMonth(
+		private fun HomeComponent.State.Content.withMonth(
 			month: Month,
-		): HomeComponent.State =
+		): HomeComponent.State.Content =
 			copy(
 				monthTitle = month.title,
 				monthDays = month.days,
@@ -114,6 +133,7 @@ internal class HomeStoreFactory @Inject constructor(
 
 		override fun executeIntent(intent: HomeStore.Intent) {
 			when (intent) {
+				HomeStore.Intent.Retry -> loadHome()
 				HomeStore.Intent.OpenMonth -> {
 					showCurrentMonth()
 					dispatch(Msg.ShowCalendar)
@@ -133,13 +153,23 @@ internal class HomeStoreFactory @Inject constructor(
 		}
 
 		private fun loadHome() {
+			dispatch(Msg.Loading)
 			launchTry {
 				val home = getHomeUseCase()
 				completedDayOffsets = home.completedDayOffsets.toSet()
 				displayedMonth = YearMonth.now(clock)
-				dispatch(Msg.HomeLoaded(home = home))
+				dispatch(
+					Msg.HomeLoaded(
+						home = home,
+						weekDays = weekDaysFactory(completedOffsets = completedDayOffsets),
+						month = monthFactory(
+							yearMonth = displayedMonth,
+							completedOffsets = completedDayOffsets,
+						),
+					),
+				)
 			} catch {
-				// Keep empty immutable state until retry is added.
+				dispatch(Msg.SetError)
 			}
 		}
 
@@ -156,7 +186,7 @@ internal class HomeStoreFactory @Inject constructor(
 		private fun dispatchCalendarMonth(yearMonth: YearMonth) {
 			dispatch(
 				Msg.CalendarMonthChanged(
-					month = getMonthUseCase(
+					month = monthFactory(
 						yearMonth = yearMonth,
 						completedOffsets = completedDayOffsets,
 					),
