@@ -60,7 +60,6 @@ fun MainHostContent(
 				)
 				is MainHostComponent.Child.NewsDetail -> NewsDetailContent(
 					component = instance.component,
-					modifier = Modifier.padding(innerPadding),
 				)
 			}
 		}

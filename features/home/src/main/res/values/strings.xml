@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="home_retry">Повторить</string>
+	<string name="home_error_title">Что-то пошло не так</string>
+	<string name="home_error_description">Не удалось загрузить главный экран. Попробуйте ещё раз.</string>
+</resources>
