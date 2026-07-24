@@ -177,9 +177,9 @@ internal class ReviewStoreFactory @Inject constructor(
 			dispatch(Msg.Submitting)
 			launchTry {
 				submitReviewAnswerUseCase(
-					wordId = progress.currentWord.id,
-					selectedOptionId = selectedOptionId,
-					correct = progress.isCorrect,
+					progress.currentWord.id,
+					selectedOptionId,
+					progress.isCorrect,
 				)
 				val nextCorrectCount = if (progress.isCorrect) {
 					progress.correctCount + 1

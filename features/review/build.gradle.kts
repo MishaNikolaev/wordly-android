@@ -22,4 +22,13 @@ dependencies {
 	implementation(projects.core.navigation)
 	implementation(projects.core.network)
 	implementation(libs.retrofit)
+
+	testImplementation(projects.testutils)
+	testImplementation(libs.kotlinx.coroutines.test)
+	testImplementation(libs.test.junit.api)
+	testImplementation(libs.test.junit.engine)
+	testImplementation(libs.test.junit.params)
+	testImplementation(libs.mockito.core)
+	testImplementation(libs.mockito.kotlin)
+	testImplementation(libs.mockito.junit.jupiter)
 }

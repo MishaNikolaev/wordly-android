@@ -5,8 +5,5 @@ import com.nmichail.wordly.android.features.review.domain.repository.ReviewRepos
 import javax.inject.Inject
 
 class GetReviewSessionUseCase @Inject constructor(
-	private val reviewRepository: ReviewRepository,
-) {
-	suspend operator fun invoke(): List<ReviewWord> =
-		reviewRepository.getSession()
-}
+	reviewRepository: ReviewRepository,
+) : suspend () -> List<ReviewWord> by reviewRepository::getSession
