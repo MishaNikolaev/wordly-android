@@ -20,4 +20,6 @@ dependencies {
 	implementation(projects.component.ui)
 	implementation(projects.component.presentation)
 	implementation(projects.core.navigation)
+	implementation(projects.core.network)
+	implementation(libs.retrofit)
 }

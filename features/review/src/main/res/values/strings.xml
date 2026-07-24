@@ -4,4 +4,12 @@
 	<string name="review_close_content_description">Закрыть</string>
 	<string name="review_play_audio_content_description">Произношение</string>
 	<string name="review_progress_format">%1$d/%2$d</string>
+	<string name="review_retry">Повторить</string>
+	<string name="review_error_title">Что-то пошло не так</string>
+	<string name="review_error_description">Не удалось загрузить повторение. Попробуйте ещё раз.</string>
+	<string name="review_continue">Далее</string>
+	<string name="review_finished_title_great">Отличная работа!</string>
+	<string name="review_finished_title_done">Сессия завершена</string>
+	<string name="review_finished_subtitle">Ты повторил %1$d из %2$d слов</string>
+	<string name="review_finished_home">На главную</string>
 </resources>

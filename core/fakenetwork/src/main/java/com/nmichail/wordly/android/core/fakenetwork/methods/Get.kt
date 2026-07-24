@@ -40,6 +40,11 @@ internal fun get(context: Context, uri: Uri, response: Response.Builder): Respon
 			body = context.getJson(R.raw.get_home),
 		)
 
+		"/api/review/session" -> response.create(
+			description = "Review session",
+			body = context.getJson(R.raw.get_review_session),
+		)
+
 		else -> {
 			val newsId = path.removePrefix("/api/news/").takeIf {
 				path.startsWith("/api/news/") && it.isNotEmpty() && !it.contains('/')
