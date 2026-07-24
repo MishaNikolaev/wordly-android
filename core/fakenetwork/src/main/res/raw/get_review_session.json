@@ -1,0 +1,56 @@
+{
+  "words": [
+    {
+      "id": "recall",
+      "word": "recall",
+      "phonetic": "/rɪˈkɔːl/",
+      "audioUrl": null,
+      "options": [
+        { "id": "recall-1", "text": "стойкость, упругость" },
+        { "id": "recall-2", "text": "вспоминать; отзыв" },
+        { "id": "recall-3", "text": "использовать; рычаг" },
+        { "id": "recall-4", "text": "обыденный, скучный" }
+      ],
+      "correctOptionId": "recall-2"
+    },
+    {
+      "id": "resilience",
+      "word": "resilience",
+      "phonetic": "/rɪˈzɪliəns/",
+      "audioUrl": null,
+      "options": [
+        { "id": "resilience-1", "text": "стойкость, упругость" },
+        { "id": "resilience-2", "text": "вспоминать; отзыв" },
+        { "id": "resilience-3", "text": "редкая удача" },
+        { "id": "resilience-4", "text": "развёртывать" }
+      ],
+      "correctOptionId": "resilience-1"
+    },
+    {
+      "id": "leverage",
+      "word": "leverage",
+      "phonetic": "/ˈlevərɪdʒ/",
+      "audioUrl": null,
+      "options": [
+        { "id": "leverage-1", "text": "обыденный, скучный" },
+        { "id": "leverage-2", "text": "красноречивый" },
+        { "id": "leverage-3", "text": "использовать; рычаг" },
+        { "id": "leverage-4", "text": "стойкость, упругость" }
+      ],
+      "correctOptionId": "leverage-3"
+    },
+    {
+      "id": "mundane",
+      "word": "mundane",
+      "phonetic": "/mʌnˈdeɪn/",
+      "audioUrl": null,
+      "options": [
+        { "id": "mundane-1", "text": "обыденный, скучный" },
+        { "id": "mundane-2", "text": "использовать; рычаг" },
+        { "id": "mundane-3", "text": "вспоминать; отзыв" },
+        { "id": "mundane-4", "text": "развёртывать" }
+      ],
+      "correctOptionId": "mundane-1"
+    }
+  ]
+}

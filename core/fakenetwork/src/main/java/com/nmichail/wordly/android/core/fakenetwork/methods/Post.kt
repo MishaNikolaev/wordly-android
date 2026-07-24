@@ -65,6 +65,10 @@ internal fun post(
 			description = "Logout",
 		)
 
+		"/api/review/answer" -> response.create(
+			description = "Review answer accepted; correct=true removes word from review queue",
+		)
+
 		else -> response.error404(context)
 	}
 }

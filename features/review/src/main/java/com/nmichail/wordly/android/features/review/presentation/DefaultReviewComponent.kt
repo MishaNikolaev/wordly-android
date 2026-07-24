@@ -36,11 +36,23 @@ internal class DefaultReviewComponent(
 		store.accept(ReviewStore.Intent.Close)
 	}
 
+	override fun handleRetry() {
+		store.accept(ReviewStore.Intent.Retry)
+	}
+
 	override fun handlePlayAudio() {
 		store.accept(ReviewStore.Intent.PlayAudio)
 	}
 
 	override fun handleSelectOption(optionId: String) {
 		store.accept(ReviewStore.Intent.SelectOption(optionId = optionId))
+	}
+
+	override fun handleContinue() {
+		store.accept(ReviewStore.Intent.Continue)
+	}
+
+	override fun handleFinish() {
+		store.accept(ReviewStore.Intent.Finish)
 	}
 }
