@@ -6,6 +6,7 @@ include(
 	":features:home",
 	":features:news",
 	":features:review",
+	":features:cards",
 	":features:words",
 	":features:stats",
 	":features:profile",
