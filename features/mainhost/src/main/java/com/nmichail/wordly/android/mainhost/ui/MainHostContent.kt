@@ -8,6 +8,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import com.arkivanov.decompose.extensions.compose.stack.Children
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
+import com.nmichail.wordly.android.features.cards.ui.CardPracticeContent
+import com.nmichail.wordly.android.features.cards.ui.CardsContent
 import com.nmichail.wordly.android.features.home.ui.HomeContent
 import com.nmichail.wordly.android.features.news.ui.NewsDetailContent
 import com.nmichail.wordly.android.features.profile.ui.ProfileContent
@@ -57,6 +59,12 @@ fun MainHostContent(
 				is MainHostComponent.Child.Review -> ReviewContent(
 					component = instance.component,
 					modifier = Modifier.padding(innerPadding),
+				)
+				is MainHostComponent.Child.Cards -> CardsContent(
+					component = instance.component,
+				)
+				is MainHostComponent.Child.CardPractice -> CardPracticeContent(
+					component = instance.component,
 				)
 				is MainHostComponent.Child.NewsDetail -> NewsDetailContent(
 					component = instance.component,

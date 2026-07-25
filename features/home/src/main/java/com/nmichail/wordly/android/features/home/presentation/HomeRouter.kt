@@ -6,5 +6,7 @@ interface HomeRouter {
 
 	fun navigateToReview()
 
+	fun navigateToCards()
+
 	fun navigateToNews(news: News)
 }
