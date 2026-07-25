@@ -1,0 +1,72 @@
+package com.nmichail.wordly.android.features.constructor.presentation.detail
+
+import com.arkivanov.decompose.ComponentContext
+import com.arkivanov.decompose.value.Value
+import com.arkivanov.mvikotlin.core.instancekeeper.getStore
+import com.arkivanov.mvikotlin.extensions.coroutines.labelsChannel
+import com.nmichail.wordly.android.component.presentation.launchTry
+import com.nmichail.wordly.android.core.navigation.asValue
+
+internal class DefaultConstructorPracticeComponent(
+	componentContext: ComponentContext,
+	themeId: String,
+	constructorPracticeStoreFactory: ConstructorPracticeStoreFactory,
+	private val constructorPracticeRouter: ConstructorPracticeRouter,
+) : ComponentContext by componentContext,
+	ConstructorPracticeComponent {
+
+	private val store: ConstructorPracticeStore = instanceKeeper.getStore {
+		constructorPracticeStoreFactory.create(themeId = themeId)
+	}
+
+	override val model: Value<ConstructorPracticeComponent.State> = store.asValue()
+
+	init {
+		launchTry {
+			for (label in store.labelsChannel(lifecycle)) {
+				when (label) {
+					ConstructorPracticeComponent.Label.Close -> constructorPracticeRouter.navigateBack()
+				}
+			}
+		} catch {
+			// ignored
+		}
+	}
+
+	override fun handleClose() {
+		store.accept(ConstructorPracticeStore.Intent.Close)
+	}
+
+	override fun handleRetry() {
+		store.accept(ConstructorPracticeStore.Intent.Retry)
+	}
+
+	override fun handlePlaceWord(wordId: String) {
+		store.accept(ConstructorPracticeStore.Intent.PlaceWord(wordId = wordId))
+	}
+
+	override fun handleRemoveWord(wordId: String) {
+		store.accept(ConstructorPracticeStore.Intent.RemoveWord(wordId = wordId))
+	}
+
+	override fun handleMoveAnswerWord(fromIndex: Int, toIndex: Int) {
+		store.accept(
+			ConstructorPracticeStore.Intent.MoveAnswerWord(
+				fromIndex = fromIndex,
+				toIndex = toIndex,
+			),
+		)
+	}
+
+	override fun handleCheck() {
+		store.accept(ConstructorPracticeStore.Intent.Check)
+	}
+
+	override fun handleContinue() {
+		store.accept(ConstructorPracticeStore.Intent.Continue)
+	}
+
+	override fun handleFinish() {
+		store.accept(ConstructorPracticeStore.Intent.Finish)
+	}
+}

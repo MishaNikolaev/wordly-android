@@ -29,6 +29,7 @@ dependencies {
 	implementation(projects.features.news)
 	implementation(projects.features.review)
 	implementation(projects.features.cards)
+	implementation(projects.features.constructor)
 	implementation(projects.component.ui)
 	implementation(projects.core.network)
 	implementation(projects.core.preferences)

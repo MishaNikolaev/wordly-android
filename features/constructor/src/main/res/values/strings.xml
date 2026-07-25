@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="constructor_back">Назад</string>
+	<string name="constructor_retry">Повторить</string>
+	<string name="constructor_error_title">Не удалось загрузить конструктор</string>
+	<string name="constructor_error_subtitle">Проверьте соединение и попробуйте снова</string>
+	<string name="constructor_level_banner_action">Выбрать уровень</string>
+	<string name="constructor_practice_close">Закрыть</string>
+	<string name="constructor_practice_error_title">Что-то пошло не так</string>
+	<string name="constructor_practice_error_description">Не удалось загрузить фразы. Попробуйте ещё раз.</string>
+	<string name="constructor_practice_check">Проверить</string>
+	<string name="constructor_practice_continue">Следующая фраза</string>
+	<string name="constructor_practice_progress_format">%1$d/%2$d</string>
+	<string name="constructor_practice_correct">Верно!</string>
+	<string name="constructor_practice_incorrect">Неверно</string>
+	<string name="constructor_practice_author_format">— %1$s</string>
+	<string name="constructor_practice_finished_title_great">Отличная работа!</string>
+	<string name="constructor_practice_finished_title_done">Сессия завершена</string>
+	<string name="constructor_practice_finished_subtitle">Ты собрал %1$d из %2$d фраз</string>
+	<string name="constructor_practice_finished_back">К конструктору</string>
+</resources>

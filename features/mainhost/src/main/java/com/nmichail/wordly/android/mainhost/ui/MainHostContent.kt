@@ -10,6 +10,8 @@ import com.arkivanov.decompose.extensions.compose.stack.Children
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import com.nmichail.wordly.android.features.cards.ui.CardPracticeContent
 import com.nmichail.wordly.android.features.cards.ui.CardsContent
+import com.nmichail.wordly.android.features.constructor.ui.ConstructorContent
+import com.nmichail.wordly.android.features.constructor.ui.ConstructorPracticeContent
 import com.nmichail.wordly.android.features.home.ui.HomeContent
 import com.nmichail.wordly.android.features.news.ui.NewsDetailContent
 import com.nmichail.wordly.android.features.profile.ui.ProfileContent
@@ -64,6 +66,12 @@ fun MainHostContent(
 					component = instance.component,
 				)
 				is MainHostComponent.Child.CardPractice -> CardPracticeContent(
+					component = instance.component,
+				)
+				is MainHostComponent.Child.Constructor -> ConstructorContent(
+					component = instance.component,
+				)
+				is MainHostComponent.Child.ConstructorPractice -> ConstructorPracticeContent(
 					component = instance.component,
 				)
 				is MainHostComponent.Child.NewsDetail -> NewsDetailContent(

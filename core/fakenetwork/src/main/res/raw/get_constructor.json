@@ -1,0 +1,42 @@
+{
+  "title": "Конструктор",
+  "searchPlaceholder": "Поиск темы",
+  "levelBanner": {
+    "text": "Ваш уровень / темы подбираются под него",
+    "levelLabel": "B2",
+    "levels": ["A1", "A2", "B1", "B2", "C1", "C2"]
+  },
+  "sections": [
+    {
+      "title": "Под ваш уровень · B2",
+      "items": [
+        {
+          "id": "philosophy",
+          "title": "Философские мысли",
+          "subtitle": "4 фразы",
+          "badge": "B2",
+          "imageUrl": null
+        },
+        {
+          "id": "movies",
+          "title": "Цитаты из фильмов",
+          "subtitle": "4 фразы",
+          "badge": "B2",
+          "imageUrl": null
+        }
+      ]
+    },
+    {
+      "title": "Другие уровни",
+      "items": [
+        {
+          "id": "books",
+          "title": "Цитаты из книг",
+          "subtitle": "3 фразы",
+          "badge": "B1",
+          "imageUrl": null
+        }
+      ]
+    }
+  ]
+}
