@@ -1,0 +1,37 @@
+{
+  "themeId": "philosophy",
+  "themeTitle": "Философские мысли",
+  "phrases": [
+    {
+      "id": "socrates-1",
+      "prompt": "Я знаю, что ничего не знаю.",
+      "author": "Сократ",
+      "words": [
+        { "id": "w1", "text": "I" },
+        { "id": "w2", "text": "know" },
+        { "id": "w3", "text": "that" },
+        { "id": "w4", "text": "I" },
+        { "id": "w5", "text": "know" },
+        { "id": "w6", "text": "nothing" },
+        { "id": "w7", "text": "never" },
+        { "id": "w8", "text": "am" }
+      ],
+      "correctOrder": ["w1", "w2", "w3", "w4", "w5", "w6"]
+    },
+    {
+      "id": "descartes-1",
+      "prompt": "Я мыслю, следовательно, я существую.",
+      "author": "Декарт",
+      "words": [
+        { "id": "d1", "text": "I" },
+        { "id": "d2", "text": "think" },
+        { "id": "d3", "text": "therefore" },
+        { "id": "d4", "text": "I" },
+        { "id": "d5", "text": "am" },
+        { "id": "d6", "text": "exist" },
+        { "id": "d7", "text": "so" }
+      ],
+      "correctOrder": ["d1", "d2", "d3", "d4", "d5"]
+    }
+  ]
+}

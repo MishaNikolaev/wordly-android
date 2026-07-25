@@ -53,6 +53,10 @@ private fun responseForPath(
 			description = "Cards catalog",
 			body = context.getJson(R.raw.get_cards),
 		)
+		"/api/gateway/constructor" -> response.create(
+			description = "Constructor catalog",
+			body = context.getJson(R.raw.get_constructor),
+		)
 		else -> responseForDynamicPath(context = context, path = path, response = response)
 	}
 
@@ -62,6 +66,7 @@ private fun responseForDynamicPath(
 	response: Response.Builder,
 ): Response.Builder =
 	cardSessionResponse(context, path, response)
+		?: constructorSessionResponse(context, path, response)
 		?: newsDetailResponse(context, path, response)
 		?: response.error404(context)
 
@@ -81,6 +86,25 @@ private fun cardSessionResponse(
 	return response.create(
 		description = "Card practice session",
 		body = context.getJson(R.raw.get_cards_session),
+	)
+}
+
+private fun constructorSessionResponse(
+	context: Context,
+	path: String,
+	response: Response.Builder,
+): Response.Builder? {
+	val themeId = Regex("^/api/gateway/constructor/([^/]+)/session$")
+		.matchEntire(path)
+		?.groupValues
+		?.get(1)
+		?: return null
+	if (themeId !in setOf("philosophy", "movies", "books")) {
+		return response.error404(context)
+	}
+	return response.create(
+		description = "Constructor session",
+		body = context.getJson(R.raw.get_constructor_session),
 	)
 }
 
