@@ -1,0 +1,49 @@
+{
+  "title": "Карточки",
+  "searchPlaceholder": "Поиск темы или сферы",
+  "levelBanner": {
+    "text": "Ваш уровень / темы подбираются под него",
+    "levelLabel": "B2",
+    "levels": ["A1", "A2", "B1", "B2", "C1", "C2"]
+  },
+  "sections": [
+    {
+      "title": "Под ваш уровень · B2",
+      "items": [
+        {
+          "id": "science",
+          "title": "Наука",
+          "subtitle": "8 слов",
+          "badge": "B2",
+          "imageUrl": null
+        },
+        {
+          "id": "journalism",
+          "title": "Журналистика",
+          "subtitle": "10 слов",
+          "badge": "B2",
+          "imageUrl": null
+        },
+        {
+          "id": "medicine",
+          "title": "Медицина",
+          "subtitle": "12 слов",
+          "badge": "B2",
+          "imageUrl": null
+        }
+      ]
+    },
+    {
+      "title": "Другие уровни",
+      "items": [
+        {
+          "id": "engineering",
+          "title": "Инженерия",
+          "subtitle": "9 слов",
+          "badge": "B1",
+          "imageUrl": null
+        }
+      ]
+    }
+  ]
+}

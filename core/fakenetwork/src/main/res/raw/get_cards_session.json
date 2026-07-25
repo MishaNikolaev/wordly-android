@@ -1,0 +1,56 @@
+{
+  "words": [
+    {
+      "id": "hypothesis",
+      "word": "hypothesis",
+      "phonetic": "/haɪˈpɒθəsɪs/",
+      "audioUrl": null,
+      "options": [
+        { "id": "hypothesis-1", "text": "молекула" },
+        { "id": "hypothesis-2", "text": "гипотеза" },
+        { "id": "hypothesis-3", "text": "гравитация" },
+        { "id": "hypothesis-4", "text": "эксперимент" }
+      ],
+      "correctOptionId": "hypothesis-2"
+    },
+    {
+      "id": "molecule",
+      "word": "molecule",
+      "phonetic": "/ˈmɒlɪkjuːl/",
+      "audioUrl": null,
+      "options": [
+        { "id": "molecule-1", "text": "молекула" },
+        { "id": "molecule-2", "text": "гипотеза" },
+        { "id": "molecule-3", "text": "реакция" },
+        { "id": "molecule-4", "text": "формула" }
+      ],
+      "correctOptionId": "molecule-1"
+    },
+    {
+      "id": "gravity",
+      "word": "gravity",
+      "phonetic": "/ˈɡrævəti/",
+      "audioUrl": null,
+      "options": [
+        { "id": "gravity-1", "text": "энергия" },
+        { "id": "gravity-2", "text": "скорость" },
+        { "id": "gravity-3", "text": "гравитация" },
+        { "id": "gravity-4", "text": "давление" }
+      ],
+      "correctOptionId": "gravity-3"
+    },
+    {
+      "id": "experiment",
+      "word": "experiment",
+      "phonetic": "/ɪkˈsperɪmənt/",
+      "audioUrl": null,
+      "options": [
+        { "id": "experiment-1", "text": "теория" },
+        { "id": "experiment-2", "text": "образец" },
+        { "id": "experiment-3", "text": "наблюдение" },
+        { "id": "experiment-4", "text": "эксперимент" }
+      ],
+      "correctOptionId": "experiment-4"
+    }
+  ]
+}

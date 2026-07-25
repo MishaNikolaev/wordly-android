@@ -27,7 +27,11 @@ internal class DefaultHomeComponent(
 			for (label in store.labelsChannel(lifecycle)) {
 				when (label) {
 					HomeComponent.Label.StartReview -> homeRouter.navigateToReview()
-					is HomeComponent.Label.OpenTraining -> Unit
+					is HomeComponent.Label.OpenTraining -> {
+						if (label.training.id == "cards") {
+							homeRouter.navigateToCards()
+						}
+					}
 					is HomeComponent.Label.OpenNews -> homeRouter.navigateToNews(news = label.news)
 				}
 			}

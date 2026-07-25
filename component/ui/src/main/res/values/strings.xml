@@ -89,6 +89,8 @@
 	<string name="news_detail_reading_minutes">%d мин чтения</string>
 	<string name="news_detail_author_meta">%1$s · %2$s</string>
 
+	<string name="search_field_icon">Поиск</string>
+
 	<string name="home_training_cards_title">Карточки</string>
 	<string name="home_training_cards_subtitle">слова по темам</string>
 	<string name="home_training_constructor_title">Конструктор</string>

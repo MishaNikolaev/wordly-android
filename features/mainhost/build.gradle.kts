@@ -21,6 +21,7 @@ dependencies {
 	implementation(projects.features.home)
 	implementation(projects.features.news)
 	implementation(projects.features.review)
+	implementation(projects.features.cards)
 	implementation(projects.features.words)
 	implementation(projects.features.stats)
 	implementation(projects.features.profile)
