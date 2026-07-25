@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="cards_back">Назад</string>
+	<string name="cards_level_banner_action">Выбрать уровень</string>
+	<string name="cards_retry">Повторить</string>
+	<string name="cards_error_title">Не удалось загрузить карточки</string>
+	<string name="cards_error_subtitle">Проверьте соединение и попробуйте снова</string>
+	<string name="card_practice_task_choose_translation">Выбери перевод</string>
+	<string name="card_practice_close">Закрыть</string>
+	<string name="card_practice_play_audio">Произношение</string>
+	<string name="card_practice_progress_format">%1$d/%2$d</string>
+	<string name="card_practice_error_title">Что-то пошло не так</string>
+	<string name="card_practice_error_description">Не удалось загрузить слова. Попробуйте ещё раз.</string>
+	<string name="card_practice_continue">Далее</string>
+	<string name="card_practice_finished_title_great">Отличная работа!</string>
+	<string name="card_practice_finished_title_done">Сессия завершена</string>
+	<string name="card_practice_finished_subtitle">Ты выучил %1$d из %2$d слов</string>
+	<string name="card_practice_finished_back">К карточкам</string>
+</resources>
