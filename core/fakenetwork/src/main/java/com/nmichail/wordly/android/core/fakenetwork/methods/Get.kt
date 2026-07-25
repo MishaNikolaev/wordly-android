@@ -24,47 +24,80 @@ internal fun get(context: Context, uri: Uri, response: Response.Builder): Respon
 		)
 	}
 
-	return when (path) {
+	return responseForPath(context = context, path = path, response = response)
+}
+
+private fun responseForPath(
+	context: Context,
+	path: String,
+	response: Response.Builder,
+): Response.Builder =
+	when (path) {
 		"/api/gateway/session" -> response.create(
 			description = "Auth session",
 			body = context.getJson(R.raw.session_ok),
 		)
-
 		"/api/gateway/profile" -> response.create(
 			description = "User profile",
 			body = context.getJson(R.raw.profile_ok),
 		)
-
 		"/api/home" -> response.create(
 			description = "Home screen",
 			body = context.getJson(R.raw.get_home),
 		)
-
 		"/api/review/session" -> response.create(
 			description = "Review session",
 			body = context.getJson(R.raw.get_review_session),
 		)
-
-		else -> {
-			val newsId = path.removePrefix("/api/news/").takeIf {
-				path.startsWith("/api/news/") && it.isNotEmpty() && !it.contains('/')
-			}
-			if (newsId != null) {
-				val newsBody = newsJson(context, newsId)
-				if (newsBody != null) {
-					response.create(
-						description = "News detail",
-						body = newsBody,
-					)
-				} else {
-					response.error404(context)
-				}
-			} else {
-				response.error404(context)
-			}
-		}
+		"/api/gateway/cards" -> response.create(
+			description = "Cards catalog",
+			body = context.getJson(R.raw.get_cards),
+		)
+		else -> responseForDynamicPath(context = context, path = path, response = response)
 	}
+
+private fun responseForDynamicPath(
+	context: Context,
+	path: String,
+	response: Response.Builder,
+): Response.Builder =
+	cardSessionResponse(context, path, response)
+		?: newsDetailResponse(context, path, response)
+		?: response.error404(context)
+
+private fun cardSessionResponse(
+	context: Context,
+	path: String,
+	response: Response.Builder,
+): Response.Builder? {
+	val cardId = Regex("^/api/gateway/cards/([^/]+)/session$")
+		.matchEntire(path)
+		?.groupValues
+		?.get(1)
+		?: return null
+	if (cardId !in setOf("science", "journalism", "medicine", "engineering")) {
+		return response.error404(context)
+	}
+	return response.create(
+		description = "Card practice session",
+		body = context.getJson(R.raw.get_cards_session),
+	)
 }
+
+private fun newsDetailResponse(
+	context: Context,
+	path: String,
+	response: Response.Builder,
+): Response.Builder? {
+	val newsId = pathSegmentId(path = path, prefix = "/api/news/") ?: return null
+	val body = newsJson(context, newsId) ?: return response.error404(context)
+	return response.create(description = "News detail", body = body)
+}
+
+private fun pathSegmentId(path: String, prefix: String): String? =
+	path.removePrefix(prefix).takeIf {
+		path.startsWith(prefix) && it.isNotEmpty() && !it.contains('/')
+	}
 
 private fun newsJson(context: Context, newsId: String): String? {
 	val rawId = when (newsId) {
