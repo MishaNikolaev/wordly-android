@@ -13,6 +13,10 @@ import com.nmichail.wordly.android.features.cards.presentation.CardsComponent
 import com.nmichail.wordly.android.features.cards.presentation.CardsRouter
 import com.nmichail.wordly.android.features.cards.presentation.detail.CardPracticeComponent
 import com.nmichail.wordly.android.features.cards.presentation.detail.CardPracticeRouter
+import com.nmichail.wordly.android.features.constructor.presentation.ConstructorComponent
+import com.nmichail.wordly.android.features.constructor.presentation.ConstructorRouter
+import com.nmichail.wordly.android.features.constructor.presentation.detail.ConstructorPracticeComponent
+import com.nmichail.wordly.android.features.constructor.presentation.detail.ConstructorPracticeRouter
 import com.nmichail.wordly.android.features.home.presentation.HomeComponent
 import com.nmichail.wordly.android.features.home.presentation.HomeRouter
 import com.nmichail.wordly.android.features.news.domain.entity.News
@@ -28,6 +32,8 @@ internal class DefaultMainHostComponent(
 	private val reviewComponentFactory: ReviewComponent.Factory,
 	private val cardsComponentFactory: CardsComponent.Factory,
 	private val cardPracticeComponentFactory: CardPracticeComponent.Factory,
+	private val constructorComponentFactory: ConstructorComponent.Factory,
+	private val constructorPracticeComponentFactory: ConstructorPracticeComponent.Factory,
 	private val newsDetailComponentFactory: NewsDetailComponent.Factory,
 ) : MainHostComponent, ComponentContext by componentContext {
 
@@ -58,6 +64,10 @@ internal class DefaultMainHostComponent(
 			MainHostConfig.Review -> reviewChild(componentContext)
 			MainHostConfig.Cards -> cardsChild(componentContext)
 			is MainHostConfig.CardPractice -> cardPracticeChild(config.cardId, componentContext)
+			MainHostConfig.Constructor -> constructorChild(componentContext)
+			is MainHostConfig.ConstructorPractice -> {
+				constructorPracticeChild(config.themeId, componentContext)
+			}
 			is MainHostConfig.NewsDetail -> newsDetailChild(config.newsId, componentContext)
 		}
 
@@ -70,6 +80,10 @@ internal class DefaultMainHostComponent(
 
 			override fun navigateToCards() {
 				navigation.push(MainHostConfig.Cards)
+			}
+
+			override fun navigateToConstructor() {
+				navigation.push(MainHostConfig.Constructor)
 			}
 
 			override fun navigateToNews(news: News) {
@@ -134,6 +148,42 @@ internal class DefaultMainHostComponent(
 		)
 	}
 
+	@OptIn(DelicateDecomposeApi::class)
+	private fun constructorChild(componentContext: ComponentContext): MainHostComponent.Child {
+		val constructorRouter = object : ConstructorRouter {
+			override fun navigateBack() {
+				navigation.pop()
+			}
+		}
+		return MainHostComponent.Child.Constructor(
+			component = constructorComponentFactory(
+				componentContext = componentContext,
+				constructorRouter = constructorRouter,
+				onThemeClick = { theme ->
+					navigation.push(MainHostConfig.ConstructorPractice(themeId = theme.id))
+				},
+			),
+		)
+	}
+
+	private fun constructorPracticeChild(
+		themeId: String,
+		componentContext: ComponentContext,
+	): MainHostComponent.Child {
+		val constructorPracticeRouter = object : ConstructorPracticeRouter {
+			override fun navigateBack() {
+				navigation.pop()
+			}
+		}
+		return MainHostComponent.Child.ConstructorPractice(
+			component = constructorPracticeComponentFactory(
+				componentContext = componentContext,
+				themeId = themeId,
+				constructorPracticeRouter = constructorPracticeRouter,
+			),
+		)
+	}
+
 	private fun newsDetailChild(
 		newsId: String,
 		componentContext: ComponentContext,
@@ -180,6 +230,14 @@ private sealed interface MainHostConfig {
 	) : MainHostConfig
 
 	@Serializable
+	data object Constructor : MainHostConfig
+
+	@Serializable
+	data class ConstructorPractice(
+		val themeId: String,
+	) : MainHostConfig
+
+	@Serializable
 	data class NewsDetail(
 		val newsId: String,
 	) : MainHostConfig
@@ -202,5 +260,7 @@ fun MainHostComponent.Child.toTab(): MainHostTab? =
 		is MainHostComponent.Child.Review -> null
 		is MainHostComponent.Child.Cards -> null
 		is MainHostComponent.Child.CardPractice -> null
+		is MainHostComponent.Child.Constructor -> null
+		is MainHostComponent.Child.ConstructorPractice -> null
 		is MainHostComponent.Child.NewsDetail -> null
 	}

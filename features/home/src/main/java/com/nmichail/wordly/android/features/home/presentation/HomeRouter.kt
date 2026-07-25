@@ -8,5 +8,7 @@ interface HomeRouter {
 
 	fun navigateToCards()
 
+	fun navigateToConstructor()
+
 	fun navigateToNews(news: News)
 }

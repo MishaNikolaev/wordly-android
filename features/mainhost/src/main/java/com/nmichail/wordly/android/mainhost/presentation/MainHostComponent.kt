@@ -5,6 +5,8 @@ import com.arkivanov.decompose.router.stack.ChildStack
 import com.arkivanov.decompose.value.Value
 import com.nmichail.wordly.android.features.cards.presentation.CardsComponent
 import com.nmichail.wordly.android.features.cards.presentation.detail.CardPracticeComponent
+import com.nmichail.wordly.android.features.constructor.presentation.ConstructorComponent
+import com.nmichail.wordly.android.features.constructor.presentation.detail.ConstructorPracticeComponent
 import com.nmichail.wordly.android.features.home.presentation.HomeComponent
 import com.nmichail.wordly.android.features.news.presentation.NewsDetailComponent
 import com.nmichail.wordly.android.features.review.presentation.ReviewComponent
@@ -30,6 +32,10 @@ interface MainHostComponent {
 		data class Cards(val component: CardsComponent) : Child
 
 		data class CardPractice(val component: CardPracticeComponent) : Child
+
+		data class Constructor(val component: ConstructorComponent) : Child
+
+		data class ConstructorPractice(val component: ConstructorPracticeComponent) : Child
 
 		data class NewsDetail(val component: NewsDetailComponent) : Child
 	}
