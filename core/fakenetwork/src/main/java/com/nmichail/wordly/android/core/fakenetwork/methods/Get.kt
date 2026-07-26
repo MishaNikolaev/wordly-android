@@ -2,6 +2,7 @@ package com.nmichail.wordly.android.core.fakenetwork.methods
 
 import android.content.Context
 import android.net.Uri
+import com.nmichail.wordly.android.core.fakenetwork.FakeEnglishLevelStore
 import com.nmichail.wordly.android.core.fakenetwork.FakeServerResponses
 import com.nmichail.wordly.android.core.fakenetwork.R
 import com.nmichail.wordly.android.core.fakenetwork.create
@@ -35,11 +36,11 @@ private fun responseForPath(
 	when (path) {
 		"/api/gateway/session" -> response.create(
 			description = "Auth session",
-			body = context.getJson(R.raw.session_ok),
+			body = FakeEnglishLevelStore.applyToSessionJson(context.getJson(R.raw.session_ok)),
 		)
 		"/api/gateway/profile" -> response.create(
 			description = "User profile",
-			body = context.getJson(R.raw.profile_ok),
+			body = FakeEnglishLevelStore.applyToProfileJson(context.getJson(R.raw.profile_ok)),
 		)
 		"/api/home" -> response.create(
 			description = "Home screen",
@@ -51,11 +52,15 @@ private fun responseForPath(
 		)
 		"/api/gateway/cards" -> response.create(
 			description = "Cards catalog",
-			body = context.getJson(R.raw.get_cards),
+			body = FakeEnglishLevelStore.applyToCatalogJson(context.getJson(R.raw.get_cards)),
 		)
 		"/api/gateway/constructor" -> response.create(
 			description = "Constructor catalog",
-			body = context.getJson(R.raw.get_constructor),
+			body = FakeEnglishLevelStore.applyToCatalogJson(context.getJson(R.raw.get_constructor)),
+		)
+		"/api/gateway/books" -> response.create(
+			description = "Books catalog",
+			body = FakeEnglishLevelStore.applyToCatalogJson(context.getJson(R.raw.get_books)),
 		)
 		else -> responseForDynamicPath(context = context, path = path, response = response)
 	}
@@ -67,6 +72,8 @@ private fun responseForDynamicPath(
 ): Response.Builder =
 	cardSessionResponse(context, path, response)
 		?: constructorSessionResponse(context, path, response)
+		?: bookContentResponse(context, path, response)
+		?: bookTranslationResponse(context, path, response)
 		?: newsDetailResponse(context, path, response)
 		?: response.error404(context)
 
@@ -116,6 +123,46 @@ private fun newsDetailResponse(
 	val newsId = pathSegmentId(path = path, prefix = "/api/news/") ?: return null
 	val body = newsJson(context, newsId) ?: return response.error404(context)
 	return response.create(description = "News detail", body = body)
+}
+
+private val ALLOWED_BOOK_IDS = setOf("little-prince", "animal-farm", "1984")
+
+private fun bookContentResponse(
+	context: Context,
+	path: String,
+	response: Response.Builder,
+): Response.Builder? {
+	val bookId = Regex("^/api/gateway/books/([^/]+)$")
+		.matchEntire(path)
+		?.groupValues
+		?.get(1)
+		?: return null
+	if (bookId !in ALLOWED_BOOK_IDS) {
+		return response.error404(context)
+	}
+	return response.create(
+		description = "Book content",
+		body = context.getJson(R.raw.get_book_little_prince),
+	)
+}
+
+private fun bookTranslationResponse(
+	context: Context,
+	path: String,
+	response: Response.Builder,
+): Response.Builder? {
+	val bookId = Regex("^/api/gateway/books/([^/]+)/translation$")
+		.matchEntire(path)
+		?.groupValues
+		?.get(1)
+		?: return null
+	if (bookId !in ALLOWED_BOOK_IDS) {
+		return response.error404(context)
+	}
+	return response.create(
+		description = "Book translation",
+		body = context.getJson(R.raw.get_book_translation_little_prince),
+	)
 }
 
 private fun pathSegmentId(path: String, prefix: String): String? =

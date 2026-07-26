@@ -1,0 +1,42 @@
+{
+  "title": "Книги",
+  "searchPlaceholder": "Поиск книги",
+  "levelBanner": {
+    "text": "Ваш уровень / книги подбираются под него",
+    "levelLabel": "B2",
+    "levels": ["A1", "A2", "B1", "B2", "C1", "C2"]
+  },
+  "sections": [
+    {
+      "title": "Под ваш уровень · B2",
+      "items": [
+        {
+          "id": "little-prince",
+          "title": "The Little Prince",
+          "subtitle": "Antoine de Saint-Exupéry",
+          "badge": "B1",
+          "imageUrl": null
+        },
+        {
+          "id": "animal-farm",
+          "title": "Animal Farm",
+          "subtitle": "George Orwell",
+          "badge": "B1",
+          "imageUrl": null
+        }
+      ]
+    },
+    {
+      "title": "Другие уровни",
+      "items": [
+        {
+          "id": "1984",
+          "title": "1984",
+          "subtitle": "George Orwell",
+          "badge": "B2",
+          "imageUrl": null
+        }
+      ]
+    }
+  ]
+}
