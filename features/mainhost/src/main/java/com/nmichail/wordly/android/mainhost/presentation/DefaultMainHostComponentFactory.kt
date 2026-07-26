@@ -1,6 +1,8 @@
 package com.nmichail.wordly.android.mainhost.presentation
 
 import com.arkivanov.decompose.ComponentContext
+import com.nmichail.wordly.android.features.books.presentation.BooksComponent
+import com.nmichail.wordly.android.features.books.presentation.detail.BookReaderComponent
 import com.nmichail.wordly.android.features.cards.presentation.CardsComponent
 import com.nmichail.wordly.android.features.cards.presentation.detail.CardPracticeComponent
 import com.nmichail.wordly.android.features.constructor.presentation.ConstructorComponent
@@ -17,6 +19,8 @@ internal class DefaultMainHostComponentFactory @Inject constructor(
 	private val cardPracticeComponentFactory: CardPracticeComponent.Factory,
 	private val constructorComponentFactory: ConstructorComponent.Factory,
 	private val constructorPracticeComponentFactory: ConstructorPracticeComponent.Factory,
+	private val booksComponentFactory: BooksComponent.Factory,
+	private val bookReaderComponentFactory: BookReaderComponent.Factory,
 	private val newsDetailComponentFactory: NewsDetailComponent.Factory,
 ) : MainHostComponent.Factory {
 
@@ -29,6 +33,8 @@ internal class DefaultMainHostComponentFactory @Inject constructor(
 			cardPracticeComponentFactory = cardPracticeComponentFactory,
 			constructorComponentFactory = constructorComponentFactory,
 			constructorPracticeComponentFactory = constructorPracticeComponentFactory,
+			booksComponentFactory = booksComponentFactory,
+			bookReaderComponentFactory = bookReaderComponentFactory,
 			newsDetailComponentFactory = newsDetailComponentFactory,
 		)
 }

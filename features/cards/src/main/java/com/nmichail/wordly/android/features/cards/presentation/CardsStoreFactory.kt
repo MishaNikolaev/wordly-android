@@ -7,6 +7,7 @@ import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.logging.store.LoggingStoreFactory
 import com.arkivanov.mvikotlin.main.store.DefaultStoreFactory
 import com.nmichail.wordly.android.component.presentation.BaseCoroutineExecutor
+import com.nmichail.wordly.android.core.network.domain.usecase.UpdateEnglishLevelUseCase
 import com.nmichail.wordly.android.features.cards.domain.entity.Cards
 import com.nmichail.wordly.android.features.cards.domain.entity.CardsSection
 import com.nmichail.wordly.android.features.cards.domain.usecase.GetCardsUseCase
@@ -14,6 +15,7 @@ import javax.inject.Inject
 
 internal class CardsStoreFactory @Inject constructor(
 	private val getCardsUseCase: GetCardsUseCase,
+	private val updateEnglishLevelUseCase: UpdateEnglishLevelUseCase,
 ) {
 
 	private val storeFactory: StoreFactory = LoggingStoreFactory(DefaultStoreFactory())
@@ -75,6 +77,10 @@ internal class CardsStoreFactory @Inject constructor(
 					val banner = content.levelBanner ?: return this
 					content.copy(
 						levelBanner = banner.copy(levelLabel = msg.level),
+						sections = updateLevelSectionTitles(
+							sections = content.sections,
+							level = msg.level,
+						),
 					)
 				}
 			}
@@ -117,7 +123,17 @@ internal class CardsStoreFactory @Inject constructor(
 						?: return
 					publish(CardsComponent.Label.OpenCard(item = item))
 				}
-				is CardsStore.Intent.ChangeLevel -> dispatch(Msg.LevelUpdated(level = intent.level))
+				is CardsStore.Intent.ChangeLevel -> changeLevel(level = intent.level)
+			}
+		}
+
+		private fun changeLevel(level: String) {
+			launchTry {
+				updateEnglishLevelUseCase(level)
+				allSections = updateLevelSectionTitles(sections = allSections, level = level)
+				dispatch(Msg.LevelUpdated(level = level))
+			} catch {
+				// keep previous level
 			}
 		}
 
@@ -154,3 +170,17 @@ internal class CardsStoreFactory @Inject constructor(
 		}
 	}
 }
+
+private const val LEVEL_SECTION_PREFIX = "Под ваш уровень · "
+
+private fun updateLevelSectionTitles(
+	sections: List<CardsSection>,
+	level: String,
+): List<CardsSection> =
+	sections.map { section ->
+		if (section.title.startsWith(LEVEL_SECTION_PREFIX)) {
+			section.copy(title = "$LEVEL_SECTION_PREFIX$level")
+		} else {
+			section
+		}
+	}

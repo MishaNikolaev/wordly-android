@@ -1,5 +1,6 @@
 package com.nmichail.wordly.android.mainhost.ui
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -8,6 +9,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import com.arkivanov.decompose.extensions.compose.stack.Children
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
+import com.nmichail.wordly.android.features.books.ui.BookReaderContent
+import com.nmichail.wordly.android.features.books.ui.BooksContent
 import com.nmichail.wordly.android.features.cards.ui.CardPracticeContent
 import com.nmichail.wordly.android.features.cards.ui.CardsContent
 import com.nmichail.wordly.android.features.constructor.ui.ConstructorContent
@@ -27,8 +30,7 @@ fun MainHostContent(
 	modifier: Modifier = Modifier,
 ) {
 	val stack by component.stack.subscribeAsState()
-	val activeChild = stack.active.instance
-	val selectedTab = activeChild.toTab()
+	val selectedTab = stack.active.instance.toTab()
 	val showBottomBar = selectedTab != null
 
 	Scaffold(
@@ -44,40 +46,57 @@ fun MainHostContent(
 		},
 	) { innerPadding ->
 		Children(stack = component.stack) { child ->
-			when (val instance = child.instance) {
-				is MainHostComponent.Child.Home -> HomeContent(
-					component = instance.component,
-					modifier = Modifier.padding(innerPadding),
-				)
-				MainHostComponent.Child.Words -> WordContent(
-					modifier = Modifier.padding(innerPadding),
-				)
-				MainHostComponent.Child.Stats -> StatsContent(
-					modifier = Modifier.padding(innerPadding),
-				)
-				MainHostComponent.Child.Profile -> ProfileContent(
-					modifier = Modifier.padding(innerPadding),
-				)
-				is MainHostComponent.Child.Review -> ReviewContent(
-					component = instance.component,
-					modifier = Modifier.padding(innerPadding),
-				)
-				is MainHostComponent.Child.Cards -> CardsContent(
-					component = instance.component,
-				)
-				is MainHostComponent.Child.CardPractice -> CardPracticeContent(
-					component = instance.component,
-				)
-				is MainHostComponent.Child.Constructor -> ConstructorContent(
-					component = instance.component,
-				)
-				is MainHostComponent.Child.ConstructorPractice -> ConstructorPracticeContent(
-					component = instance.component,
-				)
-				is MainHostComponent.Child.NewsDetail -> NewsDetailContent(
-					component = instance.component,
-				)
-			}
+			MainHostChildContent(
+				child = child.instance,
+				innerPadding = innerPadding,
+			)
 		}
+	}
+}
+
+@Composable
+private fun MainHostChildContent(
+	child: MainHostComponent.Child,
+	innerPadding: PaddingValues,
+) {
+	when (child) {
+		is MainHostComponent.Child.Home -> HomeContent(
+			component = child.component,
+			modifier = Modifier.padding(innerPadding),
+		)
+		MainHostComponent.Child.Words -> WordContent(
+			modifier = Modifier.padding(innerPadding),
+		)
+		MainHostComponent.Child.Stats -> StatsContent(
+			modifier = Modifier.padding(innerPadding),
+		)
+		MainHostComponent.Child.Profile -> ProfileContent(
+			modifier = Modifier.padding(innerPadding),
+		)
+		is MainHostComponent.Child.Review -> ReviewContent(
+			component = child.component,
+			modifier = Modifier.padding(innerPadding),
+		)
+		is MainHostComponent.Child.Cards -> CardsContent(
+			component = child.component,
+		)
+		is MainHostComponent.Child.CardPractice -> CardPracticeContent(
+			component = child.component,
+		)
+		is MainHostComponent.Child.Constructor -> ConstructorContent(
+			component = child.component,
+		)
+		is MainHostComponent.Child.ConstructorPractice -> ConstructorPracticeContent(
+			component = child.component,
+		)
+		is MainHostComponent.Child.Books -> BooksContent(
+			component = child.component,
+		)
+		is MainHostComponent.Child.BookReader -> BookReaderContent(
+			component = child.component,
+		)
+		is MainHostComponent.Child.NewsDetail -> NewsDetailContent(
+			component = child.component,
+		)
 	}
 }

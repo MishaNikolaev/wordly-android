@@ -9,6 +9,10 @@ import com.arkivanov.decompose.router.stack.childStack
 import com.arkivanov.decompose.router.stack.pop
 import com.arkivanov.decompose.router.stack.push
 import com.arkivanov.decompose.value.Value
+import com.nmichail.wordly.android.features.books.presentation.BooksComponent
+import com.nmichail.wordly.android.features.books.presentation.BooksRouter
+import com.nmichail.wordly.android.features.books.presentation.detail.BookReaderComponent
+import com.nmichail.wordly.android.features.books.presentation.detail.BookReaderRouter
 import com.nmichail.wordly.android.features.cards.presentation.CardsComponent
 import com.nmichail.wordly.android.features.cards.presentation.CardsRouter
 import com.nmichail.wordly.android.features.cards.presentation.detail.CardPracticeComponent
@@ -34,6 +38,8 @@ internal class DefaultMainHostComponent(
 	private val cardPracticeComponentFactory: CardPracticeComponent.Factory,
 	private val constructorComponentFactory: ConstructorComponent.Factory,
 	private val constructorPracticeComponentFactory: ConstructorPracticeComponent.Factory,
+	private val booksComponentFactory: BooksComponent.Factory,
+	private val bookReaderComponentFactory: BookReaderComponent.Factory,
 	private val newsDetailComponentFactory: NewsDetailComponent.Factory,
 ) : MainHostComponent, ComponentContext by componentContext {
 
@@ -68,6 +74,39 @@ internal class DefaultMainHostComponent(
 			is MainHostConfig.ConstructorPractice -> {
 				constructorPracticeChild(config.themeId, componentContext)
 			}
+			MainHostConfig.Books -> {
+				val booksRouter = object : BooksRouter {
+					override fun navigateBack() {
+						navigation.pop()
+					}
+				}
+				MainHostComponent.Child.Books(
+					component = booksComponentFactory(
+						componentContext = componentContext,
+						booksRouter = booksRouter,
+						onBookClick = { book ->
+							navigation.push(MainHostConfig.BookReader(bookId = book.id))
+						},
+					),
+				)
+			}
+			is MainHostConfig.BookReader -> {
+				val bookReaderRouter = object : BookReaderRouter {
+					override fun navigateBack() {
+						navigation.pop()
+					}
+				}
+				MainHostComponent.Child.BookReader(
+					component = bookReaderComponentFactory(
+						componentContext = componentContext,
+						bookId = config.bookId,
+						bookReaderRouter = bookReaderRouter,
+						onAddWordToCard = {
+							// TODO: реализовать добавление слова в карточку
+						},
+					),
+				)
+			}
 			is MainHostConfig.NewsDetail -> newsDetailChild(config.newsId, componentContext)
 		}
 
@@ -84,6 +123,10 @@ internal class DefaultMainHostComponent(
 
 			override fun navigateToConstructor() {
 				navigation.push(MainHostConfig.Constructor)
+			}
+
+			override fun navigateToBooks() {
+				navigation.push(MainHostConfig.Books)
 			}
 
 			override fun navigateToNews(news: News) {
@@ -238,6 +281,14 @@ private sealed interface MainHostConfig {
 	) : MainHostConfig
 
 	@Serializable
+	data object Books : MainHostConfig
+
+	@Serializable
+	data class BookReader(
+		val bookId: String,
+	) : MainHostConfig
+
+	@Serializable
 	data class NewsDetail(
 		val newsId: String,
 	) : MainHostConfig
@@ -262,5 +313,7 @@ fun MainHostComponent.Child.toTab(): MainHostTab? =
 		is MainHostComponent.Child.CardPractice -> null
 		is MainHostComponent.Child.Constructor -> null
 		is MainHostComponent.Child.ConstructorPractice -> null
+		is MainHostComponent.Child.Books -> null
+		is MainHostComponent.Child.BookReader -> null
 		is MainHostComponent.Child.NewsDetail -> null
 	}

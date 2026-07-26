@@ -10,5 +10,7 @@ interface HomeRouter {
 
 	fun navigateToConstructor()
 
+	fun navigateToBooks()
+
 	fun navigateToNews(news: News)
 }

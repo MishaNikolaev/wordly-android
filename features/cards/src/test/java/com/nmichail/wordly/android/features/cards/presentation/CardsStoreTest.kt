@@ -2,6 +2,7 @@ package com.nmichail.wordly.android.features.cards.presentation
 
 import com.arkivanov.essenty.lifecycle.destroy
 import com.arkivanov.mvikotlin.extensions.coroutines.labelsChannel
+import com.nmichail.wordly.android.core.network.domain.usecase.UpdateEnglishLevelUseCase
 import com.nmichail.wordly.android.core.testutils.InstantExecutorExtension
 import com.nmichail.wordly.android.core.testutils.TestCoroutineExtension
 import com.nmichail.wordly.android.core.testutils.createTestLifecycle
@@ -19,6 +20,7 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.junit.jupiter.MockitoExtension
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import java.io.IOException
 
@@ -30,6 +32,7 @@ import java.io.IOException
 class CardsStoreTest {
 
 	private val getCardsUseCase: GetCardsUseCase = mock()
+	private val updateEnglishLevelUseCase: UpdateEnglishLevelUseCase = mock()
 
 	private val scienceItem = CardsItem(
 		id = "science",
@@ -160,8 +163,20 @@ class CardsStoreTest {
 
 		store.accept(CardsStore.Intent.ChangeLevel("C1"))
 
+		verify(updateEnglishLevelUseCase).invoke("C1")
 		assertEquals(
-			content().copy(
+			content(
+				sections = listOf(
+					CardsSection(
+						title = "Под ваш уровень · C1",
+						items = listOf(scienceItem, journalismItem),
+					),
+					CardsSection(
+						title = "Другие уровни",
+						items = listOf(engineeringItem),
+					),
+				),
+			).copy(
 				levelBanner = cards.levelBanner?.copy(levelLabel = "C1"),
 			),
 			store.state,
@@ -183,5 +198,6 @@ class CardsStoreTest {
 	private fun createStore(): CardsStore =
 		CardsStoreFactory(
 			getCardsUseCase = getCardsUseCase,
+			updateEnglishLevelUseCase = updateEnglishLevelUseCase,
 		).create()
 }

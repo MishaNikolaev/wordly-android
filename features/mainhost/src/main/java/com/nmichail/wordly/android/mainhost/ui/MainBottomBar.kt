@@ -23,8 +23,6 @@ import androidx.compose.ui.unit.sp
 import com.nmichail.wordly.android.features.mainhost.R
 import com.nmichail.wordly.android.mainhost.presentation.MainHostTab
 
-private val BottomBarIconSize = 24.dp
-
 @Composable
 fun MainBottomBar(
 	selectedTab: MainHostTab,
@@ -61,7 +59,7 @@ private fun RowScope.BottomBarNavigationItem(
 			Icon(
 				imageVector = item.icon,
 				contentDescription = stringResource(item.labelResId),
-				modifier = Modifier.size(BottomBarIconSize),
+				modifier = Modifier.size(24.dp),
 			)
 		},
 		label = {

@@ -1,4 +1,4 @@
-package com.nmichail.wordly.android.features.constructor.presentation
+package com.nmichail.wordly.android.features.books.presentation
 
 import com.arkivanov.mvikotlin.core.store.Reducer
 import com.arkivanov.mvikotlin.core.store.SimpleBootstrapper
@@ -8,24 +8,24 @@ import com.arkivanov.mvikotlin.logging.store.LoggingStoreFactory
 import com.arkivanov.mvikotlin.main.store.DefaultStoreFactory
 import com.nmichail.wordly.android.component.presentation.BaseCoroutineExecutor
 import com.nmichail.wordly.android.core.network.domain.usecase.UpdateEnglishLevelUseCase
-import com.nmichail.wordly.android.features.constructor.domain.entity.ConstructorCatalog
-import com.nmichail.wordly.android.features.constructor.domain.entity.ConstructorSection
-import com.nmichail.wordly.android.features.constructor.domain.usecase.GetConstructorCatalogUseCase
+import com.nmichail.wordly.android.features.books.domain.entity.BooksCatalog
+import com.nmichail.wordly.android.features.books.domain.entity.BooksSection
+import com.nmichail.wordly.android.features.books.domain.usecase.GetBooksCatalogUseCase
 import javax.inject.Inject
 
-internal class ConstructorStoreFactory @Inject constructor(
-	private val getConstructorCatalogUseCase: GetConstructorCatalogUseCase,
+internal class BooksStoreFactory @Inject constructor(
+	private val getBooksCatalogUseCase: GetBooksCatalogUseCase,
 	private val updateEnglishLevelUseCase: UpdateEnglishLevelUseCase,
 ) {
 
 	private val storeFactory: StoreFactory = LoggingStoreFactory(DefaultStoreFactory())
 
-	fun create(): ConstructorStore =
+	fun create(): BooksStore =
 		object :
-			ConstructorStore,
-			Store<ConstructorStore.Intent, ConstructorComponent.State, ConstructorComponent.Label> by storeFactory.create(
-				name = "ConstructorStore",
-				initialState = ConstructorComponent.State.Loading,
+			BooksStore,
+			Store<BooksStore.Intent, BooksComponent.State, BooksComponent.Label> by storeFactory.create(
+				name = "BooksStore",
+				initialState = BooksComponent.State.Loading,
 				bootstrapper = SimpleBootstrapper(Action.Load),
 				executorFactory = ::ExecutorImpl,
 				reducer = ReducerImpl,
@@ -40,40 +40,40 @@ internal class ConstructorStoreFactory @Inject constructor(
 
 		data object Loading : Msg
 
-		data class CatalogLoaded(val catalog: ConstructorCatalog) : Msg
+		data class CatalogLoaded(val catalog: BooksCatalog) : Msg
 
 		data object SetError : Msg
 
 		data class SearchUpdated(
 			val query: String,
-			val sections: List<ConstructorSection>,
+			val sections: List<BooksSection>,
 		) : Msg
 
 		data class LevelUpdated(val level: String) : Msg
 	}
 
-	private object ReducerImpl : Reducer<ConstructorComponent.State, Msg> {
+	private object ReducerImpl : Reducer<BooksComponent.State, Msg> {
 
-		override fun ConstructorComponent.State.reduce(msg: Msg): ConstructorComponent.State =
+		override fun BooksComponent.State.reduce(msg: Msg): BooksComponent.State =
 			when (msg) {
-				Msg.Loading -> ConstructorComponent.State.Loading
-				is Msg.CatalogLoaded -> ConstructorComponent.State.Content(
+				Msg.Loading -> BooksComponent.State.Loading
+				is Msg.CatalogLoaded -> BooksComponent.State.Content(
 					title = msg.catalog.title,
 					searchQuery = "",
 					searchPlaceholder = msg.catalog.searchPlaceholder,
 					levelBanner = msg.catalog.levelBanner,
 					sections = msg.catalog.sections,
 				)
-				Msg.SetError -> ConstructorComponent.State.Error
+				Msg.SetError -> BooksComponent.State.Error
 				is Msg.SearchUpdated -> {
-					val content = this as? ConstructorComponent.State.Content ?: return this
+					val content = this as? BooksComponent.State.Content ?: return this
 					content.copy(
 						searchQuery = msg.query,
 						sections = msg.sections,
 					)
 				}
 				is Msg.LevelUpdated -> {
-					val content = this as? ConstructorComponent.State.Content ?: return this
+					val content = this as? BooksComponent.State.Content ?: return this
 					val banner = content.levelBanner ?: return this
 					content.copy(
 						levelBanner = banner.copy(levelLabel = msg.level),
@@ -88,14 +88,14 @@ internal class ConstructorStoreFactory @Inject constructor(
 
 	private inner class ExecutorImpl :
 		BaseCoroutineExecutor<
-			ConstructorStore.Intent,
+			BooksStore.Intent,
 			Action,
-			ConstructorComponent.State,
+			BooksComponent.State,
 			Msg,
-			ConstructorComponent.Label,
+			BooksComponent.Label,
 			>() {
 
-		private var allSections: List<ConstructorSection> = emptyList()
+		private var allSections: List<BooksSection> = emptyList()
 
 		override fun executeAction(action: Action) {
 			when (action) {
@@ -103,11 +103,11 @@ internal class ConstructorStoreFactory @Inject constructor(
 			}
 		}
 
-		override fun executeIntent(intent: ConstructorStore.Intent) {
+		override fun executeIntent(intent: BooksStore.Intent) {
 			when (intent) {
-				ConstructorStore.Intent.Back -> publish(ConstructorComponent.Label.Close)
-				ConstructorStore.Intent.Retry -> loadCatalog()
-				is ConstructorStore.Intent.ChangeSearchQuery -> {
+				BooksStore.Intent.Back -> publish(BooksComponent.Label.Close)
+				BooksStore.Intent.Retry -> loadCatalog()
+				is BooksStore.Intent.ChangeSearchQuery -> {
 					dispatch(
 						Msg.SearchUpdated(
 							query = intent.query,
@@ -115,15 +115,15 @@ internal class ConstructorStoreFactory @Inject constructor(
 						),
 					)
 				}
-				is ConstructorStore.Intent.SelectTheme -> {
-					val theme = allSections
+				is BooksStore.Intent.SelectBook -> {
+					val book = allSections
 						.asSequence()
 						.flatMap { it.items.asSequence() }
-						.firstOrNull { it.id == intent.themeId }
+						.firstOrNull { it.id == intent.bookId }
 						?: return
-					publish(ConstructorComponent.Label.OpenTheme(theme = theme))
+					publish(BooksComponent.Label.OpenBook(book = book))
 				}
-				is ConstructorStore.Intent.ChangeLevel -> changeLevel(level = intent.level)
+				is BooksStore.Intent.ChangeLevel -> changeLevel(level = intent.level)
 			}
 		}
 
@@ -133,14 +133,14 @@ internal class ConstructorStoreFactory @Inject constructor(
 				allSections = updateLevelSectionTitles(sections = allSections, level = level)
 				dispatch(Msg.LevelUpdated(level = level))
 			} catch {
-				// keep previous level
+				// ignored
 			}
 		}
 
 		private fun loadCatalog() {
 			dispatch(Msg.Loading)
 			launchTry {
-				val catalog = getConstructorCatalogUseCase()
+				val catalog = getBooksCatalogUseCase()
 				allSections = catalog.sections
 				dispatch(Msg.CatalogLoaded(catalog = catalog))
 			} catch {
@@ -149,9 +149,9 @@ internal class ConstructorStoreFactory @Inject constructor(
 		}
 
 		private fun filterSections(
-			sections: List<ConstructorSection>,
+			sections: List<BooksSection>,
 			query: String,
-		): List<ConstructorSection> {
+		): List<BooksSection> {
 			val normalized = query.trim()
 			if (normalized.isEmpty()) return sections
 
@@ -174,9 +174,9 @@ internal class ConstructorStoreFactory @Inject constructor(
 private const val LEVEL_SECTION_PREFIX = "Под ваш уровень · "
 
 private fun updateLevelSectionTitles(
-	sections: List<ConstructorSection>,
+	sections: List<BooksSection>,
 	level: String,
-): List<ConstructorSection> =
+): List<BooksSection> =
 	sections.map { section ->
 		if (section.title.startsWith(LEVEL_SECTION_PREFIX)) {
 			section.copy(title = "$LEVEL_SECTION_PREFIX$level")

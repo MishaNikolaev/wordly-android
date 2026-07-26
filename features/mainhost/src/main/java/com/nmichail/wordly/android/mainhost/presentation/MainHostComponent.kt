@@ -3,6 +3,8 @@ package com.nmichail.wordly.android.mainhost.presentation
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.router.stack.ChildStack
 import com.arkivanov.decompose.value.Value
+import com.nmichail.wordly.android.features.books.presentation.BooksComponent
+import com.nmichail.wordly.android.features.books.presentation.detail.BookReaderComponent
 import com.nmichail.wordly.android.features.cards.presentation.CardsComponent
 import com.nmichail.wordly.android.features.cards.presentation.detail.CardPracticeComponent
 import com.nmichail.wordly.android.features.constructor.presentation.ConstructorComponent
@@ -36,6 +38,10 @@ interface MainHostComponent {
 		data class Constructor(val component: ConstructorComponent) : Child
 
 		data class ConstructorPractice(val component: ConstructorPracticeComponent) : Child
+
+		data class Books(val component: BooksComponent) : Child
+
+		data class BookReader(val component: BookReaderComponent) : Child
 
 		data class NewsDetail(val component: NewsDetailComponent) : Child
 	}
