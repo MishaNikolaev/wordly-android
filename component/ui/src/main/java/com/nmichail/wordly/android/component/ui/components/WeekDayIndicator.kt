@@ -25,9 +25,6 @@ object WeekDayStatusId {
 	const val Upcoming = "upcoming"
 }
 
-private val DayCircleSize = 36.dp
-private val ActivityDotSize = 5.dp
-
 @Composable
 fun WeekDayIndicator(
 	label: String,
@@ -73,7 +70,7 @@ private fun TodayDaySlot(dayOfMonth: Int) {
 		Column(horizontalAlignment = Alignment.CenterHorizontally) {
 			Box(
 				modifier = Modifier
-					.size(DayCircleSize)
+					.size(36.dp)
 					.background(colorScheme.primary, CircleShape),
 				contentAlignment = Alignment.Center,
 			) {
@@ -102,7 +99,7 @@ private fun ActivityDaySlot(dayOfMonth: Int) {
 			Box(
 				modifier = Modifier
 					.padding(top = 4.dp)
-					.size(ActivityDotSize)
+					.size(5.dp)
 					.background(colorScheme.primary, CircleShape),
 			)
 		}
@@ -123,7 +120,7 @@ private fun PlainDaySlot(dayOfMonth: Int) {
 			Box(
 				modifier = Modifier
 					.padding(top = 4.dp)
-					.size(ActivityDotSize),
+					.size(5.dp),
 			)
 		}
 	}

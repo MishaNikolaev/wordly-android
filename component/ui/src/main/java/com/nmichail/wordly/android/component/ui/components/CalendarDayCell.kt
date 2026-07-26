@@ -16,9 +16,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 
-private val DayCircleSize = 36.dp
-private val ActivityDotSize = 5.dp
-
 @Composable
 fun CalendarDayCell(
 	day: CalendarDay,
@@ -53,7 +50,7 @@ private fun TodayDayCell(
 	) {
 		Box(
 			modifier = Modifier
-				.size(DayCircleSize)
+				.size(36.dp)
 				.background(MaterialTheme.colorScheme.primary, CircleShape),
 			contentAlignment = Alignment.Center,
 		) {
@@ -86,7 +83,7 @@ private fun ActivityDayCell(
 		Box(
 			modifier = Modifier
 				.padding(top = 4.dp)
-				.size(ActivityDotSize)
+				.size(5.dp)
 				.background(MaterialTheme.colorScheme.primary, CircleShape),
 		)
 	}
@@ -122,6 +119,6 @@ private fun SpacerDot() {
 	Box(
 		modifier = Modifier
 			.padding(top = 4.dp)
-			.size(ActivityDotSize),
+			.size(5.dp),
 	)
 }

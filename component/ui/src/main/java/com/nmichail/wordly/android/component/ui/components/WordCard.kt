@@ -31,15 +31,7 @@ import androidx.compose.ui.unit.dp
 import com.nmichail.wordly.android.component.ui.R
 import com.nmichail.wordly.android.component.ui.theme.WordlyTypography
 
-private val WORD_CARD_SHAPE = RoundedCornerShape(16.dp)
-private val AUTH_PREVIEW_WORD_CARD_SHAPE = RoundedCornerShape(20.dp)
 private val AUTH_PREVIEW_CARD_SHADOW_COLOR = Color.Black.copy(alpha = 0.38f)
-private val AUTH_PREVIEW_WORD_CARD_WIDTH = 168.dp
-private val AUTH_PREVIEW_WORD_CARD_HEIGHT = 68.dp
-private val AUTH_PREVIEW_WORD_CARD_SHADOW_ELEVATION = 20.dp
-private val WORD_CARD_WIDTH = 200.dp
-private val WORD_CARD_HEIGHT = 108.dp
-private val WORD_CARD_SHADOW_ELEVATION = 24.dp
 
 @Composable
 fun AuthPreviewWordCard(
@@ -53,15 +45,15 @@ fun AuthPreviewWordCard(
 	Box(modifier = modifier.graphicsLayer { rotationZ = rotation }) {
 		Column(
 			modifier = Modifier
-				.size(AUTH_PREVIEW_WORD_CARD_WIDTH, AUTH_PREVIEW_WORD_CARD_HEIGHT)
+				.size(168.dp, 68.dp)
 				.shadow(
-					elevation = AUTH_PREVIEW_WORD_CARD_SHADOW_ELEVATION,
-					shape = AUTH_PREVIEW_WORD_CARD_SHAPE,
+					elevation = 20.dp,
+					shape = RoundedCornerShape(20.dp),
 					clip = false,
 					ambientColor = AUTH_PREVIEW_CARD_SHADOW_COLOR,
 					spotColor = AUTH_PREVIEW_CARD_SHADOW_COLOR,
 				)
-				.background(colorScheme.surface, AUTH_PREVIEW_WORD_CARD_SHAPE)
+				.background(colorScheme.surface, RoundedCornerShape(20.dp))
 				.padding(horizontal = 16.dp, vertical = 10.dp),
 		) {
 			Text(
@@ -89,19 +81,19 @@ fun WordCard(
 	onPlayClick: (() -> Unit)? = null,
 ) {
 	val colorScheme = MaterialTheme.colorScheme
-	val shadowElevationPx = with(LocalDensity.current) { WORD_CARD_SHADOW_ELEVATION.toPx() }
+	val shadowElevationPx = with(LocalDensity.current) { 24.dp.toPx() }
 
 	Column(
 		modifier = modifier
 			.padding(12.dp)
-			.size(WORD_CARD_WIDTH, WORD_CARD_HEIGHT)
+			.size(200.dp, 108.dp)
 			.graphicsLayer {
-				shape = WORD_CARD_SHAPE
+				shape = RoundedCornerShape(16.dp)
 				clip = true
 				shadowElevation = shadowElevationPx
 				rotationZ = rotation
 			}
-			.background(colorScheme.surface, WORD_CARD_SHAPE)
+			.background(colorScheme.surface, RoundedCornerShape(16.dp))
 			.padding(horizontal = 12.dp, vertical = 12.dp),
 	) {
 		WordCardTopBar(

@@ -29,6 +29,7 @@ fun ConstructorAnswerBoard(
 	val borderColor = answerBoardBorderColor(isCorrect = isCorrect, dark = dark)
 	val background = answerBoardBackground(isCorrect = isCorrect, dark = dark)
 	val shape = RoundedCornerShape(16.dp)
+	@Suppress("MagicNumber")
 	val dash = PathEffect.dashPathEffect(floatArrayOf(12f, 10f), 0f)
 
 	Box(

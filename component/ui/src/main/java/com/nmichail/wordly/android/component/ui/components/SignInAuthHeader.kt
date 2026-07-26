@@ -17,12 +17,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.nmichail.wordly.android.component.ui.R
 
-private val AUTH_CARDS_WIDTH = 360.dp
-private val AUTH_CARDS_HEIGHT = 180.dp
-private val RESILIENCE_CARD_OFFSET_Y = 24.dp
-private val DEPLOY_CARD_OFFSET_X = 148.dp
-private val DEPLOY_CARD_OFFSET_Y = (-44).dp
-
 @Composable
 fun SignInAuthHeader(
 	modifier: Modifier = Modifier,
@@ -44,8 +38,8 @@ fun SignInAuthHeader(
 		) {
 			Box(
 				modifier = Modifier
-					.width(AUTH_CARDS_WIDTH)
-					.height(AUTH_CARDS_HEIGHT),
+					.width(360.dp)
+					.height(180.dp),
 			) {
 				WordCard(
 					word = stringResource(R.string.auth_preview_resilience_word),
@@ -53,7 +47,7 @@ fun SignInAuthHeader(
 					rotation = 8f,
 					modifier = Modifier
 						.align(Alignment.TopStart)
-						.offset(y = RESILIENCE_CARD_OFFSET_Y),
+						.offset(y = 24.dp),
 				)
 				WordCard(
 					word = stringResource(R.string.auth_preview_deploy_word),
@@ -61,7 +55,7 @@ fun SignInAuthHeader(
 					rotation = -6f,
 					modifier = Modifier
 						.align(Alignment.TopStart)
-						.offset(x = DEPLOY_CARD_OFFSET_X, y = DEPLOY_CARD_OFFSET_Y),
+						.offset(x = 148.dp, y = (-44).dp),
 				)
 			}
 		}

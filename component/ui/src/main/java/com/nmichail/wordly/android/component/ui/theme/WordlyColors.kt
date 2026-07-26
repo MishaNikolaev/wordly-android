@@ -35,6 +35,7 @@ object WordlyColors {
 	val LightSuccessContainer = Color(0xFFE7F7EE)
 	val LightWarning = Color(0xFFE08A00)
 	val LightWarningContainer = Color(0xFFFFF1DC)
+	val BookLookupUnderline = Color(0xFF9F2BCD)
 
 	val LightStreak = Color(0xFFFF9500)
 	val LightStreakContainer = Color(0xFFFFF2DD)
