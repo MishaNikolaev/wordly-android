@@ -1,0 +1,196 @@
+{
+  "id": "little-prince",
+  "title": "The Little Prince",
+  "author": "Antoine de Saint-Exupéry",
+  "coverUrl": null,
+  "paragraphs": [
+    {
+      "id": "p1",
+      "segments": [
+        {
+          "type": "text",
+          "text": "Once when I was six years old I saw a magnificent picture in a book about the jungle. It was a picture of a boa constrictor swallowing an animal. Then I drew my first drawing — and showed it to the grown-ups."
+        }
+      ]
+    },
+    {
+      "id": "p2",
+      "segments": [
+        {
+          "type": "text",
+          "text": "I lived my life alone, without anyone to talk to, until I had an accident in the Sahara Desert. Something was broken in my engine. And as I had with me neither a mechanic nor any passengers, I prepared for a difficult repair. It was a question of life or death for me. I had scarcely enough drinking water to last a week."
+        }
+      ]
+    },
+    {
+      "id": "p3",
+      "segments": [
+        {
+          "type": "text",
+          "text": "The first night, then, I went to sleep on the sand. I was more isolated than a shipwrecked sailor on a raft in the middle of the ocean. So you can imagine my amazement, at sunrise, when I was awakened by a funny little voice. It said: \"Please… draw me a sheep!\""
+        }
+      ]
+    },
+    {
+      "id": "p4",
+      "segments": [
+        {
+          "type": "text",
+          "text": "I jumped to my feet, completely thunderstruck. I blinked my eyes hard. I looked carefully all around me. And I saw a most extraordinary small person. He was a "
+        },
+        {
+          "type": "lookupWord",
+          "id": "prince",
+          "text": "prince",
+          "definition": {
+            "word": "prince",
+            "phonetic": "/prɪns/",
+            "translation": "принц",
+            "partOfSpeech": "noun",
+            "example": "The little prince lived on a tiny planet."
+          }
+        },
+        {
+          "type": "text",
+          "text": " who asked me to draw him a "
+        },
+        {
+          "type": "lookupWord",
+          "id": "sheep",
+          "text": "sheep",
+          "definition": {
+            "word": "sheep",
+            "phonetic": "/ʃiːp/",
+            "translation": "овца",
+            "partOfSpeech": "noun",
+            "example": "Please draw me a sheep."
+          }
+        },
+        {
+          "type": "text",
+          "text": "."
+        }
+      ]
+    },
+    {
+      "id": "p5",
+      "segments": [
+        {
+          "type": "text",
+          "text": "He came from a tiny "
+        },
+        {
+          "type": "lookupWord",
+          "id": "asteroid",
+          "text": "asteroid",
+          "definition": {
+            "word": "asteroid",
+            "phonetic": "/ˈæstərɔɪd/",
+            "translation": "астероид",
+            "partOfSpeech": "noun",
+            "example": "His home was asteroid B-612."
+          }
+        },
+        {
+          "type": "text",
+          "text": " called B-612. On his planet there were dangerous "
+        },
+        {
+          "type": "lookupWord",
+          "id": "baobabs",
+          "text": "baobabs",
+          "definition": {
+            "word": "baobab",
+            "phonetic": "/ˈbeɪəʊbæb/",
+            "translation": "баобаб",
+            "partOfSpeech": "noun",
+            "example": "You must pull up the baobabs when they are young."
+          }
+        },
+        {
+          "type": "text",
+          "text": ". If you do not watch out, they grow so large that they split the planet into pieces."
+        }
+      ]
+    },
+    {
+      "id": "p6",
+      "segments": [
+        {
+          "type": "text",
+          "text": "\"It is only with the heart that one can see rightly; what is essential is invisible to the eye,\" he told me later. And I understood that the sheep I had drawn for him was more than a sketch — it was a promise to protect what he loved."
+        }
+      ]
+    },
+    {
+      "id": "p7",
+      "segments": [
+        {
+          "type": "text",
+          "text": "I have serious reason to believe that the planet from which the little prince came is the asteroid known as B-612. This asteroid has only once been seen through the telescope, by a Turkish astronomer, in 1909. On making his discovery, the astronomer had presented it to the International Astronomical Congress, in a great demonstration."
+        }
+      ]
+    },
+    {
+      "id": "p8",
+      "segments": [
+        {
+          "type": "text",
+          "text": "But he was in Turkish costume, and so nobody would believe what he said. Grown-ups are like that… Fortunately, however, for the reputation of Asteroid B-612, a Turkish dictator made a law that his subjects, under pain of death, should change to European costume. So in 1920 the astronomer gave his demonstration all over again, dressed with impressive style and elegance. And this time everybody accepted his report."
+        }
+      ]
+    },
+    {
+      "id": "p9",
+      "segments": [
+        {
+          "type": "text",
+          "text": "If I have told you these details about the asteroid, and made a note of its number for you, it is on account of the grown-ups and their ways. When you tell them that you have made a new friend, they never ask you any questions about essential matters. They never say to you, \"What does his voice sound like? What games does he love best? Does he collect butterflies?\""
+        }
+      ]
+    },
+    {
+      "id": "p10",
+      "segments": [
+        {
+          "type": "text",
+          "text": "Instead, they demand: \"How old is he? How many brothers has he? How much does he weigh? How much money does his father make?\" Only from these figures do they think they have learned anything about him. If you were to say to the grown-ups: \"I saw a beautiful house made of rosy brick, with geraniums in the windows and doves on the roof,\" they would not be able to get any idea of that house at all."
+        }
+      ]
+    },
+    {
+      "id": "p11",
+      "segments": [
+        {
+          "type": "text",
+          "text": "You would have to say to them: \"I saw a house that cost twenty thousand dollars.\" Then they would exclaim: \"Oh, what a pretty house that is!\" Just so, you might say to them: \"The proof that the little prince existed is that he was charming, that he laughed, and that he was looking for a sheep.\" If anybody wants a sheep, that is a proof that he exists."
+        }
+      ]
+    },
+    {
+      "id": "p12",
+      "segments": [
+        {
+          "type": "text",
+          "text": "And what do I think about the little prince now? I look up at the sky and remember him. Somewhere out there, on a tiny planet, a "
+        },
+        {
+          "type": "lookupWord",
+          "id": "rose",
+          "text": "rose",
+          "definition": {
+            "word": "rose",
+            "phonetic": "/rəʊz/",
+            "translation": "роза",
+            "partOfSpeech": "noun",
+            "example": "He watered his rose every day."
+          }
+        },
+        {
+          "type": "text",
+          "text": " still blooms because someone chose to love her. And that is enough to make the stars laugh."
+        }
+      ]
+    }
+  ]
+}

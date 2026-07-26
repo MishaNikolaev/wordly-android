@@ -23,8 +23,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.nmichail.wordly.android.component.ui.R
 
-private val AuthSheetShape = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp)
-
 @Composable
 fun AuthBackground(
 	modifier: Modifier = Modifier,
@@ -57,7 +55,10 @@ fun AuthBackground(
 			Column(
 				modifier = Modifier
 					.fillMaxWidth()
-					.background(color = surfaceColor, shape = AuthSheetShape),
+					.background(
+						color = surfaceColor,
+						shape = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp),
+					),
 			) {
 				content()
 			}

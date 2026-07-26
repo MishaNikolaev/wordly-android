@@ -16,8 +16,6 @@ import androidx.compose.ui.unit.dp
 import com.nmichail.wordly.android.component.ui.R
 import com.nmichail.wordly.android.component.ui.theme.WordlyTypography
 
-private val NewsImageHeight = 140.dp
-
 @Composable
 fun NewsCard(
 	title: String,
@@ -39,7 +37,7 @@ fun NewsCard(
 				contentDescription = null,
 				modifier = Modifier
 					.fillMaxWidth()
-					.height(NewsImageHeight),
+					.height(140.dp),
 				contentScale = ContentScale.Crop,
 			)
 			Text(

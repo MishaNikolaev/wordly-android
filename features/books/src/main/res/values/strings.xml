@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="books_back">Назад</string>
+	<string name="books_retry">Повторить</string>
+	<string name="books_error_title">Не удалось загрузить книги</string>
+	<string name="books_error_subtitle">Проверьте соединение и попробуйте снова</string>
+	<string name="books_level_banner_action">Выбрать уровень</string>
+	<string name="book_reader_close">Закрыть</string>
+	<string name="book_reader_retry">Повторить</string>
+	<string name="book_reader_error_title">Не удалось загрузить книгу</string>
+	<string name="book_reader_error_subtitle">Проверьте соединение и попробуйте снова</string>
+	<string name="book_reader_translate">Перевести</string>
+	<string name="book_reader_hide_translation">Скрыть перевод</string>
+	<string name="book_reader_add_word">Добавить слово в карточку</string>
+	<string name="book_reader_word_added_status">Добавлено в карточки</string>
+	<string name="book_reader_hint">Нажми на слово, чтобы перевести и сохранить</string>
+	<string name="book_reader_translating">Переводим страницу…</string>
+	<string name="book_reader_previous_page">Предыдущая страница</string>
+	<string name="book_reader_next_page">Следующая страница</string>
+</resources>

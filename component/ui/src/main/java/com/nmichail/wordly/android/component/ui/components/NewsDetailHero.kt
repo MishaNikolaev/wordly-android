@@ -36,10 +36,7 @@ import androidx.compose.ui.unit.dp
 import com.nmichail.wordly.android.component.ui.R
 import com.nmichail.wordly.android.component.ui.theme.WordlyColors
 
-private val HeroHeight = 220.dp
-private val HeroActionSize = 40.dp
 private val HeroScrim = Color.Black.copy(alpha = 0.35f)
-private val ChatBubbleSize = 40.dp
 
 private val HeroGradient = Brush.verticalGradient(
 	colors = listOf(
@@ -59,7 +56,7 @@ fun NewsDetailHero(
 	Box(
 		modifier = modifier
 			.fillMaxWidth()
-			.height(HeroHeight),
+			.height(220.dp),
 	) {
 		HeroBackground(imageUrl = imageUrl)
 		HeroMetaChips(
@@ -125,7 +122,7 @@ private fun HeroBackground(imageUrl: String?) {
 				modifier = Modifier
 					.align(Alignment.CenterEnd)
 					.padding(end = 64.dp)
-					.size(ChatBubbleSize),
+					.size(40.dp),
 				contentScale = ContentScale.Fit,
 			)
 		}
@@ -174,7 +171,7 @@ private fun HeroIconButton(
 	IconButton(
 		onClick = onClick,
 		modifier = Modifier
-			.size(HeroActionSize)
+			.size(40.dp)
 			.clip(CircleShape)
 			.background(HeroScrim),
 	) {

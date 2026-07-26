@@ -129,4 +129,11 @@ object WordlyTypography {
 		lineHeight = 14.sp,
 		letterSpacing = 1.2.sp,
 	)
+
+	val bookReaderBody = TextStyle(
+		fontFamily = InterFontFamily,
+		fontWeight = FontWeight.Normal,
+		fontSize = 20.sp,
+		lineHeight = 39.sp,
+	)
 }

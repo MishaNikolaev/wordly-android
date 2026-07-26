@@ -6,6 +6,7 @@ import com.nmichail.wordly.android.core.preferences.di.PreferencesModule
 import com.nmichail.wordly.android.features.authorization.signin.di.SignInModule
 import com.nmichail.wordly.android.features.authorization.signup.di.SignUpModule
 import com.nmichail.wordly.android.features.dev.networkselection.di.NetworkSelectionModule
+import com.nmichail.wordly.android.features.books.di.BooksModule
 import com.nmichail.wordly.android.features.cards.di.CardsModule
 import com.nmichail.wordly.android.features.constructor.di.ConstructorModule
 import com.nmichail.wordly.android.features.home.di.HomeModule
@@ -32,6 +33,7 @@ import javax.inject.Singleton
 		ReviewModule::class,
 		CardsModule::class,
 		ConstructorModule::class,
+		BooksModule::class,
 		ErrorModule::class,
 		RoutersModule::class,
 		ProcessRestarterModule::class,

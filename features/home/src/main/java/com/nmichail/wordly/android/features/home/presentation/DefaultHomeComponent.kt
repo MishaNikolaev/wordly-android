@@ -31,6 +31,7 @@ internal class DefaultHomeComponent(
 						when (label.training.id) {
 							"cards" -> homeRouter.navigateToCards()
 							"constructor" -> homeRouter.navigateToConstructor()
+							"books" -> homeRouter.navigateToBooks()
 						}
 					}
 					is HomeComponent.Label.OpenNews -> homeRouter.navigateToNews(news = label.news)

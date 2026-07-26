@@ -22,9 +22,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import com.nmichail.wordly.android.component.ui.theme.WordlyTypography
 
-private val TrainingIconContainerSize = 44.dp
-private val TrainingIconSize = 22.dp
-
 @Composable
 fun TrainingListItem(
 	title: String,
@@ -50,7 +47,7 @@ fun TrainingListItem(
 		) {
 			Box(
 				modifier = Modifier
-					.size(TrainingIconContainerSize)
+					.size(44.dp)
 					.clip(MaterialTheme.shapes.small)
 					.background(colorScheme.primaryContainer),
 				contentAlignment = Alignment.Center,
@@ -59,7 +56,7 @@ fun TrainingListItem(
 					imageVector = icon,
 					contentDescription = null,
 					tint = iconTint,
-					modifier = Modifier.size(TrainingIconSize),
+					modifier = Modifier.size(22.dp),
 				)
 			}
 			Column(modifier = Modifier.weight(1f)) {

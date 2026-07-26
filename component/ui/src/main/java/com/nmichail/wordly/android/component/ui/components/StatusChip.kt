@@ -20,7 +20,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 
-private val PillShape = RoundedCornerShape(percent = 50)
 private val DarkChipScrim = Color.Black.copy(alpha = 0.55f)
 
 enum class StatusChipStyle {
@@ -42,7 +41,7 @@ fun StatusChip(
 
 	Row(
 		modifier = modifier
-			.background(colors.background, PillShape)
+			.background(colors.background, RoundedCornerShape(percent = 50))
 			.padding(horizontal = 10.dp, vertical = 6.dp),
 		horizontalArrangement = Arrangement.spacedBy(4.dp),
 		verticalAlignment = Alignment.CenterVertically,

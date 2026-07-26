@@ -21,9 +21,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.nmichail.wordly.android.component.ui.R
 
-private val ActionsHeight = 52.dp
-private val ActionsShape = RoundedCornerShape(14.dp)
-
 @Composable
 fun NewsDetailActions(
 	onShareClick: () -> Unit,
@@ -35,8 +32,8 @@ fun NewsDetailActions(
 		onClick = onShareClick,
 		modifier = modifier
 			.fillMaxWidth()
-			.height(ActionsHeight),
-		shape = ActionsShape,
+			.height(52.dp),
+		shape = RoundedCornerShape(14.dp),
 		contentPadding = PaddingValues(horizontal = 16.dp),
 		colors = ButtonDefaults.buttonColors(
 			containerColor = colorScheme.primary,

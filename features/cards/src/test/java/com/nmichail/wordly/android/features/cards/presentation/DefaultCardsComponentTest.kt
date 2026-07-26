@@ -1,5 +1,6 @@
 package com.nmichail.wordly.android.features.cards.presentation
 
+import com.nmichail.wordly.android.core.network.domain.usecase.UpdateEnglishLevelUseCase
 import com.nmichail.wordly.android.core.testutils.InstantExecutorExtension
 import com.nmichail.wordly.android.core.testutils.TestCoroutineExtension
 import com.nmichail.wordly.android.core.testutils.createTestComponentContext
@@ -27,6 +28,7 @@ import org.mockito.kotlin.whenever
 class DefaultCardsComponentTest {
 
 	private val getCardsUseCase: GetCardsUseCase = mock()
+	private val updateEnglishLevelUseCase: UpdateEnglishLevelUseCase = mock()
 	private val cardsRouter: CardsRouter = mock()
 	private val onCardClick: (CardsItem) -> Unit = mock()
 
@@ -62,6 +64,7 @@ class DefaultCardsComponentTest {
 			componentContext = createTestComponentContext(),
 			cardsStoreFactory = CardsStoreFactory(
 				getCardsUseCase = getCardsUseCase,
+				updateEnglishLevelUseCase = updateEnglishLevelUseCase,
 			),
 			cardsRouter = cardsRouter,
 			onCardClick = onCardClick,

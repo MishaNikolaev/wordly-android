@@ -60,7 +60,6 @@ import kotlin.math.roundToInt
 
 private const val DRAG_CHIP_SCALE = 1.05f
 private const val DRAG_CHIP_ALPHA = 0.92f
-private val APPROX_CHIP_WIDTH = 88.dp
 
 @Composable
 internal fun ConstructorPracticeInProgressContent(
@@ -254,7 +253,7 @@ private fun ConstructorAnswerWords(
 	var dragOffsetY by remember { mutableFloatStateOf(0f) }
 	var rowWidthPx by remember { mutableIntStateOf(1) }
 	val density = LocalDensity.current
-	val approxChipWidthPx = with(density) { APPROX_CHIP_WIDTH.toPx() }
+	val approxChipWidthPx = with(density) { 88.dp.toPx() }
 
 	FlowRow(
 		modifier = Modifier

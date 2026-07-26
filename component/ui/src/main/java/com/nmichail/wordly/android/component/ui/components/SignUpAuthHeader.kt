@@ -17,13 +17,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.nmichail.wordly.android.component.ui.R
 
-private val AUTH_PREVIEW_CARDS_WIDTH = 296.dp
-private val AUTH_PREVIEW_CARDS_HEIGHT = 164.dp
-private val AUTH_PREVIEW_SERENDIPITY_OFFSET_X = (-10).dp
-private val AUTH_PREVIEW_DEPLOY_CARD_OFFSET_X = 22.dp
-private val AUTH_PREVIEW_DEPLOY_CARD_OFFSET_Y = (-14).dp
-private val AUTH_PREVIEW_RESILIENCE_CARD_OFFSET_Y = (-16).dp
-
 @Composable
 fun SignUpAuthHeader(
 	modifier: Modifier = Modifier,
@@ -45,8 +38,8 @@ fun SignUpAuthHeader(
 		) {
 			Box(
 				modifier = Modifier
-					.width(AUTH_PREVIEW_CARDS_WIDTH)
-					.height(AUTH_PREVIEW_CARDS_HEIGHT)
+					.width(296.dp)
+					.height(164.dp)
 					.padding(vertical = 8.dp),
 			) {
 				AuthPreviewWordCard(
@@ -54,7 +47,7 @@ fun SignUpAuthHeader(
 					translation = stringResource(R.string.auth_preview_serendipity_translation),
 					modifier = Modifier
 						.align(Alignment.TopStart)
-						.offset(x = AUTH_PREVIEW_SERENDIPITY_OFFSET_X),
+						.offset(x = (-10).dp),
 					rotation = 10f,
 				)
 				AuthPreviewWordCard(
@@ -63,8 +56,8 @@ fun SignUpAuthHeader(
 					modifier = Modifier
 						.align(Alignment.TopEnd)
 						.offset(
-							x = AUTH_PREVIEW_DEPLOY_CARD_OFFSET_X,
-							y = AUTH_PREVIEW_DEPLOY_CARD_OFFSET_Y,
+							x = 22.dp,
+							y = (-14).dp,
 						),
 					rotation = -14f,
 				)
@@ -73,7 +66,7 @@ fun SignUpAuthHeader(
 					translation = stringResource(R.string.auth_preview_resilience_translation),
 					modifier = Modifier
 						.align(Alignment.BottomCenter)
-						.offset(y = AUTH_PREVIEW_RESILIENCE_CARD_OFFSET_Y),
+						.offset(y = (-16).dp),
 					rotation = 0f,
 				)
 			}

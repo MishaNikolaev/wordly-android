@@ -20,9 +20,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.nmichail.wordly.android.component.ui.R
 
-private val AvatarSize = 36.dp
-private val AvatarShape = RoundedCornerShape(8.dp)
-
 @Composable
 fun NewsAuthorRow(
 	author: String,
@@ -45,8 +42,8 @@ fun NewsAuthorRow(
 			painter = painterResource(logoRes),
 			contentDescription = stringResource(R.string.logo_app_name),
 			modifier = Modifier
-				.size(AvatarSize)
-				.clip(AvatarShape),
+				.size(36.dp)
+				.clip(RoundedCornerShape(8.dp)),
 			contentScale = ContentScale.Crop,
 		)
 		Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {

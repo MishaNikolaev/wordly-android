@@ -19,9 +19,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 
-private val QuoteBarWidth = 3.dp
-private val QuoteBarShape = RoundedCornerShape(percent = 50)
-
 @Composable
 fun NewsQuote(
 	text: String,
@@ -36,9 +33,9 @@ fun NewsQuote(
 	) {
 		Box(
 			modifier = Modifier
-				.width(QuoteBarWidth)
+				.width(3.dp)
 				.fillMaxHeight()
-				.background(colorScheme.primary, QuoteBarShape),
+				.background(colorScheme.primary, RoundedCornerShape(percent = 50)),
 		)
 		Text(
 			text = text,

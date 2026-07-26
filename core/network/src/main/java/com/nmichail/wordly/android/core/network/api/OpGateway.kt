@@ -10,4 +10,5 @@ object OpGateway {
 	const val OP_GATEWAY_PASSWORD_RESET = "/api/gateway/password/reset"
 	const val OP_GATEWAY_PROFILE = "/api/gateway/profile"
 	const val OP_GATEWAY_PROFILE_PASSWORD = "/api/gateway/profile/password"
+	const val OP_GATEWAY_ENGLISH_LEVEL = "/api/gateway/english-level"
 }

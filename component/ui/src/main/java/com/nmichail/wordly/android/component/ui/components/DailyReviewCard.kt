@@ -29,8 +29,6 @@ import androidx.compose.ui.unit.dp
 import com.nmichail.wordly.android.component.ui.R
 import com.nmichail.wordly.android.component.ui.theme.WordlyTypography
 
-private val DailyReviewCardHeight = 257.dp
-
 @Composable
 fun DailyReviewCard(
 	wordsToReview: Int,
@@ -44,7 +42,7 @@ fun DailyReviewCard(
 	Card(
 		modifier = modifier
 			.fillMaxWidth()
-			.height(DailyReviewCardHeight),
+			.height(257.dp),
 		shape = shape,
 		colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
 		elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
