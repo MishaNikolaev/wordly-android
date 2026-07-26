@@ -8,6 +8,7 @@ include(
 	":features:review",
 	":features:cards",
 	":features:constructor",
+	":features:books",
 	":features:words",
 	":features:stats",
 	":features:profile",
