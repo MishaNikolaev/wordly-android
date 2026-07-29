@@ -68,6 +68,41 @@ object WordlyTypography {
 		lineHeight = 32.sp,
 	)
 
+	val wordDetailWord = TextStyle(
+		fontWeight = FontWeight.ExtraBold,
+		fontSize = 30.sp,
+		lineHeight = 34.sp,
+	)
+
+	val wordDetailTranslation = TextStyle(
+		fontFamily = OnestFontFamily,
+		fontWeight = FontWeight.Normal,
+		fontSize = 16.sp,
+		lineHeight = 22.sp,
+	)
+
+	val wordDetailExamplesTitle = TextStyle(
+		fontFamily = OnestFontFamily,
+		fontWeight = FontWeight.Medium,
+		fontSize = 11.sp,
+		lineHeight = 14.sp,
+		letterSpacing = 0.6.sp,
+	)
+
+	val wordDetailExample = TextStyle(
+		fontFamily = OnestFontFamily,
+		fontWeight = FontWeight.Normal,
+		fontSize = 15.sp,
+		lineHeight = 20.sp,
+	)
+
+	val wordDetailExampleTranslation = TextStyle(
+		fontFamily = OnestFontFamily,
+		fontWeight = FontWeight.Normal,
+		fontSize = 14.sp,
+		lineHeight = 18.sp,
+	)
+
 	val wordCardPhonetic = TextStyle(
 		fontFamily = JetBrainsMonoFontFamily,
 		fontWeight = FontWeight.SemiBold,
@@ -135,5 +170,47 @@ object WordlyTypography {
 		fontWeight = FontWeight.Normal,
 		fontSize = 20.sp,
 		lineHeight = 39.sp,
+	)
+
+	val addWordTitle = TextStyle(
+		fontWeight = FontWeight.Bold,
+		fontSize = 20.sp,
+		lineHeight = 28.sp,
+	)
+
+	val addWordInput = TextStyle(
+		fontFamily = OnestFontFamily,
+		fontWeight = FontWeight.Medium,
+		fontSize = 16.sp,
+		lineHeight = 22.sp,
+	)
+
+	val addWordAutofillLabel = TextStyle(
+		fontFamily = OnestFontFamily,
+		fontWeight = FontWeight.Medium,
+		fontSize = 13.sp,
+		lineHeight = 18.sp,
+	)
+
+	val addWordPhonetic = TextStyle(
+		fontFamily = JetBrainsMonoFontFamily,
+		fontWeight = FontWeight.Medium,
+		fontSize = 15.sp,
+		lineHeight = 20.sp,
+	)
+
+	val addWordExamplesTitle = TextStyle(
+		fontFamily = OnestFontFamily,
+		fontWeight = FontWeight.Bold,
+		fontSize = 11.sp,
+		lineHeight = 14.sp,
+		letterSpacing = 0.8.sp,
+	)
+
+	val addWordExample = TextStyle(
+		fontFamily = OnestFontFamily,
+		fontWeight = FontWeight.SemiBold,
+		fontSize = 14.sp,
+		lineHeight = 20.sp,
 	)
 }

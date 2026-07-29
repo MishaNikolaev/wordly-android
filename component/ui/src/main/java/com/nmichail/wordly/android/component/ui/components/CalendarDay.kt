@@ -10,4 +10,5 @@ object CalendarDayStatusId {
 	const val Missed = "missed"
 	const val Today = "today"
 	const val Inactive = "inactive"
+	const val Selected = "selected"
 }

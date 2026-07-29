@@ -12,3 +12,10 @@ val InterFontFamily = FontFamily(
 val JetBrainsMonoFontFamily = FontFamily(
 	Font(R.font.jetbrains_mono_medium, FontWeight.Medium),
 )
+
+val OnestFontFamily = FontFamily(
+	Font(R.font.onest, FontWeight.Normal),
+	Font(R.font.onest, FontWeight.Medium),
+	Font(R.font.onest, FontWeight.SemiBold),
+	Font(R.font.onest, FontWeight.Bold),
+)
