@@ -29,6 +29,7 @@ fun CalendarDialog(
 	onTodayClick: () -> Unit,
 	onPreviousMonthClick: () -> Unit,
 	onNextMonthClick: () -> Unit,
+	onDayClick: ((Int) -> Unit)? = null,
 ) {
 	Dialog(
 		onDismissRequest = onDismiss,
@@ -42,6 +43,7 @@ fun CalendarDialog(
 			onTodayClick = onTodayClick,
 			onPreviousMonthClick = onPreviousMonthClick,
 			onNextMonthClick = onNextMonthClick,
+			onDayClick = onDayClick,
 			modifier = Modifier
 				.fillMaxWidth()
 				.padding(horizontal = 16.dp),
@@ -59,6 +61,7 @@ fun Calendar(
 	onPreviousMonthClick: () -> Unit,
 	onNextMonthClick: () -> Unit,
 	modifier: Modifier = Modifier,
+	onDayClick: ((Int) -> Unit)? = null,
 ) {
 	Surface(
 		modifier = modifier,
@@ -98,21 +101,29 @@ fun Calendar(
 			Spacer(modifier = Modifier.height(4.dp))
 			CalendarWeekdayLabels()
 			Spacer(modifier = Modifier.height(8.dp))
-			CalendarGrid(days = days)
+			CalendarGrid(
+				days = days,
+				onDayClick = onDayClick,
+			)
 			Spacer(modifier = Modifier.height(16.dp))
-			Row(
-				modifier = Modifier.fillMaxWidth(),
-				horizontalArrangement = Arrangement.End,
-			) {
-				TextButton(onClick = onDoneClick) {
-					Text(
-						text = stringResource(R.string.calendar_done),
-						style = MaterialTheme.typography.labelLarge,
-						fontWeight = FontWeight.Bold,
-						color = MaterialTheme.colorScheme.primary,
-					)
-				}
-			}
+			CalendarDoneButton(onClick = onDoneClick)
+		}
+	}
+}
+
+@Composable
+private fun CalendarDoneButton(onClick: () -> Unit) {
+	Row(
+		modifier = Modifier.fillMaxWidth(),
+		horizontalArrangement = Arrangement.End,
+	) {
+		TextButton(onClick = onClick) {
+			Text(
+				text = stringResource(R.string.calendar_done),
+				style = MaterialTheme.typography.labelLarge,
+				fontWeight = FontWeight.Bold,
+				color = MaterialTheme.colorScheme.primary,
+			)
 		}
 	}
 }

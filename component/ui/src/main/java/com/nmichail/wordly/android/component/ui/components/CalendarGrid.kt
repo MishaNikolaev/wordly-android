@@ -48,6 +48,7 @@ fun CalendarWeekdayLabels(modifier: Modifier = Modifier) {
 fun CalendarGrid(
 	days: List<CalendarDay?>,
 	modifier: Modifier = Modifier,
+	onDayClick: ((Int) -> Unit)? = null,
 ) {
 	Column(
 		modifier = modifier.fillMaxWidth(),
@@ -61,7 +62,15 @@ fun CalendarGrid(
 				week.forEach { day ->
 					Box(modifier = Modifier.weight(1f)) {
 						if (day != null) {
-							CalendarDayCell(day = day)
+							val isSelectable = day.statusId != CalendarDayStatusId.Inactive
+							CalendarDayCell(
+								day = day,
+								onClick = onDayClick
+									?.takeIf { isSelectable }
+									?.let { click ->
+										{ click(day.dayOfMonth) }
+									},
+							)
 						}
 					}
 				}

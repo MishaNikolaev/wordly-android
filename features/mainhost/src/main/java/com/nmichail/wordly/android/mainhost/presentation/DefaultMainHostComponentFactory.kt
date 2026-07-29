@@ -10,10 +10,12 @@ import com.nmichail.wordly.android.features.constructor.presentation.detail.Cons
 import com.nmichail.wordly.android.features.home.presentation.HomeComponent
 import com.nmichail.wordly.android.features.news.presentation.NewsDetailComponent
 import com.nmichail.wordly.android.features.review.presentation.ReviewComponent
+import com.nmichail.wordly.android.features.words.presentation.WordsComponent
 import javax.inject.Inject
 
 internal class DefaultMainHostComponentFactory @Inject constructor(
 	private val homeComponentFactory: HomeComponent.Factory,
+	private val wordsComponentFactory: WordsComponent.Factory,
 	private val reviewComponentFactory: ReviewComponent.Factory,
 	private val cardsComponentFactory: CardsComponent.Factory,
 	private val cardPracticeComponentFactory: CardPracticeComponent.Factory,
@@ -28,6 +30,7 @@ internal class DefaultMainHostComponentFactory @Inject constructor(
 		DefaultMainHostComponent(
 			componentContext = componentContext,
 			homeComponentFactory = homeComponentFactory,
+			wordsComponentFactory = wordsComponentFactory,
 			reviewComponentFactory = reviewComponentFactory,
 			cardsComponentFactory = cardsComponentFactory,
 			cardPracticeComponentFactory = cardPracticeComponentFactory,

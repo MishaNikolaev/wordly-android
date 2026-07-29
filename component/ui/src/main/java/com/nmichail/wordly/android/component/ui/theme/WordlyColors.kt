@@ -11,6 +11,7 @@ object WordlyColors {
 
 	val LightPrimaryContainer = Color(0xFFF0DFF7)
 	val LightOnPrimaryContainer = Color(0xFF4A0F5E)
+	val RepeatDateContainer = Color(0xFFEAE4F6)
 
 	val LightSecondary = Color(0xFF2563EB)
 	val LightOnSecondary = Color(0xFFFFFFFF)

@@ -1,6 +1,8 @@
 package com.nmichail.wordly.android.component.ui.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,6 +15,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 
@@ -20,20 +24,33 @@ import androidx.compose.ui.unit.dp
 fun CalendarDayCell(
 	day: CalendarDay,
 	modifier: Modifier = Modifier,
+	onClick: (() -> Unit)? = null,
 ) {
+	val clickableModifier = if (onClick != null) {
+		modifier
+			.clip(CircleShape)
+			.clickable(role = Role.Button, onClick = onClick)
+	} else {
+		modifier
+	}
+
 	when (day.statusId) {
 		CalendarDayStatusId.Today -> TodayDayCell(
 			dayOfMonth = day.dayOfMonth,
-			modifier = modifier,
+			modifier = clickableModifier,
+		)
+		CalendarDayStatusId.Selected -> SelectedDayCell(
+			dayOfMonth = day.dayOfMonth,
+			modifier = clickableModifier,
 		)
 		CalendarDayStatusId.Completed -> ActivityDayCell(
 			dayOfMonth = day.dayOfMonth,
-			modifier = modifier,
+			modifier = clickableModifier,
 		)
 		else -> PlainDayCell(
 			dayOfMonth = day.dayOfMonth,
 			muted = day.statusId == CalendarDayStatusId.Inactive,
-			modifier = modifier,
+			modifier = clickableModifier,
 		)
 	}
 }
@@ -59,6 +76,32 @@ private fun TodayDayCell(
 				style = MaterialTheme.typography.labelLarge,
 				fontWeight = FontWeight.Bold,
 				color = MaterialTheme.colorScheme.onPrimary,
+			)
+		}
+	}
+}
+
+@Composable
+private fun SelectedDayCell(
+	dayOfMonth: Int,
+	modifier: Modifier = Modifier,
+) {
+	Column(
+		modifier = modifier.aspectRatio(1f),
+		horizontalAlignment = Alignment.CenterHorizontally,
+		verticalArrangement = Arrangement.Center,
+	) {
+		Box(
+			modifier = Modifier
+				.size(36.dp)
+				.border(2.dp, MaterialTheme.colorScheme.primary, CircleShape),
+			contentAlignment = Alignment.Center,
+		) {
+			Text(
+				text = dayOfMonth.toString(),
+				style = MaterialTheme.typography.labelLarge,
+				fontWeight = FontWeight.Bold,
+				color = MaterialTheme.colorScheme.primary,
 			)
 		}
 	}

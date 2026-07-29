@@ -28,11 +28,13 @@ import com.nmichail.wordly.android.features.news.presentation.NewsDetailComponen
 import com.nmichail.wordly.android.features.news.presentation.NewsDetailRouter
 import com.nmichail.wordly.android.features.review.presentation.ReviewComponent
 import com.nmichail.wordly.android.features.review.presentation.ReviewRouter
+import com.nmichail.wordly.android.features.words.presentation.WordsComponent
 import kotlinx.serialization.Serializable
 
 internal class DefaultMainHostComponent(
 	componentContext: ComponentContext,
 	private val homeComponentFactory: HomeComponent.Factory,
+	private val wordsComponentFactory: WordsComponent.Factory,
 	private val reviewComponentFactory: ReviewComponent.Factory,
 	private val cardsComponentFactory: CardsComponent.Factory,
 	private val cardPracticeComponentFactory: CardPracticeComponent.Factory,
@@ -64,7 +66,9 @@ internal class DefaultMainHostComponent(
 	): MainHostComponent.Child =
 		when (config) {
 			MainHostConfig.Home -> homeChild(componentContext)
-			MainHostConfig.Words -> MainHostComponent.Child.Words
+			MainHostConfig.Words -> MainHostComponent.Child.Words(
+				component = wordsComponentFactory(componentContext),
+			)
 			MainHostConfig.Stats -> MainHostComponent.Child.Stats
 			MainHostConfig.Profile -> MainHostComponent.Child.Profile
 			MainHostConfig.Review -> reviewChild(componentContext)
@@ -305,7 +309,7 @@ private fun MainHostTab.toConfig(): MainHostConfig =
 fun MainHostComponent.Child.toTab(): MainHostTab? =
 	when (this) {
 		is MainHostComponent.Child.Home -> MainHostTab.Home
-		MainHostComponent.Child.Words -> MainHostTab.Words
+		is MainHostComponent.Child.Words -> MainHostTab.Words
 		MainHostComponent.Child.Stats -> MainHostTab.Stats
 		MainHostComponent.Child.Profile -> MainHostTab.Profile
 		is MainHostComponent.Child.Review -> null

@@ -1,0 +1,96 @@
+{
+  "title": "Мои слова",
+  "searchPlaceholder": "Поиск по словарю",
+  "tags": [
+    { "id": "everyday", "title": "повседневное" },
+    { "id": "b2", "title": "B2" },
+    { "id": "work", "title": "работа" },
+    { "id": "travel", "title": "путешествия" }
+  ],
+  "words": [
+    {
+      "id": "1",
+      "word": "recall",
+      "phonetic": "/rɪˈkɔːl/",
+      "translation": "вспоминать; отзыв",
+      "definition": null,
+      "status": "LEARNED",
+      "tags": ["повседневное"],
+      "examples": [
+        { "text": "I can't recall his name.", "translation": "Я не могу вспомнить его имя." }
+      ],
+      "difficulty": 2,
+      "repeatEpochDay": null
+    },
+    {
+      "id": "2",
+      "word": "glimpse",
+      "phonetic": "/ɡlɪmps/",
+      "translation": "мельком увидеть; проблеск",
+      "definition": null,
+      "status": "IN_PROGRESS",
+      "tags": ["B2"],
+      "examples": [
+        { "text": "She caught a glimpse of the sea.", "translation": "Она мельком увидела море." }
+      ],
+      "difficulty": 3,
+      "repeatEpochDay": null
+    },
+    {
+      "id": "3",
+      "word": "reluctant",
+      "phonetic": "/rɪˈlʌktənt/",
+      "translation": "неохотный; нежелающий",
+      "definition": null,
+      "status": "NEW",
+      "tags": ["работа"],
+      "examples": [
+        { "text": "He was reluctant to leave.", "translation": "Он неохотно уходил." }
+      ],
+      "difficulty": 2,
+      "repeatEpochDay": null
+    },
+    {
+      "id": "4",
+      "word": "thrive",
+      "phonetic": "/θraɪv/",
+      "translation": "процветать; преуспевать",
+      "definition": null,
+      "status": "IN_PROGRESS",
+      "tags": ["повседневное"],
+      "examples": [
+        { "text": "Plants thrive in sunlight.", "translation": "Растения хорошо растут на солнце." }
+      ],
+      "difficulty": 2,
+      "repeatEpochDay": null
+    },
+    {
+      "id": "5",
+      "word": "subtle",
+      "phonetic": "/ˈsʌtl/",
+      "translation": "тонкий; неуловимый",
+      "definition": null,
+      "status": "LEARNED",
+      "tags": ["B2"],
+      "examples": [
+        { "text": "There was a subtle change in tone.", "translation": "В тоне была тонкая перемена." }
+      ],
+      "difficulty": 3,
+      "repeatEpochDay": null
+    },
+    {
+      "id": "6",
+      "word": "notion",
+      "phonetic": "/ˈnəʊʃn/",
+      "translation": "понятие; представление",
+      "definition": null,
+      "status": "NEW",
+      "tags": ["путешествия"],
+      "examples": [
+        { "text": "I have no notion of what he means.", "translation": "Я не понимаю, что он имеет в виду." }
+      ],
+      "difficulty": 1,
+      "repeatEpochDay": null
+    }
+  ]
+}

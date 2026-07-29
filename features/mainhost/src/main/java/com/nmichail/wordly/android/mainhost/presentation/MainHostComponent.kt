@@ -12,6 +12,7 @@ import com.nmichail.wordly.android.features.constructor.presentation.detail.Cons
 import com.nmichail.wordly.android.features.home.presentation.HomeComponent
 import com.nmichail.wordly.android.features.news.presentation.NewsDetailComponent
 import com.nmichail.wordly.android.features.review.presentation.ReviewComponent
+import com.nmichail.wordly.android.features.words.presentation.WordsComponent
 
 interface MainHostComponent {
 
@@ -23,7 +24,7 @@ interface MainHostComponent {
 
 		data class Home(val component: HomeComponent) : Child
 
-		data object Words : Child
+		data class Words(val component: WordsComponent) : Child
 
 		data object Stats : Child
 

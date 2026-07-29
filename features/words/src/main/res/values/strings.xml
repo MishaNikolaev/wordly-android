@@ -1,4 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<string name="word_screen_title">Мои слова</string>
+	<string name="words_search_placeholder">Поиск по словарю</string>
+	<string name="words_filter_all">Все</string>
+	<string name="words_filter_new">Новые</string>
+	<string name="words_filter_in_progress">В работе</string>
+	<string name="words_filter_learned">Выучено</string>
+	<string name="words_status_new">Новое</string>
+	<string name="words_status_in_progress">В работе</string>
+	<string name="words_status_learned">Выучено</string>
+	<string name="words_error_title">Не удалось загрузить слова</string>
+	<string name="words_error_subtitle">Проверьте соединение и попробуйте ещё раз</string>
+	<string name="words_retry">Повторить</string>
+	<string name="words_add_fab">Добавить слово</string>
+	<string name="words_empty">Пока нет слов в этом фильтре</string>
+	<string name="words_add_title">Добавить слово</string>
+	<string name="words_add_word_label">Слово</string>
+	<string name="words_add_examples_label">ПРИМЕРЫ</string>
+	<string name="words_add_confirm">Добавить в словарь</string>
+	<string name="words_add_close">Закрыть</string>
+	<string name="words_add_autofilled">автозаполнено</string>
+	<string name="words_looking_up">Подбираем перевод…</string>
+	<string name="words_detail_status_label">Статус</string>
+	<string name="words_detail_back">Назад</string>
+	<string name="words_detail_play_audio">Произношение</string>
+	<string name="words_detail_definition_label">Описание</string>
+	<string name="words_detail_difficulty_label">сложность слова</string>
+	<string name="words_detail_difficulty_value">%1$d</string>
+	<string name="words_detail_difficulty_max">/%1$d</string>
+	<string name="words_detail_repeat_label">выбрать дату повторения</string>
+	<string name="words_detail_add_to_review">Добавить в повторение</string>
+	<string name="words_detail_added_to_review">Добавлено в повторение</string>
+	<string name="words_detail_examples_label">ПРИМЕРЫ</string>
 </resources>
