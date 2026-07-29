@@ -64,7 +64,8 @@ private fun MainHostChildContent(
 			component = child.component,
 			modifier = Modifier.padding(innerPadding),
 		)
-		MainHostComponent.Child.Words -> WordContent(
+		is MainHostComponent.Child.Words -> WordContent(
+			component = child.component,
 			modifier = Modifier.padding(innerPadding),
 		)
 		MainHostComponent.Child.Stats -> StatsContent(
