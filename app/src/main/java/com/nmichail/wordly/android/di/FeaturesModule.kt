@@ -9,6 +9,7 @@ import com.nmichail.wordly.android.features.dev.networkselection.di.NetworkSelec
 import com.nmichail.wordly.android.features.home.di.HomeModule
 import com.nmichail.wordly.android.features.news.di.NewsModule
 import com.nmichail.wordly.android.features.review.di.ReviewModule
+import com.nmichail.wordly.android.features.words.di.WordsModule
 import com.nmichail.wordly.android.mainhost.di.MainHostModule
 import dagger.Module
 
@@ -23,6 +24,7 @@ import dagger.Module
 		CardsModule::class,
 		ConstructorModule::class,
 		BooksModule::class,
+		WordsModule::class,
 		MainHostModule::class,
 	],
 )
