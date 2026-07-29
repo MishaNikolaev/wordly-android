@@ -22,5 +22,12 @@ internal fun put(context: Context, uri: Uri, response: Response.Builder): Respon
 		)
 	}
 
-	return response.error404(context)
+	val handler = putHandlers.entries.firstOrNull {
+		it.key.matches(path)
+	}?.value
+	return handler?.invoke(context, uri, response) ?: response.error404(context)
 }
+
+private typealias PutHandler = (Context, Uri, Response.Builder) -> Response.Builder
+
+private val putHandlers: Map<Regex, PutHandler> = emptyMap()

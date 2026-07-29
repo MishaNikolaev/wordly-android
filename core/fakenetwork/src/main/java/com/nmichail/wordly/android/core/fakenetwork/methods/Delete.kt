@@ -22,5 +22,12 @@ internal fun delete(context: Context, uri: Uri, response: Response.Builder): Res
 		)
 	}
 
-	return response.error404(context)
+	val handler = deleteHandlers.entries.firstOrNull {
+		it.key.matches(path)
+	}?.value
+	return handler?.invoke(context, uri, response) ?: response.error404(context)
 }
+
+private typealias DeleteHandler = (Context, Uri, Response.Builder) -> Response.Builder
+
+private val deleteHandlers: Map<Regex, DeleteHandler> = emptyMap()

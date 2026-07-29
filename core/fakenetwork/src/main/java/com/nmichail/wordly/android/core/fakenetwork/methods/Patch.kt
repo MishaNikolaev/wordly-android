@@ -24,16 +24,22 @@ internal fun patch(context: Context, uri: Uri, response: Response.Builder): Resp
 		)
 	}
 
-	return when (path) {
-		"/api/gateway/profile" -> response.create(
+	val handler = patchHandlers.entries.firstOrNull {
+		it.key.matches(path)
+	}?.value
+	return handler?.invoke(context, uri, response) ?: response.error404(context)
+}
+
+private typealias PatchHandler = (Context, Uri, Response.Builder) -> Response.Builder
+
+private val patchHandlers: Map<Regex, PatchHandler> = mapOf(
+	Regex("^/api/gateway/profile$") to { context, _, response ->
+		response.create(
 			description = "Update profile",
 			body = context.getJson(R.raw.profile_ok),
 		)
-
-		"/api/gateway/profile/password" -> response.create(
-			description = "Change password",
-		)
-
-		else -> response.error404(context)
-	}
-}
+	},
+	Regex("^/api/gateway/profile/password$") to { _, _, response ->
+		response.create(description = "Change password")
+	},
+)
