@@ -10,6 +10,8 @@ include(
 	":features:constructor",
 	":features:books",
 	":features:words",
+	":features:words:add",
+	":features:words:detail",
 	":features:stats",
 	":features:profile",
 	":features:authorization:signin",
@@ -24,6 +26,7 @@ include(
 
 	":shared:converters:dateconverter",
 	":shared:error",
+	":shared:words:domain",
 
 	":component:ui",
 	":component:presentation",
