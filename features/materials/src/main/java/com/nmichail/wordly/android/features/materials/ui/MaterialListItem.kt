@@ -3,7 +3,6 @@
 package com.nmichail.wordly.android.features.materials.ui
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -49,14 +48,12 @@ internal fun MaterialListItem(
 	modifier: Modifier = Modifier,
 ) {
 	val colorScheme = MaterialTheme.colorScheme
-	val cardBorder = colorScheme.outlineVariant
 
 	Column(
 		modifier = modifier
 			.fillMaxWidth()
 			.defaultMinSize(minHeight = CardMinHeight)
 			.clip(CardShape)
-			.border(width = 1.dp, color = cardBorder, shape = CardShape)
 			.background(colorScheme.surface)
 			.clickable(onClick = onClick)
 	) {

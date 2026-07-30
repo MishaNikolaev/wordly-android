@@ -18,7 +18,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
@@ -108,18 +107,9 @@ private fun MaterialsLoaded(
 		modifier = modifier
 			.fillMaxSize()
 			.background(MaterialTheme.colorScheme.background),
-		contentPadding = PaddingValues(bottom = 24.dp),
+		contentPadding = PaddingValues(top = 8.dp, bottom = 24.dp),
 		verticalArrangement = Arrangement.spacedBy(12.dp),
 	) {
-		item {
-			Text(
-				text = state.title.ifBlank { stringResource(R.string.materials_screen_title) },
-				style = MaterialTheme.typography.titleLarge,
-				fontWeight = FontWeight.SemiBold,
-				color = MaterialTheme.colorScheme.onBackground,
-				modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp),
-			)
-		}
 		item {
 			MaterialsFilterChips(
 				selected = state.selectedFilter,
