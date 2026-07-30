@@ -12,10 +12,12 @@ import com.nmichail.wordly.android.features.words.data.mapper.toBody
 import com.nmichail.wordly.android.features.words.data.mapper.toDomain
 import com.nmichail.wordly.android.features.words.domain.entity.NewWord
 import com.nmichail.wordly.android.features.words.domain.entity.WordExample
+import com.nmichail.wordly.android.features.words.domain.entity.WordFilter
 import com.nmichail.wordly.android.features.words.domain.entity.WordLookup
 import com.nmichail.wordly.android.features.words.domain.entity.WordReview
 import com.nmichail.wordly.android.features.words.domain.entity.WordStatus
 import com.nmichail.wordly.android.features.words.domain.entity.WordTag
+import com.nmichail.wordly.android.features.words.domain.entity.WordsFilters
 import com.nmichail.wordly.android.features.words.domain.repository.WordsRepository
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -26,9 +28,19 @@ class WordsRepositoryImpl @Inject constructor(
 	private val wordsApi: WordsApi,
 	private val mockDataSource: MockDataSource,
 ) : WordsRepository {
-	override suspend fun getWords() = wordsApi.getWords().toDomain()
+	override suspend fun getWords(filters: WordsFilters) =
+		wordsApi.getWords(
+			status = filters.filter.toApiStatus(),
+			query = filters.query.trim().takeIf { it.isNotEmpty() },
+		).toDomain()
 
-	override suspend fun getTags(): List<WordTag> = getWords().tags
+	override suspend fun getTags(): List<WordTag> =
+		getWords(
+			filters = WordsFilters(
+				filter = WordFilter.All,
+				query = "",
+			),
+		).tags
 
 	override suspend fun lookupWord(query: String): WordLookup {
 		val normalized = query.trim().lowercase()
@@ -78,6 +90,14 @@ class WordsRepositoryImpl @Inject constructor(
 			difficulty = 2,
 		)
 }
+private fun WordFilter.toApiStatus(): String? =
+	when (this) {
+		WordFilter.All -> null
+		WordFilter.New -> "NEW"
+		WordFilter.InProgress -> "IN_PROGRESS"
+		WordFilter.Learned -> "LEARNED"
+	}
+
 private fun WordStatus.toApiStatus(): String =
 	when (this) {
 		WordStatus.New -> "NEW"
