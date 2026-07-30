@@ -21,6 +21,7 @@ import com.nmichail.wordly.android.features.words.domain.entity.WordReview
 import com.nmichail.wordly.android.features.words.domain.entity.WordStatus
 import com.nmichail.wordly.android.features.words.domain.entity.WordTag
 import com.nmichail.wordly.android.features.words.domain.entity.WordsCatalog
+import com.nmichail.wordly.android.features.words.domain.entity.WordsFilters
 import com.nmichail.wordly.android.features.words.domain.usecase.AddWordToReviewUseCase
 import com.nmichail.wordly.android.features.words.domain.usecase.AddWordUseCase
 import com.nmichail.wordly.android.features.words.domain.usecase.GetWordsUseCase
@@ -93,7 +94,7 @@ internal class WordsStoreFactory @Inject constructor(
 					searchQuery = "",
 					searchPlaceholder = msg.catalog.searchPlaceholder,
 					selectedFilter = WordFilter.All,
-					words = filterWords(words = msg.catalog.words, query = "", wordFilter = WordFilter.All),
+					words = msg.catalog.words,
 					tags = msg.catalog.tags,
 					addWordDialog = null,
 					wordDetailDialog = null,
@@ -136,43 +137,51 @@ internal class WordsStoreFactory @Inject constructor(
 			Nothing,
 			>() {
 
-		private var allWords: List<WordItem> = emptyList()
 		private var tags: List<WordTag> = emptyList()
 		private var lookupJob: Job? = null
+		private var wordsJob: Job? = null
 
 		override fun executeAction(action: Action) {
 			when (action) {
-				Action.Load -> loadWords()
+				Action.Load -> loadWords(showLoading = true)
 			}
 		}
 
 		override fun executeIntent(intent: WordsStore.Intent) {
 			when (intent) {
-				WordsStore.Intent.Retry -> loadWords()
+				WordsStore.Intent.Retry -> loadWords(showLoading = true)
 				is WordsStore.Intent.ChangeSearchQuery -> {
 					val content = state() as? WordsComponent.State.Content ?: return
-					dispatch(
-						Msg.SearchUpdated(
+					reloadWords(
+						filters = WordsFilters(
+							filter = content.selectedFilter,
 							query = intent.query,
-							words = filterWords(
-								words = allWords,
-								query = intent.query,
-								wordFilter = content.selectedFilter,
-							),
 						),
+						onResult = { words ->
+							dispatch(
+								Msg.SearchUpdated(
+									query = intent.query,
+									words = words,
+								),
+							)
+						},
 					)
 				}
 				is WordsStore.Intent.ChangeFilter -> {
 					val content = state() as? WordsComponent.State.Content ?: return
-					dispatch(
-						Msg.FilterUpdated(
+					reloadWords(
+						filters = WordsFilters(
 							filter = intent.filter,
-							words = filterWords(
-								words = allWords,
-								query = content.searchQuery,
-								wordFilter = intent.filter,
-							),
+							query = content.searchQuery,
 						),
+						onResult = { words ->
+							dispatch(
+								Msg.FilterUpdated(
+									filter = intent.filter,
+									words = words,
+								),
+							)
+						},
 					)
 				}
 				WordsStore.Intent.OpenAddWord -> openAddWord()
@@ -194,16 +203,53 @@ internal class WordsStoreFactory @Inject constructor(
 			}
 		}
 
-		private fun refreshVisibleWords() {
-			val content = state() as? WordsComponent.State.Content ?: return
-			dispatch(
-				Msg.WordsUpdated(
-					words = filterWords(
-						words = allWords,
-						query = content.searchQuery,
-						wordFilter = content.selectedFilter,
+		private fun currentFilters(): WordsFilters {
+			val content = state() as? WordsComponent.State.Content
+			return WordsFilters(
+				filter = content?.selectedFilter ?: WordFilter.All,
+				query = content?.searchQuery.orEmpty(),
+			)
+		}
+
+		private fun loadWords(showLoading: Boolean) {
+			if (showLoading) {
+				dispatch(Msg.Loading)
+			}
+			wordsJob?.cancel()
+			wordsJob = launchTry {
+				val catalog = getWordsUseCase(
+					filters = WordsFilters(
+						filter = WordFilter.All,
+						query = "",
 					),
-				),
+				)
+				tags = catalog.tags
+				dispatch(Msg.CatalogLoaded(catalog = catalog))
+			} catch {
+				if (showLoading) {
+					dispatch(Msg.SetError)
+				}
+			}
+		}
+
+		private fun reloadWords(
+			filters: WordsFilters,
+			onResult: (List<WordItem>) -> Unit,
+		) {
+			wordsJob?.cancel()
+			wordsJob = launchTry {
+				val catalog = getWordsUseCase(filters = filters)
+				tags = catalog.tags
+				onResult(catalog.words)
+			} catch {
+				// ignored
+			}
+		}
+
+		private fun refreshVisibleWords() {
+			reloadWords(
+				filters = currentFilters(),
+				onResult = { words -> dispatch(Msg.WordsUpdated(words = words)) },
 			)
 		}
 
@@ -215,18 +261,6 @@ internal class WordsStoreFactory @Inject constructor(
 				WordsComponent.CalendarAction.NextMonth -> shiftCalendarMonth(1)
 				WordsComponent.CalendarAction.Today -> selectToday()
 				is WordsComponent.CalendarAction.DayClick -> selectCalendarDay(action.dayOfMonth)
-			}
-		}
-
-		private fun loadWords() {
-			dispatch(Msg.Loading)
-			launchTry {
-				val catalog = getWordsUseCase()
-				allWords = catalog.words
-				tags = catalog.tags
-				dispatch(Msg.CatalogLoaded(catalog = catalog))
-			} catch {
-				dispatch(Msg.SetError)
 			}
 		}
 
@@ -338,8 +372,6 @@ internal class WordsStoreFactory @Inject constructor(
 						difficulty = dialog.difficulty,
 					),
 				)
-				val catalog = getWordsUseCase()
-				allWords = catalog.words
 				refreshVisibleWords()
 				dispatch(Msg.AddDialogUpdated(dialog = null))
 			} catch {
@@ -353,8 +385,7 @@ internal class WordsStoreFactory @Inject constructor(
 		}
 
 		private fun openWordDetail(wordId: String) {
-			val word = allWords.find { it.id == wordId }
-				?: (state() as? WordsComponent.State.Content)?.words?.find { it.id == wordId }
+			val word = (state() as? WordsComponent.State.Content)?.words?.find { it.id == wordId }
 				?: return
 			dispatch(
 				Msg.DetailDialogUpdated(
@@ -373,6 +404,7 @@ internal class WordsStoreFactory @Inject constructor(
 						repeatDateLabel = RepeatDateFormatter.label(word.repeatEpochDay),
 						calendar = null,
 						isSubmittingReview = false,
+						isAddedToReview = false,
 					),
 				),
 			)
@@ -384,8 +416,6 @@ internal class WordsStoreFactory @Inject constructor(
 			dispatch(Msg.DetailDialogUpdated(dialog = dialog.copy(status = status)))
 			launchTry {
 				updateWordStatusUseCase(wordId = dialog.wordId, status = status)
-				val catalog = getWordsUseCase()
-				allWords = catalog.words
 				refreshVisibleWords()
 			} catch {
 				// ignored
@@ -472,7 +502,7 @@ internal class WordsStoreFactory @Inject constructor(
 		private fun confirmAddToReview() {
 			val content = state() as? WordsComponent.State.Content ?: return
 			val dialog = content.wordDetailDialog ?: return
-			if (dialog.isSubmittingReview) return
+			if (dialog.isSubmittingReview || dialog.isAddedToReview) return
 			val todayEpoch = LocalDate.now().toEpochDay()
 			val epochDay = (dialog.repeatEpochDay ?: todayEpoch).coerceAtLeast(todayEpoch)
 			dispatch(Msg.DetailDialogUpdated(dialog = dialog.copy(isSubmittingReview = true)))
@@ -483,10 +513,16 @@ internal class WordsStoreFactory @Inject constructor(
 						epochDay = epochDay,
 					),
 				)
-				val catalog = getWordsUseCase()
-				allWords = catalog.words
 				refreshVisibleWords()
-				dispatch(Msg.DetailDialogUpdated(dialog = null))
+				val current = (state() as? WordsComponent.State.Content)?.wordDetailDialog ?: return@launchTry
+				dispatch(
+					Msg.DetailDialogUpdated(
+						dialog = current.copy(
+							isSubmittingReview = false,
+							isAddedToReview = true,
+						),
+					),
+				)
 			} catch {
 				val current = (state() as? WordsComponent.State.Content)?.wordDetailDialog
 					?: return@catch

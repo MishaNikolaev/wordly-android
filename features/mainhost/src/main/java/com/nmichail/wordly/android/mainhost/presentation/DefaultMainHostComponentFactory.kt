@@ -8,6 +8,8 @@ import com.nmichail.wordly.android.features.cards.presentation.detail.CardPracti
 import com.nmichail.wordly.android.features.constructor.presentation.ConstructorComponent
 import com.nmichail.wordly.android.features.constructor.presentation.detail.ConstructorPracticeComponent
 import com.nmichail.wordly.android.features.home.presentation.HomeComponent
+import com.nmichail.wordly.android.features.materials.presentation.MaterialsComponent
+import com.nmichail.wordly.android.features.materials.presentation.detail.MaterialDetailComponent
 import com.nmichail.wordly.android.features.news.presentation.NewsDetailComponent
 import com.nmichail.wordly.android.features.review.presentation.ReviewComponent
 import com.nmichail.wordly.android.features.words.presentation.WordsComponent
@@ -16,6 +18,8 @@ import javax.inject.Inject
 internal class DefaultMainHostComponentFactory @Inject constructor(
 	private val homeComponentFactory: HomeComponent.Factory,
 	private val wordsComponentFactory: WordsComponent.Factory,
+	private val materialsComponentFactory: MaterialsComponent.Factory,
+	private val materialDetailComponentFactory: MaterialDetailComponent.Factory,
 	private val reviewComponentFactory: ReviewComponent.Factory,
 	private val cardsComponentFactory: CardsComponent.Factory,
 	private val cardPracticeComponentFactory: CardPracticeComponent.Factory,
@@ -31,6 +35,8 @@ internal class DefaultMainHostComponentFactory @Inject constructor(
 			componentContext = componentContext,
 			homeComponentFactory = homeComponentFactory,
 			wordsComponentFactory = wordsComponentFactory,
+			materialsComponentFactory = materialsComponentFactory,
+			materialDetailComponentFactory = materialDetailComponentFactory,
 			reviewComponentFactory = reviewComponentFactory,
 			cardsComponentFactory = cardsComponentFactory,
 			cardPracticeComponentFactory = cardPracticeComponentFactory,

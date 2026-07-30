@@ -23,6 +23,9 @@ import com.nmichail.wordly.android.features.constructor.presentation.detail.Cons
 import com.nmichail.wordly.android.features.constructor.presentation.detail.ConstructorPracticeRouter
 import com.nmichail.wordly.android.features.home.presentation.HomeComponent
 import com.nmichail.wordly.android.features.home.presentation.HomeRouter
+import com.nmichail.wordly.android.features.materials.presentation.MaterialsComponent
+import com.nmichail.wordly.android.features.materials.presentation.detail.MaterialDetailComponent
+import com.nmichail.wordly.android.features.materials.presentation.detail.MaterialDetailRouter
 import com.nmichail.wordly.android.features.news.domain.entity.News
 import com.nmichail.wordly.android.features.news.presentation.NewsDetailComponent
 import com.nmichail.wordly.android.features.news.presentation.NewsDetailRouter
@@ -31,10 +34,13 @@ import com.nmichail.wordly.android.features.review.presentation.ReviewRouter
 import com.nmichail.wordly.android.features.words.presentation.WordsComponent
 import kotlinx.serialization.Serializable
 
+@Suppress("TooManyFunctions")
 internal class DefaultMainHostComponent(
 	componentContext: ComponentContext,
 	private val homeComponentFactory: HomeComponent.Factory,
 	private val wordsComponentFactory: WordsComponent.Factory,
+	private val materialsComponentFactory: MaterialsComponent.Factory,
+	private val materialDetailComponentFactory: MaterialDetailComponent.Factory,
 	private val reviewComponentFactory: ReviewComponent.Factory,
 	private val cardsComponentFactory: CardsComponent.Factory,
 	private val cardPracticeComponentFactory: CardPracticeComponent.Factory,
@@ -69,7 +75,8 @@ internal class DefaultMainHostComponent(
 			MainHostConfig.Words -> MainHostComponent.Child.Words(
 				component = wordsComponentFactory(componentContext),
 			)
-			MainHostConfig.Stats -> MainHostComponent.Child.Stats
+			MainHostConfig.Materials -> materialsChild(componentContext)
+			is MainHostConfig.MaterialDetail -> materialDetailChild(config.materialId, componentContext)
 			MainHostConfig.Profile -> MainHostComponent.Child.Profile
 			MainHostConfig.Review -> reviewChild(componentContext)
 			MainHostConfig.Cards -> cardsChild(componentContext)
@@ -113,6 +120,35 @@ internal class DefaultMainHostComponent(
 			}
 			is MainHostConfig.NewsDetail -> newsDetailChild(config.newsId, componentContext)
 		}
+
+	@OptIn(DelicateDecomposeApi::class)
+	private fun materialsChild(componentContext: ComponentContext): MainHostComponent.Child =
+		MainHostComponent.Child.Materials(
+			component = materialsComponentFactory(
+				componentContext = componentContext,
+				onMaterialClick = { material ->
+					navigation.push(MainHostConfig.MaterialDetail(materialId = material.id))
+				},
+			),
+		)
+
+	private fun materialDetailChild(
+		materialId: String,
+		componentContext: ComponentContext,
+	): MainHostComponent.Child {
+		val materialDetailRouter = object : MaterialDetailRouter {
+			override fun navigateBack() {
+				navigation.pop()
+			}
+		}
+		return MainHostComponent.Child.MaterialDetail(
+			component = materialDetailComponentFactory(
+				componentContext = componentContext,
+				materialId = materialId,
+				materialDetailRouter = materialDetailRouter,
+			),
+		)
+	}
 
 	@OptIn(DelicateDecomposeApi::class)
 	private fun homeChild(componentContext: ComponentContext): MainHostComponent.Child {
@@ -260,7 +296,12 @@ private sealed interface MainHostConfig {
 	data object Words : MainHostConfig
 
 	@Serializable
-	data object Stats : MainHostConfig
+	data object Materials : MainHostConfig
+
+	@Serializable
+	data class MaterialDetail(
+		val materialId: String,
+	) : MainHostConfig
 
 	@Serializable
 	data object Profile : MainHostConfig
@@ -302,7 +343,7 @@ private fun MainHostTab.toConfig(): MainHostConfig =
 	when (this) {
 		MainHostTab.Home -> MainHostConfig.Home
 		MainHostTab.Words -> MainHostConfig.Words
-		MainHostTab.Stats -> MainHostConfig.Stats
+		MainHostTab.Materials -> MainHostConfig.Materials
 		MainHostTab.Profile -> MainHostConfig.Profile
 	}
 
@@ -310,8 +351,9 @@ fun MainHostComponent.Child.toTab(): MainHostTab? =
 	when (this) {
 		is MainHostComponent.Child.Home -> MainHostTab.Home
 		is MainHostComponent.Child.Words -> MainHostTab.Words
-		MainHostComponent.Child.Stats -> MainHostTab.Stats
+		is MainHostComponent.Child.Materials -> MainHostTab.Materials
 		MainHostComponent.Child.Profile -> MainHostTab.Profile
+		is MainHostComponent.Child.MaterialDetail -> null
 		is MainHostComponent.Child.Review -> null
 		is MainHostComponent.Child.Cards -> null
 		is MainHostComponent.Child.CardPractice -> null
