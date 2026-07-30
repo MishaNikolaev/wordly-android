@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string name="materials_screen_title">Полезные материалы</string>
 	<string name="materials_filter_all">Все</string>
 	<string name="materials_filter_grammar">Грамматика</string>
 	<string name="materials_filter_idioms">Идиомы</string>
