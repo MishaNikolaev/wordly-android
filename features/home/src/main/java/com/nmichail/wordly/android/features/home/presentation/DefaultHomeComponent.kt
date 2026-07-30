@@ -7,7 +7,6 @@ import com.arkivanov.mvikotlin.extensions.coroutines.labelsChannel
 import com.nmichail.wordly.android.component.presentation.launchTry
 import com.nmichail.wordly.android.core.navigation.asValue
 import com.nmichail.wordly.android.features.home.domain.entity.Training
-import com.nmichail.wordly.android.features.news.domain.entity.News
 
 internal class DefaultHomeComponent(
 	componentContext: ComponentContext,
@@ -34,7 +33,6 @@ internal class DefaultHomeComponent(
 							"books" -> homeRouter.navigateToBooks()
 						}
 					}
-					is HomeComponent.Label.OpenNews -> homeRouter.navigateToNews(news = label.news)
 				}
 			}
 		} catch {
@@ -72,9 +70,5 @@ internal class DefaultHomeComponent(
 
 	override fun handleOpenTraining(training: Training) {
 		store.accept(HomeStore.Intent.OpenTraining(training = training))
-	}
-
-	override fun handleOpenNews(news: News) {
-		store.accept(HomeStore.Intent.OpenNews(news = news))
 	}
 }

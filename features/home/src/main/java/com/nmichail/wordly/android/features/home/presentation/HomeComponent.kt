@@ -5,7 +5,6 @@ import com.arkivanov.decompose.value.Value
 import com.nmichail.wordly.android.features.home.domain.entity.Training
 import com.nmichail.wordly.android.features.home.presentation.calendar.MonthDay
 import com.nmichail.wordly.android.features.home.presentation.calendar.WeekDay
-import com.nmichail.wordly.android.features.news.domain.entity.News
 
 interface HomeComponent {
 
@@ -27,8 +26,6 @@ interface HomeComponent {
 
 	fun handleOpenTraining(training: Training)
 
-	fun handleOpenNews(news: News)
-
 	sealed interface State {
 
 		data object Loading : State
@@ -43,7 +40,6 @@ interface HomeComponent {
 			val estimatedMinutes: Int,
 			val reviewStreakDays: Int,
 			val trainings: List<Training>,
-			val news: List<News>,
 			val monthTitle: String,
 			val monthDays: List<MonthDay?>,
 			val monthActiveDays: Int,
@@ -57,8 +53,6 @@ interface HomeComponent {
 		data object StartReview : Label
 
 		data class OpenTraining(val training: Training) : Label
-
-		data class OpenNews(val news: News) : Label
 	}
 
 	fun interface Factory {

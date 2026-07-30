@@ -4,7 +4,6 @@ include(
 
 	":features:mainhost",
 	":features:home",
-	":features:news",
 	":features:review",
 	":features:cards",
 	":features:constructor",

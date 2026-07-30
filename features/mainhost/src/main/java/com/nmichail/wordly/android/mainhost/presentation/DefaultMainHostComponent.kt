@@ -26,9 +26,6 @@ import com.nmichail.wordly.android.features.home.presentation.HomeRouter
 import com.nmichail.wordly.android.features.materials.presentation.MaterialsComponent
 import com.nmichail.wordly.android.features.materials.presentation.detail.MaterialDetailComponent
 import com.nmichail.wordly.android.features.materials.presentation.detail.MaterialDetailRouter
-import com.nmichail.wordly.android.features.news.domain.entity.News
-import com.nmichail.wordly.android.features.news.presentation.NewsDetailComponent
-import com.nmichail.wordly.android.features.news.presentation.NewsDetailRouter
 import com.nmichail.wordly.android.features.review.presentation.ReviewComponent
 import com.nmichail.wordly.android.features.review.presentation.ReviewRouter
 import com.nmichail.wordly.android.features.words.presentation.WordsComponent
@@ -48,7 +45,6 @@ internal class DefaultMainHostComponent(
 	private val constructorPracticeComponentFactory: ConstructorPracticeComponent.Factory,
 	private val booksComponentFactory: BooksComponent.Factory,
 	private val bookReaderComponentFactory: BookReaderComponent.Factory,
-	private val newsDetailComponentFactory: NewsDetailComponent.Factory,
 ) : MainHostComponent, ComponentContext by componentContext {
 
 	private val navigation = StackNavigation<MainHostConfig>()
@@ -118,7 +114,6 @@ internal class DefaultMainHostComponent(
 					),
 				)
 			}
-			is MainHostConfig.NewsDetail -> newsDetailChild(config.newsId, componentContext)
 		}
 
 	@OptIn(DelicateDecomposeApi::class)
@@ -167,10 +162,6 @@ internal class DefaultMainHostComponent(
 
 			override fun navigateToBooks() {
 				navigation.push(MainHostConfig.Books)
-			}
-
-			override fun navigateToNews(news: News) {
-				navigation.push(MainHostConfig.NewsDetail(newsId = news.id))
 			}
 		}
 		return MainHostComponent.Child.Home(
@@ -266,24 +257,6 @@ internal class DefaultMainHostComponent(
 			),
 		)
 	}
-
-	private fun newsDetailChild(
-		newsId: String,
-		componentContext: ComponentContext,
-	): MainHostComponent.Child {
-		val newsDetailRouter = object : NewsDetailRouter {
-			override fun navigateBack() {
-				navigation.pop()
-			}
-		}
-		return MainHostComponent.Child.NewsDetail(
-			component = newsDetailComponentFactory(
-				componentContext = componentContext,
-				newsId = newsId,
-				newsDetailRouter = newsDetailRouter,
-			),
-		)
-	}
 }
 
 @Serializable
@@ -332,11 +305,6 @@ private sealed interface MainHostConfig {
 	data class BookReader(
 		val bookId: String,
 	) : MainHostConfig
-
-	@Serializable
-	data class NewsDetail(
-		val newsId: String,
-	) : MainHostConfig
 }
 
 private fun MainHostTab.toConfig(): MainHostConfig =
@@ -361,5 +329,4 @@ fun MainHostComponent.Child.toTab(): MainHostTab? =
 		is MainHostComponent.Child.ConstructorPractice -> null
 		is MainHostComponent.Child.Books -> null
 		is MainHostComponent.Child.BookReader -> null
-		is MainHostComponent.Child.NewsDetail -> null
 	}

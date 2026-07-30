@@ -16,7 +16,6 @@ import com.nmichail.wordly.android.features.cards.ui.CardsContent
 import com.nmichail.wordly.android.features.constructor.ui.ConstructorContent
 import com.nmichail.wordly.android.features.constructor.ui.ConstructorPracticeContent
 import com.nmichail.wordly.android.features.home.ui.HomeContent
-import com.nmichail.wordly.android.features.news.ui.NewsDetailContent
 import com.nmichail.wordly.android.features.profile.ui.ProfileContent
 import com.nmichail.wordly.android.features.review.ui.ReviewContent
 import com.nmichail.wordly.android.features.materials.ui.MaterialDetailContent
@@ -99,9 +98,6 @@ private fun MainHostChildContent(
 			component = child.component,
 		)
 		is MainHostComponent.Child.BookReader -> BookReaderContent(
-			component = child.component,
-		)
-		is MainHostComponent.Child.NewsDetail -> NewsDetailContent(
 			component = child.component,
 		)
 	}

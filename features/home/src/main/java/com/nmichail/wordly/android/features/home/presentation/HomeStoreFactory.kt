@@ -74,7 +74,6 @@ internal class HomeStoreFactory @Inject constructor(
 					estimatedMinutes = msg.home.estimatedMinutes,
 					reviewStreakDays = msg.home.reviewStreakDays,
 					trainings = msg.home.trainings,
-					news = msg.home.news,
 					monthTitle = msg.month.title,
 					monthDays = msg.month.days,
 					monthActiveDays = msg.month.activeDays,
@@ -145,9 +144,6 @@ internal class HomeStoreFactory @Inject constructor(
 				HomeStore.Intent.StartReview -> publish(HomeComponent.Label.StartReview)
 				is HomeStore.Intent.OpenTraining -> {
 					publish(HomeComponent.Label.OpenTraining(training = intent.training))
-				}
-				is HomeStore.Intent.OpenNews -> {
-					publish(HomeComponent.Label.OpenNews(news = intent.news))
 				}
 			}
 		}

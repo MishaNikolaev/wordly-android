@@ -10,7 +10,6 @@ import com.nmichail.wordly.android.features.constructor.presentation.detail.Cons
 import com.nmichail.wordly.android.features.home.presentation.HomeComponent
 import com.nmichail.wordly.android.features.materials.presentation.MaterialsComponent
 import com.nmichail.wordly.android.features.materials.presentation.detail.MaterialDetailComponent
-import com.nmichail.wordly.android.features.news.presentation.NewsDetailComponent
 import com.nmichail.wordly.android.features.review.presentation.ReviewComponent
 import com.nmichail.wordly.android.features.words.presentation.WordsComponent
 import javax.inject.Inject
@@ -27,7 +26,6 @@ internal class DefaultMainHostComponentFactory @Inject constructor(
 	private val constructorPracticeComponentFactory: ConstructorPracticeComponent.Factory,
 	private val booksComponentFactory: BooksComponent.Factory,
 	private val bookReaderComponentFactory: BookReaderComponent.Factory,
-	private val newsDetailComponentFactory: NewsDetailComponent.Factory,
 ) : MainHostComponent.Factory {
 
 	override fun invoke(componentContext: ComponentContext): MainHostComponent =
@@ -44,6 +42,5 @@ internal class DefaultMainHostComponentFactory @Inject constructor(
 			constructorPracticeComponentFactory = constructorPracticeComponentFactory,
 			booksComponentFactory = booksComponentFactory,
 			bookReaderComponentFactory = bookReaderComponentFactory,
-			newsDetailComponentFactory = newsDetailComponentFactory,
 		)
 }

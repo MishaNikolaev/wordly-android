@@ -36,7 +36,6 @@ import com.nmichail.wordly.android.component.ui.components.CalendarDayStatusId
 import com.nmichail.wordly.android.component.ui.components.CalendarDialog
 import com.nmichail.wordly.android.component.ui.components.DailyReviewCard
 import com.nmichail.wordly.android.component.ui.components.HomeTopBar
-import com.nmichail.wordly.android.component.ui.components.NewsCard
 import com.nmichail.wordly.android.component.ui.components.SectionLabel
 import com.nmichail.wordly.android.component.ui.components.TrainingListItem
 import com.nmichail.wordly.android.component.ui.components.WeekDayIndicator
@@ -48,7 +47,6 @@ import com.nmichail.wordly.android.features.home.domain.entity.Training
 import com.nmichail.wordly.android.features.home.presentation.HomeComponent
 import com.nmichail.wordly.android.features.home.presentation.calendar.MonthDayStatus
 import com.nmichail.wordly.android.features.home.presentation.calendar.WeekDayStatus
-import com.nmichail.wordly.android.features.news.domain.entity.News
 import java.time.DayOfWeek
 
 @Composable
@@ -161,10 +159,6 @@ private fun HomeLoaded(
 				trainings = state.trainings,
 				onTrainingClick = component::handleOpenTraining,
 			)
-			NewsBlock(
-				news = state.news,
-				onNewsClick = component::handleOpenNews,
-			)
 		}
 	}
 
@@ -214,33 +208,6 @@ private fun TrainingsBlock(
 				subtitle = training.subtitle,
 				icon = training.icon(),
 				onClick = { onTrainingClick(training) },
-			)
-		}
-	}
-}
-
-@Composable
-private fun NewsBlock(
-	news: List<News>,
-	onNewsClick: (News) -> Unit,
-) {
-	if (news.isEmpty()) {
-		return
-	}
-	Column(
-		modifier = Modifier.fillMaxWidth(),
-		verticalArrangement = Arrangement.spacedBy(12.dp),
-	) {
-		SectionLabel(
-			text = stringResource(ComponentR.string.home_news_section),
-			modifier = Modifier.padding(start = 4.dp),
-		)
-		news.forEach { item ->
-			NewsCard(
-				title = item.title,
-				subtitle = item.subtitle,
-				publishedAt = item.publishedAt,
-				onClick = { onNewsClick(item) },
 			)
 		}
 	}

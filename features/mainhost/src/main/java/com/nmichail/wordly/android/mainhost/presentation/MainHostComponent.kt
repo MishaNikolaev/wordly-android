@@ -12,7 +12,6 @@ import com.nmichail.wordly.android.features.constructor.presentation.detail.Cons
 import com.nmichail.wordly.android.features.home.presentation.HomeComponent
 import com.nmichail.wordly.android.features.materials.presentation.MaterialsComponent
 import com.nmichail.wordly.android.features.materials.presentation.detail.MaterialDetailComponent
-import com.nmichail.wordly.android.features.news.presentation.NewsDetailComponent
 import com.nmichail.wordly.android.features.review.presentation.ReviewComponent
 import com.nmichail.wordly.android.features.words.presentation.WordsComponent
 
@@ -47,8 +46,6 @@ interface MainHostComponent {
 		data class Books(val component: BooksComponent) : Child
 
 		data class BookReader(val component: BookReaderComponent) : Child
-
-		data class NewsDetail(val component: NewsDetailComponent) : Child
 	}
 
 	fun interface Factory {

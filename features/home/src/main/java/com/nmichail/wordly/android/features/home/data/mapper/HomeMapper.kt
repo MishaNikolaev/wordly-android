@@ -4,7 +4,6 @@ import com.nmichail.wordly.android.features.home.data.dto.HomeResponse
 import com.nmichail.wordly.android.features.home.data.dto.TrainingResponse
 import com.nmichail.wordly.android.features.home.domain.entity.Home
 import com.nmichail.wordly.android.features.home.domain.entity.Training
-import com.nmichail.wordly.android.features.news.data.mapper.toEntity
 
 internal fun HomeResponse.toEntity(): Home =
 	Home(
@@ -14,7 +13,6 @@ internal fun HomeResponse.toEntity(): Home =
 		estimatedMinutes = estimatedMinutes,
 		reviewStreakDays = reviewStreakDays,
 		trainings = trainings.map { it.toEntity() },
-		news = news.map { it.toEntity() },
 		completedDayOffsets = completedDayOffsets,
 	)
 
