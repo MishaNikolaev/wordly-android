@@ -119,20 +119,6 @@ private val getHandlers: Map<Regex, Handler> = mapOf(
 			response.create(description = "Book translation", body = context.getJson(R.raw.get_book_translation_little_prince))
 		}
 	},
-	Regex("^/api/news/([^/]+)$") to { context, uri, response ->
-		val newsId = uri.path?.removePrefix("/api/news/").orEmpty()
-		val body = when (newsId) {
-			"phrasal-verbs" -> context.getJson(R.raw.get_news_phrasal_verbs)
-			"spaced-repetition" -> context.getJson(R.raw.get_news_spaced_repetition)
-			"listening-tip" -> context.getJson(R.raw.get_news_listening_tip)
-			else -> null
-		}
-		if (body == null) {
-			response.error404(context)
-		} else {
-			response.create(description = "News detail", body = body)
-		}
-	},
 )
 
 private fun filterMaterialsCatalog(json: String, category: String?): String {
