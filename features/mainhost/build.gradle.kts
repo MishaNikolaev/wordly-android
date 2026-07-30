@@ -19,7 +19,6 @@ dependencies {
 	implementation(projects.features.authorization.signup)
 	implementation(projects.features.dev.networkselection)
 	implementation(projects.features.home)
-	implementation(projects.features.news)
 	implementation(projects.features.review)
 	implementation(projects.features.cards)
 	implementation(projects.features.constructor)
