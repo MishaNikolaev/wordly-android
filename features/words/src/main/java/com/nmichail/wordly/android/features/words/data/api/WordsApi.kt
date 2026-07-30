@@ -8,11 +8,15 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface WordsApi {
 
 	@GET("/api/words")
-	suspend fun getWords(): WordsCatalogDto
+	suspend fun getWords(
+		@Query("status") status: String? = null,
+		@Query("query") query: String? = null,
+	): WordsCatalogDto
 
 	@POST("/api/words")
 	suspend fun addWord(@Body body: AddWordBody)
