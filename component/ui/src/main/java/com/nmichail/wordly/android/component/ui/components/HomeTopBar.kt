@@ -17,7 +17,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.nmichail.wordly.android.component.ui.theme.WordlyTypography
 
 private const val STREAK_CHIP_ALPHA = 0.12f
 
@@ -37,7 +36,8 @@ fun HomeTopBar(
 	) {
 		Text(
 			text = title,
-			style = WordlyTypography.homeScreenTitle,
+			style = MaterialTheme.typography.titleLarge,
+			fontWeight = FontWeight.SemiBold,
 			color = MaterialTheme.colorScheme.onSurface,
 			modifier = Modifier
 				.weight(1f)

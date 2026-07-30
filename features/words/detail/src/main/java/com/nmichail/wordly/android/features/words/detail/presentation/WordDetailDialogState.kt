@@ -19,6 +19,7 @@ data class WordDetailDialogState(
 	val repeatDateLabel: String,
 	val calendar: CalendarState?,
 	val isSubmittingReview: Boolean,
+	val isAddedToReview: Boolean,
 )
 
 data class CalendarState(

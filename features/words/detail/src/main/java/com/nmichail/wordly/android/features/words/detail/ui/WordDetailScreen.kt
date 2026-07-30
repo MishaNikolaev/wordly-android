@@ -126,7 +126,7 @@ private fun WordDetailBody(
 				Column(
 					modifier = Modifier
 						.fillMaxWidth()
-						.padding(start = 42.dp),
+						.padding(top = 64.dp),
 					verticalArrangement = Arrangement.spacedBy(4.dp),
 				) {
 					Text(
@@ -200,11 +200,25 @@ private fun WordDetailBody(
 			)
 		}
 		Button(
-			text = stringResource(R.string.words_detail_add_to_review),
+			text = if (state.isAddedToReview) {
+				stringResource(R.string.words_detail_added_to_review)
+			} else {
+				stringResource(R.string.words_detail_add_to_review)
+			},
 			onClick = onConfirmAddToReview,
-			enabled = !state.isSubmittingReview,
+			enabled = !state.isSubmittingReview && !state.isAddedToReview,
 			loading = state.isSubmittingReview,
-			leadingIcon = Icons.AutoMirrored.Outlined.PlaylistAdd,
+			leadingIcon = if (state.isAddedToReview) null else Icons.AutoMirrored.Outlined.PlaylistAdd,
+			containerColor = if (state.isAddedToReview) {
+				if (isSystemInDarkTheme()) WordlyColors.DarkSuccess else WordlyColors.LightSuccess
+			} else {
+				MaterialTheme.colorScheme.primary
+			},
+			contentColor = if (state.isAddedToReview) {
+				MaterialTheme.colorScheme.onPrimary
+			} else {
+				MaterialTheme.colorScheme.onPrimary
+			},
 			modifier = Modifier.padding(bottom = 10.dp),
 		)
 	}
@@ -492,10 +506,15 @@ private fun RepeatDateBox(
 ) {
 	val shape = RoundedCornerShape(14.dp)
 	val accent = WordlyColors.Primary
+	val containerColor = if (isSystemInDarkTheme()) {
+		WordlyColors.DarkPrimaryContainer
+	} else {
+		WordlyColors.RepeatDateContainer
+	}
 	Column(
 		modifier = modifier
 			.clip(shape)
-			.background(WordlyColors.RepeatDateContainer)
+			.background(containerColor)
 			.border(1.dp, accent, shape)
 			.clickable(role = Role.Button, onClick = onClick)
 			.padding(horizontal = 12.dp, vertical = 10.dp),

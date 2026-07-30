@@ -41,6 +41,12 @@ object WordlyColors {
 	val LightStreak = Color(0xFFFF9500)
 	val LightStreakContainer = Color(0xFFFFF2DD)
 
+	val CategoryTagContainer = Color(0xFFA7F3D0)
+	val OnCategoryTag = Color(0xFF065F46)
+
+	val HeroGradientMiddle = Color(0xFFD4559E)
+	val HeroGradientEnd = Color(0xFFFF7B5A)
+
 	val Streak = LightStreak
 	val StreakContainer = LightStreakContainer
 	val ReviewAccent = LightOnPrimaryContainer

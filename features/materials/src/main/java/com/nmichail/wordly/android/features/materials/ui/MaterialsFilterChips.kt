@@ -1,4 +1,4 @@
-package com.nmichail.wordly.android.features.words.ui
+package com.nmichail.wordly.android.features.materials.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -24,20 +24,21 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.nmichail.wordly.android.component.ui.theme.WordlyColors
-import com.nmichail.wordly.android.features.words.R
-import com.nmichail.wordly.android.features.words.domain.entity.WordFilter
+import com.nmichail.wordly.android.features.materials.R
+import com.nmichail.wordly.android.features.materials.domain.entity.MaterialFilter
 
 @Composable
-internal fun WordsFilterChips(
-	selected: WordFilter,
-	onSelect: (WordFilter) -> Unit,
+internal fun MaterialsFilterChips(
+	selected: MaterialFilter,
+	onSelect: (MaterialFilter) -> Unit,
 	modifier: Modifier = Modifier,
 ) {
 	val filters = listOf(
-		WordFilter.All to stringResource(R.string.words_filter_all),
-		WordFilter.New to stringResource(R.string.words_filter_new),
-		WordFilter.InProgress to stringResource(R.string.words_filter_in_progress),
-		WordFilter.Learned to stringResource(R.string.words_filter_learned),
+		MaterialFilter.All to stringResource(R.string.materials_filter_all),
+		MaterialFilter.Grammar to stringResource(R.string.materials_filter_grammar),
+		MaterialFilter.Idioms to stringResource(R.string.materials_filter_idioms),
+		MaterialFilter.Conversational to stringResource(R.string.materials_filter_conversational),
+		MaterialFilter.Listening to stringResource(R.string.materials_filter_listening),
 	)
 
 	LazyRow(
@@ -46,7 +47,7 @@ internal fun WordsFilterChips(
 		horizontalArrangement = Arrangement.spacedBy(6.dp),
 	) {
 		items(filters) { (filter, title) ->
-			WordsFilterChip(
+			MaterialsFilterChip(
 				text = title,
 				selected = filter == selected,
 				onClick = { onSelect(filter) },
@@ -56,7 +57,7 @@ internal fun WordsFilterChips(
 }
 
 @Composable
-private fun WordsFilterChip(
+private fun MaterialsFilterChip(
 	text: String,
 	selected: Boolean,
 	onClick: () -> Unit,

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="materials_screen_title">Полезные материалы</string>
+	<string name="materials_filter_all">Все</string>
+	<string name="materials_filter_grammar">Грамматика</string>
+	<string name="materials_filter_idioms">Идиомы</string>
+	<string name="materials_filter_conversational">Разговорный</string>
+	<string name="materials_filter_listening">Аудирование</string>
+	<string name="materials_status_new">Новое</string>
+	<string name="materials_status_read">Прочитано</string>
+	<string name="materials_category_grammar">Грамматика</string>
+	<string name="materials_category_idioms">Идиомы</string>
+	<string name="materials_category_conversational">Разговорный</string>
+	<string name="materials_category_listening">Аудирование</string>
+	<string name="materials_empty">Пока нет материалов в этой категории</string>
+	<string name="materials_error_title">Не удалось загрузить материалы</string>
+	<string name="materials_error_subtitle">Проверьте соединение и попробуйте ещё раз</string>
+	<string name="materials_retry">Повторить</string>
+	<string name="materials_detail_title">Материал</string>
+	<string name="materials_detail_back">Назад</string>
+	<string name="materials_detail_description">Описание</string>
+	<string name="materials_detail_rate_title">Оцени материал</string>
+	<string name="materials_detail_rate_subtitle">Ваша реакция помогает подбирать более интересные статьи</string>
+	<string name="materials_detail_like">Нравится</string>
+	<string name="materials_detail_dislike">Не нравится</string>
+	<string name="materials_detail_reading_minutes">%1$d мин чтения</string>
+	<string name="materials_detail_error_title">Не удалось открыть материал</string>
+	<string name="materials_detail_error_subtitle">Проверьте соединение и попробуйте ещё раз</string>
+</resources>

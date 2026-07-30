@@ -81,7 +81,7 @@ private fun RowScope.BottomBarNavigationItem(
 private fun bottomBarItems(): List<BottomBarItem> = listOf(
 	BottomBarItem(MainHostTab.Home, R.string.bottom_nav_learn, Icons.Outlined.Home),
 	BottomBarItem(MainHostTab.Words, R.string.bottom_nav_words, Icons.Outlined.MenuBook),
-	BottomBarItem(MainHostTab.Stats, R.string.bottom_nav_materials, Icons.Outlined.Article),
+	BottomBarItem(MainHostTab.Materials, R.string.bottom_nav_materials, Icons.Outlined.Article),
 	BottomBarItem(MainHostTab.Profile, R.string.bottom_nav_profile, Icons.Outlined.Person),
 )
 
