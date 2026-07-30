@@ -128,6 +128,73 @@ private fun WordsLoaded(
 			.fillMaxSize()
 			.background(MaterialTheme.colorScheme.background),
 	) {
+		state.wordDetailDialog?.let { dialog ->
+			WordsDetailOverlay(dialog = dialog, component = component)
+			return@Box
+		}
+
+		WordsMainContent(
+			state = state,
+			component = component,
+			clearSearchFocus = clearSearchFocus,
+			modifier = Modifier.fillMaxSize(),
+		)
+	}
+
+	state.addWordDialog?.let { dialog ->
+		AddWordDialog(
+			state = dialog,
+			onDismiss = component::handleDismissAddWord,
+			onWordInputChange = component::handleAddWordInputChange,
+			onToggleTag = component::handleToggleTag,
+			onConfirm = component::handleConfirmAddWord,
+		)
+	}
+}
+
+@Composable
+private fun WordsDetailOverlay(
+	dialog: com.nmichail.wordly.android.features.words.detail.presentation.WordDetailDialogState,
+	component: WordsComponent,
+) {
+	WordDetailScreen(
+		state = dialog,
+		onDismiss = component::handleDismissWordDetail,
+		onStatusChange = component::handleDetailStatusChange,
+		onOpenCalendar = {
+			component.handleCalendar(WordsComponent.CalendarAction.Open)
+		},
+		onDismissCalendar = {
+			component.handleCalendar(WordsComponent.CalendarAction.Dismiss)
+		},
+		onCalendarPreviousMonth = {
+			component.handleCalendar(WordsComponent.CalendarAction.PreviousMonth)
+		},
+		onCalendarNextMonth = {
+			component.handleCalendar(WordsComponent.CalendarAction.NextMonth)
+		},
+		onCalendarToday = {
+			component.handleCalendar(WordsComponent.CalendarAction.Today)
+		},
+		onCalendarDayClick = { day ->
+			component.handleCalendar(WordsComponent.CalendarAction.DayClick(day))
+		},
+		onConfirmAddToReview = component::handleConfirmAddToReview,
+		onPlayAudio = component::handlePlayAudio,
+		modifier = Modifier
+			.fillMaxSize()
+			.background(MaterialTheme.colorScheme.background),
+	)
+}
+
+@Composable
+private fun WordsMainContent(
+	state: WordsComponent.State.Content,
+	component: WordsComponent,
+	clearSearchFocus: () -> Unit,
+	modifier: Modifier = Modifier,
+) {
+	Box(modifier = modifier) {
 		WordsScreenBody(
 			state = state,
 			onSearchQueryChange = component::handleSearchQueryChange,
@@ -158,51 +225,6 @@ private fun WordsLoaded(
 				contentDescription = stringResource(R.string.words_add_fab),
 			)
 		}
-	}
-
-	WordsDialogs(state = state, component = component)
-}
-
-@Composable
-private fun WordsDialogs(
-	state: WordsComponent.State.Content,
-	component: WordsComponent,
-) {
-	state.addWordDialog?.let { dialog ->
-		AddWordDialog(
-			state = dialog,
-			onDismiss = component::handleDismissAddWord,
-			onWordInputChange = component::handleAddWordInputChange,
-			onToggleTag = component::handleToggleTag,
-			onConfirm = component::handleConfirmAddWord,
-		)
-	}
-	state.wordDetailDialog?.let { dialog ->
-		WordDetailScreen(
-			state = dialog,
-			onDismiss = component::handleDismissWordDetail,
-			onStatusChange = component::handleDetailStatusChange,
-			onOpenCalendar = {
-				component.handleCalendar(WordsComponent.CalendarAction.Open)
-			},
-			onDismissCalendar = {
-				component.handleCalendar(WordsComponent.CalendarAction.Dismiss)
-			},
-			onCalendarPreviousMonth = {
-				component.handleCalendar(WordsComponent.CalendarAction.PreviousMonth)
-			},
-			onCalendarNextMonth = {
-				component.handleCalendar(WordsComponent.CalendarAction.NextMonth)
-			},
-			onCalendarToday = {
-				component.handleCalendar(WordsComponent.CalendarAction.Today)
-			},
-			onCalendarDayClick = { day ->
-				component.handleCalendar(WordsComponent.CalendarAction.DayClick(day))
-			},
-			onConfirmAddToReview = component::handleConfirmAddToReview,
-			onPlayAudio = component::handlePlayAudio,
-		)
 	}
 }
 
@@ -247,10 +269,10 @@ private fun LazyListScope.wordsHeader(
 	item(key = "title") {
 		Text(
 			text = state.title,
-			style = MaterialTheme.typography.headlineMedium,
-			fontWeight = FontWeight.Bold,
+			style = MaterialTheme.typography.titleLarge,
+			fontWeight = FontWeight.SemiBold,
 			color = MaterialTheme.colorScheme.onBackground,
-			modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
+			modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp),
 		)
 	}
 	item(key = "search") {

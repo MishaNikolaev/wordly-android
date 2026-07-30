@@ -10,6 +10,8 @@ import com.nmichail.wordly.android.features.cards.presentation.detail.CardPracti
 import com.nmichail.wordly.android.features.constructor.presentation.ConstructorComponent
 import com.nmichail.wordly.android.features.constructor.presentation.detail.ConstructorPracticeComponent
 import com.nmichail.wordly.android.features.home.presentation.HomeComponent
+import com.nmichail.wordly.android.features.materials.presentation.MaterialsComponent
+import com.nmichail.wordly.android.features.materials.presentation.detail.MaterialDetailComponent
 import com.nmichail.wordly.android.features.news.presentation.NewsDetailComponent
 import com.nmichail.wordly.android.features.review.presentation.ReviewComponent
 import com.nmichail.wordly.android.features.words.presentation.WordsComponent
@@ -26,7 +28,9 @@ interface MainHostComponent {
 
 		data class Words(val component: WordsComponent) : Child
 
-		data object Stats : Child
+		data class Materials(val component: MaterialsComponent) : Child
+
+		data class MaterialDetail(val component: MaterialDetailComponent) : Child
 
 		data object Profile : Child
 
@@ -56,6 +60,6 @@ interface MainHostComponent {
 enum class MainHostTab {
 	Home,
 	Words,
-	Stats,
+	Materials,
 	Profile,
 }

@@ -12,7 +12,7 @@ include(
 	":features:words",
 	":features:words:add",
 	":features:words:detail",
-	":features:stats",
+	":features:materials",
 	":features:profile",
 	":features:authorization:signin",
 	":features:authorization:signup",

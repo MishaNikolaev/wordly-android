@@ -6,10 +6,11 @@ import com.nmichail.wordly.android.features.words.domain.entity.WordReview
 import com.nmichail.wordly.android.features.words.domain.entity.WordStatus
 import com.nmichail.wordly.android.features.words.domain.entity.WordTag
 import com.nmichail.wordly.android.features.words.domain.entity.WordsCatalog
+import com.nmichail.wordly.android.features.words.domain.entity.WordsFilters
 
 interface WordsRepository {
 
-	suspend fun getWords(): WordsCatalog
+	suspend fun getWords(filters: WordsFilters): WordsCatalog
 
 	suspend fun getTags(): List<WordTag>
 

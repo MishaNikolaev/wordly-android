@@ -25,7 +25,7 @@ dependencies {
 	implementation(projects.features.constructor)
 	implementation(projects.features.books)
 	implementation(projects.features.words)
-	implementation(projects.features.stats)
+	implementation(projects.features.materials)
 	implementation(projects.features.profile)
 	implementation(projects.core.network)
 	implementation(projects.core.preferences)

@@ -1,0 +1,40 @@
+{
+	"title": "Полезные материалы",
+	"items": [
+		{
+			"id": "present-perfect",
+			"category": "GRAMMAR",
+			"title": "Present Perfect vs Past Simple",
+			"description": "Разберём, когда ставить have/has, а когда достаточно обычного прошедшего времени — с понятными примерами.",
+			"status": "NEW"
+		},
+		{
+			"id": "daily-idioms",
+			"category": "IDIOMS",
+			"title": "10 идиом, которые используют каждый день",
+			"description": "Короткие выражения из сериалов и разговоров, которые сразу звучат естественнее.",
+			"status": "NEW"
+		},
+		{
+			"id": "small-talk",
+			"category": "CONVERSATIONAL",
+			"title": "Small talk: как начать разговор",
+			"description": "Фразы для лифта, кофе-брейка и первого сообщения — без неловкой паузы.",
+			"status": "READ"
+		},
+		{
+			"id": "listening-shadowing",
+			"category": "LISTENING",
+			"title": "Shadowing: тренируем слух и речь",
+			"description": "Техника повторения за носителем, которая ускоряет понимание на слух.",
+			"status": "NEW"
+		},
+		{
+			"id": "conditionals",
+			"category": "GRAMMAR",
+			"title": "Conditionals без боли",
+			"description": "Нулевой, первый и второй тип условных — на бытовых примерах.",
+			"status": "READ"
+		}
+	]
+}

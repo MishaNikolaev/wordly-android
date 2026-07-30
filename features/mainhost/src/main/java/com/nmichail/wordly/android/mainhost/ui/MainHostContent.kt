@@ -19,7 +19,8 @@ import com.nmichail.wordly.android.features.home.ui.HomeContent
 import com.nmichail.wordly.android.features.news.ui.NewsDetailContent
 import com.nmichail.wordly.android.features.profile.ui.ProfileContent
 import com.nmichail.wordly.android.features.review.ui.ReviewContent
-import com.nmichail.wordly.android.features.stats.ui.StatsContent
+import com.nmichail.wordly.android.features.materials.ui.MaterialDetailContent
+import com.nmichail.wordly.android.features.materials.ui.MaterialsContent
 import com.nmichail.wordly.android.features.words.ui.WordContent
 import com.nmichail.wordly.android.mainhost.presentation.MainHostComponent
 import com.nmichail.wordly.android.mainhost.presentation.toTab
@@ -68,8 +69,12 @@ private fun MainHostChildContent(
 			component = child.component,
 			modifier = Modifier.padding(innerPadding),
 		)
-		MainHostComponent.Child.Stats -> StatsContent(
+		is MainHostComponent.Child.Materials -> MaterialsContent(
+			component = child.component,
 			modifier = Modifier.padding(innerPadding),
+		)
+		is MainHostComponent.Child.MaterialDetail -> MaterialDetailContent(
+			component = child.component,
 		)
 		MainHostComponent.Child.Profile -> ProfileContent(
 			modifier = Modifier.padding(innerPadding),
