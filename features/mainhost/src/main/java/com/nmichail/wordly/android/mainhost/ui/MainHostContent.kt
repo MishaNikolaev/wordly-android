@@ -17,6 +17,7 @@ import com.nmichail.wordly.android.features.constructor.ui.ConstructorContent
 import com.nmichail.wordly.android.features.constructor.ui.ConstructorPracticeContent
 import com.nmichail.wordly.android.features.home.ui.HomeContent
 import com.nmichail.wordly.android.features.profile.ui.ProfileContent
+import com.nmichail.wordly.android.features.profile.ui.ProfileEditContent
 import com.nmichail.wordly.android.features.review.ui.ReviewContent
 import com.nmichail.wordly.android.features.materials.ui.MaterialDetailContent
 import com.nmichail.wordly.android.features.materials.ui.MaterialsContent
@@ -75,7 +76,12 @@ private fun MainHostChildContent(
 		is MainHostComponent.Child.MaterialDetail -> MaterialDetailContent(
 			component = child.component,
 		)
-		MainHostComponent.Child.Profile -> ProfileContent(
+		is MainHostComponent.Child.Profile -> ProfileContent(
+			component = child.component,
+			modifier = Modifier.padding(innerPadding),
+		)
+		is MainHostComponent.Child.ProfileEdit -> ProfileEditContent(
+			component = child.component,
 			modifier = Modifier.padding(innerPadding),
 		)
 		is MainHostComponent.Child.Review -> ReviewContent(

@@ -26,6 +26,9 @@ import com.nmichail.wordly.android.features.home.presentation.HomeRouter
 import com.nmichail.wordly.android.features.materials.presentation.MaterialsComponent
 import com.nmichail.wordly.android.features.materials.presentation.detail.MaterialDetailComponent
 import com.nmichail.wordly.android.features.materials.presentation.detail.MaterialDetailRouter
+import com.nmichail.wordly.android.features.profile.presentation.ProfileComponent
+import com.nmichail.wordly.android.features.profile.presentation.edit.ProfileEditComponent
+import com.nmichail.wordly.android.features.profile.presentation.edit.ProfileEditRouter
 import com.nmichail.wordly.android.features.review.presentation.ReviewComponent
 import com.nmichail.wordly.android.features.review.presentation.ReviewRouter
 import com.nmichail.wordly.android.features.words.presentation.WordsComponent
@@ -38,6 +41,8 @@ internal class DefaultMainHostComponent(
 	private val wordsComponentFactory: WordsComponent.Factory,
 	private val materialsComponentFactory: MaterialsComponent.Factory,
 	private val materialDetailComponentFactory: MaterialDetailComponent.Factory,
+	private val profileComponentFactory: ProfileComponent.Factory,
+	private val profileEditComponentFactory: ProfileEditComponent.Factory,
 	private val reviewComponentFactory: ReviewComponent.Factory,
 	private val cardsComponentFactory: CardsComponent.Factory,
 	private val cardPracticeComponentFactory: CardPracticeComponent.Factory,
@@ -48,6 +53,7 @@ internal class DefaultMainHostComponent(
 ) : MainHostComponent, ComponentContext by componentContext {
 
 	private val navigation = StackNavigation<MainHostConfig>()
+	private var profileComponent: ProfileComponent? = null
 
 	override val stack: Value<ChildStack<*, MainHostComponent.Child>> = childStack(
 		source = navigation,
@@ -73,7 +79,8 @@ internal class DefaultMainHostComponent(
 			)
 			MainHostConfig.Materials -> materialsChild(componentContext)
 			is MainHostConfig.MaterialDetail -> materialDetailChild(config.materialId, componentContext)
-			MainHostConfig.Profile -> MainHostComponent.Child.Profile
+			MainHostConfig.Profile -> profileChild(componentContext)
+			MainHostConfig.ProfileEdit -> profileEditChild(componentContext)
 			MainHostConfig.Review -> reviewChild(componentContext)
 			MainHostConfig.Cards -> cardsChild(componentContext)
 			is MainHostConfig.CardPractice -> cardPracticeChild(config.cardId, componentContext)
@@ -115,6 +122,33 @@ internal class DefaultMainHostComponent(
 				)
 			}
 		}
+
+	@OptIn(DelicateDecomposeApi::class)
+	private fun profileChild(componentContext: ComponentContext): MainHostComponent.Child {
+		val component = profileComponentFactory(
+			componentContext = componentContext,
+			onOpenEdit = {
+				navigation.push(MainHostConfig.ProfileEdit)
+			},
+		)
+		profileComponent = component
+		return MainHostComponent.Child.Profile(component = component)
+	}
+
+	private fun profileEditChild(componentContext: ComponentContext): MainHostComponent.Child {
+		val profileEditRouter = object : ProfileEditRouter {
+			override fun navigateBack() {
+				navigation.pop()
+				profileComponent?.handleRefresh()
+			}
+		}
+		return MainHostComponent.Child.ProfileEdit(
+			component = profileEditComponentFactory(
+				componentContext = componentContext,
+				profileEditRouter = profileEditRouter,
+			),
+		)
+	}
 
 	@OptIn(DelicateDecomposeApi::class)
 	private fun materialsChild(componentContext: ComponentContext): MainHostComponent.Child =
@@ -280,6 +314,9 @@ private sealed interface MainHostConfig {
 	data object Profile : MainHostConfig
 
 	@Serializable
+	data object ProfileEdit : MainHostConfig
+
+	@Serializable
 	data object Review : MainHostConfig
 
 	@Serializable
@@ -320,7 +357,8 @@ fun MainHostComponent.Child.toTab(): MainHostTab? =
 		is MainHostComponent.Child.Home -> MainHostTab.Home
 		is MainHostComponent.Child.Words -> MainHostTab.Words
 		is MainHostComponent.Child.Materials -> MainHostTab.Materials
-		MainHostComponent.Child.Profile -> MainHostTab.Profile
+		is MainHostComponent.Child.Profile -> MainHostTab.Profile
+		is MainHostComponent.Child.ProfileEdit -> null
 		is MainHostComponent.Child.MaterialDetail -> null
 		is MainHostComponent.Child.Review -> null
 		is MainHostComponent.Child.Cards -> null
