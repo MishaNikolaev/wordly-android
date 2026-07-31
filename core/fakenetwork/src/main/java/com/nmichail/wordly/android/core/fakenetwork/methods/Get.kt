@@ -39,7 +39,10 @@ private val getHandlers: Map<Regex, Handler> = mapOf(
 		response.create(description = "Auth session", body = context.getJson(R.raw.session_ok))
 	},
 	Regex("^/api/gateway/profile$") to { context, _, response ->
-		response.create(description = "User profile", body = context.getJson(R.raw.profile_ok))
+		response.create(
+			description = "User profile",
+			body = com.nmichail.wordly.android.core.fakenetwork.FakeProfileStore.getProfile(context),
+		)
 	},
 	Regex("^/api/home$") to { context, _, response ->
 		response.create(description = "Home screen", body = context.getJson(R.raw.get_home))
