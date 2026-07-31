@@ -6,7 +6,6 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -54,6 +53,7 @@ import com.nmichail.wordly.android.component.ui.components.Button
 import com.nmichail.wordly.android.component.ui.components.CalendarDialog
 import com.nmichail.wordly.android.component.ui.theme.WordlyColors
 import com.nmichail.wordly.android.component.ui.theme.WordlyTypography
+import com.nmichail.wordly.android.component.ui.theme.isAppInDarkTheme
 import com.nmichail.wordly.android.features.words.detail.R
 import com.nmichail.wordly.android.features.words.detail.presentation.WordDetailDialogState
 import com.nmichail.wordly.android.features.words.domain.entity.WordExample
@@ -210,7 +210,7 @@ private fun WordDetailBody(
 			loading = state.isSubmittingReview,
 			leadingIcon = if (state.isAddedToReview) null else Icons.AutoMirrored.Outlined.PlaylistAdd,
 			containerColor = if (state.isAddedToReview) {
-				if (isSystemInDarkTheme()) WordlyColors.DarkSuccess else WordlyColors.LightSuccess
+				if (isAppInDarkTheme()) WordlyColors.DarkSuccess else WordlyColors.LightSuccess
 			} else {
 				MaterialTheme.colorScheme.primary
 			},
@@ -253,7 +253,7 @@ private fun WordDetailPhonetic(
 	onPlayAudio: () -> Unit,
 ) {
 	if (phonetic.isNullOrBlank()) return
-	val muted = if (isSystemInDarkTheme()) WordlyColors.DarkOnSurfaceVariant2 else WordlyColors.LightOnSurfaceVariant2
+	val muted = if (isAppInDarkTheme()) WordlyColors.DarkOnSurfaceVariant2 else WordlyColors.LightOnSurfaceVariant2
 	Row(
 		verticalAlignment = Alignment.CenterVertically,
 		horizontalArrangement = Arrangement.spacedBy(6.dp),
@@ -422,7 +422,7 @@ private fun WordDetailExamples(examples: List<WordExample>) {
 	if (examples.isEmpty()) return
 	val colorScheme = MaterialTheme.colorScheme
 	val shape = RoundedCornerShape(16.dp)
-	val translationColor = if (isSystemInDarkTheme()) WordlyColors.DarkOnSurfaceVariant2 else WordlyColors.LightOnSurfaceVariant2
+	val translationColor = if (isAppInDarkTheme()) WordlyColors.DarkOnSurfaceVariant2 else WordlyColors.LightOnSurfaceVariant2
 	Column(
 		modifier = Modifier
 			.fillMaxWidth()
@@ -506,7 +506,7 @@ private fun RepeatDateBox(
 ) {
 	val shape = RoundedCornerShape(14.dp)
 	val accent = WordlyColors.Primary
-	val containerColor = if (isSystemInDarkTheme()) {
+	val containerColor = if (isAppInDarkTheme()) {
 		WordlyColors.DarkPrimaryContainer
 	} else {
 		WordlyColors.RepeatDateContainer
@@ -548,7 +548,7 @@ private fun RepeatDateBox(
 
 @Composable
 private fun statusAccentColor(status: WordStatus): Color {
-	val dark = isSystemInDarkTheme()
+	val dark = isAppInDarkTheme()
 	return when (status) {
 		WordStatus.New -> if (dark) WordlyColors.DarkOnSurfaceVariant2 else WordlyColors.LightOnSurfaceVariant2
 		WordStatus.InProgress -> if (dark) WordlyColors.DarkWarning else WordlyColors.LightWarning
