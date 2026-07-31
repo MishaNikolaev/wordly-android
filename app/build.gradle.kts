@@ -32,6 +32,7 @@ dependencies {
 	implementation(projects.features.books)
 	implementation(projects.features.words)
 	implementation(projects.features.materials)
+	implementation(projects.features.profile)
 	implementation(projects.component.ui)
 	implementation(projects.core.network)
 	implementation(projects.core.preferences)
