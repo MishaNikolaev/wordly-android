@@ -34,6 +34,8 @@ fun TextField(
 	onValueChange: (String) -> Unit,
 	modifier: Modifier = Modifier,
 	isPassword: Boolean = false,
+	readOnly: Boolean = false,
+	enabled: Boolean = true,
 	keyboardType: KeyboardType = KeyboardType.Text,
 	errorVisible: Boolean = false,
 	errorMessage: String = "",
@@ -51,6 +53,8 @@ fun TextField(
 			value = value,
 			onValueChange = onValueChange,
 			modifier = Modifier.fillMaxWidth(),
+			enabled = enabled,
+			readOnly = readOnly,
 			trailingIcon = passwordTrailingIcon(
 				isPassword = isPassword,
 				passwordVisible = passwordVisible,

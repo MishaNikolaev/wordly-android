@@ -1,7 +1,9 @@
 package com.nmichail.wordly.android.core.preferences.di
 
 import com.google.gson.Gson
+import com.nmichail.wordly.android.core.preferences.data.repository.ThemeRepositoryImpl
 import com.nmichail.wordly.android.core.preferences.data.repository.TokenRepositoryImpl
+import com.nmichail.wordly.android.core.preferences.domain.repository.ThemeRepository
 import com.nmichail.wordly.android.core.preferences.domain.repository.TokenRepository
 import dagger.Binds
 import dagger.Module
@@ -15,6 +17,12 @@ abstract class PreferencesModule {
 	abstract fun bindTokenRepository(
 		impl: TokenRepositoryImpl,
 	): TokenRepository
+
+	@Binds
+	@Singleton
+	abstract fun bindThemeRepository(
+		impl: ThemeRepositoryImpl,
+	): ThemeRepository
 
 	companion object {
 

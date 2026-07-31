@@ -56,7 +56,16 @@ class FakeServerInterceptor(
 					buffer.readUtf8()
 				},
 			)
-			"PATCH" -> patch(context, uri, response)
+			"PATCH" -> patch(
+				context = context,
+				uri = uri,
+				response = response,
+				requestBody = chain.request().body?.let { body ->
+					val buffer = okio.Buffer()
+					body.writeTo(buffer)
+					buffer.readUtf8()
+				},
+			)
 			"PUT" -> put(context, uri, response)
 			"DELETE" -> delete(context, uri, response)
 			else -> response.error404(context)

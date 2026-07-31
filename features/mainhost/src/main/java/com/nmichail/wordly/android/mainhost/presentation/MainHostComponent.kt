@@ -12,6 +12,8 @@ import com.nmichail.wordly.android.features.constructor.presentation.detail.Cons
 import com.nmichail.wordly.android.features.home.presentation.HomeComponent
 import com.nmichail.wordly.android.features.materials.presentation.MaterialsComponent
 import com.nmichail.wordly.android.features.materials.presentation.detail.MaterialDetailComponent
+import com.nmichail.wordly.android.features.profile.presentation.ProfileComponent
+import com.nmichail.wordly.android.features.profile.presentation.edit.ProfileEditComponent
 import com.nmichail.wordly.android.features.review.presentation.ReviewComponent
 import com.nmichail.wordly.android.features.words.presentation.WordsComponent
 
@@ -31,7 +33,9 @@ interface MainHostComponent {
 
 		data class MaterialDetail(val component: MaterialDetailComponent) : Child
 
-		data object Profile : Child
+		data class Profile(val component: ProfileComponent) : Child
+
+		data class ProfileEdit(val component: ProfileEditComponent) : Child
 
 		data class Review(val component: ReviewComponent) : Child
 

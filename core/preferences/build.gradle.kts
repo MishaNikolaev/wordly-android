@@ -6,5 +6,6 @@ plugins {
 dependencies {
 	implementation(libs.gson)
 	implementation(libs.dagger)
+	implementation(libs.kotlinx.coroutines.core)
 	ksp(libs.dagger.compiler)
 }

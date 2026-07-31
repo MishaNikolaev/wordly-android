@@ -28,6 +28,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.nmichail.wordly.android.component.ui.R
 import com.nmichail.wordly.android.component.ui.theme.WordlyTypography
+import com.nmichail.wordly.android.component.ui.theme.isAppInDarkTheme
 
 @Composable
 fun DailyReviewCard(
@@ -38,6 +39,11 @@ fun DailyReviewCard(
 	modifier: Modifier = Modifier,
 ) {
 	val shape = MaterialTheme.shapes.extraLarge
+	val mosaicRes = if (isAppInDarkTheme()) {
+		R.drawable.pixelmosaic_dark
+	} else {
+		R.drawable.pixelmosaic_light
+	}
 
 	Card(
 		modifier = modifier
@@ -49,7 +55,7 @@ fun DailyReviewCard(
 	) {
 		Box(modifier = Modifier.fillMaxSize()) {
 			Image(
-				painter = painterResource(R.drawable.pixelmosaic),
+				painter = painterResource(mosaicRes),
 				contentDescription = null,
 				modifier = Modifier.fillMaxSize(),
 				contentScale = ContentScale.Crop,

@@ -6,6 +6,7 @@ import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.luminance
 
 private val LightColorScheme = lightColorScheme(
 	primary = WordlyColors.Primary,
@@ -75,3 +76,10 @@ fun WordlyAndroidTheme(
 		content = content,
 	)
 }
+
+private const val DARK_THEME_LUMINANCE_THRESHOLD = 0.5f
+
+/** Reflects in-app theme, not system night mode. */
+@Composable
+fun isAppInDarkTheme(): Boolean =
+	MaterialTheme.colorScheme.background.luminance() < DARK_THEME_LUMINANCE_THRESHOLD

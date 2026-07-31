@@ -1,7 +1,9 @@
 {
   "id": "user-1",
   "email": "demo@wordly.app",
-  "firstName": "Артём",
-  "lastName": "Иванов",
-  "englishLevel": "B1"
+  "firstName": "Михаил",
+  "lastName": "Николаев",
+  "englishLevel": "B1",
+  "dailyGoalWords": 10,
+  "notificationTimes": ["09:00", "18:00"]
 }
