@@ -7,7 +7,10 @@ dependencies {
 	implementation(libs.androidx.ui)
 	implementation(libs.androidx.material3)
 	implementation(libs.androidx.material.icons.extended)
+	implementation(libs.androidx.ui.tooling.preview)
 	implementation(libs.glide)
+
+	debugImplementation(libs.androidx.ui.tooling)
 
 	implementation(projects.core.validation)
 }
