@@ -8,6 +8,8 @@
 	<string name="common_password_show">Показать пароль</string>
 	<string name="common_password_hide">Скрыть пароль</string>
 	<string name="common_save">Сохранить</string>
+	<string name="common_cancel">Отменить</string>
+	<string name="common_ok">ОК</string>
 
 	<string name="auth_word_language_direction">EN → RU</string>
 	<string name="auth_word_play_pronunciation">Прослушать произношение</string>

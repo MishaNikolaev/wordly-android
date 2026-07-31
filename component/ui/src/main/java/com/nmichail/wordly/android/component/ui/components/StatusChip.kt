@@ -3,7 +3,6 @@
 package com.nmichail.wordly.android.component.ui.components
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
@@ -19,6 +18,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.nmichail.wordly.android.component.ui.theme.isAppInDarkTheme
 
 private val DarkChipScrim = Color.Black.copy(alpha = 0.55f)
 
@@ -70,7 +70,7 @@ fun StatusChip(
 @Composable
 private fun chipColors(style: StatusChipStyle): ChipColors {
 	val colorScheme = MaterialTheme.colorScheme
-	val dark = isSystemInDarkTheme()
+	val dark = isAppInDarkTheme()
 
 	return when (style) {
 		StatusChipStyle.Neutral -> ChipColors(

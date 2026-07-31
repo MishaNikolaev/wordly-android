@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,6 +15,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -36,6 +38,9 @@ fun SelectionDialog(
 	saveButtonText: String,
 	onDismiss: () -> Unit,
 	onSave: (String) -> Unit,
+	cancelButtonText: String? = null,
+	onCancel: (() -> Unit)? = null,
+	onOptionSelected: ((String) -> Unit)? = null,
 ) {
 	var pendingSelection by remember(selectedOption) { mutableStateOf(selectedOption) }
 	val colorScheme = MaterialTheme.colorScheme
@@ -63,23 +68,76 @@ fun SelectionDialog(
 					fontWeight = FontWeight.Bold,
 					color = colorScheme.onSurface,
 				)
-				Column(modifier = Modifier.padding(top = 16.dp)) {
-					options.forEach { option ->
-						SelectionDialogOptionRow(
-							text = option,
-							selected = pendingSelection == option,
-							onClick = { pendingSelection = option },
-						)
-					}
-				}
-				Button(
-					text = saveButtonText,
-					onClick = { onSave(pendingSelection) },
-					enabled = pendingSelection.isNotBlank(),
-					modifier = Modifier.padding(top = 24.dp),
+				SelectionDialogOptions(
+					options = options,
+					pendingSelection = pendingSelection,
+					onSelect = { option ->
+						pendingSelection = option
+						onOptionSelected?.invoke(option)
+					},
+				)
+				SelectionDialogActions(
+					saveButtonText = saveButtonText,
+					cancelButtonText = cancelButtonText,
+					saveEnabled = pendingSelection.isNotBlank(),
+					onDismiss = onCancel ?: onDismiss,
+					onSave = { onSave(pendingSelection) },
 				)
 			}
 		}
+	}
+}
+
+@Composable
+private fun SelectionDialogOptions(
+	options: List<String>,
+	pendingSelection: String,
+	onSelect: (String) -> Unit,
+) {
+	Column(modifier = Modifier.padding(top = 16.dp)) {
+		options.forEach { option ->
+			SelectionDialogOptionRow(
+				text = option,
+				selected = pendingSelection == option,
+				onClick = { onSelect(option) },
+			)
+		}
+	}
+}
+
+@Composable
+private fun SelectionDialogActions(
+	saveButtonText: String,
+	cancelButtonText: String?,
+	saveEnabled: Boolean,
+	onDismiss: () -> Unit,
+	onSave: () -> Unit,
+) {
+	if (cancelButtonText != null) {
+		Row(
+			modifier = Modifier
+				.fillMaxWidth()
+				.padding(top = 24.dp),
+			horizontalArrangement = Arrangement.End,
+			verticalAlignment = Alignment.CenterVertically,
+		) {
+			TextButton(onClick = onDismiss) {
+				Text(text = cancelButtonText)
+			}
+			TextButton(
+				onClick = onSave,
+				enabled = saveEnabled,
+			) {
+				Text(text = saveButtonText)
+			}
+		}
+	} else {
+		Button(
+			text = saveButtonText,
+			onClick = onSave,
+			enabled = saveEnabled,
+			modifier = Modifier.padding(top = 24.dp),
+		)
 	}
 }
 
