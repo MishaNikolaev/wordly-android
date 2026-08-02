@@ -22,6 +22,19 @@ fun CoroutineScope.showErrorSnackBar(
 	)
 }
 
+fun CoroutineScope.showInfoSnackBar(
+	snackBarHostState: SnackbarHostState,
+	message: String,
+	title: String? = null,
+) {
+	showCustomSnackBar(
+		snackBarHostState = snackBarHostState,
+		title = title,
+		message = message,
+		snackBarType = SnackBarType.INFO,
+	)
+}
+
 fun CoroutineScope.showCustomSnackBar(
 	snackBarHostState: SnackbarHostState,
 	message: String,

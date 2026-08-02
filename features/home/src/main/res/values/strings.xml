@@ -3,4 +3,11 @@
 	<string name="home_retry">Повторить</string>
 	<string name="home_error_title">Что-то пошло не так</string>
 	<string name="home_error_description">Не удалось загрузить главный экран. Попробуйте ещё раз.</string>
+	<string name="home_streak_snackbar_empty">У вас нет серии дней без пропусков :(</string>
+	<plurals name="home_streak_snackbar">
+		<item quantity="one">Вы уже %d день в ударе, продолжайте в том же духе!</item>
+		<item quantity="few">Вы уже %d дня в ударе, продолжайте в том же духе!</item>
+		<item quantity="many">Вы уже %d дней в ударе, продолжайте в том же духе!</item>
+		<item quantity="other">Вы уже %d дней в ударе, продолжайте в том же духе!</item>
+	</plurals>
 </resources>

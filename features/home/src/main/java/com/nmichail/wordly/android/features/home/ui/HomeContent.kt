@@ -19,12 +19,16 @@ import androidx.compose.material.icons.outlined.MusicNote
 import androidx.compose.material.icons.outlined.Style
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -42,6 +46,8 @@ import com.nmichail.wordly.android.component.ui.components.WeekDayIndicator
 import com.nmichail.wordly.android.component.ui.components.WeekDayStatusId
 import com.nmichail.wordly.android.component.ui.components.WeekProgressCard
 import com.nmichail.wordly.android.component.ui.components.homeGreeting
+import com.nmichail.wordly.android.component.ui.components.snackbar.SnackBarHost
+import com.nmichail.wordly.android.component.ui.components.snackbar.showInfoSnackBar
 import com.nmichail.wordly.android.features.home.R
 import com.nmichail.wordly.android.features.home.domain.entity.Training
 import com.nmichail.wordly.android.features.home.presentation.HomeComponent
@@ -122,44 +128,68 @@ private fun HomeLoaded(
 	component: HomeComponent,
 	modifier: Modifier = Modifier,
 ) {
-	Column(
-		modifier = modifier
-			.fillMaxSize()
-			.background(MaterialTheme.colorScheme.background)
-			.verticalScroll(rememberScrollState()),
-	) {
-		HomeTopBar(
-			title = homeGreeting(firstName = state.firstName),
-			streakDays = state.streakDays,
+	val snackBarHostState = remember { SnackbarHostState() }
+	val coroutineScope = rememberCoroutineScope()
+	val context = LocalContext.current
+
+	fun showStreakSnackBar(days: Int) {
+		val message = if (days <= 0) {
+			context.getString(R.string.home_streak_snackbar_empty)
+		} else {
+			context.resources.getQuantityString(R.plurals.home_streak_snackbar, days, days)
+		}
+		coroutineScope.showInfoSnackBar(
+			snackBarHostState = snackBarHostState,
+			message = message,
 		)
+	}
+
+	Box(modifier = modifier.fillMaxSize()) {
 		Column(
 			modifier = Modifier
-				.fillMaxWidth()
-				.padding(horizontal = 16.dp)
-				.padding(top = 16.dp, bottom = 24.dp),
-			verticalArrangement = Arrangement.spacedBy(16.dp),
+				.fillMaxSize()
+				.background(MaterialTheme.colorScheme.background)
+				.verticalScroll(rememberScrollState()),
 		) {
-			WeekProgressCard(onMonthClick = component::handleOpenMonth) {
-				state.weekDays.forEach { day ->
-					WeekDayIndicator(
-						label = stringResource(day.dayOfWeek.labelRes()),
-						statusId = day.status.toUiId(),
-						dayOfMonth = day.dayOfMonth,
-						modifier = Modifier.weight(1f),
-					)
+			HomeTopBar(
+				title = homeGreeting(firstName = state.firstName),
+				streakDays = state.streakDays,
+				onStreakClick = { showStreakSnackBar(state.streakDays) },
+			)
+			Column(
+				modifier = Modifier
+					.fillMaxWidth()
+					.padding(horizontal = 16.dp)
+					.padding(top = 16.dp, bottom = 24.dp),
+				verticalArrangement = Arrangement.spacedBy(16.dp),
+			) {
+				WeekProgressCard(onMonthClick = component::handleOpenMonth) {
+					state.weekDays.forEach { day ->
+						WeekDayIndicator(
+							label = stringResource(day.dayOfWeek.labelRes()),
+							statusId = day.status.toUiId(),
+							dayOfMonth = day.dayOfMonth,
+							modifier = Modifier.weight(1f),
+						)
+					}
 				}
+				DailyReviewCard(
+					wordsToReview = state.wordsToReview,
+					estimatedMinutes = state.estimatedMinutes,
+					streakDays = state.reviewStreakDays,
+					onStartClick = component::handleStartReview,
+					onStreakClick = { showStreakSnackBar(state.reviewStreakDays) },
+				)
+				TrainingsBlock(
+					trainings = state.trainings,
+					onTrainingClick = component::handleOpenTraining,
+				)
 			}
-			DailyReviewCard(
-				wordsToReview = state.wordsToReview,
-				estimatedMinutes = state.estimatedMinutes,
-				streakDays = state.reviewStreakDays,
-				onStartClick = component::handleStartReview,
-			)
-			TrainingsBlock(
-				trainings = state.trainings,
-				onTrainingClick = component::handleOpenTraining,
-			)
 		}
+		SnackBarHost(
+			snackBarHostState = snackBarHostState,
+			modifier = Modifier.align(Alignment.BottomCenter),
+		)
 	}
 
 	if (state.isCalendarVisible) {
