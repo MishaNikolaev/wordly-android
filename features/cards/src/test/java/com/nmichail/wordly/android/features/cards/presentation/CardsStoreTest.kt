@@ -102,6 +102,18 @@ class CardsStoreTest {
 	}
 
 	@Test
+	fun `retry after error EXPECT content state`() = runTest {
+		whenever(getCardsUseCase())
+			.doThrowSafe(exception)
+			.thenReturn(cards)
+		val store = createStore()
+
+		store.accept(CardsStore.Intent.Retry)
+
+		assertEquals(content(), store.state)
+	}
+
+	@Test
 	fun `search by title EXPECT filtered sections`() = runTest {
 		whenever(getCardsUseCase()) doReturn cards
 		val store = createStore()

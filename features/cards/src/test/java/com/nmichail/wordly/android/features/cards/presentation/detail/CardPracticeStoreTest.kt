@@ -183,6 +183,19 @@ class CardPracticeStoreTest {
 
 		assertEquals(before, store.state)
 	}
+
+	@Test
+	fun `retry after error EXPECT session reload`() = runTest {
+		whenever(getCardSessionUseCase("science"))
+			.doThrowSafe(exception)
+			.thenReturn(words)
+		val store = createStore()
+
+		store.accept(CardPracticeStore.Intent.Retry)
+
+		assertEquals(inProgress(), store.state)
+	}
+
 	@Test
 	fun `close EXPECT close label`() = runTest {
 		whenever(getCardSessionUseCase("science")) doReturn words

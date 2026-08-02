@@ -2,6 +2,9 @@ package com.nmichail.wordly.android.component.presentation
 
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlin.coroutines.CoroutineContext
 
 abstract class BaseCoroutineExecutor<
 	in Intent : Any,
@@ -9,7 +12,9 @@ abstract class BaseCoroutineExecutor<
 	State : Any,
 	Message : Any,
 	Label : Any,
-> : CoroutineExecutor<Intent, Action, State, Message, Label>() {
+>(
+	componentContext: CoroutineContext = Dispatchers.Main.immediate + SupervisorJob(),
+) : CoroutineExecutor<Intent, Action, State, Message, Label>(componentContext) {
 
 	protected fun launchTry(
 		tryBlock: suspend CoroutineScope.() -> Unit,
