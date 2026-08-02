@@ -18,6 +18,7 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.nmichail.wordly.android.component.ui.theme.WordlyAndroidTheme
+import com.nmichail.wordly.android.component.ui.theme.isAppInDarkTheme
 
 enum class MaterialsCardBackgroundStyle {
 	Scatter,
@@ -25,13 +26,20 @@ enum class MaterialsCardBackgroundStyle {
 	EdgeCrop,
 }
 
-private val CoverBackground = Color(0xFFF1E5F6)
+private val LightCoverBackground = Color(0xFFF1E5F6)
+private val DarkCoverBackground = Color(0xFF2A1F33)
 
-private val CircleLavender = Color(0xFFD8AAEA)
-private val CircleLavenderLight = Color(0xFFDEB7EE)
-private val CircleLavenderSoft = Color(0xFFDCB2ED)
-private val CircleMauve = Color(0xFFB798C2)
-private val CircleMauveDark = Color(0xFFB190BC)
+private val LightCircleLavender = Color(0xFFD8AAEA)
+private val LightCircleLavenderLight = Color(0xFFDEB7EE)
+private val LightCircleLavenderSoft = Color(0xFFDCB2ED)
+private val LightCircleMauve = Color(0xFFB798C2)
+private val LightCircleMauveDark = Color(0xFFB190BC)
+
+private val DarkCircleLavender = Color(0xFF6B4A82)
+private val DarkCircleLavenderLight = Color(0xFF7A5A90)
+private val DarkCircleLavenderSoft = Color(0xFF5C3D72)
+private val DarkCircleMauve = Color(0xFF4A3558)
+private val DarkCircleMauveDark = Color(0xFF3F2C4C)
 
 private const val EDGE_PADDING_FRACTION = 0.08f
 
@@ -47,65 +55,93 @@ fun MaterialsCardBackground(
 	style: MaterialsCardBackgroundStyle,
 	modifier: Modifier = Modifier,
 ) {
+	val dark = isAppInDarkTheme()
+	val coverBackground = if (dark) DarkCoverBackground else LightCoverBackground
+	val colors = if (dark) {
+		CoverCircleColors(
+			lavender = DarkCircleLavender,
+			lavenderLight = DarkCircleLavenderLight,
+			lavenderSoft = DarkCircleLavenderSoft,
+			mauve = DarkCircleMauve,
+			mauveDark = DarkCircleMauveDark,
+		)
+	} else {
+		CoverCircleColors(
+			lavender = LightCircleLavender,
+			lavenderLight = LightCircleLavenderLight,
+			lavenderSoft = LightCircleLavenderSoft,
+			mauve = LightCircleMauve,
+			mauveDark = LightCircleMauveDark,
+		)
+	}
+
 	Canvas(
 		modifier = modifier
 			.fillMaxSize()
-			.background(CoverBackground),
+			.background(coverBackground),
 	) {
 		when (style) {
-			MaterialsCardBackgroundStyle.Scatter -> drawScatter()
-			MaterialsCardBackgroundStyle.Cluster -> drawCluster()
-			MaterialsCardBackgroundStyle.EdgeCrop -> drawEdgeCrop()
+			MaterialsCardBackgroundStyle.Scatter -> drawScatter(colors)
+			MaterialsCardBackgroundStyle.Cluster -> drawCluster(colors)
+			MaterialsCardBackgroundStyle.EdgeCrop -> drawEdgeCrop(colors)
 		}
 	}
 }
 
-private fun DrawScope.drawScatter() {
+private data class CoverCircleColors(
+	val lavender: Color,
+	val lavenderLight: Color,
+	val lavenderSoft: Color,
+	val mauve: Color,
+	val mauveDark: Color,
+)
+
+private fun DrawScope.drawScatter(colors: CoverCircleColors) {
 	val h = size.height
 	drawContainedCircles(
 		listOf(
-			CircleSpec(CircleLavender, h * 0.26f, 0.12f, 0.42f),
-			CircleSpec(CircleLavenderLight, h * 0.20f, 0.28f, 0.78f),
-			CircleSpec(CircleMauve, h * 0.15f, 0.48f, 0.62f),
-			CircleSpec(CircleLavenderSoft, h * 0.30f, 0.82f, 0.28f),
-			CircleSpec(CircleMauveDark, h * 0.13f, 0.70f, 0.78f),
+			CircleSpec(colors.lavender, h * 0.26f, 0.12f, 0.42f),
+			CircleSpec(colors.lavenderLight, h * 0.20f, 0.28f, 0.78f),
+			CircleSpec(colors.mauve, h * 0.15f, 0.48f, 0.62f),
+			CircleSpec(colors.lavenderSoft, h * 0.30f, 0.82f, 0.28f),
+			CircleSpec(colors.mauveDark, h * 0.13f, 0.70f, 0.78f),
 		),
 	)
 }
 
-private fun DrawScope.drawCluster() {
+private fun DrawScope.drawCluster(colors: CoverCircleColors) {
 	val h = size.height
 	drawContainedCircles(
 		listOf(
-			CircleSpec(CircleLavenderSoft, h * 0.28f, 0.20f, 0.28f),
-			CircleSpec(CircleMauveDark, h * 0.13f, 0.14f, 0.82f),
-			CircleSpec(CircleMauve, h * 0.12f, 0.50f, 0.22f),
-			CircleSpec(CircleLavenderLight, h * 0.20f, 0.58f, 0.78f),
-			CircleSpec(CircleMauve, h * 0.15f, 0.86f, 0.30f),
+			CircleSpec(colors.lavenderSoft, h * 0.28f, 0.20f, 0.28f),
+			CircleSpec(colors.mauveDark, h * 0.13f, 0.14f, 0.82f),
+			CircleSpec(colors.mauve, h * 0.12f, 0.50f, 0.22f),
+			CircleSpec(colors.lavenderLight, h * 0.20f, 0.58f, 0.78f),
+			CircleSpec(colors.mauve, h * 0.15f, 0.86f, 0.30f),
 		),
 	)
 }
 
-private fun DrawScope.drawEdgeCrop() {
+private fun DrawScope.drawEdgeCrop(colors: CoverCircleColors) {
 	val w = size.width
 	val h = size.height
 	drawCircle(
-		color = CircleLavenderSoft,
+		color = colors.lavenderSoft,
 		radius = h * 0.62f,
 		center = Offset(x = w * 0.06f, y = h * 0.02f),
 	)
 	drawCircle(
-		color = CircleLavender,
+		color = colors.lavender,
 		radius = h * 0.34f,
 		center = Offset(x = w * 0.20f, y = h * 1.12f),
 	)
 	drawCircle(
-		color = CircleLavenderLight,
+		color = colors.lavenderLight,
 		radius = h * 0.38f,
 		center = Offset(x = w * 0.62f, y = h * -0.02f),
 	)
 	drawCircle(
-		color = CircleMauve,
+		color = colors.mauve,
 		radius = h * 0.38f,
 		center = Offset(x = w * 0.92f, y = h * 0.98f),
 	)

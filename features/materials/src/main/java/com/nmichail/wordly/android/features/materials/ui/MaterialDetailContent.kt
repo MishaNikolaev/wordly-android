@@ -367,12 +367,12 @@ private fun ReactionButton(
 ) {
 	val colorScheme = MaterialTheme.colorScheme
 	val background = if (selected) {
-		WordlyColors.LightPrimaryContainer
+		colorScheme.primaryContainer
 	} else {
 		colorScheme.surface
 	}
 	val contentColor = if (selected) {
-		WordlyColors.LightOnPrimaryContainer
+		colorScheme.onPrimaryContainer
 	} else {
 		colorScheme.onSurface
 	}

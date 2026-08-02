@@ -31,14 +31,13 @@ interface ProfileEditComponent {
 			val lastName: String,
 			val englishLevel: String,
 			val saving: Boolean,
+			val saved: Boolean = false,
 		) : State
 	}
 
 	sealed interface Label {
 
 		data object Close : Label
-
-		data object Saved : Label
 	}
 
 	fun interface Factory {

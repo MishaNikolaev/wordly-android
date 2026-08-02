@@ -2,7 +2,6 @@ package com.nmichail.wordly.android.features.review.ui.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,6 +17,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.nmichail.wordly.android.component.ui.theme.WordlyColors
+import com.nmichail.wordly.android.component.ui.theme.isAppInDarkTheme
 import com.nmichail.wordly.android.features.review.domain.entity.ReviewOption
 
 @Composable
@@ -57,15 +57,20 @@ private fun optionColors(
 	isAnswerRevealed: Boolean,
 ): ReviewOptionColors {
 	val colorScheme = MaterialTheme.colorScheme
-	val dark = isSystemInDarkTheme()
+	val dark = isAppInDarkTheme()
 	val success = if (dark) WordlyColors.DarkSuccess else WordlyColors.LightSuccess
 	val error = if (dark) WordlyColors.DarkError else WordlyColors.LightError
 	val successBackground = success.copy(alpha = if (dark) 0.32f else 0.22f)
 	val errorBackground = error.copy(alpha = if (dark) 0.32f else 0.22f)
+	val selectedBackground = if (dark) {
+		WordlyColors.DarkPrimaryContainer
+	} else {
+		WordlyColors.LightPrimaryContainer
+	}
 
 	return when {
 		!isAnswerRevealed && optionId == selectedOptionId -> ReviewOptionColors(
-			background = WordlyColors.LightPrimaryContainer,
+			background = selectedBackground,
 			text = colorScheme.onSurface,
 		)
 		!isAnswerRevealed -> ReviewOptionColors(

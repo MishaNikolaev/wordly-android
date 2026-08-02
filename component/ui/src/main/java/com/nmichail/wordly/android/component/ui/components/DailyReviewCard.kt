@@ -1,6 +1,7 @@
 package com.nmichail.wordly.android.component.ui.components
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -36,6 +37,7 @@ fun DailyReviewCard(
 	estimatedMinutes: Int,
 	streakDays: Int,
 	onStartClick: () -> Unit,
+	onStreakClick: () -> Unit,
 	modifier: Modifier = Modifier,
 ) {
 	val shape = MaterialTheme.shapes.extraLarge
@@ -66,6 +68,7 @@ fun DailyReviewCard(
 				estimatedMinutes = estimatedMinutes,
 				streakDays = streakDays,
 				onStartClick = onStartClick,
+				onStreakClick = onStreakClick,
 			)
 		}
 	}
@@ -77,6 +80,7 @@ private fun DailyReviewBody(
 	estimatedMinutes: Int,
 	streakDays: Int,
 	onStartClick: () -> Unit,
+	onStreakClick: () -> Unit,
 ) {
 	Column(
 		modifier = Modifier
@@ -92,6 +96,7 @@ private fun DailyReviewBody(
 		ReviewMetaRow(
 			estimatedMinutes = estimatedMinutes,
 			streakDays = streakDays,
+			onStreakClick = onStreakClick,
 		)
 		Spacer(modifier = Modifier.weight(1f))
 		Button(
@@ -133,6 +138,7 @@ private fun ReviewWordsTitle(wordsToReview: Int) {
 private fun ReviewMetaRow(
 	estimatedMinutes: Int,
 	streakDays: Int,
+	onStreakClick: () -> Unit,
 ) {
 	Row(
 		modifier = Modifier.padding(top = 10.dp),
@@ -151,6 +157,7 @@ private fun ReviewMetaRow(
 			),
 			icon = Icons.Filled.LocalFireDepartment,
 			style = StatusChipStyle.Streak,
+			modifier = Modifier.clickable(onClick = onStreakClick),
 		)
 	}
 }

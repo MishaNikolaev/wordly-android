@@ -4,6 +4,7 @@
 	<string name="profile_edit">Редактировать</string>
 	<string name="profile_edit_title">Редактирование</string>
 	<string name="profile_edit_save">Сохранить</string>
+	<string name="profile_edit_saved">Сохранено</string>
 	<string name="profile_edit_back">Назад</string>
 	<string name="profile_first_name_label">Имя</string>
 	<string name="profile_last_name_label">Фамилия</string>
@@ -43,11 +44,11 @@
 	</string-array>
 
 	<string-array name="profile_english_levels">
-		<item>A1 — Начинающий</item>
-		<item>A2 — Любитель</item>
-		<item>B1 — Средний</item>
-		<item>B2 — Уверенный</item>
-		<item>C1 — Продвинутый</item>
-		<item>C2 — Профессионал</item>
+		<item>A1 - начинающий</item>
+		<item>A2 - любитель</item>
+		<item>B1 - средний</item>
+		<item>B2 - уверенный</item>
+		<item>C1 - продвинутый</item>
+		<item>C2 - профессионал</item>
 	</string-array>
 </resources>

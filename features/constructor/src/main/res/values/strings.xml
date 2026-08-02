@@ -12,7 +12,7 @@
 	<string name="constructor_practice_continue">Следующая фраза</string>
 	<string name="constructor_practice_progress_format">%1$d/%2$d</string>
 	<string name="constructor_practice_correct">Верно!</string>
-	<string name="constructor_practice_incorrect">Неверно</string>
+	<string name="constructor_practice_incorrect">Неправильно</string>
 	<string name="constructor_practice_author_format">— %1$s</string>
 	<string name="constructor_practice_finished_title_great">Отличная работа!</string>
 	<string name="constructor_practice_finished_title_done">Сессия завершена</string>

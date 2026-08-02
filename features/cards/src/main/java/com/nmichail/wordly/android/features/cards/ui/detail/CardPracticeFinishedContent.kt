@@ -54,7 +54,7 @@ internal fun CardPracticeFinishedContent(
 			onClick = onBackClick,
 			modifier = Modifier
 				.fillMaxWidth()
-				.padding(bottom = 24.dp),
+				.padding(bottom = 8.dp),
 		)
 	}
 }

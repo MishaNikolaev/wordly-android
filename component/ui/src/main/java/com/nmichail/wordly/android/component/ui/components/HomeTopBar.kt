@@ -1,6 +1,7 @@
 package com.nmichail.wordly.android.component.ui.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,6 +16,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 
@@ -24,6 +27,7 @@ private const val STREAK_CHIP_ALPHA = 0.12f
 fun HomeTopBar(
 	title: String,
 	streakDays: Int,
+	onStreakClick: () -> Unit,
 	modifier: Modifier = Modifier,
 ) {
 	Row(
@@ -43,19 +47,25 @@ fun HomeTopBar(
 				.weight(1f)
 				.padding(end = 12.dp),
 		)
-		StreakChip(streakDays = streakDays)
+		StreakChip(
+			streakDays = streakDays,
+			onClick = onStreakClick,
+		)
 	}
 }
 
 @Composable
 private fun StreakChip(
 	streakDays: Int,
+	onClick: () -> Unit,
 	modifier: Modifier = Modifier,
 ) {
 	val primary = MaterialTheme.colorScheme.primary
 	Row(
 		modifier = modifier
+			.clip(CircleShape)
 			.background(color = primary.copy(alpha = STREAK_CHIP_ALPHA), shape = CircleShape)
+			.clickable(role = Role.Button, onClick = onClick)
 			.padding(horizontal = 12.dp, vertical = 8.dp),
 		horizontalArrangement = Arrangement.spacedBy(4.dp),
 		verticalAlignment = Alignment.CenterVertically,

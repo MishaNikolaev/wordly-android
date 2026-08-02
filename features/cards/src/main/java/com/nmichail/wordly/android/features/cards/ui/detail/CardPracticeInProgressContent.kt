@@ -32,6 +32,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -39,8 +40,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.nmichail.wordly.android.component.ui.components.Button
+import com.nmichail.wordly.android.component.ui.components.PracticeAnswerFeedback
 import com.nmichail.wordly.android.component.ui.theme.WordlyColors
 import com.nmichail.wordly.android.component.ui.theme.WordlyTypography
+import com.nmichail.wordly.android.component.ui.theme.isAppInDarkTheme
 import com.nmichail.wordly.android.features.cards.R
 import com.nmichail.wordly.android.features.cards.domain.entity.CardPracticeWord
 import com.nmichail.wordly.android.features.cards.presentation.detail.CardPracticeComponent
@@ -84,6 +87,18 @@ internal fun CardPracticeInProgressContent(
 				enabled = !state.isAnswerRevealed,
 				onOptionClick = component::handleSelectOption,
 			)
+			if (state.isAnswerRevealed) {
+				val correctAnswerText = state.currentWord.options
+					.firstOrNull { it.id == state.currentWord.correctOptionId }
+					?.text
+				Spacer(modifier = Modifier.height(16.dp))
+				PracticeAnswerFeedback(
+					isCorrect = state.isCorrect,
+					correctText = stringResource(R.string.card_practice_correct),
+					incorrectText = stringResource(R.string.card_practice_incorrect),
+					correctAnswerText = correctAnswerText.takeUnless { state.isCorrect },
+				)
+			}
 		}
 		if (state.isAnswerRevealed) {
 			Button(
@@ -92,7 +107,7 @@ internal fun CardPracticeInProgressContent(
 				modifier = Modifier
 					.fillMaxWidth()
 					.padding(horizontal = 18.dp)
-					.padding(top = 16.dp, bottom = 24.dp),
+					.padding(top = 12.dp, bottom = 8.dp),
 			)
 		}
 	}
@@ -157,6 +172,17 @@ private fun CardPracticeQuestionCard(
 	word: CardPracticeWord,
 	onPlayAudioClick: () -> Unit,
 ) {
+	val dark = isAppInDarkTheme()
+	val borderColor = if (dark) {
+		WordlyColors.DarkOutline.copy(alpha = 0.7f)
+	} else {
+		WordlyColors.LightOutline.copy(alpha = 0.55f)
+	}
+	val taskChipBackground = if (dark) {
+		WordlyColors.DarkPrimaryContainer
+	} else {
+		WordlyColors.LightPrimaryContainer
+	}
 	Column(
 		modifier = Modifier
 			.fillMaxWidth()
@@ -168,12 +194,15 @@ private fun CardPracticeQuestionCard(
 			)
 			.clip(RoundedCornerShape(24.dp))
 			.background(MaterialTheme.colorScheme.surface)
-			.border(1.dp, WordlyColors.LightOutline.copy(alpha = 0.55f), RoundedCornerShape(24.dp))
+			.border(1.dp, borderColor, RoundedCornerShape(24.dp))
 			.padding(horizontal = 23.dp)
 			.padding(top = 21.dp, bottom = 27.dp),
 		horizontalAlignment = Alignment.CenterHorizontally,
 	) {
-		CardPracticeTaskChip(modifier = Modifier.align(Alignment.Start))
+		CardPracticeTaskChip(
+			background = taskChipBackground,
+			modifier = Modifier.align(Alignment.Start),
+		)
 		Spacer(modifier = Modifier.height(14.dp))
 		Text(
 			text = word.word,
@@ -194,10 +223,13 @@ private fun CardPracticeQuestionCard(
 }
 
 @Composable
-private fun CardPracticeTaskChip(modifier: Modifier = Modifier) {
+private fun CardPracticeTaskChip(
+	background: Color,
+	modifier: Modifier = Modifier,
+) {
 	Box(
 		modifier = modifier
-			.background(WordlyColors.LightPrimaryContainer, RoundedCornerShape(8.dp))
+			.background(background, RoundedCornerShape(8.dp))
 			.padding(horizontal = 11.dp, vertical = 7.dp),
 	) {
 		Text(
@@ -207,7 +239,11 @@ private fun CardPracticeTaskChip(modifier: Modifier = Modifier) {
 				fontSize = 13.sp,
 				lineHeight = 13.sp,
 			),
-			color = WordlyColors.ReviewAccent,
+			color = if (isAppInDarkTheme()) {
+				WordlyColors.DarkOnPrimaryContainer
+			} else {
+				WordlyColors.ReviewAccent
+			},
 		)
 	}
 }

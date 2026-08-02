@@ -1,7 +1,7 @@
 package com.nmichail.wordly.android.component.ui.components
 
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.nmichail.wordly.android.component.ui.theme.WordlyColors
+import com.nmichail.wordly.android.component.ui.theme.isAppInDarkTheme
 
 @Composable
 fun PracticeAnswerFeedback(
@@ -23,28 +24,40 @@ fun PracticeAnswerFeedback(
 	correctText: String,
 	incorrectText: String,
 	modifier: Modifier = Modifier,
+	correctAnswerText: String? = null,
 ) {
-	val dark = isSystemInDarkTheme()
+	val dark = isAppInDarkTheme()
 	val color = if (isCorrect) {
 		if (dark) WordlyColors.DarkSuccess else WordlyColors.LightSuccess
 	} else {
 		if (dark) WordlyColors.DarkError else WordlyColors.LightError
 	}
-	Row(
+	Column(
 		modifier = modifier,
-		verticalAlignment = Alignment.CenterVertically,
-		horizontalArrangement = Arrangement.spacedBy(8.dp),
+		verticalArrangement = Arrangement.spacedBy(6.dp),
 	) {
-		Icon(
-			imageVector = if (isCorrect) Icons.Rounded.CheckCircle else Icons.Rounded.Cancel,
-			contentDescription = null,
-			tint = color,
-			modifier = Modifier.size(22.dp),
-		)
-		Text(
-			text = if (isCorrect) correctText else incorrectText,
-			style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
-			color = color,
-		)
+		Row(
+			verticalAlignment = Alignment.CenterVertically,
+			horizontalArrangement = Arrangement.spacedBy(8.dp),
+		) {
+			Icon(
+				imageVector = if (isCorrect) Icons.Rounded.CheckCircle else Icons.Rounded.Cancel,
+				contentDescription = null,
+				tint = color,
+				modifier = Modifier.size(22.dp),
+			)
+			Text(
+				text = if (isCorrect) correctText else incorrectText,
+				style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
+				color = color,
+			)
+		}
+		if (!isCorrect && !correctAnswerText.isNullOrBlank()) {
+			Text(
+				text = correctAnswerText,
+				style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Medium),
+				color = MaterialTheme.colorScheme.onSurface,
+			)
+		}
 	}
 }

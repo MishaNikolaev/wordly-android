@@ -53,10 +53,12 @@ enum class SnackBarType {
 @Composable
 fun SnackBarHost(
 	snackBarHostState: SnackbarHostState,
+	modifier: Modifier = Modifier,
 	onAction: (() -> Unit)? = null,
 ) {
 	SnackbarHost(
 		hostState = snackBarHostState,
+		modifier = modifier,
 		snackbar = { snackBarData ->
 			SnackBar(
 				snackBarData = snackBarData,

@@ -156,7 +156,7 @@ object WordlyTypography {
 		fontFamily = InterFontFamily,
 		fontWeight = FontWeight.Normal,
 		fontSize = 20.sp,
-		lineHeight = 39.sp,
+		lineHeight = 30.sp,
 	)
 
 	val addWordTitle = TextStyle(
