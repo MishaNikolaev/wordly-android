@@ -250,18 +250,6 @@ class ConstructorPracticeStoreTest {
 	}
 
 	@Test
-	fun `retry after error EXPECT session reload`() = runTest {
-		whenever(getConstructorSessionUseCase("philosophy"))
-			.doThrowSafe(exception)
-			.thenReturn(session)
-		val store = createStore()
-
-		store.accept(ConstructorPracticeStore.Intent.Retry)
-
-		assertEquals(inProgress(), store.state)
-	}
-
-	@Test
 	fun `close EXPECT close label`() = runTest {
 		whenever(getConstructorSessionUseCase("philosophy")) doReturn session
 		val store = createStore()

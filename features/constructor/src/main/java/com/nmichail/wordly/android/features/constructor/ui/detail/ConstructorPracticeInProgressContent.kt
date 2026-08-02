@@ -85,6 +85,9 @@ internal fun ConstructorPracticeInProgressContent(
 			state = state,
 			phrasePrompt = phrase.prompt,
 			phraseAuthor = phrase.author,
+			correctPhraseText = phrase.correctOrder
+				.mapNotNull { wordId -> phrase.words.firstOrNull { it.id == wordId }?.text }
+				.joinToString(" "),
 			component = component,
 			modifier = Modifier
 				.weight(1f)
@@ -104,6 +107,7 @@ private fun ConstructorPracticeScrollBody(
 	state: ConstructorPracticeComponent.State.InProgress,
 	phrasePrompt: String,
 	phraseAuthor: String?,
+	correctPhraseText: String,
 	component: ConstructorPracticeComponent,
 	modifier: Modifier = Modifier,
 ) {
@@ -133,6 +137,7 @@ private fun ConstructorPracticeScrollBody(
 				isCorrect = isCorrect,
 				correctText = stringResource(R.string.constructor_practice_correct),
 				incorrectText = stringResource(R.string.constructor_practice_incorrect),
+				correctAnswerText = correctPhraseText.takeUnless { isCorrect },
 			)
 		}
 		Spacer(modifier = Modifier.height(24.dp))
@@ -403,6 +408,6 @@ private fun ConstructorPracticeBottomAction(
 		modifier = Modifier
 			.fillMaxWidth()
 			.padding(horizontal = 18.dp)
-			.padding(top = 8.dp, bottom = 24.dp),
+			.padding(top = 8.dp, bottom = 8.dp),
 	)
 }
