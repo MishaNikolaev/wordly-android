@@ -14,7 +14,9 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.rounded.TouchApp
@@ -250,14 +252,17 @@ private fun BookReaderPagedContent(
 	val density = LocalDensity.current
 	val textMeasurer = rememberTextMeasurer()
 	val bodyStyle = WordlyTypography.bookReaderBody
-	val paragraphSpacingPx = with(density) { 20.dp.roundToPx() }
-	val hintReservedPx = with(density) { 28.dp.roundToPx() }
+	val paragraphSpacingPx = with(density) { 16.dp.roundToPx() }
+	val hintReservedPx = with(density) { 36.dp.roundToPx() }
 	val horizontalPaddingPx = with(density) { 32.dp.roundToPx() }
 	val verticalPaddingPx = with(density) { 16.dp.roundToPx() }
 
-	BoxWithConstraints(modifier = modifier.fillMaxWidth()) {
+	BoxWithConstraints(modifier = modifier.fillMaxSize()) {
 		val contentWidthPx = (constraints.maxWidth - horizontalPaddingPx).coerceAtLeast(0)
-		val pageHeightPx = (constraints.maxHeight - verticalPaddingPx).coerceAtLeast(0)
+		// Pack ~1.5 screens per page; overflow is scrollable within the page.
+		val pageHeightPx = ((constraints.maxHeight - verticalPaddingPx) * PAGE_CONTENT_HEIGHT_FACTOR)
+			.toInt()
+			.coerceAtLeast(0)
 		val showTranslation = state.isTranslationVisible
 		val pages = remember(
 			state.book.paragraphs,
@@ -314,6 +319,11 @@ private fun BookReaderPage(
 	onSelectWord: (String) -> Unit,
 	modifier: Modifier = Modifier,
 ) {
+	val scrollState = rememberScrollState()
+	LaunchedEffect(pageIndices) {
+		scrollState.scrollTo(0)
+	}
+
 	Box(modifier = modifier.fillMaxSize()) {
 		if (isTranslating) {
 			BookTranslatingOverlay(
@@ -323,8 +333,9 @@ private fun BookReaderPage(
 			Column(
 				modifier = Modifier
 					.fillMaxSize()
+					.verticalScroll(scrollState)
 					.padding(horizontal = 16.dp, vertical = 8.dp),
-				verticalArrangement = Arrangement.spacedBy(20.dp),
+				verticalArrangement = Arrangement.spacedBy(16.dp),
 			) {
 				if (showHint) {
 					BookReaderHint()
@@ -345,6 +356,8 @@ private fun BookReaderPage(
 		}
 	}
 }
+
+private const val PAGE_CONTENT_HEIGHT_FACTOR = 1.5f
 
 private fun paginateBookParagraphs(
 	paragraphs: List<BookParagraph>,
