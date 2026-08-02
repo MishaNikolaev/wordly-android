@@ -54,7 +54,7 @@ internal fun ReviewFinishedContent(
 			onClick = onHomeClick,
 			modifier = Modifier
 				.fillMaxWidth()
-				.padding(bottom = 24.dp),
+				.padding(bottom = 8.dp),
 		)
 	}
 }

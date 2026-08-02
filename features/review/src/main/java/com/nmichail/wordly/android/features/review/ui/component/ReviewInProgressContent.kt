@@ -32,6 +32,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -41,6 +42,7 @@ import androidx.compose.ui.unit.sp
 import com.nmichail.wordly.android.component.ui.components.Button
 import com.nmichail.wordly.android.component.ui.theme.WordlyColors
 import com.nmichail.wordly.android.component.ui.theme.WordlyTypography
+import com.nmichail.wordly.android.component.ui.theme.isAppInDarkTheme
 import com.nmichail.wordly.android.features.review.R
 import com.nmichail.wordly.android.features.review.domain.entity.ReviewWord
 import com.nmichail.wordly.android.features.review.presentation.ReviewComponent
@@ -93,7 +95,7 @@ internal fun ReviewInProgressContent(
 				modifier = Modifier
 					.fillMaxWidth()
 					.padding(horizontal = 18.dp)
-					.padding(top = 16.dp, bottom = 24.dp),
+					.padding(top = 12.dp, bottom = 8.dp),
 			)
 		}
 	}
@@ -158,6 +160,17 @@ private fun ReviewQuestionCard(
 	word: ReviewWord,
 	onPlayAudioClick: () -> Unit,
 ) {
+	val dark = isAppInDarkTheme()
+	val borderColor = if (dark) {
+		WordlyColors.DarkOutline.copy(alpha = 0.7f)
+	} else {
+		WordlyColors.LightOutline.copy(alpha = 0.55f)
+	}
+	val taskChipBackground = if (dark) {
+		WordlyColors.DarkPrimaryContainer
+	} else {
+		WordlyColors.LightPrimaryContainer
+	}
 	Column(
 		modifier = Modifier
 			.fillMaxWidth()
@@ -169,12 +182,15 @@ private fun ReviewQuestionCard(
 			)
 			.clip(RoundedCornerShape(24.dp))
 			.background(MaterialTheme.colorScheme.surface)
-			.border(1.dp, ReviewColorBorder, RoundedCornerShape(24.dp))
+			.border(1.dp, borderColor, RoundedCornerShape(24.dp))
 			.padding(horizontal = 23.dp)
 			.padding(top = 21.dp, bottom = 27.dp),
 		horizontalAlignment = Alignment.CenterHorizontally,
 	) {
-		ReviewTaskChip(modifier = Modifier.align(Alignment.Start))
+		ReviewTaskChip(
+			background = taskChipBackground,
+			modifier = Modifier.align(Alignment.Start),
+		)
 		Spacer(modifier = Modifier.height(14.dp))
 		Text(
 			text = word.word,
@@ -195,10 +211,13 @@ private fun ReviewQuestionCard(
 }
 
 @Composable
-private fun ReviewTaskChip(modifier: Modifier = Modifier) {
+private fun ReviewTaskChip(
+	background: Color,
+	modifier: Modifier = Modifier,
+) {
 	Box(
 		modifier = modifier
-			.background(WordlyColors.LightPrimaryContainer, RoundedCornerShape(8.dp))
+			.background(background, RoundedCornerShape(8.dp))
 			.padding(horizontal = 11.dp, vertical = 7.dp),
 	) {
 		Text(
@@ -208,7 +227,11 @@ private fun ReviewTaskChip(modifier: Modifier = Modifier) {
 				fontSize = 13.sp,
 				lineHeight = 13.sp,
 			),
-			color = WordlyColors.ReviewAccent,
+			color = if (isAppInDarkTheme()) {
+				WordlyColors.DarkOnPrimaryContainer
+			} else {
+				WordlyColors.ReviewAccent
+			},
 		)
 	}
 }

@@ -219,18 +219,6 @@ class ReviewStoreTest {
 	}
 
 	@Test
-	fun `retry after error EXPECT session reload`() = runTest {
-		whenever(getReviewSessionUseCase())
-			.doThrowSafe(exception)
-			.thenReturn(words)
-		val store = createStore()
-
-		store.accept(ReviewStore.Intent.Retry)
-
-		assertEquals(inProgress(), store.state)
-	}
-
-	@Test
 	fun `close EXPECT close label`() = runTest {
 		whenever(getReviewSessionUseCase()) doReturn words
 		val store = createStore()

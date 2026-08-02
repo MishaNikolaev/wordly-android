@@ -12,6 +12,8 @@
 	<string name="card_practice_error_title">Что-то пошло не так</string>
 	<string name="card_practice_error_description">Не удалось загрузить слова. Попробуйте ещё раз.</string>
 	<string name="card_practice_continue">Далее</string>
+	<string name="card_practice_correct">Верно!</string>
+	<string name="card_practice_incorrect">Неправильно</string>
 	<string name="card_practice_finished_title_great">Отличная работа!</string>
 	<string name="card_practice_finished_title_done">Сессия завершена</string>
 	<string name="card_practice_finished_subtitle">Ты выучил %1$d из %2$d слов</string>
