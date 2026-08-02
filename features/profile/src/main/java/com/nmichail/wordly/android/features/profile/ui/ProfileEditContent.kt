@@ -119,22 +119,29 @@ private fun ProfileEditLoaded(
 		modifier = modifier
 			.fillMaxSize()
 			.background(MaterialTheme.colorScheme.background)
-			.verticalScroll(rememberScrollState())
 			.padding(horizontal = 20.dp)
 			.padding(top = 16.dp, bottom = 24.dp),
 	) {
-		ProfileEditBackButton(onClick = component::handleBack)
-		ProfileEditForm(
-			state = state,
-			component = component,
-			modifier = Modifier.padding(top = 20.dp),
-		)
+		Column(
+			modifier = Modifier
+				.weight(1f)
+				.verticalScroll(rememberScrollState()),
+		) {
+			ProfileEditBackButton(onClick = component::handleBack)
+			ProfileEditForm(
+				state = state,
+				component = component,
+				modifier = Modifier.padding(top = 20.dp),
+			)
+		}
 		Button(
-			text = stringResource(R.string.profile_edit_save),
+			text = stringResource(
+				if (state.saved) R.string.profile_edit_saved else R.string.profile_edit_save,
+			),
 			onClick = component::handleSave,
 			loading = state.saving,
 			enabled = state.firstName.isNotBlank() && state.lastName.isNotBlank(),
-			modifier = Modifier.padding(top = 32.dp),
+			modifier = Modifier.padding(top = 16.dp),
 		)
 	}
 }

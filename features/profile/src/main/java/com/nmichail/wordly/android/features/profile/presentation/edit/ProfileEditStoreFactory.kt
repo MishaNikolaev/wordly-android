@@ -55,6 +55,8 @@ internal class ProfileEditStoreFactory @Inject constructor(
 		data class EnglishLevelChanged(val value: String) : Msg
 
 		data class Saving(val saving: Boolean) : Msg
+
+		data object Saved : Msg
 	}
 
 	private object ReducerImpl : Reducer<ProfileEditComponent.State, Msg> {
@@ -69,11 +71,19 @@ internal class ProfileEditStoreFactory @Inject constructor(
 					lastName = msg.profile.lastName,
 					englishLevel = msg.profile.englishLevel,
 					saving = false,
+					saved = false,
 				)
-				is Msg.FirstNameChanged -> contentOrThis { copy(firstName = msg.value) }
-				is Msg.LastNameChanged -> contentOrThis { copy(lastName = msg.value) }
-				is Msg.EnglishLevelChanged -> contentOrThis { copy(englishLevel = msg.value) }
+				is Msg.FirstNameChanged -> contentOrThis {
+					copy(firstName = msg.value, saved = false)
+				}
+				is Msg.LastNameChanged -> contentOrThis {
+					copy(lastName = msg.value, saved = false)
+				}
+				is Msg.EnglishLevelChanged -> contentOrThis {
+					copy(englishLevel = msg.value, saved = false)
+				}
 				is Msg.Saving -> contentOrThis { copy(saving = msg.saving) }
+				Msg.Saved -> contentOrThis { copy(saving = false, saved = true) }
 			}
 
 		private fun ProfileEditComponent.State.contentOrThis(
@@ -139,8 +149,7 @@ internal class ProfileEditStoreFactory @Inject constructor(
 						notificationTimes = null,
 					),
 				)
-				dispatch(Msg.Saving(saving = false))
-				publish(ProfileEditComponent.Label.Saved)
+				dispatch(Msg.Saved)
 			} catch {
 				dispatch(Msg.Saving(saving = false))
 			}
