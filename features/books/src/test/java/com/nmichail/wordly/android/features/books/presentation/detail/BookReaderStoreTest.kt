@@ -94,6 +94,18 @@ class BookReaderStoreTest {
 	}
 
 	@Test
+	fun `retry after error EXPECT content`() = runTest {
+		whenever(getBookContentUseCase("little-prince"))
+			.doThrowSafe(exception)
+			.thenReturn(book)
+		val store = createStore()
+
+		store.accept(BookReaderStore.Intent.Retry)
+
+		assertEquals(content(), store.state)
+	}
+
+	@Test
 	fun `select word EXPECT selected definition`() = runTest {
 		whenever(getBookContentUseCase("little-prince")) doReturn book
 		val store = createStore()
