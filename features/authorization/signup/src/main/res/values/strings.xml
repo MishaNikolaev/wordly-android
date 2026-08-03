@@ -12,6 +12,9 @@
 	<string name="sign_up_registration_error">Не удалось зарегистрироваться. Попробуйте ещё раз</string>
 	<string name="sign_up_no_connection">Нет соединения с интернетом</string>
 
+	<string name="sign_up_label_email">Почта</string>
+	<string name="sign_up_label_password">Пароль</string>
+
 	<string-array name="sign_up_english_level_codes">
 		<item>A1</item>
 		<item>A2</item>
@@ -29,4 +32,11 @@
 		<item>C1 — Продвинутый</item>
 		<item>C2 — Профессионал</item>
 	</string-array>
+
+	<string name="auth_preview_serendipity_word">serendipity</string>
+	<string name="auth_preview_serendipity_translation">случайность</string>
+	<string name="auth_preview_deploy_word">deploy</string>
+	<string name="auth_preview_deploy_translation">развёртывать</string>
+	<string name="auth_preview_resilience_word">resilience</string>
+	<string name="auth_preview_resilience_translation">стойкость</string>
 </resources>

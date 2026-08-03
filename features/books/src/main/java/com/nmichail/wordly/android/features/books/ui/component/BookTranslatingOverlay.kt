@@ -1,4 +1,4 @@
-package com.nmichail.wordly.android.component.ui.components
+package com.nmichail.wordly.android.features.books.ui.component
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -12,6 +12,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.tooling.preview.Preview
+import com.nmichail.wordly.android.component.ui.theme.WordlyAndroidTheme
 
 @Composable
 fun BookTranslatingOverlay(
@@ -39,6 +41,16 @@ fun BookTranslatingOverlay(
 				style = MaterialTheme.typography.labelMedium,
 				color = colorScheme.onSurfaceVariant,
 			)
+		}
+	}
+}
+
+@Preview(showBackground = true, heightDp = 240)
+@Composable
+private fun BookTranslatingOverlayPreview() {
+	WordlyAndroidTheme {
+		Box(modifier = Modifier.fillMaxSize()) {
+			BookTranslatingOverlay(message = "Переводим…")
 		}
 	}
 }

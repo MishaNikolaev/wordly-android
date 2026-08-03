@@ -1,8 +1,7 @@
-package com.nmichail.wordly.android.component.ui.components
+package com.nmichail.wordly.android.features.books.ui.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -35,7 +34,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.nmichail.wordly.android.component.ui.theme.WordlyColors
+import androidx.compose.ui.tooling.preview.Preview
+import com.nmichail.wordly.android.component.ui.theme.WordlyAndroidTheme
+import com.nmichail.wordly.android.component.ui.theme.WordlyTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -213,18 +214,11 @@ private fun BookWordAddButton(
 private fun BookWordAddedStatus(
 	text: String,
 ) {
-	val isDark = isSystemInDarkTheme()
-	val color = if (isDark) WordlyColors.DarkSuccess else WordlyColors.LightSuccess
-	val containerColor = if (isDark) {
-		WordlyColors.DarkSuccessContainer
-	} else {
-		WordlyColors.LightSuccessContainer
-	}
-
+	val extended = WordlyTheme.colors
 	BookWordAddedStatusRow(
 		text = text,
-		color = color,
-		containerColor = containerColor,
+		color = extended.success,
+		containerColor = extended.successContainer,
 	)
 }
 
@@ -257,6 +251,23 @@ private fun BookWordAddedStatusRow(
 			fontWeight = FontWeight.SemiBold,
 			color = color,
 			modifier = Modifier.padding(start = 8.dp),
+		)
+	}
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun BookWordLookupDialogPreview() {
+	WordlyAndroidTheme {
+		BookWordLookupDialog(
+			word = "apple",
+			translation = "яблоко",
+			phonetic = "/ˈæp.əl/",
+			addButtonText = "Добавить",
+			addedStatusText = "Добавлено",
+			isAdded = false,
+			onAddClick = {},
+			onDismiss = {},
 		)
 	}
 }

@@ -6,8 +6,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import com.nmichail.wordly.android.component.ui.components.LookupReadingText
-import com.nmichail.wordly.android.component.ui.components.LookupTextSegment
+import com.nmichail.wordly.android.features.books.ui.component.LookupReadingText
+import com.nmichail.wordly.android.features.books.ui.component.LookupTextSegment
 import com.nmichail.wordly.android.component.ui.theme.WordlyTypography
 import com.nmichail.wordly.android.features.books.domain.entity.BookParagraph
 import com.nmichail.wordly.android.features.books.domain.entity.BookTextSegment

@@ -10,4 +10,55 @@
 		<item quantity="many">Вы уже %d дней в ударе, продолжайте в том же духе!</item>
 		<item quantity="other">Вы уже %d дней в ударе, продолжайте в том же духе!</item>
 	</plurals>
+
+	<string name="home_screen_title">Учиться</string>
+	<string name="home_greeting_morning">Доброе утро, %1$s</string>
+	<string name="home_greeting_day">Добрый день, %1$s</string>
+	<string name="home_greeting_evening">Добрый вечер, %1$s</string>
+	<string name="home_greeting_night">Доброй ночи, %1$s</string>
+
+	<string name="home_day_mon">Пн</string>
+	<string name="home_day_tue">Вт</string>
+	<string name="home_day_wed">Ср</string>
+	<string name="home_day_thu">Чт</string>
+	<string name="home_day_fri">Пт</string>
+	<string name="home_day_sat">Сб</string>
+	<string name="home_day_sun">Вс</string>
+
+	<string name="home_week_title">Эта неделя</string>
+	<string name="home_week_month_link">весь месяц</string>
+
+	<string name="home_daily_review_chip">Повторение на сегодня</string>
+	<string name="home_daily_review_duration">≈ %d мин</string>
+	<string name="home_daily_review_start">Начать</string>
+
+	<plurals name="home_words_to_review_prefix">
+		<item quantity="one">слово к</item>
+		<item quantity="few">слова к</item>
+		<item quantity="many">слов к</item>
+		<item quantity="other">слов к</item>
+	</plurals>
+	<string name="home_words_to_review_suffix">повторению</string>
+
+	<plurals name="home_daily_review_streak">
+		<item quantity="one">серия %d день</item>
+		<item quantity="few">серия %d дня</item>
+		<item quantity="many">серия %d дней</item>
+		<item quantity="other">серия %d дней</item>
+	</plurals>
+
+	<string name="home_trainings_section">Тренировки</string>
+
+	<string name="home_training_cards_title">Карточки</string>
+	<string name="home_training_cards_subtitle">слова по темам</string>
+	<string name="home_training_constructor_title">Конструктор</string>
+	<string name="home_training_constructor_subtitle">собери фразу из слов</string>
+	<string name="home_training_listening_title">Аудирование</string>
+	<string name="home_training_listening_subtitle">услышь и впиши</string>
+	<string name="home_training_songs_title">Песни</string>
+	<string name="home_training_songs_subtitle">караоке с пропусками</string>
+	<string name="home_training_movies_title">Фильмы</string>
+	<string name="home_training_movies_subtitle">учи по сценам</string>
+	<string name="home_training_books_title">Книги</string>
+	<string name="home_training_books_subtitle">читай любимые книги</string>
 </resources>

@@ -15,6 +15,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Person
+import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
@@ -31,7 +32,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
-import com.nmichail.wordly.android.component.ui.components.Button
+import com.nmichail.wordly.android.component.ui.components.button.CustomButton
 import com.nmichail.wordly.android.features.profile.R
 import com.nmichail.wordly.android.features.profile.presentation.ProfileComponent
 
@@ -93,7 +94,7 @@ private fun ProfileError(
 			textAlign = TextAlign.Center,
 			modifier = Modifier.padding(top = 8.dp),
 		)
-		Button(
+		CustomButton(
 			text = stringResource(R.string.profile_retry),
 			onClick = onRetryClick,
 			modifier = Modifier
@@ -129,7 +130,7 @@ private fun ProfileLoaded(
 				onClick = component::handleOpenLevel,
 				modifier = Modifier.padding(top = 20.dp),
 			)
-			Button(
+			CustomButton(
 				text = stringResource(R.string.profile_edit),
 				onClick = component::handleOpenEdit,
 				modifier = Modifier.padding(top = 20.dp),
@@ -158,7 +159,7 @@ private fun ProfileLogoutButton(
 	modifier: Modifier = Modifier,
 ) {
 	val contentColor = Color.White
-	androidx.compose.material3.Button(
+	Button(
 		onClick = onClick,
 		modifier = modifier
 			.fillMaxWidth()

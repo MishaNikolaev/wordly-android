@@ -38,14 +38,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
-import com.nmichail.wordly.android.component.ui.components.Button
-import com.nmichail.wordly.android.component.ui.components.CatalogCard
-import com.nmichail.wordly.android.component.ui.components.SearchField
-import com.nmichail.wordly.android.component.ui.components.SectionLabel
-import com.nmichail.wordly.android.component.ui.components.TextLink
+import com.nmichail.wordly.android.component.ui.components.button.CustomButton
+import com.nmichail.wordly.android.component.ui.components.card.CatalogCard
+import com.nmichail.wordly.android.component.ui.components.field.SearchField
+import com.nmichail.wordly.android.component.ui.components.text.SectionLabel
+import com.nmichail.wordly.android.component.ui.components.button.TextLink
 import com.nmichail.wordly.android.features.books.R
 import com.nmichail.wordly.android.features.books.domain.entity.BooksLevelBanner
 import com.nmichail.wordly.android.features.books.presentation.BooksComponent
+import com.nmichail.wordly.android.shared.catalog.CatalogRemoteImage
 
 @Composable
 fun BooksContent(
@@ -109,7 +110,7 @@ private fun BooksError(
 			textAlign = TextAlign.Center,
 			modifier = Modifier.padding(top = 8.dp),
 		)
-		Button(
+		CustomButton(
 			text = stringResource(R.string.books_retry),
 			onClick = onRetryClick,
 			modifier = Modifier
@@ -176,7 +177,7 @@ private fun BooksLoaded(
 						title = item.title,
 						subtitle = item.subtitle,
 						badge = item.badge,
-						imageUrl = item.imageUrl,
+						image = { CatalogRemoteImage(url = item.imageUrl) },
 						onClick = { component.handleBookClick(item.id) },
 					)
 				}

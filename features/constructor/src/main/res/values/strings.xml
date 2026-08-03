@@ -14,8 +14,6 @@
 	<string name="constructor_practice_correct">Верно!</string>
 	<string name="constructor_practice_incorrect">Неправильно</string>
 	<string name="constructor_practice_author_format">— %1$s</string>
-	<string name="constructor_practice_finished_title_great">Отличная работа!</string>
-	<string name="constructor_practice_finished_title_done">Сессия завершена</string>
 	<string name="constructor_practice_finished_subtitle">Ты собрал %1$d из %2$d фраз</string>
 	<string name="constructor_practice_finished_back">К конструктору</string>
 </resources>

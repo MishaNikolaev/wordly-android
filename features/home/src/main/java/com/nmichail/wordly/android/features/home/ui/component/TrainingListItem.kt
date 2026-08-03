@@ -1,4 +1,4 @@
-package com.nmichail.wordly.android.component.ui.components
+package com.nmichail.wordly.android.features.home.ui.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -21,6 +21,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import com.nmichail.wordly.android.component.ui.theme.WordlyTypography
+import com.nmichail.wordly.android.component.ui.components.card.AppCard
+import androidx.compose.material.icons.automirrored.rounded.MenuBook
+import androidx.compose.ui.tooling.preview.Preview
+import com.nmichail.wordly.android.component.ui.theme.WordlyAndroidTheme
 
 @Composable
 fun TrainingListItem(
@@ -79,5 +83,19 @@ fun TrainingListItem(
 				modifier = Modifier.size(24.dp),
 			)
 		}
+	}
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun TrainingListItemPreview() {
+	WordlyAndroidTheme {
+		TrainingListItem(
+			title = "Карточки",
+			subtitle = "8 слов",
+			icon = Icons.AutoMirrored.Rounded.MenuBook,
+			onClick = {},
+			modifier = Modifier.padding(16.dp),
+		)
 	}
 }

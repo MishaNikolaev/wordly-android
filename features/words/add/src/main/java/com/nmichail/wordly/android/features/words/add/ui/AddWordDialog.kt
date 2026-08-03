@@ -3,7 +3,6 @@ package com.nmichail.wordly.android.features.words.add.ui
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -35,7 +34,6 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
-import com.nmichail.wordly.android.component.ui.theme.WordlyColors
 import com.nmichail.wordly.android.component.ui.theme.WordlyTypography
 import com.nmichail.wordly.android.features.words.add.R
 import com.nmichail.wordly.android.features.words.add.presentation.AddWordDialogState
@@ -171,7 +169,7 @@ private fun AddWordAutofillBadge() {
 		Icon(
 			imageVector = Icons.Outlined.AutoAwesome,
 			contentDescription = null,
-			tint = if (isSystemInDarkTheme()) WordlyColors.DarkSecondary else WordlyColors.LightSecondary,
+			tint = MaterialTheme.colorScheme.secondary,
 			modifier = Modifier.size(16.dp),
 		)
 		Text(

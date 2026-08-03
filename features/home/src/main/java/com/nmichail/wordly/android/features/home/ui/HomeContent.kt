@@ -33,19 +33,18 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
-import com.nmichail.wordly.android.component.ui.R as ComponentR
-import com.nmichail.wordly.android.component.ui.components.Button
-import com.nmichail.wordly.android.component.ui.components.CalendarDay
-import com.nmichail.wordly.android.component.ui.components.CalendarDayStatusId
-import com.nmichail.wordly.android.component.ui.components.CalendarDialog
-import com.nmichail.wordly.android.component.ui.components.DailyReviewCard
-import com.nmichail.wordly.android.component.ui.components.HomeTopBar
-import com.nmichail.wordly.android.component.ui.components.SectionLabel
-import com.nmichail.wordly.android.component.ui.components.TrainingListItem
-import com.nmichail.wordly.android.component.ui.components.WeekDayIndicator
-import com.nmichail.wordly.android.component.ui.components.WeekDayStatusId
-import com.nmichail.wordly.android.component.ui.components.WeekProgressCard
-import com.nmichail.wordly.android.component.ui.components.homeGreeting
+import com.nmichail.wordly.android.component.ui.components.button.CustomButton
+import com.nmichail.wordly.android.component.ui.components.calendar.CalendarDay
+import com.nmichail.wordly.android.component.ui.components.calendar.CalendarDayStatusId
+import com.nmichail.wordly.android.component.ui.components.calendar.CalendarDialog
+import com.nmichail.wordly.android.features.home.ui.component.DailyReviewCard
+import com.nmichail.wordly.android.features.home.ui.component.HomeTopBar
+import com.nmichail.wordly.android.component.ui.components.text.SectionLabel
+import com.nmichail.wordly.android.features.home.ui.component.TrainingListItem
+import com.nmichail.wordly.android.features.home.ui.component.WeekDayIndicator
+import com.nmichail.wordly.android.features.home.ui.component.WeekDayStatusId
+import com.nmichail.wordly.android.features.home.ui.component.WeekProgressCard
+import com.nmichail.wordly.android.features.home.ui.component.homeGreeting
 import com.nmichail.wordly.android.component.ui.components.snackbar.SnackBarHost
 import com.nmichail.wordly.android.component.ui.components.snackbar.showInfoSnackBar
 import com.nmichail.wordly.android.features.home.R
@@ -114,7 +113,7 @@ private fun HomeError(
 			textAlign = TextAlign.Center,
 			modifier = Modifier.padding(top = 8.dp),
 		)
-		Button(
+		CustomButton(
 			text = stringResource(R.string.home_retry),
 			onClick = onRetryClick,
 			modifier = Modifier.padding(top = 24.dp),
@@ -229,7 +228,7 @@ private fun TrainingsBlock(
 		verticalArrangement = Arrangement.spacedBy(12.dp),
 	) {
 		SectionLabel(
-			text = stringResource(ComponentR.string.home_trainings_section),
+			text = stringResource(R.string.home_trainings_section),
 			modifier = Modifier.padding(start = 4.dp),
 		)
 		trainings.forEach { training ->
@@ -246,13 +245,13 @@ private fun TrainingsBlock(
 @StringRes
 private fun DayOfWeek.labelRes(): Int =
 	when (this) {
-		DayOfWeek.MONDAY -> ComponentR.string.home_day_mon
-		DayOfWeek.TUESDAY -> ComponentR.string.home_day_tue
-		DayOfWeek.WEDNESDAY -> ComponentR.string.home_day_wed
-		DayOfWeek.THURSDAY -> ComponentR.string.home_day_thu
-		DayOfWeek.FRIDAY -> ComponentR.string.home_day_fri
-		DayOfWeek.SATURDAY -> ComponentR.string.home_day_sat
-		DayOfWeek.SUNDAY -> ComponentR.string.home_day_sun
+		DayOfWeek.MONDAY -> R.string.home_day_mon
+		DayOfWeek.TUESDAY -> R.string.home_day_tue
+		DayOfWeek.WEDNESDAY -> R.string.home_day_wed
+		DayOfWeek.THURSDAY -> R.string.home_day_thu
+		DayOfWeek.FRIDAY -> R.string.home_day_fri
+		DayOfWeek.SATURDAY -> R.string.home_day_sat
+		DayOfWeek.SUNDAY -> R.string.home_day_sun
 	}
 
 private fun WeekDayStatus.toUiId(): String =

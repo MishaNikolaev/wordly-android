@@ -1,6 +1,4 @@
-@file:Suppress("MagicNumber")
-
-package com.nmichail.wordly.android.component.ui.components
+package com.nmichail.wordly.android.features.materials.ui.component
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -40,8 +38,6 @@ private val DarkCircleLavenderLight = Color(0xFF7A5A90)
 private val DarkCircleLavenderSoft = Color(0xFF5C3D72)
 private val DarkCircleMauve = Color(0xFF4A3558)
 private val DarkCircleMauveDark = Color(0xFF3F2C4C)
-
-private const val EDGE_PADDING_FRACTION = 0.08f
 
 fun materialsCardBackgroundStyleFor(id: String): MaterialsCardBackgroundStyle =
 	when (kotlin.math.abs(id.hashCode()) % MaterialsCardBackgroundStyle.entries.size) {
@@ -100,11 +96,11 @@ private fun DrawScope.drawScatter(colors: CoverCircleColors) {
 	val h = size.height
 	drawContainedCircles(
 		listOf(
-			CircleSpec(colors.lavender, h * 0.26f, 0.12f, 0.42f),
-			CircleSpec(colors.lavenderLight, h * 0.20f, 0.28f, 0.78f),
-			CircleSpec(colors.mauve, h * 0.15f, 0.48f, 0.62f),
-			CircleSpec(colors.lavenderSoft, h * 0.30f, 0.82f, 0.28f),
-			CircleSpec(colors.mauveDark, h * 0.13f, 0.70f, 0.78f),
+			CircleSpec(color = colors.lavender, radius = h * 0.26f, xFraction = 0.12f, yFraction = 0.42f),
+			CircleSpec(color = colors.lavenderLight, radius = h * 0.20f, xFraction = 0.28f, yFraction = 0.78f),
+			CircleSpec(color = colors.mauve, radius = h * 0.15f, xFraction = 0.48f, yFraction = 0.62f),
+			CircleSpec(color = colors.lavenderSoft, radius = h * 0.30f, xFraction = 0.82f, yFraction = 0.28f),
+			CircleSpec(color = colors.mauveDark, radius = h * 0.13f, xFraction = 0.70f, yFraction = 0.78f),
 		),
 	)
 }
@@ -113,11 +109,11 @@ private fun DrawScope.drawCluster(colors: CoverCircleColors) {
 	val h = size.height
 	drawContainedCircles(
 		listOf(
-			CircleSpec(colors.lavenderSoft, h * 0.28f, 0.20f, 0.28f),
-			CircleSpec(colors.mauveDark, h * 0.13f, 0.14f, 0.82f),
-			CircleSpec(colors.mauve, h * 0.12f, 0.50f, 0.22f),
-			CircleSpec(colors.lavenderLight, h * 0.20f, 0.58f, 0.78f),
-			CircleSpec(colors.mauve, h * 0.15f, 0.86f, 0.30f),
+			CircleSpec(color = colors.lavenderSoft, radius = h * 0.28f, xFraction = 0.20f, yFraction = 0.28f),
+			CircleSpec(color = colors.mauveDark, radius = h * 0.13f, xFraction = 0.14f, yFraction = 0.82f),
+			CircleSpec(color = colors.mauve, radius = h * 0.12f, xFraction = 0.50f, yFraction = 0.22f),
+			CircleSpec(color = colors.lavenderLight, radius = h * 0.20f, xFraction = 0.58f, yFraction = 0.78f),
+			CircleSpec(color = colors.mauve, radius = h * 0.15f, xFraction = 0.86f, yFraction = 0.30f),
 		),
 	)
 }
@@ -155,7 +151,8 @@ private data class CircleSpec(
 )
 
 private fun DrawScope.drawContainedCircles(circles: List<CircleSpec>) {
-	val padding = size.minDimension * EDGE_PADDING_FRACTION
+	val edgePaddingFraction = 0.08f
+	val padding = size.minDimension * edgePaddingFraction
 	val minX = padding
 	val minY = padding
 	val maxX = size.width - padding

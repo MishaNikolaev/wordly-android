@@ -1,4 +1,4 @@
-package com.nmichail.wordly.android.component.ui.components
+package com.nmichail.wordly.android.features.home.ui.component
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -18,7 +18,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.nmichail.wordly.android.component.ui.R
+import com.nmichail.wordly.android.features.home.R
+import com.nmichail.wordly.android.component.ui.components.card.AppCard
+import androidx.compose.ui.tooling.preview.Preview
+import com.nmichail.wordly.android.component.ui.theme.WordlyAndroidTheme
 
 @Composable
 fun WeekProgressCard(
@@ -64,6 +67,27 @@ fun WeekProgressCard(
 				.padding(top = 16.dp),
 			horizontalArrangement = Arrangement.spacedBy(4.dp),
 			content = daysContent,
+		)
+	}
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun WeekProgressCardPreview() {
+	WordlyAndroidTheme {
+		WeekProgressCard(
+			onMonthClick = {},
+			modifier = Modifier.padding(16.dp),
+			daysContent = {
+				listOf("Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс").forEachIndexed { index, label ->
+					WeekDayIndicator(
+						label = label,
+						statusId = if (index == 1) WeekDayStatusId.Today else WeekDayStatusId.Upcoming,
+						dayOfMonth = index + 1,
+						modifier = Modifier.weight(1f),
+					)
+				}
+			},
 		)
 	}
 }

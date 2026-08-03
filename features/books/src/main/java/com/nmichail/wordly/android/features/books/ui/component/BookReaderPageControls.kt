@@ -1,4 +1,4 @@
-package com.nmichail.wordly.android.component.ui.components
+package com.nmichail.wordly.android.features.books.ui.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -27,8 +27,8 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-
-private const val DISABLED_ALPHA = 0.4f
+import androidx.compose.ui.tooling.preview.Preview
+import com.nmichail.wordly.android.component.ui.theme.WordlyAndroidTheme
 
 @Composable
 fun BookReaderPageControls(
@@ -135,7 +135,7 @@ private fun BookReaderPageButton(
 	val background = if (enabled) {
 		colorScheme.surface
 	} else {
-		colorScheme.surfaceContainerHigh.copy(alpha = DISABLED_ALPHA)
+		colorScheme.surfaceContainerHigh.copy(alpha = 0.4f)
 	}
 
 	Box(
@@ -163,5 +163,20 @@ private fun BookReaderPageButton(
 		contentAlignment = Alignment.Center,
 	) {
 		icon()
+	}
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun BookReaderPageControlsPreview() {
+	WordlyAndroidTheme {
+		BookReaderPageControls(
+			currentPage = 2,
+			pageCount = 10,
+			onPreviousClick = {},
+			onNextClick = {},
+			previousContentDescription = "Previous",
+			nextContentDescription = "Next",
+		)
 	}
 }

@@ -10,6 +10,7 @@ dependencies {
 	implementation(libs.androidx.ui)
 	implementation(libs.androidx.material3)
 	implementation(libs.androidx.material.icons.extended)
+	implementation(libs.androidx.ui.tooling.preview)
 	implementation(libs.dagger)
 	implementation(libs.retrofit)
 	implementation(libs.mvikotlin)
@@ -19,6 +20,7 @@ dependencies {
 	ksp(libs.dagger.compiler)
 
 	implementation(projects.component.ui)
+	implementation(projects.shared.catalog)
 	implementation(projects.component.presentation)
 	implementation(projects.core.navigation)
 	implementation(projects.core.network)

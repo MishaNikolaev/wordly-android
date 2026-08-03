@@ -14,8 +14,6 @@
 	<string name="card_practice_continue">Далее</string>
 	<string name="card_practice_correct">Верно!</string>
 	<string name="card_practice_incorrect">Неправильно</string>
-	<string name="card_practice_finished_title_great">Отличная работа!</string>
-	<string name="card_practice_finished_title_done">Сессия завершена</string>
 	<string name="card_practice_finished_subtitle">Ты выучил %1$d из %2$d слов</string>
 	<string name="card_practice_finished_back">К карточкам</string>
 </resources>

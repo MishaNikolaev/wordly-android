@@ -1,4 +1,4 @@
-package com.nmichail.wordly.android.component.ui.components
+package com.nmichail.wordly.android.features.home.ui.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -27,9 +27,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.nmichail.wordly.android.component.ui.R
+import com.nmichail.wordly.android.features.home.R
 import com.nmichail.wordly.android.component.ui.theme.WordlyTypography
 import com.nmichail.wordly.android.component.ui.theme.isAppInDarkTheme
+import com.nmichail.wordly.android.component.ui.components.button.CustomButton
+import com.nmichail.wordly.android.component.ui.components.chip.StatusChip
+import com.nmichail.wordly.android.component.ui.components.chip.StatusChipStyle
+import androidx.compose.ui.tooling.preview.Preview
+import com.nmichail.wordly.android.component.ui.theme.WordlyAndroidTheme
 
 @Composable
 fun DailyReviewCard(
@@ -99,7 +104,7 @@ private fun DailyReviewBody(
 			onStreakClick = onStreakClick,
 		)
 		Spacer(modifier = Modifier.weight(1f))
-		Button(
+		CustomButton(
 			text = stringResource(R.string.home_daily_review_start),
 			onClick = onStartClick,
 		)
@@ -158,6 +163,23 @@ private fun ReviewMetaRow(
 			icon = Icons.Filled.LocalFireDepartment,
 			style = StatusChipStyle.Streak,
 			modifier = Modifier.clickable(onClick = onStreakClick),
+		)
+	}
+}
+
+@Preview(showBackground = true, widthDp = 360)
+@Composable
+private fun DailyReviewCardPreview() {
+	WordlyAndroidTheme {
+		DailyReviewCard(
+			wordsToReview = 12,
+			estimatedMinutes = 5,
+			streakDays = 7,
+			onStartClick = {},
+			onStreakClick = {},
+			modifier = Modifier
+				.padding(16.dp)
+				.height(220.dp),
 		)
 	}
 }

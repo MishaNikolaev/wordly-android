@@ -1,4 +1,4 @@
-package com.nmichail.wordly.android.component.ui.components
+package com.nmichail.wordly.android.features.books.ui.component
 
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -20,10 +20,13 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.buildAnnotatedString
-import com.nmichail.wordly.android.component.ui.theme.WordlyColors
 import com.nmichail.wordly.android.component.ui.theme.WordlyTypography
 import kotlin.math.max
 import kotlin.math.min
+import androidx.compose.foundation.layout.padding
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import com.nmichail.wordly.android.component.ui.theme.WordlyAndroidTheme
 
 data class LookupTextSegment(
 	val text: String,
@@ -38,11 +41,10 @@ fun LookupReadingText(
 ) {
 	val bodyStyle = WordlyTypography.bookReaderBody
 	val textColor = MaterialTheme.colorScheme.onBackground
-	val underlineColor = WordlyColors.BookLookupUnderline
+	val underlineColor = MaterialTheme.colorScheme.primary
 	val currentOnSelectWord by rememberUpdatedState(onSelectWord)
 	val annotated = remember(segments) { buildLookupAnnotatedString(segments) }
 	var textLayoutResult by remember { mutableStateOf<TextLayoutResult?>(null) }
-	@Suppress("MagicNumber")
 	val dashEffect = remember {
 		PathEffect.dashPathEffect(floatArrayOf(6f, 4f))
 	}
@@ -135,6 +137,22 @@ private fun DrawScope.drawLookupUnderline(
 			end = Offset(right, y),
 			strokeWidth = 2f,
 			pathEffect = dashEffect,
+		)
+	}
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun LookupReadingTextPreview() {
+	WordlyAndroidTheme {
+		LookupReadingText(
+			segments = listOf(
+				LookupTextSegment(text = "Once ", lookupId = null),
+				LookupTextSegment(text = "upon", lookupId = "upon"),
+				LookupTextSegment(text = " a time", lookupId = null),
+			),
+			onSelectWord = {},
+			modifier = Modifier.padding(16.dp),
 		)
 	}
 }

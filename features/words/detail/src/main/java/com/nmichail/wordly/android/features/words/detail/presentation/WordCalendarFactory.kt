@@ -1,7 +1,7 @@
 package com.nmichail.wordly.android.features.words.detail.presentation
 
-import com.nmichail.wordly.android.component.ui.components.CalendarDay
-import com.nmichail.wordly.android.component.ui.components.CalendarDayStatusId
+import com.nmichail.wordly.android.component.ui.components.calendar.CalendarDay
+import com.nmichail.wordly.android.component.ui.components.calendar.CalendarDayStatusId
 import java.time.LocalDate
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter

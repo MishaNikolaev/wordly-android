@@ -1,4 +1,4 @@
-package com.nmichail.wordly.android.component.ui.components
+package com.nmichail.wordly.android.features.books.ui.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -15,7 +15,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
-import com.nmichail.wordly.android.component.ui.R
+import com.nmichail.wordly.android.features.books.R
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
+import androidx.compose.ui.tooling.preview.Preview
+import com.nmichail.wordly.android.component.ui.theme.WordlyAndroidTheme
 
 @Composable
 fun BookTranslateButton(
@@ -26,13 +31,9 @@ fun BookTranslateButton(
 	modifier: Modifier = Modifier,
 ) {
 	val colorScheme = MaterialTheme.colorScheme
-	val background = when {
-		isTranslated -> colorScheme.primary
-		else -> colorScheme.surfaceVariant
-	}
-	val iconTint = when {
-		isTranslated -> colorScheme.onPrimary
-		else -> colorScheme.onBackground
+	val (background, iconTint) = when {
+		isTranslated -> colorScheme.primary to colorScheme.onPrimary
+		else -> colorScheme.surfaceVariant to colorScheme.onBackground
 	}
 
 	Box(
@@ -59,6 +60,36 @@ fun BookTranslateButton(
 				contentDescription = contentDescription,
 				tint = iconTint,
 				modifier = Modifier.size(17.dp),
+			)
+		}
+	}
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun BookTranslateButtonPreview() {
+	WordlyAndroidTheme {
+		Row(
+			modifier = Modifier.padding(16.dp),
+			horizontalArrangement = Arrangement.spacedBy(12.dp),
+		) {
+			BookTranslateButton(
+				isTranslating = false,
+				isTranslated = false,
+				contentDescription = "Translate",
+				onClick = {},
+			)
+			BookTranslateButton(
+				isTranslating = true,
+				isTranslated = false,
+				contentDescription = "Translating",
+				onClick = {},
+			)
+			BookTranslateButton(
+				isTranslating = false,
+				isTranslated = true,
+				contentDescription = "Hide translation",
+				onClick = {},
 			)
 		}
 	}

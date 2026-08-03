@@ -1,8 +1,9 @@
-package com.nmichail.wordly.android.component.ui.components
+package com.nmichail.wordly.android.shared.practice
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Cancel
@@ -15,8 +16,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.nmichail.wordly.android.component.ui.theme.WordlyColors
-import com.nmichail.wordly.android.component.ui.theme.isAppInDarkTheme
+import com.nmichail.wordly.android.component.ui.theme.WordlyAndroidTheme
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import com.nmichail.wordly.android.component.ui.theme.PreviewTheme
+import com.nmichail.wordly.android.component.ui.theme.PreviewThemeProvider
+import com.nmichail.wordly.android.component.ui.theme.WordlyPreviews
+import com.nmichail.wordly.android.component.ui.theme.WordlyTheme
 
 @Composable
 fun PracticeAnswerFeedback(
@@ -26,11 +31,10 @@ fun PracticeAnswerFeedback(
 	modifier: Modifier = Modifier,
 	correctAnswerText: String? = null,
 ) {
-	val dark = isAppInDarkTheme()
 	val color = if (isCorrect) {
-		if (dark) WordlyColors.DarkSuccess else WordlyColors.LightSuccess
+		WordlyTheme.colors.success
 	} else {
-		if (dark) WordlyColors.DarkError else WordlyColors.LightError
+		MaterialTheme.colorScheme.error
 	}
 	Column(
 		modifier = modifier,
@@ -57,6 +61,31 @@ fun PracticeAnswerFeedback(
 				text = correctAnswerText,
 				style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Medium),
 				color = MaterialTheme.colorScheme.onSurface,
+			)
+		}
+	}
+}
+
+@WordlyPreviews
+@Composable
+private fun PracticeAnswerFeedbackPreview(
+	@PreviewParameter(PreviewThemeProvider::class) theme: PreviewTheme,
+) {
+	WordlyAndroidTheme(darkTheme = theme == PreviewTheme.Dark) {
+		Column(
+			modifier = Modifier.padding(16.dp),
+			verticalArrangement = Arrangement.spacedBy(16.dp),
+		) {
+			PracticeAnswerFeedback(
+				isCorrect = true,
+				correctText = "Верно",
+				incorrectText = "Неверно",
+			)
+			PracticeAnswerFeedback(
+				isCorrect = false,
+				correctText = "Верно",
+				incorrectText = "Неверно",
+				correctAnswerText = "correct",
 			)
 		}
 	}

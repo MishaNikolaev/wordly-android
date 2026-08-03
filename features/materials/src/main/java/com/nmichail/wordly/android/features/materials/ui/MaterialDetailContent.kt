@@ -42,10 +42,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
-import com.nmichail.wordly.android.component.ui.components.Button
-import com.nmichail.wordly.android.component.ui.components.TextLink
+import com.nmichail.wordly.android.component.ui.components.button.CustomButton
+import com.nmichail.wordly.android.component.ui.components.button.TextLink
 import com.nmichail.wordly.android.component.ui.theme.WordlyBrushes
-import com.nmichail.wordly.android.component.ui.theme.WordlyColors
+import com.nmichail.wordly.android.component.ui.theme.isAppInDarkTheme
 import com.nmichail.wordly.android.features.materials.R
 import com.nmichail.wordly.android.features.materials.domain.entity.MaterialDetail
 import com.nmichail.wordly.android.features.materials.domain.entity.MaterialReaction
@@ -112,7 +112,7 @@ private fun MaterialDetailError(
 			textAlign = TextAlign.Center,
 			modifier = Modifier.padding(top = 8.dp),
 		)
-		Button(
+		CustomButton(
 			text = stringResource(R.string.materials_retry),
 			onClick = onRetryClick,
 			modifier = Modifier.padding(top = 24.dp),
@@ -216,11 +216,21 @@ private fun MaterialDetailHero(
 
 @Composable
 private fun MaterialHeroTagsRow(material: MaterialDetail) {
+	val categoryBackground = if (isAppInDarkTheme()) {
+		Color(0xFF16332B)
+	} else {
+		Color(0xFFA7F3D0)
+	}
+	val categoryContent = if (isAppInDarkTheme()) {
+		Color(0xFF4ADE9A)
+	} else {
+		Color(0xFF065F46)
+	}
 	Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
 		HeroTag(
 			text = materialCategoryLabel(material.category),
-			background = WordlyColors.CategoryTagContainer,
-			contentColor = WordlyColors.OnCategoryTag,
+			background = categoryBackground,
+			contentColor = categoryContent,
 		)
 		HeroTag(
 			text = material.typeLabel,

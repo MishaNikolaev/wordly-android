@@ -23,7 +23,7 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.nmichail.wordly.android.component.ui.theme.WordlyColors
+import com.nmichail.wordly.android.component.ui.theme.WordlyTheme
 import com.nmichail.wordly.android.features.words.R
 import com.nmichail.wordly.android.features.words.domain.entity.WordFilter
 
@@ -64,7 +64,7 @@ private fun WordsFilterChip(
 ) {
 	val colorScheme = MaterialTheme.colorScheme
 	val background = if (selected) {
-		WordlyColors.Primary.copy(alpha = 0.16f)
+		WordlyTheme.colors.primaryMuted
 	} else {
 		colorScheme.surfaceVariant.copy(alpha = 0.55f)
 	}

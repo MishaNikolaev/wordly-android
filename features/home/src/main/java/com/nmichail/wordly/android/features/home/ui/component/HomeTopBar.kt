@@ -1,4 +1,4 @@
-package com.nmichail.wordly.android.component.ui.components
+package com.nmichail.wordly.android.features.home.ui.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -20,8 +20,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-
-private const val STREAK_CHIP_ALPHA = 0.12f
+import androidx.compose.ui.tooling.preview.Preview
+import com.nmichail.wordly.android.component.ui.theme.WordlyAndroidTheme
 
 @Composable
 fun HomeTopBar(
@@ -64,7 +64,7 @@ private fun StreakChip(
 	Row(
 		modifier = modifier
 			.clip(CircleShape)
-			.background(color = primary.copy(alpha = STREAK_CHIP_ALPHA), shape = CircleShape)
+			.background(color = primary.copy(alpha = 0.12f), shape = CircleShape)
 			.clickable(role = Role.Button, onClick = onClick)
 			.padding(horizontal = 12.dp, vertical = 8.dp),
 		horizontalArrangement = Arrangement.spacedBy(4.dp),
@@ -81,6 +81,18 @@ private fun StreakChip(
 			style = MaterialTheme.typography.labelMedium,
 			fontWeight = FontWeight.SemiBold,
 			color = primary,
+		)
+	}
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun HomeTopBarPreview() {
+	WordlyAndroidTheme {
+		HomeTopBar(
+			title = "Доброе утро, Alex",
+			streakDays = 5,
+			onStreakClick = {},
 		)
 	}
 }

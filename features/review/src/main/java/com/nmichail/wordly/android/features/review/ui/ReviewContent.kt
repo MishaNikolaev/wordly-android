@@ -19,12 +19,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
-import com.nmichail.wordly.android.component.ui.components.Button
-import com.nmichail.wordly.android.component.ui.components.TextLink
+import com.nmichail.wordly.android.component.ui.components.button.CustomButton
+import com.nmichail.wordly.android.component.ui.components.button.TextLink
 import com.nmichail.wordly.android.features.review.R
 import com.nmichail.wordly.android.features.review.presentation.ReviewComponent
-import com.nmichail.wordly.android.features.review.ui.component.ReviewFinishedContent
 import com.nmichail.wordly.android.features.review.ui.component.ReviewInProgressContent
+import com.nmichail.wordly.android.shared.practice.PracticeFinishedContent
 
 @Composable
 fun ReviewContent(
@@ -59,9 +59,16 @@ fun ReviewContent(
 			)
 		}
 		is ReviewComponent.State.Finished -> {
-			ReviewFinishedContent(
-				state = currentState,
-				onHomeClick = component::handleFinish,
+			PracticeFinishedContent(
+				correctCount = currentState.correctCount,
+				totalCount = currentState.totalCount,
+				subtitle = stringResource(
+					R.string.review_finished_subtitle,
+					currentState.correctCount,
+					currentState.totalCount,
+				),
+				primaryActionText = stringResource(R.string.review_finished_home),
+				onPrimaryClick = component::handleFinish,
 				modifier = modifier,
 			)
 		}
@@ -96,7 +103,7 @@ private fun ReviewError(
 			textAlign = TextAlign.Center,
 			modifier = Modifier.padding(top = 8.dp),
 		)
-		Button(
+		CustomButton(
 			text = stringResource(R.string.review_retry),
 			onClick = onRetryClick,
 			modifier = Modifier.padding(top = 24.dp),

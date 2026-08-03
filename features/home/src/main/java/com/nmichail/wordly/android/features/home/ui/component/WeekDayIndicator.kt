@@ -1,4 +1,4 @@
-package com.nmichail.wordly.android.component.ui.components
+package com.nmichail.wordly.android.features.home.ui.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -17,6 +17,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.foundation.layout.Row
+import androidx.compose.ui.tooling.preview.Preview
+import com.nmichail.wordly.android.component.ui.theme.WordlyAndroidTheme
 
 object WeekDayStatusId {
 	const val Completed = "completed"
@@ -122,6 +125,22 @@ private fun PlainDaySlot(dayOfMonth: Int) {
 					.padding(top = 4.dp)
 					.size(5.dp),
 			)
+		}
+	}
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun WeekDayIndicatorPreview() {
+	WordlyAndroidTheme {
+		Row(
+			modifier = Modifier.padding(16.dp),
+			horizontalArrangement = Arrangement.spacedBy(8.dp),
+		) {
+			WeekDayIndicator(label = "Пн", statusId = WeekDayStatusId.Completed, dayOfMonth = 1)
+			WeekDayIndicator(label = "Вт", statusId = WeekDayStatusId.Today, dayOfMonth = 2)
+			WeekDayIndicator(label = "Ср", statusId = WeekDayStatusId.Missed, dayOfMonth = 3)
+			WeekDayIndicator(label = "Чт", statusId = WeekDayStatusId.Upcoming, dayOfMonth = 4)
 		}
 	}
 }

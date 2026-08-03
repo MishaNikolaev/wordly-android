@@ -32,8 +32,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
-import com.nmichail.wordly.android.component.ui.components.Button
-import com.nmichail.wordly.android.component.ui.components.SearchField
+import com.nmichail.wordly.android.component.ui.components.button.CustomButton
+import com.nmichail.wordly.android.component.ui.components.field.SearchField
 import com.nmichail.wordly.android.features.words.add.ui.AddWordDialog
 import com.nmichail.wordly.android.features.words.detail.ui.WordDetailScreen
 import com.nmichail.wordly.android.features.words.R
@@ -99,7 +99,7 @@ private fun WordsError(
 			textAlign = TextAlign.Center,
 			modifier = Modifier.padding(top = 8.dp),
 		)
-		Button(
+		CustomButton(
 			text = stringResource(R.string.words_retry),
 			onClick = onRetryClick,
 			modifier = Modifier

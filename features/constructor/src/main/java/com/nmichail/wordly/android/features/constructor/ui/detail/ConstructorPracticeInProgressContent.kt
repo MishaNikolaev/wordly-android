@@ -47,19 +47,16 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
-import com.nmichail.wordly.android.component.ui.components.Button
-import com.nmichail.wordly.android.component.ui.components.ConstructorAnswerBoard
-import com.nmichail.wordly.android.component.ui.components.ConstructorWordChip
-import com.nmichail.wordly.android.component.ui.components.ConstructorWordChipStyle
-import com.nmichail.wordly.android.component.ui.components.PracticeAnswerFeedback
+import com.nmichail.wordly.android.component.ui.components.button.CustomButton
+import com.nmichail.wordly.android.features.constructor.ui.component.ConstructorAnswerBoard
+import com.nmichail.wordly.android.features.constructor.ui.component.ConstructorWordChip
+import com.nmichail.wordly.android.features.constructor.ui.component.ConstructorWordChipStyle
+import com.nmichail.wordly.android.shared.practice.PracticeAnswerFeedback
 import com.nmichail.wordly.android.component.ui.theme.WordlyTypography
 import com.nmichail.wordly.android.features.constructor.R
 import com.nmichail.wordly.android.features.constructor.domain.entity.ConstructorWord
 import com.nmichail.wordly.android.features.constructor.presentation.detail.ConstructorPracticeComponent
 import kotlin.math.roundToInt
-
-private const val DRAG_CHIP_SCALE = 1.05f
-private const val DRAG_CHIP_ALPHA = 0.92f
 
 @Composable
 internal fun ConstructorPracticeInProgressContent(
@@ -338,9 +335,9 @@ private fun ConstructorAnswerWordChip(
 				if (isDragging) {
 					translationX = dragOffsetX
 					translationY = dragOffsetY
-					scaleX = DRAG_CHIP_SCALE
-					scaleY = DRAG_CHIP_SCALE
-					alpha = DRAG_CHIP_ALPHA
+					scaleX = 1.05f
+					scaleY = 1.05f
+					alpha = 0.92f
 				}
 			}
 			.then(
@@ -401,7 +398,7 @@ private fun ConstructorPracticeBottomAction(
 	} else {
 		stringResource(R.string.constructor_practice_check)
 	}
-	Button(
+	CustomButton(
 		text = text,
 		onClick = if (isAnswerRevealed) onContinueClick else onCheckClick,
 		enabled = isAnswerRevealed || canCheck,
