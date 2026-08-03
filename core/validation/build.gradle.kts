@@ -1,5 +1,5 @@
 plugins {
-	alias(libs.plugins.wordlyKotlinLibrary)
+	alias(libs.plugins.wordlyAndroidLibrary)
 }
 
 dependencies {

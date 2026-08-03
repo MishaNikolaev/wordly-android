@@ -27,15 +27,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.nmichail.wordly.android.component.ui.components.MaterialsCardBackground
-import com.nmichail.wordly.android.component.ui.components.materialsCardBackgroundStyleFor
-import com.nmichail.wordly.android.component.ui.theme.WordlyColors
+import com.nmichail.wordly.android.features.materials.ui.component.MaterialsCardBackground
+import com.nmichail.wordly.android.features.materials.ui.component.materialsCardBackgroundStyleFor
+import com.nmichail.wordly.android.component.ui.theme.WordlyTheme
 import com.nmichail.wordly.android.features.materials.R
 import com.nmichail.wordly.android.features.materials.domain.entity.MaterialCategory
 import com.nmichail.wordly.android.features.materials.domain.entity.MaterialItem
 import com.nmichail.wordly.android.features.materials.domain.entity.MaterialReadStatus
 
-private val StatusNewAccent = WordlyColors.Primary
 private val StatusReadAccent = Color(0xFF9CA3AF)
 private val CardShape = RoundedCornerShape(10.dp)
 private val CardMinHeight = 220.dp
@@ -78,17 +77,18 @@ internal fun MaterialListItem(
 
 @Composable
 private fun MaterialCategoryChip(text: String) {
+	val primary = MaterialTheme.colorScheme.primary
 	Box(
 		modifier = Modifier
 			.clip(RoundedCornerShape(4.dp))
-			.background(WordlyColors.Primary.copy(alpha = 0.14f))
+			.background(WordlyTheme.colors.primaryMuted)
 			.padding(horizontal = 6.dp, vertical = 2.dp),
 	) {
 		Text(
 			text = text,
 			style = MaterialTheme.typography.labelSmall,
 			fontWeight = FontWeight.Medium,
-			color = WordlyColors.Primary,
+			color = primary,
 		)
 	}
 }
@@ -167,8 +167,9 @@ private fun materialStatusLabel(status: MaterialReadStatus): String =
 		MaterialReadStatus.Read -> stringResource(R.string.materials_status_read)
 	}
 
+@Composable
 private fun materialStatusColor(status: MaterialReadStatus): Color =
 	when (status) {
-		MaterialReadStatus.New -> StatusNewAccent
+		MaterialReadStatus.New -> MaterialTheme.colorScheme.primary
 		MaterialReadStatus.Read -> StatusReadAccent
 	}

@@ -23,10 +23,14 @@ include(
 	":core:validation",
 	":core:preferences",
 
+	":shared:authorization",
+	":shared:catalog",
+	":shared:practice",
 	":shared:converters:dateconverter",
 	":shared:error",
 	":shared:words:domain",
 
 	":component:ui",
+	":component:media",
 	":component:presentation",
 )

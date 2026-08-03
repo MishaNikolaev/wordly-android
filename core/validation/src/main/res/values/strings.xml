@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="empty" />
+
+	<string name="validation_error_empty">Обязательное поле</string>
+	<string name="validation_error_empty_email">Введите email</string>
+	<string name="validation_error_invalid_email">Некорректный email</string>
+	<string name="validation_error_empty_password">Введите пароль</string>
+	<string name="validation_error_invalid_min_length_password">Не меньше 8 символов</string>
+	<string name="validation_error_invalid_max_length_password">Слишком длинный пароль</string>
+	<string name="validation_error_empty_first_name">Введите имя</string>
+	<string name="validation_error_empty_last_name">Введите фамилию</string>
+	<string name="validation_error_invalid_name">Только русские буквы</string>
+	<string name="validation_error_short_first_name">Слишком короткое имя</string>
+	<string name="validation_error_short_last_name">Слишком короткая фамилия</string>
+	<string name="validation_error_long_first_name">Слишком длинное имя</string>
+	<string name="validation_error_long_last_name">Слишком длинная фамилия</string>
+</resources>

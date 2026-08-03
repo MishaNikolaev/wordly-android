@@ -1,5 +1,3 @@
-@file:Suppress("MagicNumber")
-
 package com.nmichail.wordly.android.component.ui.components.snackbar
 
 import androidx.annotation.DrawableRes
@@ -39,9 +37,14 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import com.nmichail.wordly.android.component.ui.R
-
-private val successColor = Color(0xFF4CAF50)
-private val alertColor = Color(0xFFFFC10E)
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
+import com.nmichail.wordly.android.component.ui.theme.WordlyAndroidTheme
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import com.nmichail.wordly.android.component.ui.theme.PreviewTheme
+import com.nmichail.wordly.android.component.ui.theme.PreviewThemeProvider
+import com.nmichail.wordly.android.component.ui.theme.WordlyPreviews
+import com.nmichail.wordly.android.component.ui.theme.WordlyTheme
 
 enum class SnackBarType {
 	INFO,
@@ -237,13 +240,15 @@ internal data class CustomSnackBarVisuals(
 ) : SnackbarVisuals
 
 @Composable
-private fun getSnackBarColor(snackBarType: SnackBarType): Color =
-	when (snackBarType) {
+private fun getSnackBarColor(snackBarType: SnackBarType): Color {
+	val extended = WordlyTheme.colors
+	return when (snackBarType) {
 		SnackBarType.INFO -> MaterialTheme.colorScheme.primary
-		SnackBarType.SUCCESS -> successColor
-		SnackBarType.ALERT -> alertColor
+		SnackBarType.SUCCESS -> extended.success
+		SnackBarType.ALERT -> extended.warning
 		SnackBarType.ERROR -> MaterialTheme.colorScheme.error
 	}
+}
 
 @DrawableRes
 private fun getSnackBarIcon(snackBarType: SnackBarType): Int =
@@ -253,3 +258,33 @@ private fun getSnackBarIcon(snackBarType: SnackBarType): Int =
 		SnackBarType.ALERT -> R.drawable.ic_snackbar_alert
 		SnackBarType.ERROR -> R.drawable.ic_snackbar_error
 	}
+
+@WordlyPreviews
+@Composable
+private fun SnackBarHostPreview(
+	@PreviewParameter(PreviewThemeProvider::class) theme: PreviewTheme,
+) {
+	WordlyAndroidTheme(darkTheme = theme == PreviewTheme.Dark) {
+		val hostState = remember { SnackbarHostState() }
+		LaunchedEffect(Unit) {
+			hostState.showSnackbar(
+				CustomSnackBarVisuals(
+					title = "Серия дней",
+					message = "Вы занимаетесь 7 дней подряд",
+					actionLabel = null,
+					withDismissAction = true,
+					duration = SnackbarDuration.Indefinite,
+					snackBarType = SnackBarType.SUCCESS,
+				),
+			)
+		}
+		Box(
+			modifier = Modifier
+				.fillMaxWidth()
+				.height(120.dp),
+			contentAlignment = Alignment.BottomCenter,
+		) {
+			SnackBarHost(snackBarHostState = hostState)
+		}
+	}
+}

@@ -30,10 +30,9 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
-import com.nmichail.wordly.android.component.ui.R as ComponentR
-import com.nmichail.wordly.android.component.ui.components.Button
-import com.nmichail.wordly.android.component.ui.components.SelectionField
-import com.nmichail.wordly.android.component.ui.components.TextField
+import com.nmichail.wordly.android.component.ui.components.button.CustomButton
+import com.nmichail.wordly.android.component.ui.components.field.SelectionField
+import com.nmichail.wordly.android.component.ui.components.field.CustomTextField
 import com.nmichail.wordly.android.features.profile.R
 import com.nmichail.wordly.android.features.profile.presentation.edit.ProfileEditComponent
 
@@ -90,14 +89,14 @@ private fun ProfileEditError(
 			color = MaterialTheme.colorScheme.onBackground,
 			textAlign = TextAlign.Center,
 		)
-		Button(
+		CustomButton(
 			text = stringResource(R.string.profile_retry),
 			onClick = onRetryClick,
 			modifier = Modifier
 				.fillMaxWidth()
 				.padding(top = 24.dp),
 		)
-		Button(
+		CustomButton(
 			text = stringResource(R.string.profile_edit_back),
 			onClick = onBackClick,
 			modifier = Modifier
@@ -134,7 +133,7 @@ private fun ProfileEditLoaded(
 				modifier = Modifier.padding(top = 20.dp),
 			)
 		}
-		Button(
+		CustomButton(
 			text = stringResource(
 				if (state.saved) R.string.profile_edit_saved else R.string.profile_edit_save,
 			),
@@ -183,19 +182,19 @@ private fun ProfileEditForm(
 		?: state.englishLevel
 
 	Column(modifier = modifier) {
-		TextField(
+		CustomTextField(
 			label = stringResource(R.string.profile_first_name_label),
 			value = state.firstName,
 			onValueChange = component::handleChangeFirstName,
 		)
-		TextField(
+		CustomTextField(
 			label = stringResource(R.string.profile_last_name_label),
 			value = state.lastName,
 			onValueChange = component::handleChangeLastName,
 			modifier = Modifier.padding(top = 16.dp),
 		)
-		TextField(
-			label = stringResource(ComponentR.string.common_label_email),
+		CustomTextField(
+			label = stringResource(R.string.profile_email_label),
 			value = state.email,
 			onValueChange = {},
 			readOnly = true,

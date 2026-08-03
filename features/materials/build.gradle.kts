@@ -11,6 +11,7 @@ dependencies {
 	implementation(libs.androidx.material3)
 	implementation(libs.androidx.material.icons.extended)
 	implementation(libs.androidx.activity.compose)
+	implementation(libs.androidx.ui.tooling.preview)
 	implementation(libs.dagger)
 	implementation(libs.retrofit)
 	implementation(libs.mvikotlin)

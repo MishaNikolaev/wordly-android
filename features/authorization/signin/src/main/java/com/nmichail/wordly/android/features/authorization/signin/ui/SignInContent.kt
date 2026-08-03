@@ -27,17 +27,16 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
-import com.nmichail.wordly.android.component.ui.R as ComponentR
-import com.nmichail.wordly.android.component.ui.components.AuthBackground
-import com.nmichail.wordly.android.component.ui.components.Button
-import com.nmichail.wordly.android.component.ui.components.ScreenTitle
-import com.nmichail.wordly.android.component.ui.components.SignInAuthHeader
-import com.nmichail.wordly.android.component.ui.components.TextField
-import com.nmichail.wordly.android.component.ui.components.TextLink
+import com.nmichail.wordly.android.shared.authorization.AuthBackground
+import com.nmichail.wordly.android.component.ui.components.button.CustomButton
+import com.nmichail.wordly.android.component.ui.components.text.ScreenTitle
+import com.nmichail.wordly.android.features.authorization.signin.ui.component.SignInAuthHeader
+import com.nmichail.wordly.android.component.ui.components.field.CustomTextField
+import com.nmichail.wordly.android.component.ui.components.button.TextLink
 import com.nmichail.wordly.android.component.ui.components.snackbar.SnackBarHost
 import com.nmichail.wordly.android.component.ui.components.snackbar.showErrorSnackBar
-import com.nmichail.wordly.android.component.ui.validation.emailErrorMessage
-import com.nmichail.wordly.android.component.ui.validation.passwordErrorMessage
+import com.nmichail.wordly.android.core.validation.ui.emailErrorMessage
+import com.nmichail.wordly.android.core.validation.ui.passwordErrorMessage
 import com.nmichail.wordly.android.core.validation.DefaultValidationState
 import com.nmichail.wordly.android.features.authorization.signin.R
 import com.nmichail.wordly.android.features.authorization.signin.presentation.SignInComponent
@@ -104,8 +103,8 @@ private fun SignInForm(
 			textAlign = TextAlign.Start,
 		)
 
-		TextField(
-			label = stringResource(ComponentR.string.common_label_email),
+		CustomTextField(
+			label = stringResource(R.string.sign_in_label_email),
 			value = state.email.data,
 			onValueChange = component::handleChangeEmail,
 			keyboardType = KeyboardType.Email,
@@ -114,8 +113,8 @@ private fun SignInForm(
 			modifier = Modifier.padding(top = 24.dp),
 		)
 
-		TextField(
-			label = stringResource(ComponentR.string.common_label_password),
+		CustomTextField(
+			label = stringResource(R.string.sign_in_label_password),
 			value = state.password.data,
 			onValueChange = component::handleChangePassword,
 			isPassword = true,
@@ -131,7 +130,7 @@ private fun SignInForm(
 			modifier = Modifier.padding(top = 8.dp),
 		)
 
-		Button(
+		CustomButton(
 			text = stringResource(R.string.sign_in_submit),
 			onClick = component::handleSubmit,
 			enabled = state.areFieldsValid(),

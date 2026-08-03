@@ -529,8 +529,8 @@ style:
     excludes: [ '**/test/**', '**/androidTest/**' ]
     ignoreNumbers: [ '-1', '0', '1', '2' ]
     ignoreHashCodeFunction: true
-    ignorePropertyDeclaration: false
-    ignoreLocalVariableDeclaration: false
+    ignorePropertyDeclaration: true
+    ignoreLocalVariableDeclaration: true
     ignoreConstantDeclaration: true
     ignoreCompanionObjectPropertyDeclaration: true
     ignoreAnnotation: false

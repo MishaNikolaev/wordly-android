@@ -19,9 +19,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
-import com.nmichail.wordly.android.component.ui.components.BookWordLookupDialog
-import com.nmichail.wordly.android.component.ui.components.Button
-import com.nmichail.wordly.android.component.ui.components.TextLink
+import com.nmichail.wordly.android.features.books.ui.component.BookWordLookupDialog
+import com.nmichail.wordly.android.component.ui.components.button.CustomButton
+import com.nmichail.wordly.android.component.ui.components.button.TextLink
 import com.nmichail.wordly.android.features.books.R
 import com.nmichail.wordly.android.features.books.domain.entity.BookWordDefinition
 import com.nmichail.wordly.android.features.books.presentation.detail.BookReaderComponent
@@ -93,7 +93,7 @@ private fun BookReaderError(
 			textAlign = TextAlign.Center,
 			modifier = Modifier.padding(top = 8.dp),
 		)
-		Button(
+		CustomButton(
 			text = stringResource(R.string.book_reader_retry),
 			onClick = onRetryClick,
 			modifier = Modifier

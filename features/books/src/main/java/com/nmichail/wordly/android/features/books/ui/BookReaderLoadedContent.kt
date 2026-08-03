@@ -43,9 +43,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.dp
-import com.nmichail.wordly.android.component.ui.components.BookReaderPageControls
-import com.nmichail.wordly.android.component.ui.components.BookTranslateButton
-import com.nmichail.wordly.android.component.ui.components.BookTranslatingOverlay
+import com.nmichail.wordly.android.features.books.ui.component.BookReaderPageControls
+import com.nmichail.wordly.android.features.books.ui.component.BookTranslateButton
+import com.nmichail.wordly.android.features.books.ui.component.BookTranslatingOverlay
 import com.nmichail.wordly.android.component.ui.pagination.paginateMeasuredTexts
 import com.nmichail.wordly.android.component.ui.theme.WordlyTypography
 import com.nmichail.wordly.android.features.books.R
@@ -259,7 +259,6 @@ private fun BookReaderPagedContent(
 
 	BoxWithConstraints(modifier = modifier.fillMaxSize()) {
 		val contentWidthPx = (constraints.maxWidth - horizontalPaddingPx).coerceAtLeast(0)
-		// Pack ~1.5 screens per page; overflow is scrollable within the page.
 		val pageHeightPx = ((constraints.maxHeight - verticalPaddingPx) * PAGE_CONTENT_HEIGHT_FACTOR)
 			.toInt()
 			.coerceAtLeast(0)

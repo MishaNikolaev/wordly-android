@@ -1,17 +1,14 @@
-@file:Suppress("MagicNumber")
-
 package com.nmichail.wordly.android.component.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-object WordlyColors {
+internal object WordlyColors {
 
 	val Primary = Color(0xFF9F2BCD)
 	val OnPrimary = Color(0xFFFFFFFF)
 
 	val LightPrimaryContainer = Color(0xFFF0DFF7)
 	val LightOnPrimaryContainer = Color(0xFF4A0F5E)
-	val RepeatDateContainer = Color(0xFFEAE4F6)
 
 	val LightSecondary = Color(0xFF2563EB)
 	val LightOnSecondary = Color(0xFFFFFFFF)
@@ -36,21 +33,12 @@ object WordlyColors {
 	val LightSuccessContainer = Color(0xFFE7F7EE)
 	val LightWarning = Color(0xFFE08A00)
 	val LightWarningContainer = Color(0xFFFFF1DC)
-	val BookLookupUnderline = Color(0xFF9F2BCD)
 
 	val LightStreak = Color(0xFFFF9500)
 	val LightStreakContainer = Color(0xFFFFF2DD)
 
-	val CategoryTagContainer = Color(0xFFA7F3D0)
-	val OnCategoryTag = Color(0xFF065F46)
-
 	val HeroGradientMiddle = Color(0xFFD4559E)
 	val HeroGradientEnd = Color(0xFFFF7B5A)
-
-	val Streak = LightStreak
-	val StreakContainer = LightStreakContainer
-	val ReviewAccent = LightOnPrimaryContainer
-	val ReviewAccentContainer = LightPrimaryContainer
 
 	val DarkPrimary = Color(0xFFB95ADE)
 	val DarkOnPrimary = Color(0xFF1C1C1C)
@@ -82,6 +70,6 @@ object WordlyColors {
 	val DarkWarning = Color(0xFFFFB74D)
 	val DarkWarningContainer = Color(0xFF3A2F1A)
 
-	val DarkStreak = Color(0xFFB95ADE)
-	val DarkStreakContainer = Color(0xFF3A2245)
+	val DarkStreak = Color(0xFFFFB74D)
+	val DarkStreakContainer = Color(0xFF3A2F1A)
 }

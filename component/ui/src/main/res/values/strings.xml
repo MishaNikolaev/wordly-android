@@ -1,115 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string name="logo_icon_letter">W</string>
-	<string name="logo_app_name">Wordly</string>
-
-	<string name="common_label_email">Почта</string>
-	<string name="common_label_password">Пароль</string>
 	<string name="common_password_show">Показать пароль</string>
 	<string name="common_password_hide">Скрыть пароль</string>
 	<string name="common_save">Сохранить</string>
 	<string name="common_cancel">Отменить</string>
 	<string name="common_ok">ОК</string>
 
-	<string name="auth_word_language_direction">EN → RU</string>
-	<string name="auth_word_play_pronunciation">Прослушать произношение</string>
-
-	<string name="auth_preview_resilience_word">resilience</string>
-	<string name="auth_preview_resilience_phonetic">/rɪˈzɪliəns/</string>
-	<string name="auth_preview_resilience_translation">стойкость</string>
-
-	<string name="auth_preview_serendipity_word">serendipity</string>
-	<string name="auth_preview_serendipity_phonetic">/ˌserənˈdɪpəti/</string>
-	<string name="auth_preview_serendipity_translation">случайность</string>
-
-	<string name="auth_preview_deploy_word">deploy</string>
-	<string name="auth_preview_deploy_phonetic">/dɪˈplɔɪ/</string>
-	<string name="auth_preview_deploy_translation">развёртывать</string>
-
-	<string name="auth_preview_eloquent_word">eloquent</string>
-	<string name="auth_preview_eloquent_phonetic">/ˈeləkwənt/</string>
-	<string name="auth_preview_eloquent_translation">красноречивый</string>
-
-	<string name="empty" />
-
-	<string name="validation_error_empty">Обязательное поле</string>
-	<string name="validation_error_empty_email">Введите email</string>
-	<string name="validation_error_invalid_email">Некорректный email</string>
-	<string name="validation_error_empty_password">Введите пароль</string>
-	<string name="validation_error_invalid_min_length_password">Не меньше 8 символов</string>
-	<string name="validation_error_invalid_max_length_password">Слишком длинный пароль</string>
-	<string name="validation_error_empty_first_name">Введите имя</string>
-	<string name="validation_error_empty_last_name">Введите фамилию</string>
-	<string name="validation_error_invalid_name">Только русские буквы</string>
-	<string name="validation_error_short_first_name">Слишком короткое имя</string>
-	<string name="validation_error_short_last_name">Слишком короткая фамилия</string>
-	<string name="validation_error_long_first_name">Слишком длинное имя</string>
-	<string name="validation_error_long_last_name">Слишком длинная фамилия</string>
-
-	<string name="home_screen_title">Учиться</string>
-	<string name="home_greeting_morning">Доброе утро, %1$s</string>
-	<string name="home_greeting_day">Добрый день, %1$s</string>
-	<string name="home_greeting_evening">Добрый вечер, %1$s</string>
-	<string name="home_greeting_night">Доброй ночи, %1$s</string>
-
-	<string name="home_day_mon">Пн</string>
-	<string name="home_day_tue">Вт</string>
-	<string name="home_day_wed">Ср</string>
-	<string name="home_day_thu">Чт</string>
-	<string name="home_day_fri">Пт</string>
-	<string name="home_day_sat">Сб</string>
-	<string name="home_day_sun">Вс</string>
-
-	<string name="home_week_title">Эта неделя</string>
-	<string name="home_week_month_link">весь месяц</string>
-
-	<string name="home_daily_review_chip">Повторение на сегодня</string>
-	<string name="home_daily_review_duration">≈ %d мин</string>
-	<string name="home_daily_review_start">Начать</string>
-
-	<plurals name="home_words_to_review_prefix">
-		<item quantity="one">слово к</item>
-		<item quantity="few">слова к</item>
-		<item quantity="many">слов к</item>
-		<item quantity="other">слов к</item>
-	</plurals>
-	<string name="home_words_to_review_suffix">повторению</string>
-
-	<plurals name="home_daily_review_streak">
-		<item quantity="one">серия %d день</item>
-		<item quantity="few">серия %d дня</item>
-		<item quantity="many">серия %d дней</item>
-		<item quantity="other">серия %d дней</item>
-	</plurals>
-
-	<string name="home_trainings_section">Тренировки</string>
-
 	<string name="search_field_icon">Поиск</string>
 
-	<string name="home_training_cards_title">Карточки</string>
-	<string name="home_training_cards_subtitle">слова по темам</string>
-	<string name="home_training_constructor_title">Конструктор</string>
-	<string name="home_training_constructor_subtitle">собери фразу из слов</string>
-	<string name="home_training_listening_title">Аудирование</string>
-	<string name="home_training_listening_subtitle">услышь и впиши</string>
-	<string name="home_training_songs_title">Песни</string>
-	<string name="home_training_songs_subtitle">караоке с пропусками</string>
-	<string name="home_training_movies_title">Фильмы</string>
-	<string name="home_training_movies_subtitle">учи по сценам</string>
-	<string name="home_training_books_title">Книги</string>
-	<string name="home_training_books_subtitle">читай любимые книги</string>
+	<string name="calendar_day_mon">Пн</string>
+	<string name="calendar_day_tue">Вт</string>
+	<string name="calendar_day_wed">Ср</string>
+	<string name="calendar_day_thu">Чт</string>
+	<string name="calendar_day_fri">Пт</string>
+	<string name="calendar_day_sat">Сб</string>
+	<string name="calendar_day_sun">Вс</string>
 
-	<string name="calendar_title">Активность</string>
 	<string name="calendar_close">Закрыть</string>
 	<string name="calendar_done">Готово</string>
 	<string name="calendar_today">Сегодня</string>
 	<string name="calendar_previous_month">Предыдущий месяц</string>
 	<string name="calendar_next_month">Следующий месяц</string>
-	<string name="calendar_legend_completed">занимался</string>
-	<string name="calendar_legend_missed">пропуск</string>
-	<string name="calendar_legend_today">сегодня</string>
-	<string name="calendar_stat_days_in_month">дней в месяце</string>
-	<string name="calendar_stat_current_streak">серия сейчас</string>
-	<string name="calendar_stat_completion">выполнение</string>
-	<string name="calendar_stat_percent">%d%%</string>
 </resources>

@@ -18,8 +18,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.nmichail.wordly.android.component.ui.R as ComponentR
-import com.nmichail.wordly.android.component.ui.components.Button
-import com.nmichail.wordly.android.component.ui.components.SelectionDialog
+import com.nmichail.wordly.android.component.ui.components.button.CustomButton
+import com.nmichail.wordly.android.component.ui.components.dialog.SelectionDialog
 import com.nmichail.wordly.android.core.preferences.domain.entity.AppThemeMode
 import com.nmichail.wordly.android.features.profile.R
 import com.nmichail.wordly.android.features.profile.domain.entity.DailyGoal
@@ -201,13 +201,13 @@ private fun LogoutDialog(
 					textAlign = TextAlign.Center,
 					modifier = Modifier.padding(top = 8.dp),
 				)
-				Button(
+				CustomButton(
 					text = stringResource(R.string.profile_logout_confirm),
 					onClick = onConfirm,
 					loading = loggingOut,
 					modifier = Modifier.padding(top = 24.dp),
 				)
-				Button(
+				CustomButton(
 					text = stringResource(R.string.profile_logout_cancel),
 					onClick = onDismiss,
 					enabled = !loggingOut,

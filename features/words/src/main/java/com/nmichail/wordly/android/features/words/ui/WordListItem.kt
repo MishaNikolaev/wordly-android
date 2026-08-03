@@ -2,7 +2,6 @@ package com.nmichail.wordly.android.features.words.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -22,7 +21,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.nmichail.wordly.android.component.ui.theme.WordlyColors
+import com.nmichail.wordly.android.component.ui.theme.WordlyTheme
 import com.nmichail.wordly.android.component.ui.theme.WordlyTypography
 import com.nmichail.wordly.android.features.words.R
 import com.nmichail.wordly.android.features.words.domain.entity.WordItem
@@ -103,10 +102,10 @@ private fun wordStatusLabel(status: WordStatus): String =
 
 @Composable
 private fun wordStatusColor(status: WordStatus): Color {
-	val dark = isSystemInDarkTheme()
+	val extended = WordlyTheme.colors
 	return when (status) {
-		WordStatus.New -> if (dark) WordlyColors.DarkOnSurfaceVariant2 else WordlyColors.LightOnSurfaceVariant2
-		WordStatus.InProgress -> if (dark) WordlyColors.DarkWarning else WordlyColors.LightWarning
-		WordStatus.Learned -> if (dark) WordlyColors.DarkSuccess else WordlyColors.LightSuccess
+		WordStatus.New -> extended.muted
+		WordStatus.InProgress -> extended.warning
+		WordStatus.Learned -> extended.success
 	}
 }

@@ -8,6 +8,7 @@
 	<string name="profile_edit_back">Назад</string>
 	<string name="profile_first_name_label">Имя</string>
 	<string name="profile_last_name_label">Фамилия</string>
+	<string name="profile_email_label">Почта</string>
 	<string name="profile_english_level_label">Уровень английского</string>
 	<string name="profile_daily_goal">Дневная цель</string>
 	<string name="profile_daily_goal_value">%d слов</string>

@@ -19,6 +19,8 @@ dependencies {
 	ksp(libs.dagger.compiler)
 
 	implementation(projects.component.ui)
+	implementation(projects.shared.catalog)
+	implementation(projects.shared.practice)
 	implementation(projects.component.presentation)
 	implementation(projects.core.navigation)
 	implementation(projects.core.network)

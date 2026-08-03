@@ -1,6 +1,6 @@
 package com.nmichail.wordly.android.features.words.detail.presentation
 
-import com.nmichail.wordly.android.component.ui.components.CalendarDay
+import com.nmichail.wordly.android.component.ui.components.calendar.CalendarDay
 import com.nmichail.wordly.android.features.words.domain.entity.WordExample
 import com.nmichail.wordly.android.features.words.domain.entity.WordStatus
 

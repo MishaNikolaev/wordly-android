@@ -2,11 +2,6 @@ package com.nmichail.wordly.android.component.ui.pagination
 
 import androidx.compose.ui.text.TextStyle
 
-/**
- * Measures [primaryTexts] (and optional [alternateTexts] at the same indices) and packs
- * them into pages. When an alternate text is present, height is max(primary, alternate)
- * so page breaks stay stable when switching languages.
- */
 fun paginateMeasuredTexts(
 	primaryTexts: List<String>,
 	alternateTexts: List<String?>,
@@ -37,5 +32,5 @@ fun paginateMeasuredTexts(
 		pageHeightPx = pageHeightPx,
 		spacingPx = spacingPx,
 		firstPageReservedPx = firstPageReservedPx,
-	).ifEmpty { listOf(primaryTexts.indices) }
+	)
 }

@@ -21,21 +21,20 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
-import com.nmichail.wordly.android.component.ui.R as ComponentR
-import com.nmichail.wordly.android.component.ui.components.AuthBackground
-import com.nmichail.wordly.android.component.ui.components.Button
-import com.nmichail.wordly.android.component.ui.components.LinkedText
-import com.nmichail.wordly.android.component.ui.components.ScreenTitle
-import com.nmichail.wordly.android.component.ui.components.SelectionField
-import com.nmichail.wordly.android.component.ui.components.SignUpAuthHeader
-import com.nmichail.wordly.android.component.ui.components.TextField
-import com.nmichail.wordly.android.component.ui.components.TextLink
+import com.nmichail.wordly.android.shared.authorization.AuthBackground
+import com.nmichail.wordly.android.component.ui.components.button.CustomButton
+import com.nmichail.wordly.android.component.ui.components.text.LinkedText
+import com.nmichail.wordly.android.component.ui.components.text.ScreenTitle
+import com.nmichail.wordly.android.component.ui.components.field.SelectionField
+import com.nmichail.wordly.android.features.authorization.signup.ui.component.SignUpAuthHeader
+import com.nmichail.wordly.android.component.ui.components.field.CustomTextField
+import com.nmichail.wordly.android.component.ui.components.button.TextLink
 import com.nmichail.wordly.android.component.ui.components.snackbar.SnackBarHost
 import com.nmichail.wordly.android.component.ui.components.snackbar.showErrorSnackBar
-import com.nmichail.wordly.android.component.ui.validation.emailErrorMessage
-import com.nmichail.wordly.android.component.ui.validation.nameErrorMessage
-import com.nmichail.wordly.android.component.ui.validation.notEmptyErrorMessage
-import com.nmichail.wordly.android.component.ui.validation.passwordErrorMessage
+import com.nmichail.wordly.android.core.validation.ui.emailErrorMessage
+import com.nmichail.wordly.android.core.validation.ui.nameErrorMessage
+import com.nmichail.wordly.android.core.validation.ui.notEmptyErrorMessage
+import com.nmichail.wordly.android.core.validation.ui.passwordErrorMessage
 import com.nmichail.wordly.android.core.validation.DefaultValidationState
 import com.nmichail.wordly.android.core.validation.name.NamePart
 import com.nmichail.wordly.android.core.validation.notEmpty.NotEmptyValidationState
@@ -100,8 +99,8 @@ private fun SignUpForm(
 			textAlign = TextAlign.Start,
 		)
 
-		TextField(
-			label = stringResource(ComponentR.string.common_label_email),
+		CustomTextField(
+			label = stringResource(R.string.sign_up_label_email),
 			value = state.email.data,
 			onValueChange = component::handleChangeEmail,
 			keyboardType = KeyboardType.Email,
@@ -109,8 +108,8 @@ private fun SignUpForm(
 			errorMessage = stringResource(id = emailErrorMessage(state = state.email.validationState)),
 			modifier = Modifier.padding(top = 24.dp),
 		)
-		TextField(
-			label = stringResource(ComponentR.string.common_label_password),
+		CustomTextField(
+			label = stringResource(R.string.sign_up_label_password),
 			value = state.password.data,
 			onValueChange = component::handleChangePassword,
 			isPassword = true,
@@ -122,7 +121,7 @@ private fun SignUpForm(
 		SignUpNameFields(state = state, component = component)
 		SignUpEnglishLevelField(state = state, component = component)
 
-		Button(
+		CustomButton(
 			text = stringResource(R.string.sign_up_submit),
 			onClick = component::handleSubmit,
 			enabled = state.areFieldsValid(),
@@ -158,7 +157,7 @@ private fun SignUpNameFields(
 			.fillMaxWidth()
 			.padding(top = 16.dp),
 	) {
-		TextField(
+		CustomTextField(
 			label = stringResource(R.string.sign_up_first_name_label),
 			value = state.firstName.data,
 			onValueChange = component::handleChangeFirstName,
@@ -173,7 +172,7 @@ private fun SignUpNameFields(
 				.weight(1f)
 				.padding(end = 8.dp),
 		)
-		TextField(
+		CustomTextField(
 			label = stringResource(R.string.sign_up_last_name_label),
 			value = state.lastName.data,
 			onValueChange = component::handleChangeLastName,

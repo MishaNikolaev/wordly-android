@@ -1,0 +1,93 @@
+package com.nmichail.wordly.android.features.authorization.signup.ui.component
+
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import com.nmichail.wordly.android.features.authorization.signup.R
+import com.nmichail.wordly.android.shared.authorization.AuthPreviewWordCard
+import com.nmichail.wordly.android.shared.authorization.Logo
+import androidx.compose.foundation.background
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.ui.tooling.preview.Preview
+import com.nmichail.wordly.android.component.ui.theme.WordlyAndroidTheme
+
+@Composable
+fun SignUpAuthHeader(
+	modifier: Modifier = Modifier,
+) {
+	Column(
+		modifier = modifier
+			.fillMaxWidth()
+			.padding(horizontal = 20.dp)
+			.padding(top = 12.dp, bottom = 28.dp),
+		horizontalAlignment = Alignment.Start,
+	) {
+		Logo()
+		Box(
+			modifier = Modifier
+				.fillMaxWidth()
+				.padding(top = 20.dp)
+				.graphicsLayer { clip = false },
+			contentAlignment = Alignment.TopCenter,
+		) {
+			Box(
+				modifier = Modifier
+					.width(296.dp)
+					.height(164.dp)
+					.padding(vertical = 8.dp),
+			) {
+				AuthPreviewWordCard(
+					word = stringResource(R.string.auth_preview_serendipity_word),
+					translation = stringResource(R.string.auth_preview_serendipity_translation),
+					modifier = Modifier
+						.align(Alignment.TopStart)
+						.offset(x = (-10).dp),
+					rotation = 10f,
+				)
+				AuthPreviewWordCard(
+					word = stringResource(R.string.auth_preview_deploy_word),
+					translation = stringResource(R.string.auth_preview_deploy_translation),
+					modifier = Modifier
+						.align(Alignment.TopEnd)
+						.offset(
+							x = 22.dp,
+							y = (-14).dp,
+						),
+					rotation = -14f,
+				)
+				AuthPreviewWordCard(
+					word = stringResource(R.string.auth_preview_resilience_word),
+					translation = stringResource(R.string.auth_preview_resilience_translation),
+					modifier = Modifier
+						.align(Alignment.BottomCenter)
+						.offset(y = (-16).dp),
+					rotation = 0f,
+				)
+			}
+		}
+	}
+}
+
+@Preview(showBackground = true, heightDp = 360)
+@Composable
+private fun SignUpAuthHeaderPreview() {
+	WordlyAndroidTheme {
+		Box(
+			modifier = Modifier
+				.fillMaxWidth()
+				.background(MaterialTheme.colorScheme.primary),
+		) {
+			SignUpAuthHeader()
+		}
+	}
+}

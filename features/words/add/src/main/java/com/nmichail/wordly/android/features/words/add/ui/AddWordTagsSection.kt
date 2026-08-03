@@ -1,5 +1,6 @@
 package com.nmichail.wordly.android.features.words.add.ui
 
+import com.nmichail.wordly.android.component.ui.theme.WordlyTheme
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -24,7 +25,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.nmichail.wordly.android.component.ui.theme.WordlyColors
 import com.nmichail.wordly.android.features.words.add.R
 import com.nmichail.wordly.android.features.words.domain.entity.WordTag
 
@@ -114,12 +114,15 @@ private fun TagChip(
 	)
 }
 
+@Composable
 private fun tagPalette(index: Int): Color {
+	val colorScheme = MaterialTheme.colorScheme
+	val extended = WordlyTheme.colors
 	val colors = listOf(
-		WordlyColors.Primary,
-		WordlyColors.LightSecondary,
-		WordlyColors.LightSuccess,
-		WordlyColors.LightWarning,
+		colorScheme.primary,
+		colorScheme.secondary,
+		extended.success,
+		extended.warning,
 	)
 	return colors[index % colors.size]
 }

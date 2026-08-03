@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="logo_app_name">Wordly</string>
+	<string name="auth_word_language_direction">EN → RU</string>
+	<string name="auth_word_play_pronunciation">Прослушать произношение</string>
+</resources>
