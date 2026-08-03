@@ -1,47 +1,57 @@
 package com.nmichail.wordly.android.component.ui.pagination
 
-/**
- * Packs item heights into pages that fit [pageHeightPx].
- *
- * [firstPageReservedPx] is subtracted from the first page only (e.g. a hint row).
- * Oversized items still occupy a page alone.
- */
 fun paginateItemHeights(
 	itemHeightsPx: List<Int>,
 	pageHeightPx: Int,
 	spacingPx: Int,
 	firstPageReservedPx: Int = 0,
 ): List<IntRange> {
-	if (itemHeightsPx.isEmpty() || pageHeightPx <= 0) {
-		return emptyList()
-	}
+	if (itemHeightsPx.isEmpty()) return emptyList()
+	if (pageHeightPx <= 0) return listOf(itemHeightsPx.indices)
 
-	val pages = mutableListOf<IntRange>()
-	var pageStart = 0
-	var usedHeight = 0
-	var isFirstPage = true
+	val spacing = spacingPx.coerceAtLeast(0)
 
-	itemHeightsPx.forEachIndexed { index, height ->
-		val itemHeight = height.coerceAtLeast(0)
-		val capacity = if (isFirstPage) {
-			(pageHeightPx - firstPageReservedPx.coerceAtLeast(0)).coerceAtLeast(0)
-		} else {
-			pageHeightPx
+	return buildList {
+		var pageStart = 0
+		var usedHeight = firstPageReservedPx.coerceAtLeast(0)
+		var itemsOnPage = 0
+
+		fun closePage(endExclusive: Int) {
+			if (pageStart < endExclusive) {
+				add(pageStart until endExclusive)
+			}
+			pageStart = endExclusive
+			usedHeight = 0
+			itemsOnPage = 0
 		}
-		val spacing = if (usedHeight == 0) 0 else spacingPx
-		val needed = spacing + itemHeight
-		val wouldExceed = usedHeight > 0 && usedHeight + needed > capacity
 
-		if (wouldExceed) {
-			pages += pageStart until index
-			pageStart = index
-			usedHeight = itemHeight
-			isFirstPage = false
-		} else {
-			usedHeight += needed
+		itemHeightsPx.forEachIndexed { index, rawHeight ->
+			val itemHeight = rawHeight.coerceAtLeast(0)
+			val gap = when {
+				itemsOnPage > 0 -> spacing
+				usedHeight > 0 -> spacing
+				else -> 0
+			}
+			val needed = gap + itemHeight
+			val exceeds = usedHeight + needed > pageHeightPx
+
+			when {
+				!exceeds -> {
+					usedHeight += needed
+					itemsOnPage += 1
+				}
+				itemsOnPage > 0 -> {
+					closePage(endExclusive = index)
+					usedHeight = itemHeight
+					itemsOnPage = 1
+				}
+				else -> {
+					usedHeight += needed
+					itemsOnPage = 1
+				}
+			}
 		}
-	}
 
-	pages += pageStart until itemHeightsPx.size
-	return pages
+		closePage(endExclusive = itemHeightsPx.size)
+	}
 }

@@ -1,4 +1,4 @@
-package com.nmichail.wordly.android.component.ui.components
+package com.nmichail.wordly.android.component.ui.components.field
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
@@ -18,6 +18,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import com.nmichail.wordly.android.component.ui.R
+import androidx.compose.foundation.layout.padding
+import com.nmichail.wordly.android.component.ui.theme.WordlyAndroidTheme
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import com.nmichail.wordly.android.component.ui.theme.PreviewTheme
+import com.nmichail.wordly.android.component.ui.theme.PreviewThemeProvider
+import com.nmichail.wordly.android.component.ui.theme.WordlyPreviews
 
 @Composable
 fun SearchField(
@@ -66,4 +72,19 @@ fun SearchField(
 			unfocusedTextColor = colorScheme.onSurface,
 		),
 	)
+}
+
+@WordlyPreviews
+@Composable
+private fun SearchFieldPreview(
+	@PreviewParameter(PreviewThemeProvider::class) theme: PreviewTheme,
+) {
+	WordlyAndroidTheme(darkTheme = theme == PreviewTheme.Dark) {
+		SearchField(
+			value = "наука",
+			onValueChange = {},
+			placeholder = "Поиск",
+			modifier = Modifier.padding(16.dp),
+		)
+	}
 }

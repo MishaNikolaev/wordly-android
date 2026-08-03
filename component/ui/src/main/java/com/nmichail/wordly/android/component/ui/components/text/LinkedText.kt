@@ -1,4 +1,4 @@
-package com.nmichail.wordly.android.component.ui.components
+package com.nmichail.wordly.android.component.ui.components.text
 
 import android.text.SpannableString
 import android.text.style.URLSpan
@@ -24,6 +24,13 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.foundation.layout.padding
+import androidx.compose.ui.unit.dp
+import com.nmichail.wordly.android.component.ui.theme.WordlyAndroidTheme
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import com.nmichail.wordly.android.component.ui.theme.PreviewTheme
+import com.nmichail.wordly.android.component.ui.theme.PreviewThemeProvider
+import com.nmichail.wordly.android.component.ui.theme.WordlyPreviews
 
 @Composable
 fun LinkedText(
@@ -148,3 +155,18 @@ private fun AnnotatedString.linkTagAt(position: Int): String? =
 		.firstOrNull()
 		?.let { it.item as? LinkAnnotation.Clickable }
 		?.tag
+
+@WordlyPreviews
+@Composable
+private fun LinkedTextPreview(
+	@PreviewParameter(PreviewThemeProvider::class) theme: PreviewTheme,
+) {
+	WordlyAndroidTheme(darkTheme = theme == PreviewTheme.Dark) {
+		LinkedText(
+			text = "Продолжая, вы принимаете Условия",
+			linkText = "Условия",
+			onLinkClick = {},
+			modifier = Modifier.padding(16.dp),
+		)
+	}
+}
