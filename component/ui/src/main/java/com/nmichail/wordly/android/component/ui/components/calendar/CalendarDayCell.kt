@@ -1,4 +1,4 @@
-package com.nmichail.wordly.android.component.ui.components
+package com.nmichail.wordly.android.component.ui.components.calendar
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -19,6 +19,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.foundation.layout.Row
+import com.nmichail.wordly.android.component.ui.theme.WordlyAndroidTheme
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import com.nmichail.wordly.android.component.ui.theme.PreviewTheme
+import com.nmichail.wordly.android.component.ui.theme.PreviewThemeProvider
+import com.nmichail.wordly.android.component.ui.theme.WordlyPreviews
 
 @Composable
 fun CalendarDayCell(
@@ -164,4 +170,31 @@ private fun SpacerDot() {
 			.padding(top = 4.dp)
 			.size(5.dp),
 	)
+}
+
+@WordlyPreviews
+@Composable
+private fun CalendarDayCellPreview(
+	@PreviewParameter(PreviewThemeProvider::class) theme: PreviewTheme,
+) {
+	WordlyAndroidTheme(darkTheme = theme == PreviewTheme.Dark) {
+		Row(
+			modifier = Modifier.padding(16.dp),
+			horizontalArrangement = Arrangement.spacedBy(8.dp),
+		) {
+			listOf(
+				CalendarDayStatusId.Today,
+				CalendarDayStatusId.Selected,
+				CalendarDayStatusId.Completed,
+				CalendarDayStatusId.Missed,
+				CalendarDayStatusId.Inactive,
+			).forEachIndexed { index, status ->
+				CalendarDayCell(
+					day = CalendarDay(dayOfMonth = index + 1, statusId = status),
+					onClick = {},
+					modifier = Modifier.size(40.dp),
+				)
+			}
+		}
+	}
 }

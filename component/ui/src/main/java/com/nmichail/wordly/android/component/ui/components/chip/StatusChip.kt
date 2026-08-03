@@ -1,9 +1,8 @@
-@file:Suppress("MagicNumber")
-
-package com.nmichail.wordly.android.component.ui.components
+package com.nmichail.wordly.android.component.ui.components.chip
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -18,14 +17,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.nmichail.wordly.android.component.ui.theme.WordlyPreviews
+import com.nmichail.wordly.android.component.ui.theme.WordlyTheme
+import com.nmichail.wordly.android.component.ui.theme.WordlyAndroidTheme
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import com.nmichail.wordly.android.component.ui.theme.PreviewTheme
+import com.nmichail.wordly.android.component.ui.theme.PreviewThemeProvider
 import com.nmichail.wordly.android.component.ui.theme.isAppInDarkTheme
-
-private val DarkChipScrim = Color.Black.copy(alpha = 0.55f)
 
 enum class StatusChipStyle {
 	Neutral,
 	Accent,
-	Warm,
 	Streak,
 	OnMedia,
 }
@@ -70,17 +72,18 @@ fun StatusChip(
 @Composable
 private fun chipColors(style: StatusChipStyle): ChipColors {
 	val colorScheme = MaterialTheme.colorScheme
+	val extended = WordlyTheme.colors
 	val dark = isAppInDarkTheme()
 
 	return when (style) {
 		StatusChipStyle.Neutral -> ChipColors(
-			background = if (dark) DarkChipScrim else colorScheme.surface,
+			background = if (dark) Color.Black.copy(alpha = 0.55f) else colorScheme.surface,
 			content = if (dark) colorScheme.onSurface else colorScheme.onSurfaceVariant,
 			icon = if (dark) colorScheme.onSurface else colorScheme.onSurfaceVariant,
 		)
 		StatusChipStyle.Accent -> if (dark) {
 			ChipColors(
-				background = DarkChipScrim,
+				background = Color.Black.copy(alpha = 0.55f),
 				content = colorScheme.onPrimaryContainer,
 				icon = colorScheme.onPrimaryContainer,
 			)
@@ -91,16 +94,10 @@ private fun chipColors(style: StatusChipStyle): ChipColors {
 				icon = colorScheme.onPrimaryContainer,
 			)
 		}
-		StatusChipStyle.Warm,
-		StatusChipStyle.Streak,
-		-> ChipColors(
-			background = if (dark) {
-				colorScheme.primaryContainer
-			} else {
-				colorScheme.primary.copy(alpha = 0.12f)
-			},
-			content = colorScheme.primary,
-			icon = colorScheme.primary,
+		StatusChipStyle.Streak -> ChipColors(
+			background = extended.streakContainer,
+			content = extended.streak,
+			icon = extended.streak,
 		)
 		StatusChipStyle.OnMedia -> ChipColors(
 			background = Color.White.copy(alpha = 0.22f),
@@ -115,3 +112,20 @@ private data class ChipColors(
 	val content: Color,
 	val icon: Color,
 )
+
+@WordlyPreviews
+@Composable
+private fun StatusChipPreview(
+	@PreviewParameter(PreviewThemeProvider::class) theme: PreviewTheme,
+) {
+	WordlyAndroidTheme(darkTheme = theme == PreviewTheme.Dark) {
+		Column(
+			modifier = Modifier.padding(16.dp),
+			verticalArrangement = Arrangement.spacedBy(8.dp),
+		) {
+			StatusChipStyle.entries.forEach { style ->
+				StatusChip(text = style.name, style = style)
+			}
+		}
+	}
+}

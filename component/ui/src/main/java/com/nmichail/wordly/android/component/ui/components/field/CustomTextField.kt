@@ -1,5 +1,6 @@
-package com.nmichail.wordly.android.component.ui.components
+package com.nmichail.wordly.android.component.ui.components.field
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -26,9 +27,14 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import com.nmichail.wordly.android.component.ui.R
+import com.nmichail.wordly.android.component.ui.theme.WordlyAndroidTheme
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import com.nmichail.wordly.android.component.ui.theme.PreviewTheme
+import com.nmichail.wordly.android.component.ui.theme.PreviewThemeProvider
+import com.nmichail.wordly.android.component.ui.theme.WordlyPreviews
 
 @Composable
-fun TextField(
+fun CustomTextField(
 	label: String,
 	value: String,
 	onValueChange: (String) -> Unit,
@@ -71,7 +77,7 @@ fun TextField(
 			keyboardOptions = KeyboardOptions(
 				keyboardType = if (isPassword) KeyboardType.Password else keyboardType,
 			),
-			colors = textFieldColors(),
+			colors = customTextFieldColors(),
 		)
 	}
 }
@@ -128,7 +134,7 @@ private fun PasswordVisibilityToggle(
 }
 
 @Composable
-private fun textFieldColors(): TextFieldColors =
+private fun customTextFieldColors(): TextFieldColors =
 	OutlinedTextFieldDefaults.colors(
 		focusedContainerColor = MaterialTheme.colorScheme.surface,
 		unfocusedContainerColor = MaterialTheme.colorScheme.surface,
@@ -151,3 +157,26 @@ private fun fieldErrorText(errorMessage: String): (@Composable () -> Unit)? =
 	} else {
 		null
 	}
+
+@WordlyPreviews
+@Composable
+private fun CustomTextFieldPreview(
+	@PreviewParameter(PreviewThemeProvider::class) theme: PreviewTheme,
+) {
+	WordlyAndroidTheme(darkTheme = theme == PreviewTheme.Dark) {
+		Column(
+			modifier = Modifier.padding(16.dp),
+			verticalArrangement = Arrangement.spacedBy(12.dp),
+		) {
+			CustomTextField(label = "Email", value = "demo@wordly.app", onValueChange = {})
+			CustomTextField(label = "Password", value = "secret", onValueChange = {}, isPassword = true)
+			CustomTextField(
+				label = "Name",
+				value = "",
+				onValueChange = {},
+				errorVisible = true,
+				errorMessage = "Обязательное поле",
+			)
+		}
+	}
+}

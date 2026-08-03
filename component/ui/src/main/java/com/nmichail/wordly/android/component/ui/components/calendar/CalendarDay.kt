@@ -1,4 +1,4 @@
-package com.nmichail.wordly.android.component.ui.components
+package com.nmichail.wordly.android.component.ui.components.calendar
 
 data class CalendarDay(
 	val dayOfMonth: Int,

@@ -19,12 +19,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
-import com.nmichail.wordly.android.component.ui.components.Button
-import com.nmichail.wordly.android.component.ui.components.TextLink
+import com.nmichail.wordly.android.component.ui.components.button.CustomButton
+import com.nmichail.wordly.android.component.ui.components.button.TextLink
 import com.nmichail.wordly.android.features.cards.R
 import com.nmichail.wordly.android.features.cards.presentation.detail.CardPracticeComponent
-import com.nmichail.wordly.android.features.cards.ui.detail.CardPracticeFinishedContent
 import com.nmichail.wordly.android.features.cards.ui.detail.CardPracticeInProgressContent
+import com.nmichail.wordly.android.shared.practice.PracticeFinishedContent
 
 @Composable
 fun CardPracticeContent(
@@ -59,9 +59,16 @@ fun CardPracticeContent(
 			)
 		}
 		is CardPracticeComponent.State.Finished -> {
-			CardPracticeFinishedContent(
-				state = currentState,
-				onBackClick = component::handleFinish,
+			PracticeFinishedContent(
+				correctCount = currentState.correctCount,
+				totalCount = currentState.totalCount,
+				subtitle = stringResource(
+					R.string.card_practice_finished_subtitle,
+					currentState.correctCount,
+					currentState.totalCount,
+				),
+				primaryActionText = stringResource(R.string.card_practice_finished_back),
+				onPrimaryClick = component::handleFinish,
 				modifier = modifier,
 			)
 		}
@@ -96,7 +103,7 @@ private fun CardPracticeError(
 			textAlign = TextAlign.Center,
 			modifier = Modifier.padding(top = 8.dp),
 		)
-		Button(
+		CustomButton(
 			text = stringResource(R.string.cards_retry),
 			onClick = onRetryClick,
 			modifier = Modifier.padding(top = 24.dp),

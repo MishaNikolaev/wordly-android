@@ -1,4 +1,4 @@
-package com.nmichail.wordly.android.component.ui.components
+package com.nmichail.wordly.android.component.ui.components.card
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
@@ -10,6 +10,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.compose.material3.Text
+import com.nmichail.wordly.android.component.ui.theme.WordlyAndroidTheme
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import com.nmichail.wordly.android.component.ui.theme.PreviewTheme
+import com.nmichail.wordly.android.component.ui.theme.PreviewThemeProvider
+import com.nmichail.wordly.android.component.ui.theme.WordlyPreviews
 
 @Composable
 fun AppCard(
@@ -47,5 +53,20 @@ fun AppCard(
 			elevation = elevation,
 			content = { body() },
 		)
+	}
+}
+
+@WordlyPreviews
+@Composable
+private fun AppCardPreview(
+	@PreviewParameter(PreviewThemeProvider::class) theme: PreviewTheme,
+) {
+	WordlyAndroidTheme(darkTheme = theme == PreviewTheme.Dark) {
+		AppCard(
+			modifier = Modifier.padding(16.dp),
+			onClick = {},
+		) {
+			Text(text = "App card content")
+		}
 	}
 }

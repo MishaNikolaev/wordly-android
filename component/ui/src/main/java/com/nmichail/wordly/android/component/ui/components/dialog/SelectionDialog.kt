@@ -1,4 +1,4 @@
-package com.nmichail.wordly.android.component.ui.components
+package com.nmichail.wordly.android.component.ui.components.dialog
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -29,6 +29,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import com.nmichail.wordly.android.component.ui.components.button.CustomButton
+import com.nmichail.wordly.android.component.ui.theme.WordlyAndroidTheme
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import com.nmichail.wordly.android.component.ui.theme.PreviewTheme
+import com.nmichail.wordly.android.component.ui.theme.PreviewThemeProvider
+import com.nmichail.wordly.android.component.ui.theme.WordlyPreviews
 
 @Composable
 fun SelectionDialog(
@@ -132,7 +138,7 @@ private fun SelectionDialogActions(
 			}
 		}
 	} else {
-		Button(
+		CustomButton(
 			text = saveButtonText,
 			onClick = onSave,
 			enabled = saveEnabled,
@@ -199,5 +205,24 @@ private fun SelectionDialogRadioIndicator(
 					.background(selectedColor),
 			)
 		}
+	}
+}
+
+@WordlyPreviews
+@Composable
+private fun SelectionDialogPreview(
+	@PreviewParameter(PreviewThemeProvider::class) theme: PreviewTheme,
+) {
+	WordlyAndroidTheme(darkTheme = theme == PreviewTheme.Dark) {
+		SelectionDialog(
+			title = "Уровень",
+			options = listOf("A1", "A2", "B1", "B2"),
+			selectedOption = "B1",
+			saveButtonText = "Сохранить",
+			cancelButtonText = "Отмена",
+			onDismiss = {},
+			onSave = {},
+			onCancel = {},
+		)
 	}
 }

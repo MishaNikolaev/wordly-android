@@ -1,4 +1,4 @@
-package com.nmichail.wordly.android.component.ui.components
+package com.nmichail.wordly.android.component.ui.components.calendar
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -25,6 +25,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import com.nmichail.wordly.android.component.ui.R
+import androidx.compose.foundation.layout.padding
+import com.nmichail.wordly.android.component.ui.theme.WordlyAndroidTheme
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import com.nmichail.wordly.android.component.ui.theme.PreviewTheme
+import com.nmichail.wordly.android.component.ui.theme.PreviewThemeProvider
+import com.nmichail.wordly.android.component.ui.theme.WordlyPreviews
 
 @Composable
 fun CalendarTopBar(
@@ -86,6 +92,21 @@ private fun CalendarNavIconButton(
 			contentDescription = contentDescription,
 			tint = MaterialTheme.colorScheme.onSurfaceVariant,
 			modifier = Modifier.size(28.dp),
+		)
+	}
+}
+
+@WordlyPreviews
+@Composable
+private fun CalendarTopBarPreview(
+	@PreviewParameter(PreviewThemeProvider::class) theme: PreviewTheme,
+) {
+	WordlyAndroidTheme(darkTheme = theme == PreviewTheme.Dark) {
+		CalendarTopBar(
+			onCloseClick = {},
+			onPreviousMonthClick = {},
+			onNextMonthClick = {},
+			modifier = Modifier.padding(8.dp),
 		)
 	}
 }

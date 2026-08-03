@@ -1,4 +1,4 @@
-package com.nmichail.wordly.android.component.ui.components
+package com.nmichail.wordly.android.component.ui.components.calendar
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -14,19 +14,25 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.nmichail.wordly.android.component.ui.R
+import androidx.compose.foundation.layout.padding
+import com.nmichail.wordly.android.component.ui.theme.WordlyAndroidTheme
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import com.nmichail.wordly.android.component.ui.theme.PreviewTheme
+import com.nmichail.wordly.android.component.ui.theme.PreviewThemeProvider
+import com.nmichail.wordly.android.component.ui.theme.WordlyPreviews
 
 internal const val DAYS_IN_WEEK = 7
 
 @Composable
 fun CalendarWeekdayLabels(modifier: Modifier = Modifier) {
 	val labels = listOf(
-		stringResource(R.string.home_day_mon),
-		stringResource(R.string.home_day_tue),
-		stringResource(R.string.home_day_wed),
-		stringResource(R.string.home_day_thu),
-		stringResource(R.string.home_day_fri),
-		stringResource(R.string.home_day_sat),
-		stringResource(R.string.home_day_sun),
+		stringResource(R.string.calendar_day_mon),
+		stringResource(R.string.calendar_day_tue),
+		stringResource(R.string.calendar_day_wed),
+		stringResource(R.string.calendar_day_thu),
+		stringResource(R.string.calendar_day_fri),
+		stringResource(R.string.calendar_day_sat),
+		stringResource(R.string.calendar_day_sun),
 	)
 	Row(
 		modifier = modifier.fillMaxWidth(),
@@ -78,6 +84,35 @@ fun CalendarGrid(
 					Spacer(modifier = Modifier.weight(1f))
 				}
 			}
+		}
+	}
+}
+
+@WordlyPreviews
+@Composable
+private fun CalendarGridPreview(
+	@PreviewParameter(PreviewThemeProvider::class) theme: PreviewTheme,
+) {
+	WordlyAndroidTheme(darkTheme = theme == PreviewTheme.Dark) {
+		val days = List(42) { index ->
+			val day = index - 1
+			if (day in 1..31) {
+				CalendarDay(
+					dayOfMonth = day,
+					statusId = when (day) {
+						3 -> CalendarDayStatusId.Today
+						5 -> CalendarDayStatusId.Completed
+						7 -> CalendarDayStatusId.Missed
+						else -> CalendarDayStatusId.Inactive
+					},
+				)
+			} else {
+				null
+			}
+		}
+		Column(modifier = Modifier.padding(16.dp)) {
+			CalendarWeekdayLabels()
+			CalendarGrid(days = days, onDayClick = {})
 		}
 	}
 }

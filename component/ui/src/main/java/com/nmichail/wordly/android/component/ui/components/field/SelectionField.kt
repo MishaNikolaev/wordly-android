@@ -1,4 +1,4 @@
-package com.nmichail.wordly.android.component.ui.components
+package com.nmichail.wordly.android.component.ui.components.field
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -22,6 +22,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.nmichail.wordly.android.component.ui.R
+import com.nmichail.wordly.android.component.ui.components.dialog.SelectionDialog
+import com.nmichail.wordly.android.component.ui.theme.WordlyAndroidTheme
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import com.nmichail.wordly.android.component.ui.theme.PreviewTheme
+import com.nmichail.wordly.android.component.ui.theme.PreviewThemeProvider
+import com.nmichail.wordly.android.component.ui.theme.WordlyPreviews
 
 @Composable
 fun SelectionField(
@@ -126,3 +132,19 @@ private fun selectionFieldColors() =
 		errorBorderColor = MaterialTheme.colorScheme.error,
 		errorSupportingTextColor = MaterialTheme.colorScheme.error,
 	)
+
+@WordlyPreviews
+@Composable
+private fun SelectionFieldPreview(
+	@PreviewParameter(PreviewThemeProvider::class) theme: PreviewTheme,
+) {
+	WordlyAndroidTheme(darkTheme = theme == PreviewTheme.Dark) {
+		SelectionField(
+			label = "Уровень",
+			value = "B2",
+			options = listOf("A1", "A2", "B1", "B2"),
+			onValueChange = {},
+			modifier = Modifier.padding(16.dp),
+		)
+	}
+}

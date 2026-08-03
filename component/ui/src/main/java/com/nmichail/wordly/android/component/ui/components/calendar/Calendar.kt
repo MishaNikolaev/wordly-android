@@ -1,4 +1,4 @@
-package com.nmichail.wordly.android.component.ui.components
+package com.nmichail.wordly.android.component.ui.components.calendar
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -20,6 +20,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.nmichail.wordly.android.component.ui.R
+import com.nmichail.wordly.android.component.ui.theme.WordlyAndroidTheme
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import com.nmichail.wordly.android.component.ui.theme.PreviewTheme
+import com.nmichail.wordly.android.component.ui.theme.PreviewThemeProvider
+import com.nmichail.wordly.android.component.ui.theme.WordlyPreviews
 
 @Composable
 fun CalendarDialog(
@@ -125,5 +130,35 @@ private fun CalendarDoneButton(onClick: () -> Unit) {
 				color = MaterialTheme.colorScheme.primary,
 			)
 		}
+	}
+}
+
+@WordlyPreviews
+@Composable
+private fun CalendarPreview(
+	@PreviewParameter(PreviewThemeProvider::class) theme: PreviewTheme,
+) {
+	WordlyAndroidTheme(darkTheme = theme == PreviewTheme.Dark) {
+		val days = buildList {
+			repeat(2) { add(null) }
+			add(CalendarDay(dayOfMonth = 1, statusId = CalendarDayStatusId.Completed))
+			add(CalendarDay(dayOfMonth = 2, statusId = CalendarDayStatusId.Missed))
+			add(CalendarDay(dayOfMonth = 3, statusId = CalendarDayStatusId.Today))
+			add(CalendarDay(dayOfMonth = 4, statusId = CalendarDayStatusId.Selected))
+			add(CalendarDay(dayOfMonth = 5, statusId = CalendarDayStatusId.Inactive))
+			repeat(37) { index ->
+				add(CalendarDay(dayOfMonth = index + 6, statusId = CalendarDayStatusId.Inactive))
+			}
+		}.take(42)
+		Calendar(
+			monthTitle = "Август 2026",
+			days = days,
+			onCloseClick = {},
+			onDoneClick = {},
+			onTodayClick = {},
+			onPreviousMonthClick = {},
+			onNextMonthClick = {},
+			onDayClick = {},
+		)
 	}
 }

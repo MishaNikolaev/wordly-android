@@ -1,9 +1,11 @@
-package com.nmichail.wordly.android.component.ui.components
+package com.nmichail.wordly.android.component.ui.components.button
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -17,9 +19,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
+import com.nmichail.wordly.android.component.ui.theme.WordlyAndroidTheme
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import com.nmichail.wordly.android.component.ui.theme.PreviewTheme
+import com.nmichail.wordly.android.component.ui.theme.PreviewThemeProvider
+import com.nmichail.wordly.android.component.ui.theme.WordlyPreviews
 
 @Composable
-fun Button(
+fun CustomButton(
 	text: String,
 	onClick: () -> Unit,
 	modifier: Modifier = Modifier,
@@ -66,6 +73,23 @@ fun Button(
 					style = MaterialTheme.typography.labelLarge,
 				)
 			}
+		}
+	}
+}
+
+@WordlyPreviews
+@Composable
+private fun CustomButtonPreview(
+	@PreviewParameter(PreviewThemeProvider::class) theme: PreviewTheme,
+) {
+	WordlyAndroidTheme(darkTheme = theme == PreviewTheme.Dark) {
+		Column(
+			modifier = Modifier.padding(16.dp),
+			verticalArrangement = Arrangement.spacedBy(12.dp),
+		) {
+			CustomButton(text = "Сохранить", onClick = {})
+			CustomButton(text = "Загрузка", onClick = {}, loading = true)
+			CustomButton(text = "Disabled", onClick = {}, enabled = false)
 		}
 	}
 }

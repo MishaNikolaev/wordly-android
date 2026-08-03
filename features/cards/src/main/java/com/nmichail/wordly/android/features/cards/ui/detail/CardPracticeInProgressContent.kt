@@ -1,5 +1,6 @@
 package com.nmichail.wordly.android.features.cards.ui.detail
 
+import com.nmichail.wordly.android.component.ui.theme.WordlyTheme
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -39,14 +40,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.nmichail.wordly.android.component.ui.components.Button
-import com.nmichail.wordly.android.component.ui.components.PracticeAnswerFeedback
-import com.nmichail.wordly.android.component.ui.theme.WordlyColors
+import com.nmichail.wordly.android.component.ui.components.button.CustomButton
 import com.nmichail.wordly.android.component.ui.theme.WordlyTypography
-import com.nmichail.wordly.android.component.ui.theme.isAppInDarkTheme
 import com.nmichail.wordly.android.features.cards.R
 import com.nmichail.wordly.android.features.cards.domain.entity.CardPracticeWord
 import com.nmichail.wordly.android.features.cards.presentation.detail.CardPracticeComponent
+import com.nmichail.wordly.android.shared.practice.PracticeAnswerFeedback
+import com.nmichail.wordly.android.shared.practice.PracticeOption
+import com.nmichail.wordly.android.shared.practice.PracticeOptions
 
 @Composable
 internal fun CardPracticeInProgressContent(
@@ -79,8 +80,8 @@ internal fun CardPracticeInProgressContent(
 				onPlayAudioClick = component::handlePlayAudio,
 			)
 			Spacer(modifier = Modifier.height(18.dp))
-			CardPracticeOptions(
-				options = state.currentWord.options,
+			PracticeOptions(
+				options = state.currentWord.options.map { PracticeOption(id = it.id, text = it.text) },
 				correctOptionId = state.currentWord.correctOptionId,
 				selectedOptionId = state.selectedOptionId,
 				isAnswerRevealed = state.isAnswerRevealed,
@@ -101,7 +102,7 @@ internal fun CardPracticeInProgressContent(
 			}
 		}
 		if (state.isAnswerRevealed) {
-			Button(
+			CustomButton(
 				text = stringResource(R.string.card_practice_continue),
 				onClick = component::handleContinue,
 				modifier = Modifier
@@ -172,25 +173,18 @@ private fun CardPracticeQuestionCard(
 	word: CardPracticeWord,
 	onPlayAudioClick: () -> Unit,
 ) {
-	val dark = isAppInDarkTheme()
-	val borderColor = if (dark) {
-		WordlyColors.DarkOutline.copy(alpha = 0.7f)
-	} else {
-		WordlyColors.LightOutline.copy(alpha = 0.55f)
-	}
-	val taskChipBackground = if (dark) {
-		WordlyColors.DarkPrimaryContainer
-	} else {
-		WordlyColors.LightPrimaryContainer
-	}
+	val colorScheme = MaterialTheme.colorScheme
+	val extended = WordlyTheme.colors
+	val borderColor = extended.outlineSoft
+	val taskChipBackground = colorScheme.primaryContainer
 	Column(
 		modifier = Modifier
 			.fillMaxWidth()
 			.shadow(
 				elevation = 8.dp,
 				shape = RoundedCornerShape(24.dp),
-				ambientColor = WordlyColors.OnPrimary.copy(alpha = 0.08f),
-				spotColor = WordlyColors.OnPrimary.copy(alpha = 0.08f),
+				ambientColor = extended.softShadow,
+				spotColor = extended.softShadow,
 			)
 			.clip(RoundedCornerShape(24.dp))
 			.background(MaterialTheme.colorScheme.surface)
@@ -239,11 +233,7 @@ private fun CardPracticeTaskChip(
 				fontSize = 13.sp,
 				lineHeight = 13.sp,
 			),
-			color = if (isAppInDarkTheme()) {
-				WordlyColors.DarkOnPrimaryContainer
-			} else {
-				WordlyColors.ReviewAccent
-			},
+			color = MaterialTheme.colorScheme.onPrimaryContainer,
 		)
 	}
 }

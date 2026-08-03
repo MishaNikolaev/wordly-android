@@ -1,15 +1,13 @@
-package com.nmichail.wordly.android.component.ui.validation
+package com.nmichail.wordly.android.core.validation.ui
 
-import androidx.compose.runtime.Composable
-import com.nmichail.wordly.android.component.ui.R
 import com.nmichail.wordly.android.core.validation.DefaultValidationState
+import com.nmichail.wordly.android.core.validation.R
 import com.nmichail.wordly.android.core.validation.email.EmailInvalidState
 import com.nmichail.wordly.android.core.validation.name.NameInvalidState
 import com.nmichail.wordly.android.core.validation.name.NamePart
 import com.nmichail.wordly.android.core.validation.notEmpty.NotEmptyValidationState
 import com.nmichail.wordly.android.core.validation.password.PasswordInvalidState
 
-@Composable
 fun emailErrorMessage(state: DefaultValidationState): Int {
 	if (state !is DefaultValidationState.Invalid) {
 		return R.string.empty
@@ -25,7 +23,6 @@ fun emailErrorMessage(state: DefaultValidationState): Int {
 	}
 }
 
-@Composable
 fun passwordErrorMessage(state: DefaultValidationState): Int {
 	if (state !is DefaultValidationState.Invalid) {
 		return R.string.empty
@@ -39,7 +36,6 @@ fun passwordErrorMessage(state: DefaultValidationState): Int {
 	}
 }
 
-@Composable
 fun nameErrorMessage(state: DefaultValidationState, namePart: NamePart): Int {
 	if (state !is DefaultValidationState.Invalid) {
 		return R.string.empty
@@ -54,28 +50,24 @@ fun nameErrorMessage(state: DefaultValidationState, namePart: NamePart): Int {
 	}
 }
 
-@Composable
 private fun nameEmptyErrorMessage(namePart: NamePart): Int =
 	when (namePart) {
 		NamePart.NAME -> R.string.validation_error_empty_first_name
 		NamePart.SURNAME -> R.string.validation_error_empty_last_name
 	}
 
-@Composable
 private fun nameShortErrorMessage(namePart: NamePart): Int =
 	when (namePart) {
 		NamePart.NAME -> R.string.validation_error_short_first_name
 		NamePart.SURNAME -> R.string.validation_error_short_last_name
 	}
 
-@Composable
 private fun nameLongErrorMessage(namePart: NamePart): Int =
 	when (namePart) {
 		NamePart.NAME -> R.string.validation_error_long_first_name
 		NamePart.SURNAME -> R.string.validation_error_long_last_name
 	}
 
-@Composable
 fun notEmptyErrorMessage(state: NotEmptyValidationState): Int =
 	if (state is NotEmptyValidationState.Invalid) {
 		R.string.validation_error_empty
