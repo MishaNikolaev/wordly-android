@@ -1,6 +1,4 @@
-@file:Suppress("MagicNumber")
-
-package com.nmichail.wordly.android.component.ui.components
+package com.nmichail.wordly.android.shared.authorization
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -21,58 +19,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.nmichail.wordly.android.component.ui.R
+import com.nmichail.wordly.android.component.ui.theme.WordlyAndroidTheme
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import com.nmichail.wordly.android.component.ui.theme.PreviewTheme
+import com.nmichail.wordly.android.component.ui.theme.PreviewThemeProvider
 import com.nmichail.wordly.android.component.ui.theme.WordlyTypography
 
-private val AUTH_PREVIEW_CARD_SHADOW_COLOR = Color.Black.copy(alpha = 0.38f)
-
 @Composable
-fun AuthPreviewWordCard(
-	word: String,
-	translation: String,
-	modifier: Modifier = Modifier,
-	rotation: Float = 0f,
-) {
-	val colorScheme = MaterialTheme.colorScheme
-
-	Box(modifier = modifier.graphicsLayer { rotationZ = rotation }) {
-		Column(
-			modifier = Modifier
-				.size(168.dp, 68.dp)
-				.shadow(
-					elevation = 20.dp,
-					shape = RoundedCornerShape(20.dp),
-					clip = false,
-					ambientColor = AUTH_PREVIEW_CARD_SHADOW_COLOR,
-					spotColor = AUTH_PREVIEW_CARD_SHADOW_COLOR,
-				)
-				.background(colorScheme.surface, RoundedCornerShape(20.dp))
-				.padding(horizontal = 16.dp, vertical = 10.dp),
-		) {
-			Text(
-				text = word,
-				style = WordlyTypography.authPreviewWord,
-				color = colorScheme.onSurface,
-			)
-			Text(
-				text = translation,
-				style = WordlyTypography.authPreviewTranslation,
-				color = colorScheme.onSurfaceVariant,
-				modifier = Modifier.padding(top = 4.dp),
-			)
-		}
-	}
-}
-
-@Composable
-fun WordCard(
+fun AuthPhoneticWordCard(
 	word: String,
 	phonetic: String,
 	modifier: Modifier = Modifier,
@@ -96,7 +57,7 @@ fun WordCard(
 			.background(colorScheme.surface, RoundedCornerShape(16.dp))
 			.padding(horizontal = 12.dp, vertical = 12.dp),
 	) {
-		WordCardTopBar(
+		AuthPhoneticWordCardTopBar(
 			languageDirection = languageDirection,
 			iconTint = colorScheme.onSurfaceVariant,
 			chipBackground = colorScheme.primaryContainer,
@@ -109,7 +70,7 @@ fun WordCard(
 				.weight(1f),
 			contentAlignment = Alignment.Center,
 		) {
-			WordCardContent(
+			AuthPhoneticWordCardContent(
 				word = word,
 				phonetic = phonetic,
 				wordColor = colorScheme.onSurface,
@@ -120,7 +81,7 @@ fun WordCard(
 }
 
 @Composable
-private fun WordCardTopBar(
+private fun AuthPhoneticWordCardTopBar(
 	languageDirection: String,
 	iconTint: Color,
 	chipBackground: Color,
@@ -147,14 +108,18 @@ private fun WordCardTopBar(
 				onClick = onPlayClick,
 				modifier = Modifier.size(20.dp),
 			) {
-				WordCardSpeakerIcon(tint = iconTint)
+				Icon(
+					imageVector = Icons.AutoMirrored.Outlined.VolumeUp,
+					contentDescription = stringResource(R.string.auth_word_play_pronunciation),
+					tint = iconTint,
+				)
 			}
 		}
 	}
 }
 
 @Composable
-private fun WordCardContent(
+private fun AuthPhoneticWordCardContent(
 	word: String,
 	phonetic: String,
 	wordColor: Color,
@@ -179,15 +144,12 @@ private fun WordCardContent(
 	}
 }
 
+@Preview(showBackground = true)
 @Composable
-private fun WordCardSpeakerIcon(
-	tint: Color,
-	modifier: Modifier = Modifier,
+private fun AuthPhoneticWordCardPreview(
+	@PreviewParameter(PreviewThemeProvider::class) theme: PreviewTheme,
 ) {
-	Icon(
-		imageVector = Icons.AutoMirrored.Outlined.VolumeUp,
-		contentDescription = stringResource(R.string.auth_word_play_pronunciation),
-		tint = tint,
-		modifier = modifier,
-	)
+	WordlyAndroidTheme(darkTheme = theme == PreviewTheme.Dark) {
+		AuthPhoneticWordCard(word = "resilience", phonetic = "/rɪˈzɪliəns/", onPlayClick = {})
+	}
 }
