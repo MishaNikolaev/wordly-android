@@ -58,6 +58,9 @@ import com.nmichail.wordly.android.features.constructor.domain.entity.Constructo
 import com.nmichail.wordly.android.features.constructor.presentation.detail.ConstructorPracticeComponent
 import kotlin.math.roundToInt
 
+private const val DRAG_CHIP_SCALE = 1.05f
+private const val DRAG_CHIP_ALPHA = 0.92f
+
 @Composable
 internal fun ConstructorPracticeInProgressContent(
 	state: ConstructorPracticeComponent.State.InProgress,
@@ -66,6 +69,7 @@ internal fun ConstructorPracticeInProgressContent(
 ) {
 	val phrase = state.session.phrases[state.currentIndex]
 	val totalCount = state.session.phrases.size
+
 	Column(
 		modifier = modifier
 			.fillMaxSize()
@@ -80,8 +84,8 @@ internal fun ConstructorPracticeInProgressContent(
 		)
 		ConstructorPracticeScrollBody(
 			state = state,
-			phrasePrompt = phrase.prompt,
-			phraseAuthor = phrase.author,
+			question = phrase.question,
+			author = phrase.author,
 			correctPhraseText = phrase.correctOrder
 				.mapNotNull { wordId -> phrase.words.firstOrNull { it.id == wordId }?.text }
 				.joinToString(" "),
@@ -102,8 +106,8 @@ internal fun ConstructorPracticeInProgressContent(
 @Composable
 private fun ConstructorPracticeScrollBody(
 	state: ConstructorPracticeComponent.State.InProgress,
-	phrasePrompt: String,
-	phraseAuthor: String?,
+	question: String,
+	author: String?,
 	correctPhraseText: String,
 	component: ConstructorPracticeComponent,
 	modifier: Modifier = Modifier,
@@ -114,10 +118,10 @@ private fun ConstructorPracticeScrollBody(
 			.padding(horizontal = 18.dp)
 			.padding(top = 18.dp, bottom = 12.dp),
 	) {
-		ConstructorPracticePrompt(
+		ConstructorPracticeQuestion(
 			themeTitle = state.session.themeTitle,
-			prompt = phrasePrompt,
-			author = phraseAuthor,
+			question = question,
+			author = author,
 		)
 		Spacer(modifier = Modifier.height(20.dp))
 		ConstructorAnswerBoard(isCorrect = state.checkResult) {
@@ -147,9 +151,9 @@ private fun ConstructorPracticeScrollBody(
 }
 
 @Composable
-private fun ConstructorPracticePrompt(
+private fun ConstructorPracticeQuestion(
 	themeTitle: String,
-	prompt: String,
+	question: String,
 	author: String?,
 ) {
 	Text(
@@ -162,7 +166,7 @@ private fun ConstructorPracticePrompt(
 	)
 	Spacer(modifier = Modifier.height(10.dp))
 	Text(
-		text = prompt,
+		text = question,
 		style = MaterialTheme.typography.headlineSmall.copy(
 			fontWeight = FontWeight.Bold,
 			fontSize = 26.sp,
@@ -335,9 +339,9 @@ private fun ConstructorAnswerWordChip(
 				if (isDragging) {
 					translationX = dragOffsetX
 					translationY = dragOffsetY
-					scaleX = 1.05f
-					scaleY = 1.05f
-					alpha = 0.92f
+					scaleX = DRAG_CHIP_SCALE
+					scaleY = DRAG_CHIP_SCALE
+					alpha = DRAG_CHIP_ALPHA
 				}
 			}
 			.then(
