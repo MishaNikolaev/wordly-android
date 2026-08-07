@@ -55,7 +55,7 @@ private fun ConstructorThemeResponse.toEntity(): ConstructorTheme =
 private fun ConstructorPhraseResponse.toEntity(): ConstructorPhrase =
 	ConstructorPhrase(
 		id = id,
-		prompt = prompt,
+		question = question,
 		author = author,
 		words = words.map { it.toEntity() },
 		correctOrder = correctOrder,

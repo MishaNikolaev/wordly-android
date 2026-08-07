@@ -26,7 +26,7 @@ class GetConstructorSessionUseCaseTest {
 		phrases = listOf(
 			ConstructorPhrase(
 				id = "socrates-1",
-				prompt = "Я знаю, что ничего не знаю.",
+				question = "Я знаю, что ничего не знаю.",
 				author = "Сократ",
 				words = listOf(
 					ConstructorWord(id = "w1", text = "I"),

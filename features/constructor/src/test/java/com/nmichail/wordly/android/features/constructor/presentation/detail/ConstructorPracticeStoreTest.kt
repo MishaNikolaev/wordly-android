@@ -44,14 +44,14 @@ class ConstructorPracticeStoreTest {
 	)
 	private val firstPhrase = ConstructorPhrase(
 		id = "socrates-1",
-		prompt = "Я знаю, что ничего не знаю.",
+		question = "Я знаю, что ничего не знаю.",
 		author = "Сократ",
 		words = firstWords,
 		correctOrder = listOf("w1", "w2", "w3"),
 	)
 	private val secondPhrase = ConstructorPhrase(
 		id = "descartes-1",
-		prompt = "Я мыслю, следовательно, я существую.",
+		question = "Я мыслю, следовательно, я существую.",
 		author = "Декарт",
 		words = secondWords,
 		correctOrder = listOf("d1", "d2", "d3"),
