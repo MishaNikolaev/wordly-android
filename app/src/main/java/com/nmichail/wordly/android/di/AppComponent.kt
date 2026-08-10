@@ -18,7 +18,6 @@ import javax.inject.Singleton
 		FeaturesModule::class,
 		ErrorModule::class,
 		RoutersModule::class,
-		ProcessRestarterModule::class,
 		DevEnabledModule::class,
 	],
 )
