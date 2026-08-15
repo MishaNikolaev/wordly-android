@@ -18,7 +18,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.nmichail.wordly.android.component.ui.theme.WordlyTheme
+import com.nmichail.wordly.android.component.wui.theme.Wui
 
 private val PracticeOptionShape = RoundedCornerShape(16.dp)
 
@@ -65,7 +65,7 @@ private fun optionColors(
 	isAnswerRevealed: Boolean,
 ): PracticeOptionColors {
 	val colorScheme = MaterialTheme.colorScheme
-	val extended = WordlyTheme.colors
+	val extended = Wui.colors
 	val successBackground = extended.successContainer
 	val errorBackground = extended.errorContainer
 	val selectedBackground = colorScheme.primaryContainer

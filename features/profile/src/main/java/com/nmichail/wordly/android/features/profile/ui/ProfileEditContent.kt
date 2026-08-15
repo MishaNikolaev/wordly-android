@@ -30,9 +30,9 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
-import com.nmichail.wordly.android.component.ui.components.button.CustomButton
-import com.nmichail.wordly.android.component.ui.components.field.SelectionField
-import com.nmichail.wordly.android.component.ui.components.field.CustomTextField
+import com.nmichail.wordly.android.component.wui.components.button.WuiButton
+import com.nmichail.wordly.android.component.wui.components.field.WuiSelectionField
+import com.nmichail.wordly.android.component.wui.components.field.WuiTextField
 import com.nmichail.wordly.android.features.profile.R
 import com.nmichail.wordly.android.features.profile.presentation.edit.ProfileEditComponent
 
@@ -89,14 +89,14 @@ private fun ProfileEditError(
 			color = MaterialTheme.colorScheme.onBackground,
 			textAlign = TextAlign.Center,
 		)
-		CustomButton(
+		WuiButton(
 			text = stringResource(R.string.profile_retry),
 			onClick = onRetryClick,
 			modifier = Modifier
 				.fillMaxWidth()
 				.padding(top = 24.dp),
 		)
-		CustomButton(
+		WuiButton(
 			text = stringResource(R.string.profile_edit_back),
 			onClick = onBackClick,
 			modifier = Modifier
@@ -133,7 +133,7 @@ private fun ProfileEditLoaded(
 				modifier = Modifier.padding(top = 20.dp),
 			)
 		}
-		CustomButton(
+		WuiButton(
 			text = stringResource(
 				if (state.saved) R.string.profile_edit_saved else R.string.profile_edit_save,
 			),
@@ -182,18 +182,18 @@ private fun ProfileEditForm(
 		?: state.englishLevel
 
 	Column(modifier = modifier) {
-		CustomTextField(
+		WuiTextField(
 			label = stringResource(R.string.profile_first_name_label),
 			value = state.firstName,
 			onValueChange = component::handleChangeFirstName,
 		)
-		CustomTextField(
+		WuiTextField(
 			label = stringResource(R.string.profile_last_name_label),
 			value = state.lastName,
 			onValueChange = component::handleChangeLastName,
 			modifier = Modifier.padding(top = 16.dp),
 		)
-		CustomTextField(
+		WuiTextField(
 			label = stringResource(R.string.profile_email_label),
 			value = state.email,
 			onValueChange = {},
@@ -202,7 +202,7 @@ private fun ProfileEditForm(
 			keyboardType = KeyboardType.Email,
 			modifier = Modifier.padding(top = 16.dp),
 		)
-		SelectionField(
+		WuiSelectionField(
 			label = stringResource(R.string.profile_english_level_label),
 			value = selectedLevelLabel,
 			options = levelLabels,

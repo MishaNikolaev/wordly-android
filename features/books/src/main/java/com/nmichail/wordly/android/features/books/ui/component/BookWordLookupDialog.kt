@@ -35,8 +35,8 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.tooling.preview.Preview
-import com.nmichail.wordly.android.component.ui.theme.WordlyAndroidTheme
-import com.nmichail.wordly.android.component.ui.theme.WordlyTheme
+import com.nmichail.wordly.android.component.wui.theme.WuiTheme
+import com.nmichail.wordly.android.component.wui.theme.Wui
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -214,7 +214,7 @@ private fun BookWordAddButton(
 private fun BookWordAddedStatus(
 	text: String,
 ) {
-	val extended = WordlyTheme.colors
+	val extended = Wui.colors
 	BookWordAddedStatusRow(
 		text = text,
 		color = extended.success,
@@ -258,7 +258,7 @@ private fun BookWordAddedStatusRow(
 @Preview(showBackground = true)
 @Composable
 private fun BookWordLookupDialogPreview() {
-	WordlyAndroidTheme {
+	WuiTheme {
 		BookWordLookupDialog(
 			word = "apple",
 			translation = "яблоко",

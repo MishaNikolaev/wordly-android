@@ -19,7 +19,7 @@ import com.nmichail.wordly.android.shared.authorization.Logo
 import androidx.compose.foundation.background
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.tooling.preview.Preview
-import com.nmichail.wordly.android.component.ui.theme.WordlyAndroidTheme
+import com.nmichail.wordly.android.component.wui.theme.WuiTheme
 
 @Composable
 fun SignInAuthHeader(
@@ -69,7 +69,7 @@ fun SignInAuthHeader(
 @Preview(showBackground = true, heightDp = 360)
 @Composable
 private fun SignInAuthHeaderPreview() {
-	WordlyAndroidTheme {
+	WuiTheme {
 		Box(
 			modifier = Modifier
 				.fillMaxWidth()

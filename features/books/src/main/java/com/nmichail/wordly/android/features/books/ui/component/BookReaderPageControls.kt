@@ -28,7 +28,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.tooling.preview.Preview
-import com.nmichail.wordly.android.component.ui.theme.WordlyAndroidTheme
+import com.nmichail.wordly.android.component.wui.theme.WuiTheme
 
 @Composable
 fun BookReaderPageControls(
@@ -169,7 +169,7 @@ private fun BookReaderPageButton(
 @Preview(showBackground = true)
 @Composable
 private fun BookReaderPageControlsPreview() {
-	WordlyAndroidTheme {
+	WuiTheme {
 		BookReaderPageControls(
 			currentPage = 2,
 			pageCount = 10,

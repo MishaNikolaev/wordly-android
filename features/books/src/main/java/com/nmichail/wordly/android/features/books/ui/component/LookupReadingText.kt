@@ -20,13 +20,13 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.buildAnnotatedString
-import com.nmichail.wordly.android.component.ui.theme.WordlyTypography
+import com.nmichail.wordly.android.component.wui.theme.WuiTypography
 import kotlin.math.max
 import kotlin.math.min
 import androidx.compose.foundation.layout.padding
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.nmichail.wordly.android.component.ui.theme.WordlyAndroidTheme
+import com.nmichail.wordly.android.component.wui.theme.WuiTheme
 
 data class LookupTextSegment(
 	val text: String,
@@ -39,7 +39,7 @@ fun LookupReadingText(
 	onSelectWord: (String) -> Unit,
 	modifier: Modifier = Modifier,
 ) {
-	val bodyStyle = WordlyTypography.bookReaderBody
+	val bodyStyle = WuiTypography.bookReaderBody
 	val textColor = MaterialTheme.colorScheme.onBackground
 	val underlineColor = MaterialTheme.colorScheme.primary
 	val currentOnSelectWord by rememberUpdatedState(onSelectWord)
@@ -144,7 +144,7 @@ private fun DrawScope.drawLookupUnderline(
 @Preview(showBackground = true)
 @Composable
 private fun LookupReadingTextPreview() {
-	WordlyAndroidTheme {
+	WuiTheme {
 		LookupReadingText(
 			segments = listOf(
 				LookupTextSegment(text = "Once ", lookupId = null),

@@ -19,7 +19,7 @@ dependencies {
 	implementation(libs.retrofit)
 	ksp(libs.dagger.compiler)
 
-	implementation(projects.component.ui)
+	implementation(projects.component.wui)
 	implementation(projects.component.presentation)
 	implementation(projects.core.navigation)
 	implementation(projects.core.network)

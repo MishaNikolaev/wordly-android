@@ -28,13 +28,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import com.nmichail.wordly.android.shared.authorization.AuthBackground
-import com.nmichail.wordly.android.component.ui.components.button.CustomButton
-import com.nmichail.wordly.android.component.ui.components.text.ScreenTitle
+import com.nmichail.wordly.android.component.wui.components.button.WuiButton
+import com.nmichail.wordly.android.component.wui.components.text.WuiScreenTitle
 import com.nmichail.wordly.android.features.authorization.signin.ui.component.SignInAuthHeader
-import com.nmichail.wordly.android.component.ui.components.field.CustomTextField
-import com.nmichail.wordly.android.component.ui.components.button.TextLink
-import com.nmichail.wordly.android.component.ui.components.snackbar.SnackBarHost
-import com.nmichail.wordly.android.component.ui.components.snackbar.showErrorSnackBar
+import com.nmichail.wordly.android.component.wui.components.field.WuiTextField
+import com.nmichail.wordly.android.component.wui.components.button.WuiTextLink
+import com.nmichail.wordly.android.component.wui.components.snackbar.WuiSnackBarHost
+import com.nmichail.wordly.android.component.wui.components.snackbar.showWuiErrorSnackBar
 import com.nmichail.wordly.android.core.validation.ui.emailErrorMessage
 import com.nmichail.wordly.android.core.validation.ui.passwordErrorMessage
 import com.nmichail.wordly.android.core.validation.DefaultValidationState
@@ -59,7 +59,7 @@ fun SignInContent(
 			SignInComponent.Error.NoConnection -> context.getString(R.string.sign_in_no_connection)
 			SignInComponent.Error.Unknown -> context.getString(R.string.sign_in_unknown_error)
 		}
-		showErrorSnackBar(
+		showWuiErrorSnackBar(
 			snackBarHostState = snackBarHostState,
 			message = message,
 		)
@@ -70,7 +70,7 @@ fun SignInContent(
 		modifier = modifier.fillMaxSize(),
 		containerColor = Color.Transparent,
 		contentWindowInsets = WindowInsets(0, 0, 0, 0),
-		snackbarHost = { SnackBarHost(snackBarHostState = snackBarHostState) },
+		snackbarHost = { WuiSnackBarHost(snackBarHostState = snackBarHostState) },
 	) {
 		AuthBackground(
 			modifier = Modifier.fillMaxSize(),
@@ -97,13 +97,13 @@ private fun SignInForm(
 	modifier: Modifier = Modifier,
 ) {
 	Column(modifier = modifier.fillMaxWidth()) {
-		ScreenTitle(
+		WuiScreenTitle(
 			title = stringResource(R.string.sign_in_title),
 			subtitle = stringResource(R.string.sign_in_subtitle),
 			textAlign = TextAlign.Start,
 		)
 
-		CustomTextField(
+		WuiTextField(
 			label = stringResource(R.string.sign_in_label_email),
 			value = state.email.data,
 			onValueChange = component::handleChangeEmail,
@@ -113,7 +113,7 @@ private fun SignInForm(
 			modifier = Modifier.padding(top = 24.dp),
 		)
 
-		CustomTextField(
+		WuiTextField(
 			label = stringResource(R.string.sign_in_label_password),
 			value = state.password.data,
 			onValueChange = component::handleChangePassword,
@@ -130,7 +130,7 @@ private fun SignInForm(
 			modifier = Modifier.padding(top = 8.dp),
 		)
 
-		CustomButton(
+		WuiButton(
 			text = stringResource(R.string.sign_in_submit),
 			onClick = component::handleSubmit,
 			enabled = state.areFieldsValid(),
@@ -138,7 +138,7 @@ private fun SignInForm(
 			modifier = Modifier.padding(top = 24.dp),
 		)
 
-		TextLink(
+		WuiTextLink(
 			text = stringResource(R.string.sign_in_no_account),
 			onClick = component::handleNavigateToSignUp,
 			enabled = !state.isSubmitting,

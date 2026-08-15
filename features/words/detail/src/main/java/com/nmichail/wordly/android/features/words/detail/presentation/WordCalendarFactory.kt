@@ -1,7 +1,7 @@
 package com.nmichail.wordly.android.features.words.detail.presentation
 
-import com.nmichail.wordly.android.component.ui.components.calendar.CalendarDay
-import com.nmichail.wordly.android.component.ui.components.calendar.CalendarDayStatusId
+import com.nmichail.wordly.android.component.wui.components.calendar.WuiCalendarDay
+import com.nmichail.wordly.android.component.wui.components.calendar.WuiCalendarDayStatusId
 import java.time.LocalDate
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
@@ -31,18 +31,18 @@ object WordCalendarFactory {
 	): CalendarState {
 		val selected = LocalDate.ofEpochDay(selectedEpochDay)
 		val leadingEmpty = yearMonth.atDay(1).dayOfWeek.value - 1
-		val days = ArrayList<CalendarDay?>(leadingEmpty + yearMonth.lengthOfMonth())
+		val days = ArrayList<WuiCalendarDay?>(leadingEmpty + yearMonth.lengthOfMonth())
 		repeat(leadingEmpty) { days.add(null) }
 		for (day in 1..yearMonth.lengthOfMonth()) {
 			val date = yearMonth.atDay(day)
 			days.add(
-				CalendarDay(
+				WuiCalendarDay(
 					dayOfMonth = day,
 					statusId = when {
-						date.isBefore(today) -> CalendarDayStatusId.Inactive
-						date == selected && date == today -> CalendarDayStatusId.Today
-						date == selected -> CalendarDayStatusId.Selected
-						date == today -> CalendarDayStatusId.Today
+						date.isBefore(today) -> WuiCalendarDayStatusId.Inactive
+						date == selected && date == today -> WuiCalendarDayStatusId.Today
+						date == selected -> WuiCalendarDayStatusId.Selected
+						date == today -> WuiCalendarDayStatusId.Today
 						else -> "plain"
 					},
 				),

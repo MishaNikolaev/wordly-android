@@ -20,7 +20,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.ui.tooling.preview.Preview
-import com.nmichail.wordly.android.component.ui.theme.WordlyAndroidTheme
+import com.nmichail.wordly.android.component.wui.theme.WuiTheme
 
 @Composable
 fun BookTranslateButton(
@@ -68,7 +68,7 @@ fun BookTranslateButton(
 @Preview(showBackground = true)
 @Composable
 private fun BookTranslateButtonPreview() {
-	WordlyAndroidTheme {
+	WuiTheme {
 		Row(
 			modifier = Modifier.padding(16.dp),
 			horizontalArrangement = Arrangement.spacedBy(12.dp),

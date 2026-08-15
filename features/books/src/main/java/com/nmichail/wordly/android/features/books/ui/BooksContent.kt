@@ -38,11 +38,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
-import com.nmichail.wordly.android.component.ui.components.button.CustomButton
-import com.nmichail.wordly.android.component.ui.components.card.CatalogCard
-import com.nmichail.wordly.android.component.ui.components.field.SearchField
-import com.nmichail.wordly.android.component.ui.components.text.SectionLabel
-import com.nmichail.wordly.android.component.ui.components.button.TextLink
+import com.nmichail.wordly.android.component.wui.components.button.WuiButton
+import com.nmichail.wordly.android.component.wui.components.card.WuiCatalogCard
+import com.nmichail.wordly.android.component.wui.components.field.WuiSearchField
+import com.nmichail.wordly.android.component.wui.components.text.WuiSectionLabel
+import com.nmichail.wordly.android.component.wui.components.button.WuiTextLink
 import com.nmichail.wordly.android.features.books.R
 import com.nmichail.wordly.android.features.books.domain.entity.BooksLevelBanner
 import com.nmichail.wordly.android.features.books.presentation.BooksComponent
@@ -110,14 +110,14 @@ private fun BooksError(
 			textAlign = TextAlign.Center,
 			modifier = Modifier.padding(top = 8.dp),
 		)
-		CustomButton(
+		WuiButton(
 			text = stringResource(R.string.books_retry),
 			onClick = onRetryClick,
 			modifier = Modifier
 				.fillMaxWidth()
 				.padding(top = 24.dp),
 		)
-		TextLink(
+		WuiTextLink(
 			text = stringResource(R.string.books_back),
 			onClick = onBackClick,
 			modifier = Modifier.padding(top = 16.dp),
@@ -156,7 +156,7 @@ private fun BooksLoaded(
 				}
 			}
 			item(key = "search") {
-				SearchField(
+				WuiSearchField(
 					value = state.searchQuery,
 					onValueChange = component::handleSearchQueryChange,
 					placeholder = state.searchPlaceholder,
@@ -164,7 +164,7 @@ private fun BooksLoaded(
 			}
 			state.sections.forEach { section ->
 				item(key = "section_${section.title}") {
-					SectionLabel(
+					WuiSectionLabel(
 						text = section.title,
 						modifier = Modifier.padding(top = 8.dp, bottom = 4.dp),
 					)
@@ -173,7 +173,7 @@ private fun BooksLoaded(
 					items = section.items,
 					key = { it.id },
 				) { item ->
-					CatalogCard(
+					WuiCatalogCard(
 						title = item.title,
 						subtitle = item.subtitle,
 						badge = item.badge,

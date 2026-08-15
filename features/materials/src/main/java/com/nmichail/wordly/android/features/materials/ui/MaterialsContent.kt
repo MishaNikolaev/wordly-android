@@ -21,7 +21,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
-import com.nmichail.wordly.android.component.ui.components.button.CustomButton
+import com.nmichail.wordly.android.component.wui.components.button.WuiButton
 import com.nmichail.wordly.android.features.materials.R
 import com.nmichail.wordly.android.features.materials.domain.entity.MaterialFilter
 import com.nmichail.wordly.android.features.materials.domain.entity.MaterialItem
@@ -86,7 +86,7 @@ private fun MaterialsError(
 			textAlign = TextAlign.Center,
 			modifier = Modifier.padding(top = 8.dp),
 		)
-		CustomButton(
+		WuiButton(
 			text = stringResource(R.string.materials_retry),
 			onClick = onRetryClick,
 			modifier = Modifier

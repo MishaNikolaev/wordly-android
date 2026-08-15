@@ -21,8 +21,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.nmichail.wordly.android.component.ui.theme.WordlyTheme
-import com.nmichail.wordly.android.component.ui.theme.WordlyTypography
+import com.nmichail.wordly.android.component.wui.theme.Wui
+import com.nmichail.wordly.android.component.wui.theme.WuiTypography
 import com.nmichail.wordly.android.features.words.R
 import com.nmichail.wordly.android.features.words.domain.entity.WordItem
 import com.nmichail.wordly.android.features.words.domain.entity.WordStatus
@@ -65,7 +65,7 @@ internal fun WordListItem(
 				if (!phonetic.isNullOrBlank()) {
 					Text(
 						text = phonetic,
-						style = WordlyTypography.mono.copy(
+						style = WuiTypography.mono.copy(
 							fontSize = 12.sp,
 							lineHeight = 16.sp,
 						),
@@ -102,7 +102,7 @@ private fun wordStatusLabel(status: WordStatus): String =
 
 @Composable
 private fun wordStatusColor(status: WordStatus): Color {
-	val extended = WordlyTheme.colors
+	val extended = Wui.colors
 	return when (status) {
 		WordStatus.New -> extended.muted
 		WordStatus.InProgress -> extended.warning

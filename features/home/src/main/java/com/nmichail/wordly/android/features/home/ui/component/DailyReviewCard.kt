@@ -28,13 +28,13 @@ import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.nmichail.wordly.android.features.home.R
-import com.nmichail.wordly.android.component.ui.theme.WordlyTypography
-import com.nmichail.wordly.android.component.ui.theme.isAppInDarkTheme
-import com.nmichail.wordly.android.component.ui.components.button.CustomButton
-import com.nmichail.wordly.android.component.ui.components.chip.StatusChip
-import com.nmichail.wordly.android.component.ui.components.chip.StatusChipStyle
+import com.nmichail.wordly.android.component.wui.theme.WuiTypography
+import com.nmichail.wordly.android.component.wui.theme.isAppInDarkTheme
+import com.nmichail.wordly.android.component.wui.components.button.WuiButton
+import com.nmichail.wordly.android.component.wui.components.chip.WuiStatusChip
+import com.nmichail.wordly.android.component.wui.components.chip.WuiStatusChipStyle
 import androidx.compose.ui.tooling.preview.Preview
-import com.nmichail.wordly.android.component.ui.theme.WordlyAndroidTheme
+import com.nmichail.wordly.android.component.wui.theme.WuiTheme
 
 @Composable
 fun DailyReviewCard(
@@ -92,10 +92,10 @@ private fun DailyReviewBody(
 			.fillMaxSize()
 			.padding(16.dp),
 	) {
-		StatusChip(
+		WuiStatusChip(
 			text = stringResource(R.string.home_daily_review_chip),
 			icon = Icons.Outlined.Bolt,
-			style = StatusChipStyle.Accent,
+			style = WuiStatusChipStyle.Accent,
 		)
 		ReviewWordsTitle(wordsToReview = wordsToReview)
 		ReviewMetaRow(
@@ -104,7 +104,7 @@ private fun DailyReviewBody(
 			onStreakClick = onStreakClick,
 		)
 		Spacer(modifier = Modifier.weight(1f))
-		CustomButton(
+		WuiButton(
 			text = stringResource(R.string.home_daily_review_start),
 			onClick = onStartClick,
 		)
@@ -121,18 +121,18 @@ private fun ReviewWordsTitle(wordsToReview: Int) {
 	) {
 		Text(
 			text = wordsToReview.toString(),
-			style = WordlyTypography.dailyReviewCount,
+			style = WuiTypography.dailyReviewCount,
 			color = colorScheme.onSurface,
 		)
 		Column(modifier = Modifier.padding(start = 4.dp)) {
 			Text(
 				text = pluralStringResource(R.plurals.home_words_to_review_prefix, wordsToReview),
-				style = WordlyTypography.dailyReviewCountLabel,
+				style = WuiTypography.dailyReviewCountLabel,
 				color = colorScheme.onSurface,
 			)
 			Text(
 				text = stringResource(R.string.home_words_to_review_suffix),
-				style = WordlyTypography.dailyReviewCountLabel,
+				style = WuiTypography.dailyReviewCountLabel,
 				color = colorScheme.onSurface,
 			)
 		}
@@ -149,19 +149,19 @@ private fun ReviewMetaRow(
 		modifier = Modifier.padding(top = 10.dp),
 		horizontalArrangement = Arrangement.spacedBy(8.dp),
 	) {
-		StatusChip(
+		WuiStatusChip(
 			text = stringResource(R.string.home_daily_review_duration, estimatedMinutes),
 			icon = Icons.Outlined.Schedule,
-			style = StatusChipStyle.Neutral,
+			style = WuiStatusChipStyle.Neutral,
 		)
-		StatusChip(
+		WuiStatusChip(
 			text = pluralStringResource(
 				R.plurals.home_daily_review_streak,
 				streakDays,
 				streakDays,
 			),
 			icon = Icons.Filled.LocalFireDepartment,
-			style = StatusChipStyle.Streak,
+			style = WuiStatusChipStyle.Streak,
 			modifier = Modifier.clickable(onClick = onStreakClick),
 		)
 	}
@@ -170,7 +170,7 @@ private fun ReviewMetaRow(
 @Preview(showBackground = true, widthDp = 360)
 @Composable
 private fun DailyReviewCardPreview() {
-	WordlyAndroidTheme {
+	WuiTheme {
 		DailyReviewCard(
 			wordsToReview = 12,
 			estimatedMinutes = 5,

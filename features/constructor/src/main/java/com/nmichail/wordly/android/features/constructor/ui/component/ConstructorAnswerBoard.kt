@@ -21,8 +21,8 @@ import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.nmichail.wordly.android.component.ui.theme.WordlyAndroidTheme
-import com.nmichail.wordly.android.component.ui.theme.WordlyTheme
+import com.nmichail.wordly.android.component.wui.theme.WuiTheme
+import com.nmichail.wordly.android.component.wui.theme.Wui
 
 @Composable
 fun ConstructorAnswerBoard(
@@ -30,7 +30,7 @@ fun ConstructorAnswerBoard(
 	modifier: Modifier = Modifier,
 	content: @Composable () -> Unit,
 ) {
-	val extended = WordlyTheme.colors
+	val extended = Wui.colors
 	val colorScheme = MaterialTheme.colorScheme
 	val (borderColor, background) = when (isCorrect) {
 		true -> extended.success to extended.successContainer
@@ -63,7 +63,7 @@ fun ConstructorAnswerBoard(
 @Preview(showBackground = true)
 @Composable
 private fun ConstructorAnswerBoardPreview() {
-	WordlyAndroidTheme {
+	WuiTheme {
 		Column(
 			modifier = Modifier.padding(16.dp),
 			verticalArrangement = Arrangement.spacedBy(12.dp),

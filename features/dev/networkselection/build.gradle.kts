@@ -15,7 +15,7 @@ dependencies {
 	implementation(libs.androidx.material.icons.extended)
 	implementation(libs.dagger)
 
-	implementation(projects.component.ui)
+	implementation(projects.component.wui)
 	implementation(projects.component.presentation)
 	implementation(projects.core.network)
 	implementation(projects.core.navigation)

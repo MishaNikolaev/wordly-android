@@ -8,7 +8,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import com.nmichail.wordly.android.features.books.ui.component.LookupReadingText
 import com.nmichail.wordly.android.features.books.ui.component.LookupTextSegment
-import com.nmichail.wordly.android.component.ui.theme.WordlyTypography
+import com.nmichail.wordly.android.component.wui.theme.WuiTypography
 import com.nmichail.wordly.android.features.books.domain.entity.BookParagraph
 import com.nmichail.wordly.android.features.books.domain.entity.BookTextSegment
 import com.nmichail.wordly.android.features.books.domain.entity.BookTextSegmentType
@@ -25,7 +25,7 @@ internal fun BookReaderParagraph(
 	if (showTranslation && !translatedText.isNullOrBlank()) {
 		Text(
 			text = translatedText,
-			style = WordlyTypography.bookReaderBody,
+			style = WuiTypography.bookReaderBody,
 			color = MaterialTheme.colorScheme.onBackground,
 			modifier = modifier.fillMaxWidth(),
 		)

@@ -19,9 +19,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.nmichail.wordly.android.features.home.R
-import com.nmichail.wordly.android.component.ui.components.card.AppCard
+import com.nmichail.wordly.android.component.wui.components.card.WuiAppCard
 import androidx.compose.ui.tooling.preview.Preview
-import com.nmichail.wordly.android.component.ui.theme.WordlyAndroidTheme
+import com.nmichail.wordly.android.component.wui.theme.WuiTheme
 
 @Composable
 fun WeekProgressCard(
@@ -29,7 +29,7 @@ fun WeekProgressCard(
 	modifier: Modifier = Modifier,
 	daysContent: @Composable RowScope.() -> Unit,
 ) {
-	AppCard(modifier = modifier) {
+	WuiAppCard(modifier = modifier) {
 		Row(
 			modifier = Modifier.fillMaxWidth(),
 			horizontalArrangement = Arrangement.SpaceBetween,
@@ -74,7 +74,7 @@ fun WeekProgressCard(
 @Preview(showBackground = true)
 @Composable
 private fun WeekProgressCardPreview() {
-	WordlyAndroidTheme {
+	WuiTheme {
 		WeekProgressCard(
 			onMonthClick = {},
 			modifier = Modifier.padding(16.dp),

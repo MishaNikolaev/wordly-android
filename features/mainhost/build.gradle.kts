@@ -14,7 +14,7 @@ dependencies {
 	implementation(libs.androidx.material3)
 	implementation(libs.androidx.material.icons.extended)
 
-	implementation(projects.component.ui)
+	implementation(projects.component.wui)
 	implementation(projects.features.authorization.signin)
 	implementation(projects.features.authorization.signup)
 	implementation(projects.features.dev.networkselection)

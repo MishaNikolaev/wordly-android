@@ -22,7 +22,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import com.nmichail.wordly.android.component.ui.R as ComponentR
+import com.nmichail.wordly.android.component.wui.R as ComponentR
 import com.nmichail.wordly.android.features.profile.R
 import com.nmichail.wordly.android.features.profile.domain.entity.NotificationTimeSlot
 import com.nmichail.wordly.android.features.profile.presentation.ProfileComponent

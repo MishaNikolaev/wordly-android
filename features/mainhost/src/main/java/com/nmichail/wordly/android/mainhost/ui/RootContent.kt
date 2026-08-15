@@ -6,7 +6,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.arkivanov.decompose.extensions.compose.stack.Children
-import com.nmichail.wordly.android.component.ui.theme.WordlyAndroidTheme
+import com.nmichail.wordly.android.component.wui.theme.WuiTheme
 import com.nmichail.wordly.android.core.preferences.domain.entity.AppThemeMode
 import com.nmichail.wordly.android.features.authorization.signin.ui.SignInContent
 import com.nmichail.wordly.android.features.authorization.signup.ui.SignUpContent
@@ -26,7 +26,7 @@ fun RootContent(
 		AppThemeMode.Dark -> true
 	}
 
-	WordlyAndroidTheme(darkTheme = darkTheme) {
+	WuiTheme(darkTheme = darkTheme) {
 		Box(modifier = modifier.fillMaxSize()) {
 			Children(stack = component.stack) { child ->
 				when (val instance = child.instance) {

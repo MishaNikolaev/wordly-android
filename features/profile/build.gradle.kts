@@ -20,7 +20,7 @@ dependencies {
 	implementation(libs.kotlinx.coroutines.core)
 	ksp(libs.dagger.compiler)
 
-	implementation(projects.component.ui)
+	implementation(projects.component.wui)
 	implementation(projects.component.presentation)
 	implementation(projects.core.navigation)
 	implementation(projects.core.network)

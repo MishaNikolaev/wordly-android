@@ -19,8 +19,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
-import com.nmichail.wordly.android.component.ui.components.button.CustomButton
-import com.nmichail.wordly.android.component.ui.components.button.TextLink
+import com.nmichail.wordly.android.component.wui.components.button.WuiButton
+import com.nmichail.wordly.android.component.wui.components.button.WuiTextLink
 import com.nmichail.wordly.android.features.constructor.R
 import com.nmichail.wordly.android.features.constructor.presentation.detail.ConstructorPracticeComponent
 import com.nmichail.wordly.android.features.constructor.ui.detail.ConstructorPracticeInProgressContent
@@ -103,12 +103,12 @@ private fun ConstructorPracticeError(
 			textAlign = TextAlign.Center,
 			modifier = Modifier.padding(top = 8.dp),
 		)
-		CustomButton(
+		WuiButton(
 			text = stringResource(R.string.constructor_retry),
 			onClick = onRetryClick,
 			modifier = Modifier.padding(top = 24.dp),
 		)
-		TextLink(
+		WuiTextLink(
 			text = stringResource(R.string.constructor_practice_close),
 			onClick = onCloseClick,
 			modifier = Modifier.padding(top = 12.dp),

@@ -42,10 +42,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
-import com.nmichail.wordly.android.component.ui.components.button.CustomButton
-import com.nmichail.wordly.android.component.ui.components.button.TextLink
-import com.nmichail.wordly.android.component.ui.theme.WordlyBrushes
-import com.nmichail.wordly.android.component.ui.theme.isAppInDarkTheme
+import com.nmichail.wordly.android.component.wui.components.button.WuiButton
+import com.nmichail.wordly.android.component.wui.components.button.WuiTextLink
+import com.nmichail.wordly.android.component.wui.theme.WuiBrushes
+import com.nmichail.wordly.android.component.wui.theme.isAppInDarkTheme
 import com.nmichail.wordly.android.features.materials.R
 import com.nmichail.wordly.android.features.materials.domain.entity.MaterialDetail
 import com.nmichail.wordly.android.features.materials.domain.entity.MaterialReaction
@@ -112,12 +112,12 @@ private fun MaterialDetailError(
 			textAlign = TextAlign.Center,
 			modifier = Modifier.padding(top = 8.dp),
 		)
-		CustomButton(
+		WuiButton(
 			text = stringResource(R.string.materials_retry),
 			onClick = onRetryClick,
 			modifier = Modifier.padding(top = 24.dp),
 		)
-		TextLink(
+		WuiTextLink(
 			text = stringResource(R.string.materials_detail_back),
 			onClick = onBackClick,
 			modifier = Modifier.padding(top = 16.dp),
@@ -199,7 +199,7 @@ private fun MaterialDetailHero(
 		modifier = modifier
 			.fillMaxWidth()
 			.clip(RoundedCornerShape(24.dp))
-			.background(WordlyBrushes.MaterialHero)
+			.background(WuiBrushes.MaterialHero)
 			.padding(20.dp),
 	) {
 		MaterialHeroTagsRow(material = material)

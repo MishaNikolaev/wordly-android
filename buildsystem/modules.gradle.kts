@@ -30,7 +30,6 @@ include(
 	":shared:error",
 	":shared:words:domain",
 
-	":component:ui",
-	":component:media",
+	":component:wui",
 	":component:presentation",
 )

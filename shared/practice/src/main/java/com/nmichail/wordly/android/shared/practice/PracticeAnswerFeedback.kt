@@ -16,12 +16,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.nmichail.wordly.android.component.ui.theme.WordlyAndroidTheme
+import com.nmichail.wordly.android.component.wui.theme.WuiTheme
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import com.nmichail.wordly.android.component.ui.theme.PreviewTheme
-import com.nmichail.wordly.android.component.ui.theme.PreviewThemeProvider
-import com.nmichail.wordly.android.component.ui.theme.WordlyPreviews
-import com.nmichail.wordly.android.component.ui.theme.WordlyTheme
+import com.nmichail.wordly.android.component.wui.theme.PreviewTheme
+import com.nmichail.wordly.android.component.wui.theme.PreviewThemeProvider
+import com.nmichail.wordly.android.component.wui.theme.WuiPreviews
+import com.nmichail.wordly.android.component.wui.theme.Wui
 
 @Composable
 fun PracticeAnswerFeedback(
@@ -32,7 +32,7 @@ fun PracticeAnswerFeedback(
 	correctAnswerText: String? = null,
 ) {
 	val color = if (isCorrect) {
-		WordlyTheme.colors.success
+		Wui.colors.success
 	} else {
 		MaterialTheme.colorScheme.error
 	}
@@ -66,12 +66,12 @@ fun PracticeAnswerFeedback(
 	}
 }
 
-@WordlyPreviews
+@WuiPreviews
 @Composable
 private fun PracticeAnswerFeedbackPreview(
 	@PreviewParameter(PreviewThemeProvider::class) theme: PreviewTheme,
 ) {
-	WordlyAndroidTheme(darkTheme = theme == PreviewTheme.Dark) {
+	WuiTheme(darkTheme = theme == PreviewTheme.Dark) {
 		Column(
 			modifier = Modifier.padding(16.dp),
 			verticalArrangement = Arrangement.spacedBy(16.dp),

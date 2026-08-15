@@ -33,20 +33,20 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
-import com.nmichail.wordly.android.component.ui.components.button.CustomButton
-import com.nmichail.wordly.android.component.ui.components.calendar.CalendarDay
-import com.nmichail.wordly.android.component.ui.components.calendar.CalendarDayStatusId
-import com.nmichail.wordly.android.component.ui.components.calendar.CalendarDialog
+import com.nmichail.wordly.android.component.wui.components.button.WuiButton
+import com.nmichail.wordly.android.component.wui.components.calendar.WuiCalendarDay
+import com.nmichail.wordly.android.component.wui.components.calendar.WuiCalendarDayStatusId
+import com.nmichail.wordly.android.component.wui.components.calendar.WuiCalendarDialog
 import com.nmichail.wordly.android.features.home.ui.component.DailyReviewCard
 import com.nmichail.wordly.android.features.home.ui.component.HomeTopBar
-import com.nmichail.wordly.android.component.ui.components.text.SectionLabel
+import com.nmichail.wordly.android.component.wui.components.text.WuiSectionLabel
 import com.nmichail.wordly.android.features.home.ui.component.TrainingListItem
 import com.nmichail.wordly.android.features.home.ui.component.WeekDayIndicator
 import com.nmichail.wordly.android.features.home.ui.component.WeekDayStatusId
 import com.nmichail.wordly.android.features.home.ui.component.WeekProgressCard
 import com.nmichail.wordly.android.features.home.ui.component.homeGreeting
-import com.nmichail.wordly.android.component.ui.components.snackbar.SnackBarHost
-import com.nmichail.wordly.android.component.ui.components.snackbar.showInfoSnackBar
+import com.nmichail.wordly.android.component.wui.components.snackbar.WuiSnackBarHost
+import com.nmichail.wordly.android.component.wui.components.snackbar.showWuiInfoSnackBar
 import com.nmichail.wordly.android.features.home.R
 import com.nmichail.wordly.android.features.home.domain.entity.Training
 import com.nmichail.wordly.android.features.home.presentation.HomeComponent
@@ -113,7 +113,7 @@ private fun HomeError(
 			textAlign = TextAlign.Center,
 			modifier = Modifier.padding(top = 8.dp),
 		)
-		CustomButton(
+		WuiButton(
 			text = stringResource(R.string.home_retry),
 			onClick = onRetryClick,
 			modifier = Modifier.padding(top = 24.dp),
@@ -137,7 +137,7 @@ private fun HomeLoaded(
 		} else {
 			context.resources.getQuantityString(R.plurals.home_streak_snackbar, days, days)
 		}
-		coroutineScope.showInfoSnackBar(
+		coroutineScope.showWuiInfoSnackBar(
 			snackBarHostState = snackBarHostState,
 			message = message,
 		)
@@ -185,7 +185,7 @@ private fun HomeLoaded(
 				)
 			}
 		}
-		SnackBarHost(
+		WuiSnackBarHost(
 			snackBarHostState = snackBarHostState,
 			modifier = Modifier.align(Alignment.BottomCenter),
 		)
@@ -201,11 +201,11 @@ private fun HomeCalendarDialog(
 	state: HomeComponent.State.Content,
 	component: HomeComponent,
 ) {
-	CalendarDialog(
+	WuiCalendarDialog(
 		monthTitle = state.monthTitle,
 		days = state.monthDays.map { day ->
 			day?.let {
-				CalendarDay(
+				WuiCalendarDay(
 					dayOfMonth = it.dayOfMonth,
 					statusId = it.status.toUiId(),
 				)
@@ -227,7 +227,7 @@ private fun TrainingsBlock(
 		modifier = Modifier.fillMaxWidth(),
 		verticalArrangement = Arrangement.spacedBy(12.dp),
 	) {
-		SectionLabel(
+		WuiSectionLabel(
 			text = stringResource(R.string.home_trainings_section),
 			modifier = Modifier.padding(start = 4.dp),
 		)
@@ -264,10 +264,10 @@ private fun WeekDayStatus.toUiId(): String =
 
 private fun MonthDayStatus.toUiId(): String =
 	when (this) {
-		MonthDayStatus.Completed -> CalendarDayStatusId.Completed
-		MonthDayStatus.Missed -> CalendarDayStatusId.Missed
-		MonthDayStatus.Today -> CalendarDayStatusId.Today
-		MonthDayStatus.Inactive -> CalendarDayStatusId.Inactive
+		MonthDayStatus.Completed -> WuiCalendarDayStatusId.Completed
+		MonthDayStatus.Missed -> WuiCalendarDayStatusId.Missed
+		MonthDayStatus.Today -> WuiCalendarDayStatusId.Today
+		MonthDayStatus.Inactive -> WuiCalendarDayStatusId.Inactive
 	}
 
 private fun Training.icon(): ImageVector =
