@@ -14,9 +14,6 @@ import com.nmichail.wordly.android.features.books.domain.entity.BookWordDefiniti
 import com.nmichail.wordly.android.features.books.domain.usecase.GetBookContentUseCase
 import com.nmichail.wordly.android.features.books.domain.usecase.GetBookTranslationUseCase
 import javax.inject.Inject
-import kotlinx.coroutines.delay
-
-private const val TRANSLATE_DEMO_DELAY_MS = 800L
 
 internal class BookReaderStoreFactory @Inject constructor(
 	private val getBookContentUseCase: GetBookContentUseCase,
@@ -28,13 +25,9 @@ internal class BookReaderStoreFactory @Inject constructor(
 	fun create(bookId: String): BookReaderStore =
 		object :
 			BookReaderStore,
-			Store<
-				BookReaderStore.Intent,
-				BookReaderComponent.State,
-				BookReaderComponent.Label,
-				> by storeFactory.create(
+			Store<BookReaderStore.Intent, BookReaderStore.State, BookReaderStore.Label> by storeFactory.create(
 				name = "BookReaderStore",
-				initialState = BookReaderComponent.State.Loading,
+				initialState = BookReaderStore.State.Loading,
 				bootstrapper = SimpleBootstrapper(Action.Load),
 				executorFactory = { ExecutorImpl(bookId = bookId) },
 				reducer = ReducerImpl,
@@ -72,50 +65,41 @@ internal class BookReaderStoreFactory @Inject constructor(
 		data object WordAddedDialogDismissed : Msg
 	}
 
-	private object ReducerImpl : Reducer<BookReaderComponent.State, Msg> {
+	private object ReducerImpl : Reducer<BookReaderStore.State, Msg> {
 
-		override fun BookReaderComponent.State.reduce(
-			msg: Msg,
-		): BookReaderComponent.State =
-			when (msg) {
-				Msg.Loading -> BookReaderComponent.State.Loading
-				is Msg.BookLoaded -> BookReaderComponent.State.Content(
+		@Suppress("CyclomaticComplexMethod")
+		override fun BookReaderStore.State.reduce(msg: Msg): BookReaderStore.State {
+			val content = this as? BookReaderStore.State.Content
+			return when (msg) {
+				Msg.Loading -> BookReaderStore.State.Loading
+				is Msg.BookLoaded -> BookReaderStore.State.Content(
 					book = msg.book,
 					translation = null,
-					isTranslationVisible = false,
-					isTranslating = false,
+					translationVisible = false,
+					translating = false,
 					selectedWord = null,
 					showWordAddedDialog = false,
 				)
-				Msg.SetError -> BookReaderComponent.State.Error
-				else -> reduceContent(msg)
-			}
-
-		private fun BookReaderComponent.State.reduceContent(
-			msg: Msg,
-		): BookReaderComponent.State {
-			val content = this as? BookReaderComponent.State.Content ?: return this
-			return when (msg) {
-				Msg.Translating -> content.copy(isTranslating = true)
-				is Msg.TranslationLoaded -> content.copy(
+				Msg.SetError -> BookReaderStore.State.Error
+				Msg.Translating -> content?.copy(translating = true) ?: this
+				is Msg.TranslationLoaded -> content?.copy(
 					translation = msg.translation,
-					isTranslationVisible = true,
-					isTranslating = false,
-				)
-				Msg.TranslationHidden -> content.copy(isTranslationVisible = false)
-				Msg.TranslationShown -> content.copy(isTranslationVisible = true)
-				Msg.TranslationFailed -> content.copy(isTranslating = false)
-				is Msg.WordSelected -> content.copy(selectedWord = msg.definition)
-				Msg.WordDialogDismissed -> content.copy(
+					translationVisible = true,
+					translating = false,
+				) ?: this
+				Msg.TranslationHidden -> content?.copy(translationVisible = false) ?: this
+				Msg.TranslationShown -> content?.copy(translationVisible = true) ?: this
+				Msg.TranslationFailed -> content?.copy(translating = false) ?: this
+				is Msg.WordSelected -> content?.copy(selectedWord = msg.definition) ?: this
+				Msg.WordDialogDismissed -> content?.copy(
 					selectedWord = null,
 					showWordAddedDialog = false,
-				)
-				Msg.WordAdded -> content.copy(showWordAddedDialog = true)
-				Msg.WordAddedDialogDismissed -> content.copy(
+				) ?: this
+				Msg.WordAdded -> content?.copy(showWordAddedDialog = true) ?: this
+				Msg.WordAddedDialogDismissed -> content?.copy(
 					selectedWord = null,
 					showWordAddedDialog = false,
-				)
-				else -> this
+				) ?: this
 			}
 		}
 	}
@@ -125,9 +109,9 @@ internal class BookReaderStoreFactory @Inject constructor(
 	) : BaseCoroutineExecutor<
 		BookReaderStore.Intent,
 		Action,
-		BookReaderComponent.State,
+		BookReaderStore.State,
 		Msg,
-		BookReaderComponent.Label,
+		BookReaderStore.Label,
 		>() {
 
 		override fun executeAction(action: Action) {
@@ -138,7 +122,7 @@ internal class BookReaderStoreFactory @Inject constructor(
 
 		override fun executeIntent(intent: BookReaderStore.Intent) {
 			when (intent) {
-				BookReaderStore.Intent.Close -> publish(BookReaderComponent.Label.Close)
+				BookReaderStore.Intent.Close -> publish(BookReaderStore.Label.Close)
 				BookReaderStore.Intent.Retry -> loadBook()
 				BookReaderStore.Intent.ToggleTranslate -> handleToggleTranslate()
 				is BookReaderStore.Intent.SelectWord -> selectWord(wordId = intent.wordId)
@@ -161,15 +145,14 @@ internal class BookReaderStoreFactory @Inject constructor(
 		}
 
 		private fun handleToggleTranslate() {
-			val content = state() as? BookReaderComponent.State.Content ?: return
+			val content = state() as? BookReaderStore.State.Content ?: return
 			when {
-				content.isTranslationVisible -> dispatch(Msg.TranslationHidden)
+				content.translationVisible -> dispatch(Msg.TranslationHidden)
 				content.translation != null -> dispatch(Msg.TranslationShown)
-				content.isTranslating -> return
+				content.translating -> return
 				else -> {
 					dispatch(Msg.Translating)
 					launchTry {
-						delay(TRANSLATE_DEMO_DELAY_MS)
 						val translation = getBookTranslationUseCase(bookId)
 						dispatch(Msg.TranslationLoaded(translation = translation))
 					} catch {
@@ -180,28 +163,30 @@ internal class BookReaderStoreFactory @Inject constructor(
 		}
 
 		private fun selectWord(wordId: String) {
-			val content = state() as? BookReaderComponent.State.Content ?: return
+			val content = state() as? BookReaderStore.State.Content ?: return
 			val definition = findDefinition(book = content.book, wordId = wordId) ?: return
 			dispatch(Msg.WordSelected(definition = definition))
 		}
 
 		private fun addWordToCard() {
-			val content = state() as? BookReaderComponent.State.Content ?: return
+			val content = state() as? BookReaderStore.State.Content ?: return
 			val definition = content.selectedWord ?: return
 			dispatch(Msg.WordAdded)
-			publish(BookReaderComponent.Label.AddWordToCard(definition = definition))
+			publish(BookReaderStore.Label.AddWordToCard(definition = definition))
 		}
 
 		private fun findDefinition(
 			book: BookContent,
 			wordId: String,
-		): BookWordDefinition? =
-			book.paragraphs
-				.asSequence()
-				.flatMap { it.segments.asSequence() }
-				.firstOrNull { segment ->
-					segment.type == BookTextSegmentType.LOOKUP_WORD && segment.id == wordId
+		): BookWordDefinition? {
+			for (paragraph in book.paragraphs) {
+				for (segment in paragraph.segments) {
+					if (segment.type == BookTextSegmentType.LOOKUP_WORD && segment.id == wordId) {
+						return segment.definition
+					}
 				}
-				?.definition
+			}
+			return null
+		}
 	}
 }

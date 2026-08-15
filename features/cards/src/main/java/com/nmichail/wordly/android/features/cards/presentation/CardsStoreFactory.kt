@@ -11,6 +11,10 @@ import com.nmichail.wordly.android.core.network.domain.usecase.UpdateEnglishLeve
 import com.nmichail.wordly.android.features.cards.domain.entity.Cards
 import com.nmichail.wordly.android.features.cards.domain.entity.CardsSection
 import com.nmichail.wordly.android.features.cards.domain.usecase.GetCardsUseCase
+import com.nmichail.wordly.android.shared.catalog.filterCatalogSections
+import com.nmichail.wordly.android.shared.catalog.findCatalogItem
+import com.nmichail.wordly.android.shared.catalog.matchesCatalogSearch
+import com.nmichail.wordly.android.shared.catalog.updateCatalogLevelSectionTitles
 import javax.inject.Inject
 
 internal class CardsStoreFactory @Inject constructor(
@@ -49,7 +53,11 @@ internal class CardsStoreFactory @Inject constructor(
 			val sections: List<CardsSection>,
 		) : Msg
 
-		data class LevelUpdated(val level: String) : Msg
+		data class LevelUpdated(
+			val level: String,
+			val allSections: List<CardsSection>,
+			val sections: List<CardsSection>,
+		) : Msg
 	}
 
 	private object ReducerImpl : Reducer<CardsComponent.State, Msg> {
@@ -62,6 +70,7 @@ internal class CardsStoreFactory @Inject constructor(
 					searchQuery = "",
 					searchPlaceholder = msg.cards.searchPlaceholder,
 					levelBanner = msg.cards.levelBanner,
+					allSections = msg.cards.sections,
 					sections = msg.cards.sections,
 				)
 				Msg.SetError -> CardsComponent.State.Error
@@ -77,10 +86,8 @@ internal class CardsStoreFactory @Inject constructor(
 					val banner = content.levelBanner ?: return this
 					content.copy(
 						levelBanner = banner.copy(levelLabel = msg.level),
-						sections = updateLevelSectionTitles(
-							sections = content.sections,
-							level = msg.level,
-						),
+						allSections = msg.allSections,
+						sections = msg.sections,
 					)
 				}
 			}
@@ -95,8 +102,6 @@ internal class CardsStoreFactory @Inject constructor(
 			CardsComponent.Label,
 			>() {
 
-		private var allSections: List<CardsSection> = emptyList()
-
 		override fun executeAction(action: Action) {
 			when (action) {
 				Action.Load -> loadCards()
@@ -108,19 +113,34 @@ internal class CardsStoreFactory @Inject constructor(
 				CardsStore.Intent.Back -> publish(CardsComponent.Label.Close)
 				CardsStore.Intent.Retry -> loadCards()
 				is CardsStore.Intent.ChangeSearchQuery -> {
+					val content = state() as? CardsComponent.State.Content ?: return
 					dispatch(
 						Msg.SearchUpdated(
 							query = intent.query,
-							sections = filterSections(allSections, intent.query),
+							sections = filterCatalogSections(
+								sections = content.allSections,
+								query = intent.query,
+								getItems = { it.items },
+								itemMatches = { item, query ->
+									matchesCatalogSearch(
+										title = item.title,
+										subtitle = item.subtitle,
+										badge = item.badge,
+										query = query,
+									)
+								},
+								copyWithItems = { section, items -> section.copy(items = items) },
+							),
 						),
 					)
 				}
 				is CardsStore.Intent.SelectCard -> {
-					val item = allSections
-						.asSequence()
-						.flatMap { it.items.asSequence() }
-						.firstOrNull { it.id == intent.cardId }
-						?: return
+					val content = state() as? CardsComponent.State.Content ?: return
+					val item = findCatalogItem(
+						sections = content.allSections,
+						getItems = { it.items },
+						predicate = { it.id == intent.cardId },
+					) ?: return
 					publish(CardsComponent.Label.OpenCard(item = item))
 				}
 				is CardsStore.Intent.ChangeLevel -> changeLevel(level = intent.level)
@@ -128,10 +148,36 @@ internal class CardsStoreFactory @Inject constructor(
 		}
 
 		private fun changeLevel(level: String) {
+			val content = state() as? CardsComponent.State.Content ?: return
 			launchTry {
 				updateEnglishLevelUseCase(level)
-				allSections = updateLevelSectionTitles(sections = allSections, level = level)
-				dispatch(Msg.LevelUpdated(level = level))
+				val allSections = updateCatalogLevelSectionTitles(
+					sections = content.allSections,
+					level = level,
+					getTitle = { it.title },
+					copyWithTitle = { section, title -> section.copy(title = title) },
+				)
+				val sections = filterCatalogSections(
+					sections = allSections,
+					query = content.searchQuery,
+					getItems = { it.items },
+					itemMatches = { item, query ->
+						matchesCatalogSearch(
+							title = item.title,
+							subtitle = item.subtitle,
+							badge = item.badge,
+							query = query,
+						)
+					},
+					copyWithItems = { section, items -> section.copy(items = items) },
+				)
+				dispatch(
+					Msg.LevelUpdated(
+						level = level,
+						allSections = allSections,
+						sections = sections,
+					),
+				)
 			} catch {
 				// keep previous level
 			}
@@ -141,46 +187,10 @@ internal class CardsStoreFactory @Inject constructor(
 			dispatch(Msg.Loading)
 			launchTry {
 				val cards = getCardsUseCase()
-				allSections = cards.sections
 				dispatch(Msg.CardsLoaded(cards = cards))
 			} catch {
 				dispatch(Msg.SetError)
 			}
 		}
-
-		private fun filterSections(
-			sections: List<CardsSection>,
-			query: String,
-		): List<CardsSection> {
-			val normalized = query.trim()
-			if (normalized.isEmpty()) return sections
-
-			return sections.mapNotNull { section ->
-				val items = section.items.filter { item ->
-					item.title.contains(normalized, ignoreCase = true) ||
-						item.subtitle.contains(normalized, ignoreCase = true) ||
-						item.badge.orEmpty().contains(normalized, ignoreCase = true)
-				}
-				if (items.isEmpty()) {
-					null
-				} else {
-					section.copy(items = items)
-				}
-			}
-		}
 	}
 }
-
-private const val LEVEL_SECTION_PREFIX = "Под ваш уровень · "
-
-private fun updateLevelSectionTitles(
-	sections: List<CardsSection>,
-	level: String,
-): List<CardsSection> =
-	sections.map { section ->
-		if (section.title.startsWith(LEVEL_SECTION_PREFIX)) {
-			section.copy(title = "$LEVEL_SECTION_PREFIX$level")
-		} else {
-			section
-		}
-	}

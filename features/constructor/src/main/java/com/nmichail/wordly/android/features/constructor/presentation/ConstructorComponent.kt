@@ -31,6 +31,7 @@ interface ConstructorComponent {
 			val searchQuery: String,
 			val searchPlaceholder: String,
 			val levelBanner: ConstructorLevelBanner?,
+			val allSections: List<ConstructorSection>,
 			val sections: List<ConstructorSection>,
 		) : State
 	}

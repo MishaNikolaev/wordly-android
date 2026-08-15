@@ -11,6 +11,10 @@ import com.nmichail.wordly.android.core.network.domain.usecase.UpdateEnglishLeve
 import com.nmichail.wordly.android.features.constructor.domain.entity.ConstructorCatalog
 import com.nmichail.wordly.android.features.constructor.domain.entity.ConstructorSection
 import com.nmichail.wordly.android.features.constructor.domain.usecase.GetConstructorCatalogUseCase
+import com.nmichail.wordly.android.shared.catalog.filterCatalogSections
+import com.nmichail.wordly.android.shared.catalog.findCatalogItem
+import com.nmichail.wordly.android.shared.catalog.matchesCatalogSearch
+import com.nmichail.wordly.android.shared.catalog.updateCatalogLevelSectionTitles
 import javax.inject.Inject
 
 internal class ConstructorStoreFactory @Inject constructor(
@@ -49,7 +53,11 @@ internal class ConstructorStoreFactory @Inject constructor(
 			val sections: List<ConstructorSection>,
 		) : Msg
 
-		data class LevelUpdated(val level: String) : Msg
+		data class LevelUpdated(
+			val level: String,
+			val allSections: List<ConstructorSection>,
+			val sections: List<ConstructorSection>,
+		) : Msg
 	}
 
 	private object ReducerImpl : Reducer<ConstructorComponent.State, Msg> {
@@ -62,6 +70,7 @@ internal class ConstructorStoreFactory @Inject constructor(
 					searchQuery = "",
 					searchPlaceholder = msg.catalog.searchPlaceholder,
 					levelBanner = msg.catalog.levelBanner,
+					allSections = msg.catalog.sections,
 					sections = msg.catalog.sections,
 				)
 				Msg.SetError -> ConstructorComponent.State.Error
@@ -77,10 +86,8 @@ internal class ConstructorStoreFactory @Inject constructor(
 					val banner = content.levelBanner ?: return this
 					content.copy(
 						levelBanner = banner.copy(levelLabel = msg.level),
-						sections = updateLevelSectionTitles(
-							sections = content.sections,
-							level = msg.level,
-						),
+						allSections = msg.allSections,
+						sections = msg.sections,
 					)
 				}
 			}
@@ -95,8 +102,6 @@ internal class ConstructorStoreFactory @Inject constructor(
 			ConstructorComponent.Label,
 			>() {
 
-		private var allSections: List<ConstructorSection> = emptyList()
-
 		override fun executeAction(action: Action) {
 			when (action) {
 				Action.Load -> loadCatalog()
@@ -108,19 +113,34 @@ internal class ConstructorStoreFactory @Inject constructor(
 				ConstructorStore.Intent.Back -> publish(ConstructorComponent.Label.Close)
 				ConstructorStore.Intent.Retry -> loadCatalog()
 				is ConstructorStore.Intent.ChangeSearchQuery -> {
+					val content = state() as? ConstructorComponent.State.Content ?: return
 					dispatch(
 						Msg.SearchUpdated(
 							query = intent.query,
-							sections = filterSections(allSections, intent.query),
+							sections = filterCatalogSections(
+								sections = content.allSections,
+								query = intent.query,
+								getItems = { it.items },
+								itemMatches = { item, query ->
+									matchesCatalogSearch(
+										title = item.title,
+										subtitle = item.subtitle,
+										badge = item.badge,
+										query = query,
+									)
+								},
+								copyWithItems = { section, items -> section.copy(items = items) },
+							),
 						),
 					)
 				}
 				is ConstructorStore.Intent.SelectTheme -> {
-					val theme = allSections
-						.asSequence()
-						.flatMap { it.items.asSequence() }
-						.firstOrNull { it.id == intent.themeId }
-						?: return
+					val content = state() as? ConstructorComponent.State.Content ?: return
+					val theme = findCatalogItem(
+						sections = content.allSections,
+						getItems = { it.items },
+						predicate = { it.id == intent.themeId },
+					) ?: return
 					publish(ConstructorComponent.Label.OpenTheme(theme = theme))
 				}
 				is ConstructorStore.Intent.ChangeLevel -> changeLevel(level = intent.level)
@@ -128,10 +148,36 @@ internal class ConstructorStoreFactory @Inject constructor(
 		}
 
 		private fun changeLevel(level: String) {
+			val content = state() as? ConstructorComponent.State.Content ?: return
 			launchTry {
 				updateEnglishLevelUseCase(level)
-				allSections = updateLevelSectionTitles(sections = allSections, level = level)
-				dispatch(Msg.LevelUpdated(level = level))
+				val allSections = updateCatalogLevelSectionTitles(
+					sections = content.allSections,
+					level = level,
+					getTitle = { it.title },
+					copyWithTitle = { section, title -> section.copy(title = title) },
+				)
+				val sections = filterCatalogSections(
+					sections = allSections,
+					query = content.searchQuery,
+					getItems = { it.items },
+					itemMatches = { item, query ->
+						matchesCatalogSearch(
+							title = item.title,
+							subtitle = item.subtitle,
+							badge = item.badge,
+							query = query,
+						)
+					},
+					copyWithItems = { section, items -> section.copy(items = items) },
+				)
+				dispatch(
+					Msg.LevelUpdated(
+						level = level,
+						allSections = allSections,
+						sections = sections,
+					),
+				)
 			} catch {
 				// keep previous level
 			}
@@ -141,46 +187,10 @@ internal class ConstructorStoreFactory @Inject constructor(
 			dispatch(Msg.Loading)
 			launchTry {
 				val catalog = getConstructorCatalogUseCase()
-				allSections = catalog.sections
 				dispatch(Msg.CatalogLoaded(catalog = catalog))
 			} catch {
 				dispatch(Msg.SetError)
 			}
 		}
-
-		private fun filterSections(
-			sections: List<ConstructorSection>,
-			query: String,
-		): List<ConstructorSection> {
-			val normalized = query.trim()
-			if (normalized.isEmpty()) return sections
-
-			return sections.mapNotNull { section ->
-				val items = section.items.filter { item ->
-					item.title.contains(normalized, ignoreCase = true) ||
-						item.subtitle.contains(normalized, ignoreCase = true) ||
-						item.badge.orEmpty().contains(normalized, ignoreCase = true)
-				}
-				if (items.isEmpty()) {
-					null
-				} else {
-					section.copy(items = items)
-				}
-			}
-		}
 	}
 }
-
-private const val LEVEL_SECTION_PREFIX = "Под ваш уровень · "
-
-private fun updateLevelSectionTitles(
-	sections: List<ConstructorSection>,
-	level: String,
-): List<ConstructorSection> =
-	sections.map { section ->
-		if (section.title.startsWith(LEVEL_SECTION_PREFIX)) {
-			section.copy(title = "$LEVEL_SECTION_PREFIX$level")
-		} else {
-			section
-		}
-	}

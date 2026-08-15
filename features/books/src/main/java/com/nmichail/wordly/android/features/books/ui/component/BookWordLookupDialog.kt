@@ -45,7 +45,7 @@ fun BookWordLookupDialog(
 	translation: String,
 	addButtonText: String,
 	addedStatusText: String,
-	isAdded: Boolean,
+	added: Boolean,
 	onAddClick: () -> Unit,
 	onDismiss: () -> Unit,
 	modifier: Modifier = Modifier,
@@ -67,7 +67,7 @@ fun BookWordLookupDialog(
 			translation = translation,
 			addButtonText = addButtonText,
 			addedStatusText = addedStatusText,
-			isAdded = isAdded,
+			added = added,
 			onAddClick = onAddClick,
 			onDismiss = onDismiss,
 		)
@@ -81,7 +81,7 @@ private fun BookWordLookupSheetContent(
 	translation: String,
 	addButtonText: String,
 	addedStatusText: String,
-	isAdded: Boolean,
+	added: Boolean,
 	onAddClick: () -> Unit,
 	onDismiss: () -> Unit,
 ) {
@@ -104,7 +104,7 @@ private fun BookWordLookupSheetContent(
 			color = MaterialTheme.colorScheme.onSurface,
 			modifier = Modifier.padding(bottom = 6.dp),
 		)
-		if (isAdded) {
+		if (added) {
 			BookWordAddedStatus(text = addedStatusText)
 		} else {
 			BookWordAddButton(
@@ -265,7 +265,7 @@ private fun BookWordLookupDialogPreview() {
 			phonetic = "/ˈæp.əl/",
 			addButtonText = "Добавить",
 			addedStatusText = "Добавлено",
-			isAdded = false,
+			added = false,
 			onAddClick = {},
 			onDismiss = {},
 		)

@@ -90,7 +90,7 @@ class BookReaderStoreTest {
 
 		val store = createStore()
 
-		assertEquals(BookReaderComponent.State.Error, store.state)
+		assertEquals(BookReaderStore.State.Error, store.state)
 	}
 
 	@Test
@@ -153,7 +153,7 @@ class BookReaderStoreTest {
 			store.state,
 		)
 		assertEquals(
-			BookReaderComponent.Label.AddWordToCard(definition = wordDefinition),
+			BookReaderStore.Label.AddWordToCard(definition = wordDefinition),
 			labelsChannel.receive(),
 		)
 	}
@@ -178,21 +178,21 @@ class BookReaderStoreTest {
 
 		store.accept(BookReaderStore.Intent.Close)
 
-		assertEquals(BookReaderComponent.Label.Close, labelsChannel.receive())
+		assertEquals(BookReaderStore.Label.Close, labelsChannel.receive())
 	}
 
 	private fun content(
 		translation: BookTranslation? = null,
-		isTranslationVisible: Boolean = false,
-		isTranslating: Boolean = false,
+		translationVisible: Boolean = false,
+		translating: Boolean = false,
 		selectedWord: BookWordDefinition? = null,
 		showWordAddedDialog: Boolean = false,
-	): BookReaderComponent.State.Content =
-		BookReaderComponent.State.Content(
+	): BookReaderStore.State.Content =
+		BookReaderStore.State.Content(
 			book = book,
 			translation = translation,
-			isTranslationVisible = isTranslationVisible,
-			isTranslating = isTranslating,
+			translationVisible = translationVisible,
+			translating = translating,
 			selectedWord = selectedWord,
 			showWordAddedDialog = showWordAddedDialog,
 		)

@@ -51,11 +51,11 @@ import com.nmichail.wordly.android.component.wui.theme.WuiTypography
 import com.nmichail.wordly.android.features.books.R
 import com.nmichail.wordly.android.features.books.domain.entity.BookParagraph
 import com.nmichail.wordly.android.features.books.domain.entity.BookTranslation
-import com.nmichail.wordly.android.features.books.presentation.detail.BookReaderComponent
+import com.nmichail.wordly.android.features.books.presentation.detail.BookReaderStore
 
 @Composable
 internal fun BookReaderLoaded(
-	state: BookReaderComponent.State.Content,
+	state: BookReaderStore.State.Content,
 	onCloseClick: () -> Unit,
 	onToggleTranslate: () -> Unit,
 	onSelectWord: (String) -> Unit,
@@ -75,8 +75,8 @@ internal fun BookReaderLoaded(
 			BookReaderTopBar(
 				title = state.book.title,
 				author = state.book.author,
-				isTranslating = state.isTranslating,
-				isTranslated = state.isTranslationVisible,
+				translating = state.translating,
+				translated = state.translationVisible,
 				onCloseClick = onCloseClick,
 				onToggleTranslate = onToggleTranslate,
 			)
@@ -90,7 +90,7 @@ internal fun BookReaderLoaded(
 		if (selectedWord != null) {
 			BookReaderWordLookupDialog(
 				definition = selectedWord,
-				isAdded = state.showWordAddedDialog,
+				added = state.showWordAddedDialog,
 				onAddClick = onAddWordToCard,
 				onDismiss = if (state.showWordAddedDialog) {
 					onDismissWordAddedDialog
@@ -106,8 +106,8 @@ internal fun BookReaderLoaded(
 private fun BookReaderTopBar(
 	title: String,
 	author: String,
-	isTranslating: Boolean,
-	isTranslated: Boolean,
+	translating: Boolean,
+	translated: Boolean,
 	onCloseClick: () -> Unit,
 	onToggleTranslate: () -> Unit,
 	modifier: Modifier = Modifier,
@@ -144,10 +144,10 @@ private fun BookReaderTopBar(
 			)
 		}
 		BookTranslateButton(
-			isTranslating = isTranslating,
-			isTranslated = isTranslated,
+			translating = translating,
+			translated = translated,
 			contentDescription = stringResource(
-				if (isTranslated) {
+				if (translated) {
 					R.string.book_reader_hide_translation
 				} else {
 					R.string.book_reader_translate
@@ -209,7 +209,7 @@ private fun BookReaderHint(
 
 @Composable
 private fun BookReaderBody(
-	state: BookReaderComponent.State.Content,
+	state: BookReaderStore.State.Content,
 	onSelectWord: (String) -> Unit,
 	modifier: Modifier = Modifier,
 ) {
@@ -243,7 +243,7 @@ private fun BookReaderBody(
 @SuppressLint("UnusedBoxWithConstraintsScope")
 @Composable
 private fun BookReaderPagedContent(
-	state: BookReaderComponent.State.Content,
+	state: BookReaderStore.State.Content,
 	currentPage: Int,
 	onPageCountChange: (Int) -> Unit,
 	onSelectWord: (String) -> Unit,
@@ -262,7 +262,7 @@ private fun BookReaderPagedContent(
 		val pageHeightPx = ((constraints.maxHeight - verticalPaddingPx) * PAGE_CONTENT_HEIGHT_FACTOR)
 			.toInt()
 			.coerceAtLeast(0)
-		val showTranslation = state.isTranslationVisible
+		val showTranslation = state.translationVisible
 		val pages = remember(
 			state.book.paragraphs,
 			state.translation,
@@ -301,7 +301,7 @@ private fun BookReaderPagedContent(
 			pageIndices = pageIndices,
 			translation = state.translation,
 			showTranslation = showTranslation,
-			isTranslating = state.isTranslating,
+			translating = state.translating,
 			onSelectWord = onSelectWord,
 		)
 	}
@@ -314,7 +314,7 @@ private fun BookReaderPage(
 	pageIndices: IntRange,
 	translation: BookTranslation?,
 	showTranslation: Boolean,
-	isTranslating: Boolean,
+	translating: Boolean,
 	onSelectWord: (String) -> Unit,
 	modifier: Modifier = Modifier,
 ) {
@@ -324,7 +324,7 @@ private fun BookReaderPage(
 	}
 
 	Box(modifier = modifier.fillMaxSize()) {
-		if (isTranslating) {
+		if (translating) {
 			BookTranslatingOverlay(
 				message = stringResource(R.string.book_reader_translating),
 			)

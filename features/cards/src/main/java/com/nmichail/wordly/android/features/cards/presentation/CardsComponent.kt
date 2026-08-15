@@ -31,6 +31,7 @@ interface CardsComponent {
 			val searchQuery: String,
 			val searchPlaceholder: String,
 			val levelBanner: CardsLevelBanner?,
+			val allSections: List<CardsSection>,
 			val sections: List<CardsSection>,
 		) : State
 	}

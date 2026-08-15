@@ -1,9 +1,35 @@
 package com.nmichail.wordly.android.features.books.presentation.detail
 
 import com.arkivanov.mvikotlin.core.store.Store
+import com.nmichail.wordly.android.features.books.domain.entity.BookContent
+import com.nmichail.wordly.android.features.books.domain.entity.BookTranslation
+import com.nmichail.wordly.android.features.books.domain.entity.BookWordDefinition
 
-internal interface BookReaderStore :
-	Store<BookReaderStore.Intent, BookReaderComponent.State, BookReaderComponent.Label> {
+interface BookReaderStore :
+	Store<BookReaderStore.Intent, BookReaderStore.State, BookReaderStore.Label> {
+
+	sealed interface State {
+
+		data object Loading : State
+
+		data class Content(
+			val book: BookContent,
+			val translation: BookTranslation?,
+			val translationVisible: Boolean,
+			val translating: Boolean,
+			val selectedWord: BookWordDefinition?,
+			val showWordAddedDialog: Boolean,
+		) : State
+
+		data object Error : State
+	}
+
+	sealed interface Label {
+
+		data object Close : Label
+
+		data class AddWordToCard(val definition: BookWordDefinition) : Label
+	}
 
 	sealed interface Intent {
 

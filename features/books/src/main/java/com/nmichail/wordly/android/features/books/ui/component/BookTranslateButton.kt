@@ -24,15 +24,15 @@ import com.nmichail.wordly.android.component.wui.theme.WuiTheme
 
 @Composable
 fun BookTranslateButton(
-	isTranslating: Boolean,
-	isTranslated: Boolean,
+	translating: Boolean,
+	translated: Boolean,
 	contentDescription: String,
 	onClick: () -> Unit,
 	modifier: Modifier = Modifier,
 ) {
 	val colorScheme = MaterialTheme.colorScheme
 	val (background, iconTint) = when {
-		isTranslated -> colorScheme.primary to colorScheme.onPrimary
+		translated -> colorScheme.primary to colorScheme.onPrimary
 		else -> colorScheme.surfaceVariant to colorScheme.onBackground
 	}
 
@@ -42,13 +42,13 @@ fun BookTranslateButton(
 			.clip(RoundedCornerShape(12.dp))
 			.background(background)
 			.clickable(
-				enabled = !isTranslating,
+				enabled = !translating,
 				role = Role.Button,
 				onClick = onClick,
 			),
 		contentAlignment = Alignment.Center,
 	) {
-		if (isTranslating) {
+		if (translating) {
 			CircularProgressIndicator(
 				modifier = Modifier.size(22.dp),
 				color = colorScheme.primary,
@@ -74,20 +74,20 @@ private fun BookTranslateButtonPreview() {
 			horizontalArrangement = Arrangement.spacedBy(12.dp),
 		) {
 			BookTranslateButton(
-				isTranslating = false,
-				isTranslated = false,
+				translating = false,
+				translated = false,
 				contentDescription = "Translate",
 				onClick = {},
 			)
 			BookTranslateButton(
-				isTranslating = true,
-				isTranslated = false,
+				translating = true,
+				translated = false,
 				contentDescription = "Translating",
 				onClick = {},
 			)
 			BookTranslateButton(
-				isTranslating = false,
-				isTranslated = true,
+				translating = false,
+				translated = true,
 				contentDescription = "Hide translation",
 				onClick = {},
 			)

@@ -11,6 +11,10 @@ import com.nmichail.wordly.android.core.network.domain.usecase.UpdateEnglishLeve
 import com.nmichail.wordly.android.features.books.domain.entity.BooksCatalog
 import com.nmichail.wordly.android.features.books.domain.entity.BooksSection
 import com.nmichail.wordly.android.features.books.domain.usecase.GetBooksCatalogUseCase
+import com.nmichail.wordly.android.shared.catalog.filterCatalogSections
+import com.nmichail.wordly.android.shared.catalog.findCatalogItem
+import com.nmichail.wordly.android.shared.catalog.matchesCatalogSearch
+import com.nmichail.wordly.android.shared.catalog.updateCatalogLevelSectionTitles
 import javax.inject.Inject
 
 internal class BooksStoreFactory @Inject constructor(
@@ -23,9 +27,9 @@ internal class BooksStoreFactory @Inject constructor(
 	fun create(): BooksStore =
 		object :
 			BooksStore,
-			Store<BooksStore.Intent, BooksComponent.State, BooksComponent.Label> by storeFactory.create(
+			Store<BooksStore.Intent, BooksStore.State, BooksStore.Label> by storeFactory.create(
 				name = "BooksStore",
-				initialState = BooksComponent.State.Loading,
+				initialState = BooksStore.State.Loading,
 				bootstrapper = SimpleBootstrapper(Action.Load),
 				executorFactory = ::ExecutorImpl,
 				reducer = ReducerImpl,
@@ -49,38 +53,41 @@ internal class BooksStoreFactory @Inject constructor(
 			val sections: List<BooksSection>,
 		) : Msg
 
-		data class LevelUpdated(val level: String) : Msg
+		data class LevelUpdated(
+			val level: String,
+			val allSections: List<BooksSection>,
+			val sections: List<BooksSection>,
+		) : Msg
 	}
 
-	private object ReducerImpl : Reducer<BooksComponent.State, Msg> {
+	private object ReducerImpl : Reducer<BooksStore.State, Msg> {
 
-		override fun BooksComponent.State.reduce(msg: Msg): BooksComponent.State =
+		override fun BooksStore.State.reduce(msg: Msg): BooksStore.State =
 			when (msg) {
-				Msg.Loading -> BooksComponent.State.Loading
-				is Msg.CatalogLoaded -> BooksComponent.State.Content(
+				Msg.Loading -> BooksStore.State.Loading
+				is Msg.CatalogLoaded -> BooksStore.State.Content(
 					title = msg.catalog.title,
 					searchQuery = "",
 					searchPlaceholder = msg.catalog.searchPlaceholder,
 					levelBanner = msg.catalog.levelBanner,
+					allSections = msg.catalog.sections,
 					sections = msg.catalog.sections,
 				)
-				Msg.SetError -> BooksComponent.State.Error
+				Msg.SetError -> BooksStore.State.Error
 				is Msg.SearchUpdated -> {
-					val content = this as? BooksComponent.State.Content ?: return this
+					val content = this as? BooksStore.State.Content ?: return this
 					content.copy(
 						searchQuery = msg.query,
 						sections = msg.sections,
 					)
 				}
 				is Msg.LevelUpdated -> {
-					val content = this as? BooksComponent.State.Content ?: return this
+					val content = this as? BooksStore.State.Content ?: return this
 					val banner = content.levelBanner ?: return this
 					content.copy(
 						levelBanner = banner.copy(levelLabel = msg.level),
-						sections = updateLevelSectionTitles(
-							sections = content.sections,
-							level = msg.level,
-						),
+						allSections = msg.allSections,
+						sections = msg.sections,
 					)
 				}
 			}
@@ -90,12 +97,10 @@ internal class BooksStoreFactory @Inject constructor(
 		BaseCoroutineExecutor<
 			BooksStore.Intent,
 			Action,
-			BooksComponent.State,
+			BooksStore.State,
 			Msg,
-			BooksComponent.Label,
+			BooksStore.Label,
 			>() {
-
-		private var allSections: List<BooksSection> = emptyList()
 
 		override fun executeAction(action: Action) {
 			when (action) {
@@ -105,33 +110,74 @@ internal class BooksStoreFactory @Inject constructor(
 
 		override fun executeIntent(intent: BooksStore.Intent) {
 			when (intent) {
-				BooksStore.Intent.Back -> publish(BooksComponent.Label.Close)
+				BooksStore.Intent.Back -> publish(BooksStore.Label.Close)
 				BooksStore.Intent.Retry -> loadCatalog()
 				is BooksStore.Intent.ChangeSearchQuery -> {
+					val content = state() as? BooksStore.State.Content ?: return
 					dispatch(
 						Msg.SearchUpdated(
 							query = intent.query,
-							sections = filterSections(allSections, intent.query),
+							sections = filterCatalogSections(
+								sections = content.allSections,
+								query = intent.query,
+								getItems = { it.items },
+								itemMatches = { item, query ->
+									matchesCatalogSearch(
+										title = item.title,
+										subtitle = item.subtitle,
+										badge = item.badge,
+										query = query,
+									)
+								},
+								copyWithItems = { section, items -> section.copy(items = items) },
+							),
 						),
 					)
 				}
 				is BooksStore.Intent.SelectBook -> {
-					val book = allSections
-						.asSequence()
-						.flatMap { it.items.asSequence() }
-						.firstOrNull { it.id == intent.bookId }
-						?: return
-					publish(BooksComponent.Label.OpenBook(book = book))
+					val content = state() as? BooksStore.State.Content ?: return
+					val book = findCatalogItem(
+						sections = content.allSections,
+						getItems = { it.items },
+						predicate = { it.id == intent.bookId },
+					) ?: return
+					publish(BooksStore.Label.OpenBook(book = book))
 				}
 				is BooksStore.Intent.ChangeLevel -> changeLevel(level = intent.level)
 			}
 		}
 
 		private fun changeLevel(level: String) {
+			val content = state() as? BooksStore.State.Content ?: return
 			launchTry {
 				updateEnglishLevelUseCase(level)
-				allSections = updateLevelSectionTitles(sections = allSections, level = level)
-				dispatch(Msg.LevelUpdated(level = level))
+				val allSections = updateCatalogLevelSectionTitles(
+					sections = content.allSections,
+					level = level,
+					getTitle = { it.title },
+					copyWithTitle = { section, title -> section.copy(title = title) },
+				)
+				val sections = filterCatalogSections(
+					sections = allSections,
+					query = content.searchQuery,
+					getItems = { it.items },
+					itemMatches = { item, query ->
+						matchesCatalogSearch(
+							title = item.title,
+							subtitle = item.subtitle,
+							badge = item.badge,
+							query = query,
+						)
+					},
+					copyWithItems = { section, items -> section.copy(items = items) },
+				)
+				dispatch(
+					Msg.LevelUpdated(
+						level = level,
+						allSections = allSections,
+						sections = sections,
+					),
+				)
 			} catch {
 				// ignored
 			}
@@ -141,46 +187,10 @@ internal class BooksStoreFactory @Inject constructor(
 			dispatch(Msg.Loading)
 			launchTry {
 				val catalog = getBooksCatalogUseCase()
-				allSections = catalog.sections
 				dispatch(Msg.CatalogLoaded(catalog = catalog))
 			} catch {
 				dispatch(Msg.SetError)
 			}
 		}
-
-		private fun filterSections(
-			sections: List<BooksSection>,
-			query: String,
-		): List<BooksSection> {
-			val normalized = query.trim()
-			if (normalized.isEmpty()) return sections
-
-			return sections.mapNotNull { section ->
-				val items = section.items.filter { item ->
-					item.title.contains(normalized, ignoreCase = true) ||
-						item.subtitle.contains(normalized, ignoreCase = true) ||
-						item.badge.orEmpty().contains(normalized, ignoreCase = true)
-				}
-				if (items.isEmpty()) {
-					null
-				} else {
-					section.copy(items = items)
-				}
-			}
-		}
 	}
 }
-
-private const val LEVEL_SECTION_PREFIX = "Под ваш уровень · "
-
-private fun updateLevelSectionTitles(
-	sections: List<BooksSection>,
-	level: String,
-): List<BooksSection> =
-	sections.map { section ->
-		if (section.title.startsWith(LEVEL_SECTION_PREFIX)) {
-			section.copy(title = "$LEVEL_SECTION_PREFIX$level")
-		} else {
-			section
-		}
-	}

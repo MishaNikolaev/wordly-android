@@ -21,14 +21,14 @@ internal class DefaultBookReaderComponent(
 		bookReaderStoreFactory.create(bookId = bookId)
 	}
 
-	override val model: Value<BookReaderComponent.State> = store.asValue()
+	override val model: Value<BookReaderStore.State> = store.asValue()
 
 	init {
 		launchTry {
 			for (label in store.labelsChannel(lifecycle)) {
 				when (label) {
-					BookReaderComponent.Label.Close -> bookReaderRouter.navigateBack()
-					is BookReaderComponent.Label.AddWordToCard -> {
+					BookReaderStore.Label.Close -> bookReaderRouter.navigateBack()
+					is BookReaderStore.Label.AddWordToCard -> {
 						onAddWordToCard(label.definition)
 					}
 				}

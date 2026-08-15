@@ -25,6 +25,7 @@ import com.nmichail.wordly.android.component.wui.components.button.WuiTextLink
 import com.nmichail.wordly.android.features.books.R
 import com.nmichail.wordly.android.features.books.domain.entity.BookWordDefinition
 import com.nmichail.wordly.android.features.books.presentation.detail.BookReaderComponent
+import com.nmichail.wordly.android.features.books.presentation.detail.BookReaderStore
 
 @Composable
 fun BookReaderContent(
@@ -34,7 +35,7 @@ fun BookReaderContent(
 	val state by component.model.subscribeAsState()
 
 	when (val currentState = state) {
-		BookReaderComponent.State.Loading -> {
+		BookReaderStore.State.Loading -> {
 			Box(
 				modifier = modifier
 					.fillMaxSize()
@@ -44,14 +45,14 @@ fun BookReaderContent(
 				CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
 			}
 		}
-		BookReaderComponent.State.Error -> {
+		BookReaderStore.State.Error -> {
 			BookReaderError(
 				onRetryClick = component::handleRetry,
 				onCloseClick = component::handleClose,
 				modifier = modifier.fillMaxSize(),
 			)
 		}
-		is BookReaderComponent.State.Content -> {
+		is BookReaderStore.State.Content -> {
 			BookReaderLoaded(
 				state = currentState,
 				onCloseClick = component::handleClose,
@@ -111,7 +112,7 @@ private fun BookReaderError(
 @Composable
 internal fun BookReaderWordLookupDialog(
 	definition: BookWordDefinition,
-	isAdded: Boolean,
+	added: Boolean,
 	onAddClick: () -> Unit,
 	onDismiss: () -> Unit,
 ) {
@@ -121,7 +122,7 @@ internal fun BookReaderWordLookupDialog(
 		translation = definition.translation,
 		addButtonText = stringResource(R.string.book_reader_add_word),
 		addedStatusText = stringResource(R.string.book_reader_word_added_status),
-		isAdded = isAdded,
+		added = added,
 		onAddClick = onAddClick,
 		onDismiss = onDismiss,
 	)
