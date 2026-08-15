@@ -103,6 +103,8 @@ class SignUpStoreTest {
 	private lateinit var lifecycle: LifecycleRegistry
 	private lateinit var store: SignUpStore
 
+	private val content get() = store.state as SignUpStore.State.Content
+
 	@BeforeEach
 	fun setUp() {
 		lifecycle = createTestLifecycle()
@@ -125,7 +127,17 @@ class SignUpStoreTest {
 
 	@Test
 	fun `init EXPECT init state`() {
-		assertEquals(SignUpComponent.State(), store.state)
+		assertEquals(
+			SignUpStore.State.Content(
+				email = EmailValidationItem(),
+				password = PasswordValidationItem(),
+				firstName = NameValidationItem(namePart = NamePart.NAME),
+				lastName = NameValidationItem(namePart = NamePart.SURNAME),
+				englishLevel = NotEmptyValidationItem(),
+				submitting = false,
+			),
+			store.state,
+		)
 	}
 
 	@Test
@@ -134,7 +146,7 @@ class SignUpStoreTest {
 
 		store.accept(SignUpStore.Intent.ChangeEmail(email))
 
-		assertEquals(emailValidItem, store.state.email)
+		assertEquals(emailValidItem, content.email)
 	}
 
 	@Test
@@ -143,7 +155,7 @@ class SignUpStoreTest {
 
 		store.accept(SignUpStore.Intent.NavigateToSignIn)
 
-		assertEquals(SignUpComponent.Label.OpenSignIn, labelsChannel.receive())
+		assertEquals(SignUpStore.Label.OpenSignIn, labelsChannel.receive())
 	}
 
 	@Test
@@ -201,11 +213,11 @@ class SignUpStoreTest {
 
 		store.accept(SignUpStore.Intent.Submit)
 
-		assertEquals(SignUpComponent.Label.OpenMainHost, labelsChannel.receive())
+		assertEquals(SignUpStore.Label.OpenMainHost, labelsChannel.receive())
 	}
 
 	@Test
-	fun `submit with registration error EXPECT registration error in state`() = runTest {
+	fun `submit with registration error EXPECT error state`() = runTest {
 		whenever(validateEmailUseCase(email)) doReturn emailValidItem
 		whenever(validatePasswordUseCase(password)) doReturn passwordValidItem
 		whenever(validateNameUseCase(firstName, NamePart.NAME)) doReturn firstNameValidItem
@@ -221,11 +233,23 @@ class SignUpStoreTest {
 
 		store.accept(SignUpStore.Intent.Submit)
 
-		assertEquals(SignUpComponent.Error.RegistrationFailed, store.state.error)
+		assertEquals(
+			SignUpStore.State.Error(
+				content = SignUpStore.State.Content(
+					email = emailValidItem,
+					password = passwordValidItem,
+					firstName = firstNameValidItem,
+					lastName = lastNameValidItem,
+					englishLevel = englishLevelValidItem,
+					submitting = false,
+				),
+			),
+			store.state,
+		)
 	}
 
 	@Test
-	fun `submit with no connection EXPECT no connection error in state`() = runTest {
+	fun `submit with no connection EXPECT error state`() = runTest {
 		whenever(validateEmailUseCase(email)) doReturn emailValidItem
 		whenever(validatePasswordUseCase(password)) doReturn passwordValidItem
 		whenever(validateNameUseCase(firstName, NamePart.NAME)) doReturn firstNameValidItem
@@ -241,7 +265,19 @@ class SignUpStoreTest {
 
 		store.accept(SignUpStore.Intent.Submit)
 
-		assertEquals(SignUpComponent.Error.NoConnection, store.state.error)
+		assertEquals(
+			SignUpStore.State.Error(
+				content = SignUpStore.State.Content(
+					email = emailValidItem,
+					password = passwordValidItem,
+					firstName = firstNameValidItem,
+					lastName = lastNameValidItem,
+					englishLevel = englishLevelValidItem,
+					submitting = false,
+				),
+			),
+			store.state,
+		)
 	}
 }
 

@@ -19,17 +19,17 @@ internal class DefaultSignInComponent(
 		signInStoreFactory.create()
 	}
 
-	override val model: Value<SignInComponent.State> = store.asValue()
+	override val model: Value<SignInStore.State> = store.asValue()
 
-	override fun labelsChannel(): ReceiveChannel<SignInComponent.Label> =
+	override fun labelsChannel(): ReceiveChannel<SignInStore.Label> =
 		store.labelsChannel(lifecycle)
 
 	init {
 		launchTry {
 			for (label in store.labelsChannel(lifecycle)) {
 				when (label) {
-					SignInComponent.Label.OpenSignUp -> signInRouter.navigateToSignUp()
-					SignInComponent.Label.OpenMainHost -> signInRouter.navigateToMain()
+					SignInStore.Label.OpenSignUp -> signInRouter.navigateToSignUp()
+					SignInStore.Label.OpenMainHost -> signInRouter.navigateToMain()
 				}
 			}
 		} catch {
@@ -54,11 +54,12 @@ internal class DefaultSignInComponent(
 	}
 
 	override fun handleNavigateToNetworkSelection() {
-		if (store.state.isSubmitting) return
+		val content = store.state as? SignInStore.State.Content ?: return
+		if (content.submitting) return
 		signInRouter.navigateToNetworkSelection()
 	}
 
-	override fun handleErrorShown() {
-		store.accept(SignInStore.Intent.ErrorShown)
+	override fun handleRetry() {
+		store.accept(SignInStore.Intent.Retry)
 	}
 }

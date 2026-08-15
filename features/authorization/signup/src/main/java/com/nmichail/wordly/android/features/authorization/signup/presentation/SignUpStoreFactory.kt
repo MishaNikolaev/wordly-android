@@ -9,25 +9,18 @@ import com.nmichail.wordly.android.component.presentation.BaseCoroutineExecutor
 import com.nmichail.wordly.android.core.preferences.domain.usecase.SaveAuthTokensUseCase
 import com.nmichail.wordly.android.core.validation.email.EmailValidationItem
 import com.nmichail.wordly.android.core.validation.email.ValidateEmailUseCase
-import com.nmichail.wordly.android.core.validation.email.isValid
 import com.nmichail.wordly.android.core.validation.name.NamePart
 import com.nmichail.wordly.android.core.validation.name.NameValidationItem
 import com.nmichail.wordly.android.core.validation.name.ValidateNameUseCase
-import com.nmichail.wordly.android.core.validation.name.isValid
 import com.nmichail.wordly.android.core.validation.notEmpty.NotEmptyValidationItem
 import com.nmichail.wordly.android.core.validation.notEmpty.ValidateNotEmptyUseCase
-import com.nmichail.wordly.android.core.validation.notEmpty.isValid
 import com.nmichail.wordly.android.core.validation.password.PasswordValidationItem
 import com.nmichail.wordly.android.core.validation.password.ValidatePasswordUseCase
-import com.nmichail.wordly.android.core.validation.password.isValid
 import com.nmichail.wordly.android.features.authorization.signup.domain.entity.SignUpForm
 import com.nmichail.wordly.android.features.authorization.signup.domain.usecase.SignUpUseCase
 import com.nmichail.wordly.android.shared.error.NetworkExceptionConverter
-import com.nmichail.wordly.android.shared.error.StatusCodes
-import com.nmichail.wordly.android.shared.error.messageIdOrNull
 import com.nmichail.wordly.android.shared.error.presentation.ErrorDelegate
 import com.nmichail.wordly.android.shared.error.presentation.HandleErrorResult
-import kotlinx.coroutines.CancellationException
 import javax.inject.Inject
 
 internal class SignUpStoreFactory @Inject constructor(
@@ -44,11 +37,18 @@ internal class SignUpStoreFactory @Inject constructor(
 	private val storeFactory: StoreFactory = LoggingStoreFactory(DefaultStoreFactory())
 
 	fun create(): SignUpStore = object : SignUpStore,
-		Store<SignUpStore.Intent, SignUpComponent.State, SignUpComponent.Label> by storeFactory.create(
+		Store<SignUpStore.Intent, SignUpStore.State, SignUpStore.Label> by storeFactory.create(
 			name = "SignUpStore",
-			initialState = SignUpComponent.State(),
-			executorFactory = ::ExecutorImpl,
+			initialState = SignUpStore.State.Content(
+				email = EmailValidationItem(),
+				password = PasswordValidationItem(),
+				firstName = NameValidationItem(namePart = NamePart.NAME),
+				lastName = NameValidationItem(namePart = NamePart.SURNAME),
+				englishLevel = NotEmptyValidationItem(),
+				submitting = false,
+			),
 			reducer = ReducerImpl,
+			executorFactory = ::ExecutorImpl,
 		) {}
 
 	private sealed interface Msg {
@@ -63,66 +63,48 @@ internal class SignUpStoreFactory @Inject constructor(
 
 		data class ChangeEnglishLevel(val englishLevel: NotEmptyValidationItem) : Msg
 
-		data class SetSubmitting(val isSubmitting: Boolean) : Msg
+		data class SetSubmitting(val submitting: Boolean) : Msg
 
-		data class SetError(val error: SignUpComponent.Error?) : Msg
-	}
+		data class SetError(val content: SignUpStore.State.Content) : Msg
 
-	private object ReducerImpl : Reducer<SignUpComponent.State, Msg> {
-
-		override fun SignUpComponent.State.reduce(msg: Msg): SignUpComponent.State =
-			when (msg) {
-				is Msg.ChangeEmail -> copy(email = msg.email)
-				is Msg.ChangePassword -> copy(password = msg.password)
-				is Msg.ChangeFirstName -> copy(firstName = msg.firstName)
-				is Msg.ChangeLastName -> copy(lastName = msg.lastName)
-				is Msg.ChangeEnglishLevel -> copy(englishLevel = msg.englishLevel)
-				is Msg.SetSubmitting -> copy(isSubmitting = msg.isSubmitting)
-				is Msg.SetError -> copy(error = msg.error)
-			}
+		data object RestoreContent : Msg
 	}
 
 	private inner class ExecutorImpl :
-		BaseCoroutineExecutor<SignUpStore.Intent, Nothing, SignUpComponent.State, Msg, SignUpComponent.Label>() {
+		BaseCoroutineExecutor<SignUpStore.Intent, Nothing, SignUpStore.State, Msg, SignUpStore.Label>() {
 
 		override fun executeIntent(intent: SignUpStore.Intent) {
 			when (intent) {
-				is SignUpStore.Intent.ChangeEmail -> dispatch(
-					Msg.ChangeEmail(validateEmailUseCase(intent.email.trim())),
-				)
-
-				is SignUpStore.Intent.ChangePassword -> dispatch(
-					Msg.ChangePassword(validatePasswordUseCase(intent.password)),
-				)
-
-				is SignUpStore.Intent.ChangeFirstName -> dispatch(
-					Msg.ChangeFirstName(validateNameUseCase(intent.firstName.trim(), NamePart.NAME)),
-				)
-
-				is SignUpStore.Intent.ChangeLastName -> dispatch(
-					Msg.ChangeLastName(validateNameUseCase(intent.lastName.trim(), NamePart.SURNAME)),
-				)
-
-				is SignUpStore.Intent.ChangeEnglishLevel -> dispatch(
-					Msg.ChangeEnglishLevel(validateNotEmptyUseCase(intent.englishLevel)),
-				)
-
-				SignUpStore.Intent.Submit -> handleSubmit()
-
+				is SignUpStore.Intent.ChangeEmail -> {
+					dispatch(Msg.ChangeEmail(validateEmailUseCase(intent.email.trim())))
+				}
+				is SignUpStore.Intent.ChangePassword -> {
+					dispatch(Msg.ChangePassword(validatePasswordUseCase(intent.password)))
+				}
+				is SignUpStore.Intent.ChangeFirstName -> {
+					dispatch(Msg.ChangeFirstName(validateNameUseCase(intent.firstName.trim(), NamePart.NAME)))
+				}
+				is SignUpStore.Intent.ChangeLastName -> {
+					dispatch(Msg.ChangeLastName(validateNameUseCase(intent.lastName.trim(), NamePart.SURNAME)))
+				}
+				is SignUpStore.Intent.ChangeEnglishLevel -> {
+					dispatch(Msg.ChangeEnglishLevel(validateNotEmptyUseCase(intent.englishLevel)))
+				}
 				SignUpStore.Intent.NavigateToSignIn -> {
-					if (!state().isSubmitting) {
-						publish(SignUpComponent.Label.OpenSignIn)
+					val content = state() as? SignUpStore.State.Content ?: return
+					if (!content.submitting) {
+						publish(SignUpStore.Label.OpenSignIn)
 					}
 				}
-
-				SignUpStore.Intent.ErrorShown -> dispatch(Msg.SetError(error = null))
+				SignUpStore.Intent.Submit -> submit()
+				SignUpStore.Intent.Retry -> dispatch(Msg.RestoreContent)
 			}
 		}
 
-		private fun handleSubmit() {
-			if (state().isSubmitting) return
+		private fun submit() {
+			val currentState = state() as? SignUpStore.State.Content ?: return
+			if (currentState.submitting) return
 
-			val currentState = state()
 			val email = validateEmailUseCase(currentState.email.data.trim())
 			val password = validatePasswordUseCase(currentState.password.data)
 			val firstName = validateNameUseCase(currentState.firstName.data.trim(), NamePart.NAME)
@@ -134,59 +116,53 @@ internal class SignUpStoreFactory @Inject constructor(
 			dispatch(Msg.ChangeFirstName(firstName))
 			dispatch(Msg.ChangeLastName(lastName))
 			dispatch(Msg.ChangeEnglishLevel(englishLevel))
-			dispatch(Msg.SetError(error = null))
+			val content = state() as? SignUpStore.State.Content ?: return
+			if (!content.areFieldsValid()) return
 
-			if (!areFieldsValid(email, password, firstName, lastName, englishLevel)) return
-
-			dispatch(Msg.SetSubmitting(isSubmitting = true))
+			dispatch(Msg.SetSubmitting(submitting = true))
 			launchTry {
-				try {
-					val tokens = signUpUseCase(
-						SignUpForm(
-							email = email.data,
-							password = password.data,
-							firstName = firstName.data,
-							lastName = lastName.data,
-							englishLevel = englishLevel.data,
-						),
-					)
-					saveAuthTokensUseCase(tokens)
-					publish(SignUpComponent.Label.OpenMainHost)
-				} catch (error: CancellationException) {
-					throw error
-				} catch (error: Exception) {
-					handleSignUpError(error)
-				} finally {
-					dispatch(Msg.SetSubmitting(isSubmitting = false))
-				}
+				val tokens = signUpUseCase(
+					SignUpForm(
+						email = email.data,
+						password = password.data,
+						firstName = firstName.data,
+						lastName = lastName.data,
+						englishLevel = englishLevel.data,
+					),
+				)
+				saveAuthTokensUseCase(tokens)
+				dispatch(Msg.SetSubmitting(submitting = false))
+				publish(SignUpStore.Label.OpenMainHost)
 			} catch { error ->
-				dispatch(Msg.SetSubmitting(isSubmitting = false))
-				handleSignUpError(error)
+				handleError(error)
 			}
 		}
 
-		private fun handleSignUpError(error: Exception) {
+		private fun handleError(error: Exception) {
 			val networkError = networkExceptionConverter.convert(error)
-			if (errorDelegate.handleError(networkError) == HandleErrorResult.HANDLED) return
-
-			val uiError = when (networkError.messageIdOrNull()) {
-				StatusCodes.NO_CONNECTION.statusCode -> SignUpComponent.Error.NoConnection
-				else -> SignUpComponent.Error.RegistrationFailed
+			if (errorDelegate.handleError(networkError) == HandleErrorResult.HANDLED) {
+				dispatch(Msg.SetSubmitting(submitting = false))
+				return
 			}
-			dispatch(Msg.SetError(error = uiError))
+			val content = (state() as? SignUpStore.State.Content)?.copy(submitting = false) ?: return
+			dispatch(Msg.SetError(content = content))
 		}
+	}
 
-		private fun areFieldsValid(
-			email: EmailValidationItem,
-			password: PasswordValidationItem,
-			firstName: NameValidationItem,
-			lastName: NameValidationItem,
-			englishLevel: NotEmptyValidationItem,
-		): Boolean =
-			email.isValid() &&
-				password.isValid() &&
-				firstName.isValid() &&
-				lastName.isValid() &&
-				englishLevel.isValid()
+	private object ReducerImpl : Reducer<SignUpStore.State, Msg> {
+
+		override fun SignUpStore.State.reduce(msg: Msg): SignUpStore.State {
+			val content = this as? SignUpStore.State.Content
+			return when (msg) {
+				is Msg.ChangeEmail -> content?.copy(email = msg.email) ?: this
+				is Msg.ChangePassword -> content?.copy(password = msg.password) ?: this
+				is Msg.ChangeFirstName -> content?.copy(firstName = msg.firstName) ?: this
+				is Msg.ChangeLastName -> content?.copy(lastName = msg.lastName) ?: this
+				is Msg.ChangeEnglishLevel -> content?.copy(englishLevel = msg.englishLevel) ?: this
+				is Msg.SetSubmitting -> content?.copy(submitting = msg.submitting) ?: this
+				is Msg.SetError -> SignUpStore.State.Error(content = msg.content)
+				Msg.RestoreContent -> (this as? SignUpStore.State.Error)?.content ?: this
+			}
+		}
 	}
 }
