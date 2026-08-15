@@ -21,6 +21,10 @@ class ProfileRepositoryImpl @Inject constructor(
 		profileApi.updateProfile(request = params.toDto()).toDomain()
 
 	override suspend fun logout() {
-		runCatching { profileApi.logout() }
+		try {
+			profileApi.logout()
+		} catch (_: Exception) {
+			// logout must proceed even if the request fails
+		}
 	}
 }

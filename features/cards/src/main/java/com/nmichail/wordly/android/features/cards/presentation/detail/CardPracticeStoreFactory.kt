@@ -1,5 +1,6 @@
 package com.nmichail.wordly.android.features.cards.presentation.detail
 
+import kotlinx.coroutines.launch
 import com.arkivanov.mvikotlin.core.store.Reducer
 import com.arkivanov.mvikotlin.core.store.SimpleBootstrapper
 import com.arkivanov.mvikotlin.core.store.Store
@@ -140,15 +141,17 @@ internal class CardPracticeStoreFactory @Inject constructor(
 
 		private fun loadSession(cardId: String) {
 			dispatch(Msg.Loading)
-			launchTry {
-				val words = getCardSessionUseCase(cardId)
-				if (words.isEmpty()) {
+			scope.launch {
+				try {
+					val words = getCardSessionUseCase(cardId)
+					if (words.isEmpty()) {
+						dispatch(Msg.SetError)
+					} else {
+						dispatch(Msg.SessionLoaded(words = words))
+					}
+				} catch (_: Exception) {
 					dispatch(Msg.SetError)
-				} else {
-					dispatch(Msg.SessionLoaded(words = words))
 				}
-			} catch {
-				dispatch(Msg.SetError)
 			}
 		}
 

@@ -1,10 +1,11 @@
 package com.nmichail.wordly.android.features.materials.presentation.detail
 
+import com.nmichail.wordly.android.core.navigation.componentScope
+import kotlinx.coroutines.launch
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.value.Value
 import com.arkivanov.mvikotlin.core.instancekeeper.getStore
 import com.arkivanov.mvikotlin.extensions.coroutines.labelsChannel
-import com.nmichail.wordly.android.component.presentation.launchTry
 import com.nmichail.wordly.android.core.navigation.asValue
 
 internal class DefaultMaterialDetailComponent(
@@ -22,15 +23,13 @@ internal class DefaultMaterialDetailComponent(
 	override val model: Value<MaterialDetailStore.State> = store.asValue()
 
 	init {
-		launchTry {
+		componentScope().launch {
 			for (label in store.labelsChannel(lifecycle)) {
 				when (label) {
 					MaterialDetailStore.Label.Close -> materialDetailRouter.navigateBack()
 					is MaterialDetailStore.Label.Share -> Unit
 				}
 			}
-		} catch {
-			// ignored
 		}
 	}
 

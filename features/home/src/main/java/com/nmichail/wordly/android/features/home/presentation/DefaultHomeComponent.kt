@@ -1,10 +1,11 @@
 package com.nmichail.wordly.android.features.home.presentation
 
+import com.nmichail.wordly.android.core.navigation.componentScope
+import kotlinx.coroutines.launch
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.value.Value
 import com.arkivanov.mvikotlin.core.instancekeeper.getStore
 import com.arkivanov.mvikotlin.extensions.coroutines.labelsChannel
-import com.nmichail.wordly.android.component.presentation.launchTry
 import com.nmichail.wordly.android.core.navigation.asValue
 import com.nmichail.wordly.android.features.home.domain.entity.Training
 
@@ -22,7 +23,7 @@ internal class DefaultHomeComponent(
 	override val model: Value<HomeStore.State> = store.asValue()
 
 	init {
-		launchTry {
+		componentScope().launch {
 			for (label in store.labelsChannel(lifecycle)) {
 				when (label) {
 					HomeStore.Label.StartReview -> homeRouter.navigateToReview()
@@ -31,8 +32,6 @@ internal class DefaultHomeComponent(
 					HomeStore.Label.OpenBooks -> homeRouter.navigateToBooks()
 				}
 			}
-		} catch {
-			// ignored
 		}
 	}
 

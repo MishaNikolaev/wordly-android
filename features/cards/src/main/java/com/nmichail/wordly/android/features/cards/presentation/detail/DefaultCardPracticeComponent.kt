@@ -1,10 +1,11 @@
 package com.nmichail.wordly.android.features.cards.presentation.detail
 
+import com.nmichail.wordly.android.core.navigation.componentScope
+import kotlinx.coroutines.launch
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.value.Value
 import com.arkivanov.mvikotlin.core.instancekeeper.getStore
 import com.arkivanov.mvikotlin.extensions.coroutines.labelsChannel
-import com.nmichail.wordly.android.component.presentation.launchTry
 import com.nmichail.wordly.android.core.navigation.asValue
 
 internal class DefaultCardPracticeComponent(
@@ -22,14 +23,12 @@ internal class DefaultCardPracticeComponent(
 	override val model: Value<CardPracticeStore.State> = store.asValue()
 
 	init {
-		launchTry {
+		componentScope().launch {
 			for (label in store.labelsChannel(lifecycle)) {
 				when (label) {
 					CardPracticeStore.Label.Close -> cardPracticeRouter.navigateBack()
 				}
 			}
-		} catch {
-			// ignored
 		}
 	}
 

@@ -1,5 +1,6 @@
 package com.nmichail.wordly.android.features.materials.presentation
 
+import kotlinx.coroutines.launch
 import com.arkivanov.mvikotlin.core.store.Reducer
 import com.arkivanov.mvikotlin.core.store.SimpleBootstrapper
 import com.arkivanov.mvikotlin.core.store.Store
@@ -138,35 +139,37 @@ internal class MaterialsStoreFactory @Inject constructor(
 			if (showLoading) {
 				dispatch(Msg.Loading)
 			}
-			launchTry {
-				val catalog = getMaterialsUseCase(filters = MaterialsFilters(filter = filter))
-				val items = catalog.items.map { item ->
-					if (item.id in locallyReadIds) {
-						item.copy(status = MaterialReadStatus.Read)
-					} else {
-						item
+			scope.launch {
+				try {
+					val catalog = getMaterialsUseCase(filters = MaterialsFilters(filter = filter))
+					val items = catalog.items.map { item ->
+						if (item.id in locallyReadIds) {
+							item.copy(status = MaterialReadStatus.Read)
+						} else {
+							item
+						}
 					}
-				}
-				if (showLoading) {
-					dispatch(
-						Msg.CatalogLoaded(
-							catalog = catalog.copy(items = items),
-							filter = filter,
-							locallyReadIds = locallyReadIds,
-						),
-					)
-				} else {
-					dispatch(
-						Msg.FilterUpdated(
-							filter = filter,
-							items = items,
-							locallyReadIds = locallyReadIds,
-						),
-					)
-				}
-			} catch {
-				if (showLoading) {
-					dispatch(Msg.SetError(locallyReadIds = locallyReadIds))
+					if (showLoading) {
+						dispatch(
+							Msg.CatalogLoaded(
+								catalog = catalog.copy(items = items),
+								filter = filter,
+								locallyReadIds = locallyReadIds,
+							),
+						)
+					} else {
+						dispatch(
+							Msg.FilterUpdated(
+								filter = filter,
+								items = items,
+								locallyReadIds = locallyReadIds,
+							),
+						)
+					}
+				} catch (_: Exception) {
+					if (showLoading) {
+						dispatch(Msg.SetError(locallyReadIds = locallyReadIds))
+					}
 				}
 			}
 		}

@@ -1,10 +1,11 @@
 package com.nmichail.wordly.android.features.constructor.presentation
 
+import com.nmichail.wordly.android.core.navigation.componentScope
+import kotlinx.coroutines.launch
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.value.Value
 import com.arkivanov.mvikotlin.core.instancekeeper.getStore
 import com.arkivanov.mvikotlin.extensions.coroutines.labelsChannel
-import com.nmichail.wordly.android.component.presentation.launchTry
 import com.nmichail.wordly.android.core.navigation.asValue
 import com.nmichail.wordly.android.features.constructor.domain.entity.ConstructorTheme
 
@@ -23,15 +24,13 @@ internal class DefaultConstructorComponent(
 	override val model: Value<ConstructorStore.State> = store.asValue()
 
 	init {
-		launchTry {
+		componentScope().launch {
 			for (label in store.labelsChannel(lifecycle)) {
 				when (label) {
 					ConstructorStore.Label.Close -> constructorRouter.navigateBack()
 					is ConstructorStore.Label.OpenTheme -> onThemeClick(label.theme)
 				}
 			}
-		} catch {
-			// ignored
 		}
 	}
 

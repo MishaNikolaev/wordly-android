@@ -1,10 +1,11 @@
 package com.nmichail.wordly.android.features.books.presentation
 
+import com.nmichail.wordly.android.core.navigation.componentScope
+import kotlinx.coroutines.launch
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.value.Value
 import com.arkivanov.mvikotlin.core.instancekeeper.getStore
 import com.arkivanov.mvikotlin.extensions.coroutines.labelsChannel
-import com.nmichail.wordly.android.component.presentation.launchTry
 import com.nmichail.wordly.android.core.navigation.asValue
 import com.nmichail.wordly.android.features.books.domain.entity.BooksItem
 
@@ -23,15 +24,13 @@ internal class DefaultBooksComponent(
 	override val model: Value<BooksStore.State> = store.asValue()
 
 	init {
-		launchTry {
+		componentScope().launch {
 			for (label in store.labelsChannel(lifecycle)) {
 				when (label) {
 					BooksStore.Label.Close -> booksRouter.navigateBack()
 					is BooksStore.Label.OpenBook -> onBookClick(label.book)
 				}
 			}
-		} catch {
-			// ignored
 		}
 	}
 

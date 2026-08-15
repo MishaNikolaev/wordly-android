@@ -1,5 +1,6 @@
 package com.nmichail.wordly.android.features.words.presentation.dialog
 
+import kotlinx.coroutines.launch
 import com.arkivanov.mvikotlin.core.store.Reducer
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.store.StoreFactory
@@ -130,12 +131,14 @@ internal class AddWordStoreFactory @Inject constructor(
 					),
 				),
 			)
-			lookupJob = launchTry {
-				val lookup = lookupWordUseCase(value)
-				applyLookup(lookup = lookup, input = value)
-			} catch {
-				val current = currentDialog() ?: return@catch
-				dispatch(Msg.DialogUpdated(dialog = current.copy(lookingUp = false)))
+			lookupJob = scope.launch {
+				try {
+					val lookup = lookupWordUseCase(value)
+					applyLookup(lookup = lookup, input = value)
+				} catch (_: Exception) {
+					val current = currentDialog() ?: return@launch
+					dispatch(Msg.DialogUpdated(dialog = current.copy(lookingUp = false)))
+				}
 			}
 		}
 
@@ -171,24 +174,26 @@ internal class AddWordStoreFactory @Inject constructor(
 			if (word.isEmpty() || dialog.submitting) return
 
 			dispatch(Msg.DialogUpdated(dialog = dialog.copy(submitting = true)))
-			launchTry {
-				addWordUseCase(
-					NewWord(
-						word = word,
-						phonetic = dialog.phonetic,
-						translation = dialog.translation,
-						definition = dialog.definition,
-						examples = dialog.examples,
-						tagIds = dialog.selectedTagIds.toList(),
-						difficulty = dialog.difficulty,
-					),
-				)
-				lookupJob?.cancel()
-				dispatch(Msg.Closed)
-				publish(AddWordStore.Label.WordAdded)
-			} catch {
-				val current = currentDialog() ?: return@catch
-				dispatch(Msg.DialogUpdated(dialog = current.copy(submitting = false)))
+			scope.launch {
+				try {
+					addWordUseCase(
+						NewWord(
+							word = word,
+							phonetic = dialog.phonetic,
+							translation = dialog.translation,
+							definition = dialog.definition,
+							examples = dialog.examples,
+							tagIds = dialog.selectedTagIds.toList(),
+							difficulty = dialog.difficulty,
+						),
+					)
+					lookupJob?.cancel()
+					dispatch(Msg.Closed)
+					publish(AddWordStore.Label.WordAdded)
+				} catch (_: Exception) {
+					val current = currentDialog() ?: return@launch
+					dispatch(Msg.DialogUpdated(dialog = current.copy(submitting = false)))
+				}
 			}
 		}
 	}

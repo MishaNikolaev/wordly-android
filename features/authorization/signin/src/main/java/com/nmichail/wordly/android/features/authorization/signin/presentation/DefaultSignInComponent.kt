@@ -1,10 +1,11 @@
 package com.nmichail.wordly.android.features.authorization.signin.presentation
 
+import com.nmichail.wordly.android.core.navigation.componentScope
+import kotlinx.coroutines.launch
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.value.Value
 import com.arkivanov.mvikotlin.core.instancekeeper.getStore
 import com.arkivanov.mvikotlin.extensions.coroutines.labelsChannel
-import com.nmichail.wordly.android.component.presentation.launchTry
 import com.nmichail.wordly.android.core.navigation.asValue
 import kotlinx.coroutines.channels.ReceiveChannel
 
@@ -25,15 +26,13 @@ internal class DefaultSignInComponent(
 		store.labelsChannel(lifecycle)
 
 	init {
-		launchTry {
+		componentScope().launch {
 			for (label in store.labelsChannel(lifecycle)) {
 				when (label) {
 					SignInStore.Label.OpenSignUp -> signInRouter.navigateToSignUp()
 					SignInStore.Label.OpenMainHost -> signInRouter.navigateToMain()
 				}
 			}
-		} catch {
-			// ignored
 		}
 	}
 

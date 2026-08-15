@@ -1,5 +1,6 @@
 package com.nmichail.wordly.android.features.words.presentation.list
 
+import kotlinx.coroutines.launch
 import com.arkivanov.mvikotlin.core.store.Reducer
 import com.arkivanov.mvikotlin.core.store.SimpleBootstrapper
 import com.arkivanov.mvikotlin.core.store.Store
@@ -164,17 +165,19 @@ internal class WordsListStoreFactory @Inject constructor(
 				dispatch(Msg.Loading)
 			}
 			wordsJob?.cancel()
-			wordsJob = launchTry {
-				val catalog = getWordsUseCase(
-					filters = WordsFilters(
-						filter = WordFilter.All,
-						query = "",
-					),
-				)
-				dispatch(Msg.CatalogLoaded(catalog = catalog))
-			} catch {
-				if (showLoading) {
-					dispatch(Msg.SetError)
+			wordsJob = scope.launch {
+				try {
+					val catalog = getWordsUseCase(
+						filters = WordsFilters(
+							filter = WordFilter.All,
+							query = "",
+						),
+					)
+					dispatch(Msg.CatalogLoaded(catalog = catalog))
+				} catch (_: Exception) {
+					if (showLoading) {
+						dispatch(Msg.SetError)
+					}
 				}
 			}
 		}
@@ -184,11 +187,9 @@ internal class WordsListStoreFactory @Inject constructor(
 			onResult: (List<WordItem>) -> Unit,
 		) {
 			wordsJob?.cancel()
-			wordsJob = launchTry {
+			wordsJob = scope.launch {
 				val catalog = getWordsUseCase(filters = filters)
 				onResult(catalog.words)
-			} catch {
-				// ignored
 			}
 		}
 

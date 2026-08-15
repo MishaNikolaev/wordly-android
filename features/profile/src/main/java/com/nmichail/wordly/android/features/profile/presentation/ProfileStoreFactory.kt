@@ -1,5 +1,6 @@
 package com.nmichail.wordly.android.features.profile.presentation
 
+import kotlinx.coroutines.launch
 import com.arkivanov.mvikotlin.core.store.Reducer
 import com.arkivanov.mvikotlin.core.store.SimpleBootstrapper
 import com.arkivanov.mvikotlin.core.store.Store
@@ -114,18 +115,20 @@ internal class ProfileStoreFactory @Inject constructor(
 			if (showLoading) {
 				dispatch(Msg.Loading)
 			}
-			launchTry {
-				dispatch(Msg.ProfileLoaded(profile = getProfileUseCase()))
-			} catch {
-				if (showLoading || state() !is ProfileStore.State.Content) {
-					dispatch(Msg.SetError)
+			scope.launch {
+				try {
+					dispatch(Msg.ProfileLoaded(profile = getProfileUseCase()))
+				} catch (_: Exception) {
+					if (showLoading || state() !is ProfileStore.State.Content) {
+						dispatch(Msg.SetError)
+					}
 				}
 			}
 		}
 
 		private fun updateLevel(level: String) {
 			val content = state() as? ProfileStore.State.Content ?: return
-			launchTry {
+			scope.launch {
 				val updated = updateProfileUseCase(
 					params = UpdateProfileParams(
 						firstName = content.profile.firstName,
@@ -136,8 +139,6 @@ internal class ProfileStoreFactory @Inject constructor(
 					),
 				)
 				dispatch(Msg.ProfileUpdated(profile = updated))
-			} catch {
-				// ignored
 			}
 		}
 
@@ -149,7 +150,7 @@ internal class ProfileStoreFactory @Inject constructor(
 
 		private fun updateDailyGoal(goal: DailyGoal) {
 			val content = state() as? ProfileStore.State.Content ?: return
-			launchTry {
+			scope.launch {
 				val updated = updateProfileUseCase(
 					params = content.profile.toUpdateParams(
 						dailyGoalWords = goal.wordsPerDay,
@@ -157,14 +158,12 @@ internal class ProfileStoreFactory @Inject constructor(
 					),
 				)
 				dispatch(Msg.ProfileUpdated(profile = updated))
-			} catch {
-				// ignored
 			}
 		}
 
 		private fun updateNotificationTimes(times: List<String>) {
 			val content = state() as? ProfileStore.State.Content ?: return
-			launchTry {
+			scope.launch {
 				val updated = updateProfileUseCase(
 					params = content.profile.toUpdateParams(
 						dailyGoalWords = null,
@@ -172,22 +171,17 @@ internal class ProfileStoreFactory @Inject constructor(
 					),
 				)
 				dispatch(Msg.ProfileUpdated(profile = updated))
-			} catch {
-				// ignored
 			}
 		}
 
 		private fun logout() {
 			dispatch(Msg.LoggingOut(loggingOut = true))
-			launchTry {
-				runCatching { logoutUseCase() }
-				clearAuthTokensUseCase()
-				dispatch(Msg.LoggingOut(loggingOut = false))
-				errorLogoutRouter.navigateToLogoutScreen(userBlocked = false)
-			} catch {
-				clearAuthTokensUseCase()
-				dispatch(Msg.LoggingOut(loggingOut = false))
-				errorLogoutRouter.navigateToLogoutScreen(userBlocked = false)
+			scope.launch {
+				try {
+					logoutUseCase()
+				} catch (_: Exception) {
+					// clear tokens and leave even if logout request fails
+				}
 			}
 		}
 	}

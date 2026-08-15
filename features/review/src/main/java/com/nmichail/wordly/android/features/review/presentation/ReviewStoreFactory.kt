@@ -1,5 +1,6 @@
 package com.nmichail.wordly.android.features.review.presentation
 
+import kotlinx.coroutines.launch
 import com.arkivanov.mvikotlin.core.store.Reducer
 import com.arkivanov.mvikotlin.core.store.SimpleBootstrapper
 import com.arkivanov.mvikotlin.core.store.Store
@@ -151,15 +152,17 @@ internal class ReviewStoreFactory @Inject constructor(
 
 		private fun loadSession() {
 			dispatch(Msg.Loading)
-			launchTry {
-				val words = getReviewSessionUseCase()
-				if (words.isEmpty()) {
+			scope.launch {
+				try {
+					val words = getReviewSessionUseCase()
+					if (words.isEmpty()) {
+						dispatch(Msg.SetError)
+					} else {
+						dispatch(Msg.SessionLoaded(words = words))
+					}
+				} catch (_: Exception) {
 					dispatch(Msg.SetError)
-				} else {
-					dispatch(Msg.SessionLoaded(words = words))
 				}
-			} catch {
-				dispatch(Msg.SetError)
 			}
 		}
 
@@ -169,30 +172,32 @@ internal class ReviewStoreFactory @Inject constructor(
 			val selectedOptionId = content.selectedOptionId ?: return
 
 			dispatch(Msg.Submitting)
-			launchTry {
-				submitReviewAnswerUseCase(
-					content.currentWord.id,
-					selectedOptionId,
-					content.correct,
-				)
-				val nextCorrectCount = if (content.correct) {
-					content.correctCount + 1
-				} else {
-					content.correctCount
-				}
-				val nextIndex = content.currentIndex + 1
-				if (nextIndex >= content.totalCount) {
-					dispatch(Msg.Finished(correctCount = nextCorrectCount))
-				} else {
-					dispatch(
-						Msg.MoveNext(
-							nextIndex = nextIndex,
-							correctCount = nextCorrectCount,
-						),
+			scope.launch {
+				try {
+					submitReviewAnswerUseCase(
+						content.currentWord.id,
+						selectedOptionId,
+						content.correct,
 					)
+					val nextCorrectCount = if (content.correct) {
+						content.correctCount + 1
+					} else {
+						content.correctCount
+					}
+					val nextIndex = content.currentIndex + 1
+					if (nextIndex >= content.totalCount) {
+						dispatch(Msg.Finished(correctCount = nextCorrectCount))
+					} else {
+						dispatch(
+							Msg.MoveNext(
+								nextIndex = nextIndex,
+								correctCount = nextCorrectCount,
+							),
+						)
+					}
+				} catch (_: Exception) {
+					dispatch(Msg.SetError)
 				}
-			} catch {
-				dispatch(Msg.SetError)
 			}
 		}
 	}

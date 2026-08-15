@@ -1,5 +1,6 @@
 package com.nmichail.wordly.android.features.home.presentation
 
+import kotlinx.coroutines.launch
 import com.arkivanov.mvikotlin.core.store.Reducer
 import com.arkivanov.mvikotlin.core.store.SimpleBootstrapper
 import com.arkivanov.mvikotlin.core.store.Store
@@ -140,24 +141,26 @@ internal class HomeStoreFactory @Inject constructor(
 
 		private fun loadHome() {
 			dispatch(Msg.Loading)
-			launchTry {
-				val home = getHomeUseCase()
-				val completedDayOffsets = home.completedDayOffsets.toSet()
-				val displayedMonth = YearMonth.now(clock)
-				dispatch(
-					Msg.HomeLoaded(
-						home = home,
-						weekDays = weekDaysFactory(completedOffsets = completedDayOffsets),
-						completedDayOffsets = completedDayOffsets,
-						displayedMonth = displayedMonth,
-						month = monthFactory(
-							yearMonth = displayedMonth,
-							completedOffsets = completedDayOffsets,
+			scope.launch {
+				try {
+					val home = getHomeUseCase()
+					val completedDayOffsets = home.completedDayOffsets.toSet()
+					val displayedMonth = YearMonth.now(clock)
+					dispatch(
+						Msg.HomeLoaded(
+							home = home,
+							weekDays = weekDaysFactory(completedOffsets = completedDayOffsets),
+							completedDayOffsets = completedDayOffsets,
+							displayedMonth = displayedMonth,
+							month = monthFactory(
+								yearMonth = displayedMonth,
+								completedOffsets = completedDayOffsets,
+							),
 						),
-					),
-				)
-			} catch {
-				dispatch(Msg.SetError)
+					)
+				} catch (_: Exception) {
+					dispatch(Msg.SetError)
+				}
 			}
 		}
 

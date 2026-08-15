@@ -48,10 +48,12 @@ private fun addWordToReview(
 			body = """{"message":"wordId is required"}""",
 		)
 	}
-	val epochDay = runCatching {
+	val epochDay = try {
 		val json = JSONObject(requestBody.orEmpty())
 		if (json.has("epochDay")) json.getLong("epochDay") else null
-	}.getOrNull()
+	} catch (_: Exception) {
+		null
+	}
 	return response.create(
 		description = "Word added to review queue",
 		body = JSONObject()
@@ -73,9 +75,11 @@ private fun updateWordStatus(
 			body = """{"message":"wordId is required"}""",
 		)
 	}
-	val status = runCatching {
+	val status = try {
 		JSONObject(requestBody.orEmpty()).optString("status")
-	}.getOrDefault("")
+	} catch (_: Exception) {
+		""
+	}
 	if (status.isBlank()) {
 		return response.create(
 			code = 400,
@@ -96,9 +100,11 @@ private fun updateEnglishLevel(
 	response: Response.Builder,
 	requestBody: String?,
 ): Response.Builder {
-	val level = runCatching {
+	val level = try {
 		JSONObject(requestBody.orEmpty()).optString("level")
-	}.getOrDefault("")
+	} catch (_: Exception) {
+		""
+	}
 	if (level.isBlank()) {
 		return response.create(
 			code = 400,
@@ -114,11 +120,13 @@ private fun updateEnglishLevel(
 
 private fun isValidDemoAuthorization(context: Context, requestBody: String?): Boolean {
 	if (requestBody.isNullOrBlank()) return false
-	return runCatching {
+	return try {
 		val json = JSONObject(requestBody)
 		val password = json.optString("password")
 		password == context.getString(R.string.mock_demo_password)
-	}.getOrDefault(false)
+	} catch (_: Exception) {
+		false
+	}
 }
 
 private typealias PostHandler = (Context, Uri, Response.Builder, String?) -> Response.Builder

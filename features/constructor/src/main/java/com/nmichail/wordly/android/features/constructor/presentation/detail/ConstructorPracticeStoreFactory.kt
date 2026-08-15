@@ -1,5 +1,6 @@
 package com.nmichail.wordly.android.features.constructor.presentation.detail
 
+import kotlinx.coroutines.launch
 import com.arkivanov.mvikotlin.core.store.Reducer
 import com.arkivanov.mvikotlin.core.store.SimpleBootstrapper
 import com.arkivanov.mvikotlin.core.store.Store
@@ -201,15 +202,17 @@ internal class ConstructorPracticeStoreFactory @Inject constructor(
 
 		private fun loadSession(themeId: String) {
 			dispatch(Msg.Loading)
-			launchTry {
-				val session = getConstructorSessionUseCase(themeId)
-				if (session.phrases.isEmpty()) {
+			scope.launch {
+				try {
+					val session = getConstructorSessionUseCase(themeId)
+					if (session.phrases.isEmpty()) {
+						dispatch(Msg.SetError)
+					} else {
+						dispatch(Msg.SessionLoaded(session = session))
+					}
+				} catch (_: Exception) {
 					dispatch(Msg.SetError)
-				} else {
-					dispatch(Msg.SessionLoaded(session = session))
 				}
-			} catch {
-				dispatch(Msg.SetError)
 			}
 		}
 
