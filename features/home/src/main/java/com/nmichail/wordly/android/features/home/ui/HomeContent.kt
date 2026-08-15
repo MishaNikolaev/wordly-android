@@ -12,10 +12,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.GridView
-import androidx.compose.material.icons.outlined.Headphones
 import androidx.compose.material.icons.outlined.MenuBook
-import androidx.compose.material.icons.outlined.Movie
-import androidx.compose.material.icons.outlined.MusicNote
 import androidx.compose.material.icons.outlined.Style
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
@@ -49,7 +46,9 @@ import com.nmichail.wordly.android.component.wui.components.snackbar.WuiSnackBar
 import com.nmichail.wordly.android.component.wui.components.snackbar.showWuiInfoSnackBar
 import com.nmichail.wordly.android.features.home.R
 import com.nmichail.wordly.android.features.home.domain.entity.Training
+import com.nmichail.wordly.android.features.home.domain.entity.TrainingType
 import com.nmichail.wordly.android.features.home.presentation.HomeComponent
+import com.nmichail.wordly.android.features.home.presentation.HomeStore
 import com.nmichail.wordly.android.features.home.presentation.calendar.MonthDayStatus
 import com.nmichail.wordly.android.features.home.presentation.calendar.WeekDayStatus
 import java.time.DayOfWeek
@@ -62,7 +61,7 @@ fun HomeContent(
 	val state by component.model.subscribeAsState()
 
 	when (val currentState = state) {
-		HomeComponent.State.Loading -> {
+		HomeStore.State.Loading -> {
 			Box(
 				modifier = modifier
 					.fillMaxSize()
@@ -72,13 +71,13 @@ fun HomeContent(
 				CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
 			}
 		}
-		HomeComponent.State.Error -> {
+		HomeStore.State.Error -> {
 			HomeError(
 				onRetryClick = component::handleRetry,
 				modifier = modifier.fillMaxSize(),
 			)
 		}
-		is HomeComponent.State.Content -> {
+		is HomeStore.State.Content -> {
 			HomeLoaded(
 				state = currentState,
 				component = component,
@@ -123,7 +122,7 @@ private fun HomeError(
 
 @Composable
 private fun HomeLoaded(
-	state: HomeComponent.State.Content,
+	state: HomeStore.State.Content,
 	component: HomeComponent,
 	modifier: Modifier = Modifier,
 ) {
@@ -191,14 +190,14 @@ private fun HomeLoaded(
 		)
 	}
 
-	if (state.isCalendarVisible) {
+	if (state.calendarVisible) {
 		HomeCalendarDialog(state = state, component = component)
 	}
 }
 
 @Composable
 private fun HomeCalendarDialog(
-	state: HomeComponent.State.Content,
+	state: HomeStore.State.Content,
 	component: HomeComponent,
 ) {
 	WuiCalendarDialog(
@@ -271,12 +270,8 @@ private fun MonthDayStatus.toUiId(): String =
 	}
 
 private fun Training.icon(): ImageVector =
-	when (id) {
-		"cards" -> Icons.Outlined.Style
-		"constructor" -> Icons.Outlined.GridView
-		"listening" -> Icons.Outlined.Headphones
-		"songs" -> Icons.Outlined.MusicNote
-		"movies" -> Icons.Outlined.Movie
-		"books" -> Icons.Outlined.MenuBook
-		else -> Icons.Outlined.Style
+	when (type) {
+		TrainingType.Cards -> Icons.Outlined.Style
+		TrainingType.Constructor -> Icons.Outlined.GridView
+		TrainingType.Books -> Icons.Outlined.MenuBook
 	}

@@ -19,20 +19,16 @@ internal class DefaultHomeComponent(
 		homeStoreFactory.create()
 	}
 
-	override val model: Value<HomeComponent.State> = store.asValue()
+	override val model: Value<HomeStore.State> = store.asValue()
 
 	init {
 		launchTry {
 			for (label in store.labelsChannel(lifecycle)) {
 				when (label) {
-					HomeComponent.Label.StartReview -> homeRouter.navigateToReview()
-					is HomeComponent.Label.OpenTraining -> {
-						when (label.training.id) {
-							"cards" -> homeRouter.navigateToCards()
-							"constructor" -> homeRouter.navigateToConstructor()
-							"books" -> homeRouter.navigateToBooks()
-						}
-					}
+					HomeStore.Label.StartReview -> homeRouter.navigateToReview()
+					HomeStore.Label.OpenCards -> homeRouter.navigateToCards()
+					HomeStore.Label.OpenConstructor -> homeRouter.navigateToConstructor()
+					HomeStore.Label.OpenBooks -> homeRouter.navigateToBooks()
 				}
 			}
 		} catch {

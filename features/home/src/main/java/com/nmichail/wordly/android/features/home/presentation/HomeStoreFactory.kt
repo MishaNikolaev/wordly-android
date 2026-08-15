@@ -9,6 +9,7 @@ import com.arkivanov.mvikotlin.main.store.DefaultStoreFactory
 import com.nmichail.wordly.android.component.presentation.BaseCoroutineExecutor
 import com.nmichail.wordly.android.features.home.domain.entity.Home
 import com.nmichail.wordly.android.features.home.domain.usecase.GetHomeUseCase
+import com.nmichail.wordly.android.features.home.domain.entity.TrainingType
 import com.nmichail.wordly.android.features.home.presentation.calendar.Month
 import com.nmichail.wordly.android.features.home.presentation.calendar.MonthFactory
 import com.nmichail.wordly.android.features.home.presentation.calendar.WeekDay
@@ -29,9 +30,9 @@ internal class HomeStoreFactory @Inject constructor(
 	fun create(): HomeStore =
 		object :
 			HomeStore,
-			Store<HomeStore.Intent, HomeComponent.State, HomeComponent.Label> by storeFactory.create(
+			Store<HomeStore.Intent, HomeStore.State, HomeStore.Label> by storeFactory.create(
 				name = "HomeStore",
-				initialState = HomeComponent.State.Loading,
+				initialState = HomeStore.State.Loading,
 				bootstrapper = SimpleBootstrapper(Action.Load),
 				executorFactory = ::ExecutorImpl,
 				reducer = ReducerImpl,
@@ -49,10 +50,15 @@ internal class HomeStoreFactory @Inject constructor(
 		data class HomeLoaded(
 			val home: Home,
 			val weekDays: List<WeekDay>,
+			val completedDayOffsets: Set<Int>,
+			val displayedMonth: YearMonth,
 			val month: Month,
 		) : Msg
 
-		data class CalendarMonthChanged(val month: Month) : Msg
+		data class CalendarMonthChanged(
+			val displayedMonth: YearMonth,
+			val month: Month,
+		) : Msg
 
 		data object ShowCalendar : Msg
 
@@ -61,12 +67,13 @@ internal class HomeStoreFactory @Inject constructor(
 		data object SetError : Msg
 	}
 
-	private object ReducerImpl : Reducer<HomeComponent.State, Msg> {
+	private object ReducerImpl : Reducer<HomeStore.State, Msg> {
 
-		override fun HomeComponent.State.reduce(msg: Msg): HomeComponent.State =
-			when (msg) {
-				Msg.Loading -> HomeComponent.State.Loading
-				is Msg.HomeLoaded -> HomeComponent.State.Content(
+		override fun HomeStore.State.reduce(msg: Msg): HomeStore.State {
+			val content = this as? HomeStore.State.Content
+			return when (msg) {
+				Msg.Loading -> HomeStore.State.Loading
+				is Msg.HomeLoaded -> HomeStore.State.Content(
 					firstName = msg.home.firstName,
 					streakDays = msg.home.streakDays,
 					weekDays = msg.weekDays,
@@ -74,55 +81,36 @@ internal class HomeStoreFactory @Inject constructor(
 					estimatedMinutes = msg.home.estimatedMinutes,
 					reviewStreakDays = msg.home.reviewStreakDays,
 					trainings = msg.home.trainings,
+					completedDayOffsets = msg.completedDayOffsets,
+					displayedMonth = msg.displayedMonth,
 					monthTitle = msg.month.title,
 					monthDays = msg.month.days,
 					monthActiveDays = msg.month.activeDays,
 					monthCompletionPercent = msg.month.completionPercent,
-					isCalendarVisible = false,
+					calendarVisible = false,
 				)
-				is Msg.CalendarMonthChanged -> when (this) {
-					is HomeComponent.State.Content -> withMonth(msg.month)
-					HomeComponent.State.Loading,
-					HomeComponent.State.Error,
-					-> this
-				}
-				Msg.ShowCalendar -> when (this) {
-					is HomeComponent.State.Content -> copy(isCalendarVisible = true)
-					HomeComponent.State.Loading,
-					HomeComponent.State.Error,
-					-> this
-				}
-				Msg.HideCalendar -> when (this) {
-					is HomeComponent.State.Content -> copy(isCalendarVisible = false)
-					HomeComponent.State.Loading,
-					HomeComponent.State.Error,
-					-> this
-				}
-				Msg.SetError -> HomeComponent.State.Error
+				is Msg.CalendarMonthChanged -> content?.copy(
+					displayedMonth = msg.displayedMonth,
+					monthTitle = msg.month.title,
+					monthDays = msg.month.days,
+					monthActiveDays = msg.month.activeDays,
+					monthCompletionPercent = msg.month.completionPercent,
+				) ?: this
+				Msg.ShowCalendar -> content?.copy(calendarVisible = true) ?: this
+				Msg.HideCalendar -> content?.copy(calendarVisible = false) ?: this
+				Msg.SetError -> HomeStore.State.Error
 			}
-
-		private fun HomeComponent.State.Content.withMonth(
-			month: Month,
-		): HomeComponent.State.Content =
-			copy(
-				monthTitle = month.title,
-				monthDays = month.days,
-				monthActiveDays = month.activeDays,
-				monthCompletionPercent = month.completionPercent,
-			)
+		}
 	}
 
 	private inner class ExecutorImpl :
 		BaseCoroutineExecutor<
 			HomeStore.Intent,
 			Action,
-			HomeComponent.State,
+			HomeStore.State,
 			Msg,
-			HomeComponent.Label,
+			HomeStore.Label,
 			>() {
-
-		private var completedDayOffsets: Set<Int> = emptySet()
-		private var displayedMonth: YearMonth = YearMonth.now(clock)
 
 		override fun executeAction(action: Action) {
 			when (action) {
@@ -141,9 +129,11 @@ internal class HomeStoreFactory @Inject constructor(
 				HomeStore.Intent.PreviousMonth -> shiftMonth(months = -1)
 				HomeStore.Intent.NextMonth -> shiftMonth(months = 1)
 				HomeStore.Intent.GoToCurrentMonth -> showCurrentMonth()
-				HomeStore.Intent.StartReview -> publish(HomeComponent.Label.StartReview)
-				is HomeStore.Intent.OpenTraining -> {
-					publish(HomeComponent.Label.OpenTraining(training = intent.training))
+				HomeStore.Intent.StartReview -> publish(HomeStore.Label.StartReview)
+				is HomeStore.Intent.OpenTraining -> when (intent.training.type) {
+					TrainingType.Cards -> publish(HomeStore.Label.OpenCards)
+					TrainingType.Constructor -> publish(HomeStore.Label.OpenConstructor)
+					TrainingType.Books -> publish(HomeStore.Label.OpenBooks)
 				}
 			}
 		}
@@ -152,12 +142,14 @@ internal class HomeStoreFactory @Inject constructor(
 			dispatch(Msg.Loading)
 			launchTry {
 				val home = getHomeUseCase()
-				completedDayOffsets = home.completedDayOffsets.toSet()
-				displayedMonth = YearMonth.now(clock)
+				val completedDayOffsets = home.completedDayOffsets.toSet()
+				val displayedMonth = YearMonth.now(clock)
 				dispatch(
 					Msg.HomeLoaded(
 						home = home,
 						weekDays = weekDaysFactory(completedOffsets = completedDayOffsets),
+						completedDayOffsets = completedDayOffsets,
+						displayedMonth = displayedMonth,
 						month = monthFactory(
 							yearMonth = displayedMonth,
 							completedOffsets = completedDayOffsets,
@@ -170,20 +162,31 @@ internal class HomeStoreFactory @Inject constructor(
 		}
 
 		private fun showCurrentMonth() {
-			displayedMonth = YearMonth.now(clock)
-			dispatchCalendarMonth(displayedMonth)
+			val content = state() as? HomeStore.State.Content ?: return
+			val displayedMonth = YearMonth.now(clock)
+			dispatchCalendarMonth(
+				displayedMonth = displayedMonth,
+				completedDayOffsets = content.completedDayOffsets,
+			)
 		}
 
 		private fun shiftMonth(months: Long) {
-			displayedMonth = displayedMonth.plusMonths(months)
-			dispatchCalendarMonth(displayedMonth)
+			val content = state() as? HomeStore.State.Content ?: return
+			dispatchCalendarMonth(
+				displayedMonth = content.displayedMonth.plusMonths(months),
+				completedDayOffsets = content.completedDayOffsets,
+			)
 		}
 
-		private fun dispatchCalendarMonth(yearMonth: YearMonth) {
+		private fun dispatchCalendarMonth(
+			displayedMonth: YearMonth,
+			completedDayOffsets: Set<Int>,
+		) {
 			dispatch(
 				Msg.CalendarMonthChanged(
+					displayedMonth = displayedMonth,
 					month = monthFactory(
-						yearMonth = yearMonth,
+						yearMonth = displayedMonth,
 						completedOffsets = completedDayOffsets,
 					),
 				),
