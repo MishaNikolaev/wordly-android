@@ -95,7 +95,7 @@ internal fun ConstructorPracticeInProgressContent(
 				.fillMaxWidth(),
 		)
 		ConstructorPracticeBottomAction(
-			isAnswerRevealed = state.checkResult != null,
+			answerRevealed = state.checkResult != null,
 			canCheck = state.answer.isNotEmpty(),
 			onCheckClick = component::handleCheck,
 			onContinueClick = component::handleContinue,
@@ -124,7 +124,7 @@ private fun ConstructorPracticeScrollBody(
 			author = author,
 		)
 		Spacer(modifier = Modifier.height(20.dp))
-		ConstructorAnswerBoard(isCorrect = state.checkResult) {
+		ConstructorAnswerBoard(correct = state.checkResult) {
 			ConstructorAnswerWords(
 				words = state.answer,
 				enabled = state.checkResult == null,
@@ -132,13 +132,13 @@ private fun ConstructorPracticeScrollBody(
 				onMoveWord = component::handleMoveAnswerWord,
 			)
 		}
-		state.checkResult?.let { isCorrect ->
+		state.checkResult?.let { correct ->
 			Spacer(modifier = Modifier.height(14.dp))
 			PracticeAnswerFeedback(
-				isCorrect = isCorrect,
+				correct = correct,
 				correctText = stringResource(R.string.constructor_practice_correct),
 				incorrectText = stringResource(R.string.constructor_practice_incorrect),
-				correctAnswerText = correctPhraseText.takeUnless { isCorrect },
+				correctAnswerText = correctPhraseText.takeUnless { correct },
 			)
 		}
 		Spacer(modifier = Modifier.height(24.dp))
@@ -392,20 +392,20 @@ private fun ConstructorBankWords(
 
 @Composable
 private fun ConstructorPracticeBottomAction(
-	isAnswerRevealed: Boolean,
+	answerRevealed: Boolean,
 	canCheck: Boolean,
 	onCheckClick: () -> Unit,
 	onContinueClick: () -> Unit,
 ) {
-	val text = if (isAnswerRevealed) {
+	val text = if (answerRevealed) {
 		stringResource(R.string.constructor_practice_continue)
 	} else {
 		stringResource(R.string.constructor_practice_check)
 	}
 	WuiButton(
 		text = text,
-		onClick = if (isAnswerRevealed) onContinueClick else onCheckClick,
-		enabled = isAnswerRevealed || canCheck,
+		onClick = if (answerRevealed) onContinueClick else onCheckClick,
+		enabled = answerRevealed || canCheck,
 		modifier = Modifier
 			.fillMaxWidth()
 			.padding(horizontal = 18.dp)

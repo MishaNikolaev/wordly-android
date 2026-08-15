@@ -277,8 +277,8 @@ internal class WordsStoreFactory @Inject constructor(
 						difficulty = 1,
 						selectedTagIds = emptySet(),
 						availableTags = content.tags.ifEmpty { tags },
-						isLookingUp = false,
-						isSubmitting = false,
+						lookingUp = false,
+						submitting = false,
 					),
 				),
 			)
@@ -298,7 +298,7 @@ internal class WordsStoreFactory @Inject constructor(
 							definition = null,
 							examples = emptyList(),
 							difficulty = 1,
-							isLookingUp = false,
+							lookingUp = false,
 						),
 					),
 				)
@@ -308,7 +308,7 @@ internal class WordsStoreFactory @Inject constructor(
 				Msg.AddDialogUpdated(
 					dialog = dialog.copy(
 						wordInput = value,
-						isLookingUp = true,
+						lookingUp = true,
 					),
 				),
 			)
@@ -319,7 +319,7 @@ internal class WordsStoreFactory @Inject constructor(
 				val current = (state() as? WordsComponent.State.Content)?.addWordDialog ?: return@catch
 				dispatch(
 					Msg.AddDialogUpdated(
-						dialog = current.copy(isLookingUp = false),
+						dialog = current.copy(lookingUp = false),
 					),
 				)
 			}
@@ -337,7 +337,7 @@ internal class WordsStoreFactory @Inject constructor(
 						definition = lookup.definition,
 						examples = lookup.examples,
 						difficulty = lookup.difficulty,
-						isLookingUp = false,
+						lookingUp = false,
 					),
 				),
 			)
@@ -357,9 +357,9 @@ internal class WordsStoreFactory @Inject constructor(
 			val content = state() as? WordsComponent.State.Content ?: return
 			val dialog = content.addWordDialog ?: return
 			val word = dialog.wordInput.trim()
-			if (word.isEmpty() || dialog.isSubmitting) return
+			if (word.isEmpty() || dialog.submitting) return
 
-			dispatch(Msg.AddDialogUpdated(dialog = dialog.copy(isSubmitting = true)))
+			dispatch(Msg.AddDialogUpdated(dialog = dialog.copy(submitting = true)))
 			launchTry {
 				addWordUseCase(
 					NewWord(
@@ -378,7 +378,7 @@ internal class WordsStoreFactory @Inject constructor(
 				val current = (state() as? WordsComponent.State.Content)?.addWordDialog ?: return@catch
 				dispatch(
 					Msg.AddDialogUpdated(
-						dialog = current.copy(isSubmitting = false),
+						dialog = current.copy(submitting = false),
 					),
 				)
 			}
@@ -403,8 +403,8 @@ internal class WordsStoreFactory @Inject constructor(
 						repeatEpochDay = word.repeatEpochDay,
 						repeatDateLabel = RepeatDateFormatter.label(word.repeatEpochDay),
 						calendar = null,
-						isSubmittingReview = false,
-						isAddedToReview = false,
+						submittingReview = false,
+						addedToReview = false,
 					),
 				),
 			)
@@ -502,10 +502,10 @@ internal class WordsStoreFactory @Inject constructor(
 		private fun confirmAddToReview() {
 			val content = state() as? WordsComponent.State.Content ?: return
 			val dialog = content.wordDetailDialog ?: return
-			if (dialog.isSubmittingReview || dialog.isAddedToReview) return
+			if (dialog.submittingReview || dialog.addedToReview) return
 			val todayEpoch = LocalDate.now().toEpochDay()
 			val epochDay = (dialog.repeatEpochDay ?: todayEpoch).coerceAtLeast(todayEpoch)
-			dispatch(Msg.DetailDialogUpdated(dialog = dialog.copy(isSubmittingReview = true)))
+			dispatch(Msg.DetailDialogUpdated(dialog = dialog.copy(submittingReview = true)))
 			launchTry {
 				addWordToReviewUseCase(
 					WordReview(
@@ -518,8 +518,8 @@ internal class WordsStoreFactory @Inject constructor(
 				dispatch(
 					Msg.DetailDialogUpdated(
 						dialog = current.copy(
-							isSubmittingReview = false,
-							isAddedToReview = true,
+							submittingReview = false,
+							addedToReview = true,
 						),
 					),
 				)
@@ -528,7 +528,7 @@ internal class WordsStoreFactory @Inject constructor(
 					?: return@catch
 				dispatch(
 					Msg.DetailDialogUpdated(
-						dialog = current.copy(isSubmittingReview = false),
+						dialog = current.copy(submittingReview = false),
 					),
 				)
 			}

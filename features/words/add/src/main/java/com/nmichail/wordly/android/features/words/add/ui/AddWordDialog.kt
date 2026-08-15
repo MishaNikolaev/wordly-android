@@ -77,8 +77,8 @@ private fun AddWordDialogBody(
 	val focusManager = LocalFocusManager.current
 	val keyboardController = LocalSoftwareKeyboardController.current
 
-	LaunchedEffect(state.isLookingUp) {
-		if (!state.isLookingUp && hasLookupContent(state)) {
+	LaunchedEffect(state.lookingUp) {
+		if (!state.lookingUp && hasLookupContent(state)) {
 			focusManager.clearFocus(force = true)
 			keyboardController?.hide()
 		}
@@ -98,7 +98,7 @@ private fun AddWordDialogBody(
 			onValueChange = onWordInputChange,
 		)
 		when {
-			state.isLookingUp -> Text(
+			state.lookingUp -> Text(
 				text = stringResource(R.string.words_looking_up),
 				style = WuiTypography.addWordAutofillLabel,
 				color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -117,8 +117,8 @@ private fun AddWordDialogBody(
 		}
 		AddToDictionaryButton(
 			onClick = onConfirm,
-			enabled = state.wordInput.isNotBlank() && !state.isLookingUp && !state.isSubmitting,
-			loading = state.isSubmitting,
+			enabled = state.wordInput.isNotBlank() && !state.lookingUp && !state.submitting,
+			loading = state.submitting,
 		)
 	}
 }

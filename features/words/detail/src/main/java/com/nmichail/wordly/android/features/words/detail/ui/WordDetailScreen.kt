@@ -200,21 +200,21 @@ private fun WordDetailBody(
 			)
 		}
 		WuiButton(
-			text = if (state.isAddedToReview) {
+			text = if (state.addedToReview) {
 				stringResource(R.string.words_detail_added_to_review)
 			} else {
 				stringResource(R.string.words_detail_add_to_review)
 			},
 			onClick = onConfirmAddToReview,
-			enabled = !state.isSubmittingReview && !state.isAddedToReview,
-			loading = state.isSubmittingReview,
-			leadingIcon = if (state.isAddedToReview) null else Icons.AutoMirrored.Outlined.PlaylistAdd,
-			containerColor = if (state.isAddedToReview) {
+			enabled = !state.submittingReview && !state.addedToReview,
+			loading = state.submittingReview,
+			leadingIcon = if (state.addedToReview) null else Icons.AutoMirrored.Outlined.PlaylistAdd,
+			containerColor = if (state.addedToReview) {
 				Wui.colors.success
 			} else {
 				MaterialTheme.colorScheme.primary
 			},
-			contentColor = if (state.isAddedToReview) {
+			contentColor = if (state.addedToReview) {
 				MaterialTheme.colorScheme.onPrimary
 			} else {
 				MaterialTheme.colorScheme.onPrimary

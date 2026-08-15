@@ -18,13 +18,13 @@ internal class DefaultReviewComponent(
 		reviewStoreFactory.create()
 	}
 
-	override val model: Value<ReviewComponent.State> = store.asValue()
+	override val model: Value<ReviewStore.State> = store.asValue()
 
 	init {
 		launchTry {
 			for (label in store.labelsChannel(lifecycle)) {
 				when (label) {
-					ReviewComponent.Label.Close -> reviewRouter.navigateBack()
+					ReviewStore.Label.Close -> reviewRouter.navigateBack()
 				}
 			}
 		} catch {

@@ -12,6 +12,6 @@ data class AddWordDialogState(
 	val difficulty: Int,
 	val selectedTagIds: Set<String>,
 	val availableTags: List<WordTag>,
-	val isLookingUp: Boolean,
-	val isSubmitting: Boolean,
+	val lookingUp: Boolean,
+	val submitting: Boolean,
 )

@@ -101,8 +101,8 @@ class CardPracticeStoreTest {
 		assertEquals(
 			inProgress(
 				selectedOptionId = firstWord.correctOptionId,
-				isAnswerRevealed = true,
-				isCorrect = true,
+				answerRevealed = true,
+				correct = true,
 			),
 			store.state,
 		)
@@ -118,8 +118,8 @@ class CardPracticeStoreTest {
 		assertEquals(
 			inProgress(
 				selectedOptionId = "hypothesis-1",
-				isAnswerRevealed = true,
-				isCorrect = false,
+				answerRevealed = true,
+				correct = false,
 			),
 			store.state,
 		)
@@ -221,8 +221,8 @@ class CardPracticeStoreTest {
 	private fun inProgress(
 		currentIndex: Int = 0,
 		selectedOptionId: String? = null,
-		isAnswerRevealed: Boolean = false,
-		isCorrect: Boolean = false,
+		answerRevealed: Boolean = false,
+		correct: Boolean = false,
 		correctCount: Int = 0,
 	): CardPracticeComponent.State.InProgress =
 		CardPracticeComponent.State.InProgress(
@@ -232,8 +232,8 @@ class CardPracticeStoreTest {
 			totalCount = words.size,
 			progressIndex = currentIndex + 1,
 			selectedOptionId = selectedOptionId,
-			isAnswerRevealed = isAnswerRevealed,
-			isCorrect = isCorrect,
+			answerRevealed = answerRevealed,
+			correct = correct,
 			correctCount = correctCount,
 		)
 

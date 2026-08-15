@@ -84,24 +84,24 @@ internal fun CardPracticeInProgressContent(
 				options = state.currentWord.options.map { PracticeOption(id = it.id, text = it.text) },
 				correctOptionId = state.currentWord.correctOptionId,
 				selectedOptionId = state.selectedOptionId,
-				isAnswerRevealed = state.isAnswerRevealed,
-				enabled = !state.isAnswerRevealed,
+				answerRevealed = state.answerRevealed,
+				enabled = !state.answerRevealed,
 				onOptionClick = component::handleSelectOption,
 			)
-			if (state.isAnswerRevealed) {
+			if (state.answerRevealed) {
 				val correctAnswerText = state.currentWord.options
 					.firstOrNull { it.id == state.currentWord.correctOptionId }
 					?.text
 				Spacer(modifier = Modifier.height(16.dp))
 				PracticeAnswerFeedback(
-					isCorrect = state.isCorrect,
+					correct = state.correct,
 					correctText = stringResource(R.string.card_practice_correct),
 					incorrectText = stringResource(R.string.card_practice_incorrect),
-					correctAnswerText = correctAnswerText.takeUnless { state.isCorrect },
+					correctAnswerText = correctAnswerText.takeUnless { state.correct },
 				)
 			}
 		}
-		if (state.isAnswerRevealed) {
+		if (state.answerRevealed) {
 			WuiButton(
 				text = stringResource(R.string.card_practice_continue),
 				onClick = component::handleContinue,

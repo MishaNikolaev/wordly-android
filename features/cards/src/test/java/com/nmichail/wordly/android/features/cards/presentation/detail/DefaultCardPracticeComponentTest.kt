@@ -69,8 +69,8 @@ class DefaultCardPracticeComponentTest {
 		assertEquals(
 			inProgress(
 				selectedOptionId = firstWord.correctOptionId,
-				isAnswerRevealed = true,
-				isCorrect = true,
+				answerRevealed = true,
+				correct = true,
 			),
 			component.model.value,
 		)
@@ -92,8 +92,8 @@ class DefaultCardPracticeComponentTest {
 
 	private fun inProgress(
 		selectedOptionId: String? = null,
-		isAnswerRevealed: Boolean = false,
-		isCorrect: Boolean = false,
+		answerRevealed: Boolean = false,
+		correct: Boolean = false,
 	): CardPracticeComponent.State.InProgress =
 		CardPracticeComponent.State.InProgress(
 			words = words,
@@ -102,8 +102,8 @@ class DefaultCardPracticeComponentTest {
 			totalCount = 1,
 			progressIndex = 1,
 			selectedOptionId = selectedOptionId,
-			isAnswerRevealed = isAnswerRevealed,
-			isCorrect = isCorrect,
+			answerRevealed = answerRevealed,
+			correct = correct,
 			correctCount = 0,
 		)
 }

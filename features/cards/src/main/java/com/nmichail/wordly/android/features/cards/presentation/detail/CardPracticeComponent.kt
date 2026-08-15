@@ -33,8 +33,8 @@ interface CardPracticeComponent {
 			val totalCount: Int,
 			val progressIndex: Int,
 			val selectedOptionId: String?,
-			val isAnswerRevealed: Boolean,
-			val isCorrect: Boolean,
+			val answerRevealed: Boolean,
+			val correct: Boolean,
 			val correctCount: Int,
 		) : State
 

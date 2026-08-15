@@ -58,7 +58,7 @@ internal class ConstructorPracticeStoreFactory @Inject constructor(
 
 		data class AnswerReordered(val answer: List<ConstructorWord>) : Msg
 
-		data class AnswerChecked(val isCorrect: Boolean) : Msg
+		data class AnswerChecked(val correct: Boolean) : Msg
 
 		data class MoveNext(
 			val nextIndex: Int,
@@ -98,7 +98,7 @@ internal class ConstructorPracticeStoreFactory @Inject constructor(
 				is Msg.AnswerChecked -> {
 					val inProgress = asInProgress() ?: return this
 					if (inProgress.checkResult != null) return this
-					inProgress.copy(checkResult = msg.isCorrect)
+					inProgress.copy(checkResult = msg.correct)
 				}
 				is Msg.MoveNext -> moveToNext(state = this, msg = msg)
 				is Msg.Finished -> ConstructorPracticeComponent.State.Finished(
@@ -245,8 +245,8 @@ internal class ConstructorPracticeStoreFactory @Inject constructor(
 			if (inProgress.checkResult != null) return
 
 			val phrase = inProgress.session.phrases[inProgress.currentIndex]
-			val isCorrect = inProgress.answer.map { it.id } == phrase.correctOrder
-			dispatch(Msg.AnswerChecked(isCorrect = isCorrect))
+			val correct = inProgress.answer.map { it.id } == phrase.correctOrder
+			dispatch(Msg.AnswerChecked(correct = correct))
 		}
 
 		private fun handleContinue() {

@@ -79,8 +79,8 @@ internal class CardPracticeStoreFactory @Inject constructor(
 				totalCount = words.size,
 				progressIndex = currentIndex + 1,
 				selectedOptionId = null,
-				isAnswerRevealed = false,
-				isCorrect = false,
+				answerRevealed = false,
+				correct = false,
 				correctCount = 0,
 			)
 		}
@@ -90,11 +90,11 @@ internal class CardPracticeStoreFactory @Inject constructor(
 			optionId: String,
 		): CardPracticeComponent.State {
 			if (state !is CardPracticeComponent.State.InProgress) return state
-			if (state.isAnswerRevealed) return state
+			if (state.answerRevealed) return state
 			return state.copy(
 				selectedOptionId = optionId,
-				isAnswerRevealed = true,
-				isCorrect = optionId == state.currentWord.correctOptionId,
+				answerRevealed = true,
+				correct = optionId == state.currentWord.correctOptionId,
 			)
 		}
 
@@ -108,8 +108,8 @@ internal class CardPracticeStoreFactory @Inject constructor(
 				currentWord = state.words[msg.nextIndex],
 				progressIndex = msg.nextIndex + 1,
 				selectedOptionId = null,
-				isAnswerRevealed = false,
-				isCorrect = false,
+				answerRevealed = false,
+				correct = false,
 				correctCount = msg.correctCount,
 			)
 		}
@@ -161,9 +161,9 @@ internal class CardPracticeStoreFactory @Inject constructor(
 
 		private fun handleContinue() {
 			val progress = state() as? CardPracticeComponent.State.InProgress ?: return
-			if (!progress.isAnswerRevealed) return
+			if (!progress.answerRevealed) return
 
-			val nextCorrectCount = if (progress.isCorrect) {
+			val nextCorrectCount = if (progress.correct) {
 				progress.correctCount + 1
 			} else {
 				progress.correctCount

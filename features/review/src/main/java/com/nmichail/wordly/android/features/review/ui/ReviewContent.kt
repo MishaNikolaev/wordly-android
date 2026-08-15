@@ -23,6 +23,7 @@ import com.nmichail.wordly.android.component.wui.components.button.WuiButton
 import com.nmichail.wordly.android.component.wui.components.button.WuiTextLink
 import com.nmichail.wordly.android.features.review.R
 import com.nmichail.wordly.android.features.review.presentation.ReviewComponent
+import com.nmichail.wordly.android.features.review.presentation.ReviewStore
 import com.nmichail.wordly.android.features.review.ui.component.ReviewInProgressContent
 import com.nmichail.wordly.android.shared.practice.PracticeFinishedContent
 
@@ -34,7 +35,7 @@ fun ReviewContent(
 	val state by component.model.subscribeAsState()
 
 	when (val currentState = state) {
-		ReviewComponent.State.Loading -> {
+		ReviewStore.State.Loading -> {
 			Box(
 				modifier = modifier
 					.fillMaxSize()
@@ -44,32 +45,33 @@ fun ReviewContent(
 				CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
 			}
 		}
-		ReviewComponent.State.Error -> {
+		is ReviewStore.State.Content -> {
+			if (currentState.finished) {
+				PracticeFinishedContent(
+					correctCount = currentState.correctCount,
+					totalCount = currentState.totalCount,
+					subtitle = stringResource(
+						R.string.review_finished_subtitle,
+						currentState.correctCount,
+						currentState.totalCount,
+					),
+					primaryActionText = stringResource(R.string.review_finished_home),
+					onPrimaryClick = component::handleFinish,
+					modifier = modifier,
+				)
+			} else {
+				ReviewInProgressContent(
+					state = currentState,
+					component = component,
+					modifier = modifier,
+				)
+			}
+		}
+		ReviewStore.State.Error -> {
 			ReviewError(
 				onRetryClick = component::handleRetry,
 				onCloseClick = component::handleClose,
 				modifier = modifier.fillMaxSize(),
-			)
-		}
-		is ReviewComponent.State.InProgress -> {
-			ReviewInProgressContent(
-				state = currentState,
-				component = component,
-				modifier = modifier,
-			)
-		}
-		is ReviewComponent.State.Finished -> {
-			PracticeFinishedContent(
-				correctCount = currentState.correctCount,
-				totalCount = currentState.totalCount,
-				subtitle = stringResource(
-					R.string.review_finished_subtitle,
-					currentState.correctCount,
-					currentState.totalCount,
-				),
-				primaryActionText = stringResource(R.string.review_finished_home),
-				onPrimaryClick = component::handleFinish,
-				modifier = modifier,
 			)
 		}
 	}

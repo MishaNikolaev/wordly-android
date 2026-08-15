@@ -32,7 +32,7 @@ fun PracticeOptions(
 	options: List<PracticeOption>,
 	correctOptionId: String,
 	selectedOptionId: String?,
-	isAnswerRevealed: Boolean,
+	answerRevealed: Boolean,
 	enabled: Boolean,
 	onOptionClick: (String) -> Unit,
 	modifier: Modifier = Modifier,
@@ -48,7 +48,7 @@ fun PracticeOptions(
 					optionId = option.id,
 					correctOptionId = correctOptionId,
 					selectedOptionId = selectedOptionId,
-					isAnswerRevealed = isAnswerRevealed,
+					answerRevealed = answerRevealed,
 				),
 				enabled = enabled,
 				onClick = { onOptionClick(option.id) },
@@ -62,7 +62,7 @@ private fun optionColors(
 	optionId: String,
 	correctOptionId: String,
 	selectedOptionId: String?,
-	isAnswerRevealed: Boolean,
+	answerRevealed: Boolean,
 ): PracticeOptionColors {
 	val colorScheme = MaterialTheme.colorScheme
 	val extended = Wui.colors
@@ -71,11 +71,11 @@ private fun optionColors(
 	val selectedBackground = colorScheme.primaryContainer
 
 	return when {
-		!isAnswerRevealed && optionId == selectedOptionId -> PracticeOptionColors(
+		!answerRevealed && optionId == selectedOptionId -> PracticeOptionColors(
 			background = selectedBackground,
 			text = colorScheme.onSurface,
 		)
-		!isAnswerRevealed -> PracticeOptionColors(
+		!answerRevealed -> PracticeOptionColors(
 			background = colorScheme.surface,
 			text = colorScheme.onSurface,
 		)

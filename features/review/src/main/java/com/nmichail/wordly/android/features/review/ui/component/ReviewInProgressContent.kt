@@ -45,12 +45,13 @@ import com.nmichail.wordly.android.component.wui.theme.WuiTypography
 import com.nmichail.wordly.android.features.review.R
 import com.nmichail.wordly.android.features.review.domain.entity.ReviewWord
 import com.nmichail.wordly.android.features.review.presentation.ReviewComponent
+import com.nmichail.wordly.android.features.review.presentation.ReviewStore
 import com.nmichail.wordly.android.shared.practice.PracticeOption
 import com.nmichail.wordly.android.shared.practice.PracticeOptions
 
 @Composable
 internal fun ReviewInProgressContent(
-	state: ReviewComponent.State.InProgress,
+	state: ReviewStore.State.Content,
 	component: ReviewComponent,
 	modifier: Modifier = Modifier,
 ) {
@@ -83,16 +84,16 @@ internal fun ReviewInProgressContent(
 				options = state.currentWord.options.map { PracticeOption(id = it.id, text = it.text) },
 				correctOptionId = state.currentWord.correctOptionId,
 				selectedOptionId = state.selectedOptionId,
-				isAnswerRevealed = state.isAnswerRevealed,
-				enabled = !state.isAnswerRevealed && !state.isSubmitting,
+				answerRevealed = state.answerRevealed,
+				enabled = !state.answerRevealed && !state.submitting,
 				onOptionClick = component::handleSelectOption,
 			)
 		}
-		if (state.isAnswerRevealed) {
+		if (state.answerRevealed) {
 			WuiButton(
 				text = stringResource(R.string.review_continue),
 				onClick = component::handleContinue,
-				loading = state.isSubmitting,
+				loading = state.submitting,
 				modifier = Modifier
 					.fillMaxWidth()
 					.padding(horizontal = 18.dp)

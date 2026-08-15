@@ -26,13 +26,13 @@ import com.nmichail.wordly.android.component.wui.theme.Wui
 
 @Composable
 fun ConstructorAnswerBoard(
-	isCorrect: Boolean?,
+	correct: Boolean?,
 	modifier: Modifier = Modifier,
 	content: @Composable () -> Unit,
 ) {
 	val extended = Wui.colors
 	val colorScheme = MaterialTheme.colorScheme
-	val (borderColor, background) = when (isCorrect) {
+	val (borderColor, background) = when (correct) {
 		true -> extended.success to extended.successContainer
 		false -> colorScheme.error to extended.errorContainer
 		null -> extended.warning to extended.warningContainer
@@ -68,13 +68,13 @@ private fun ConstructorAnswerBoardPreview() {
 			modifier = Modifier.padding(16.dp),
 			verticalArrangement = Arrangement.spacedBy(12.dp),
 		) {
-			ConstructorAnswerBoard(isCorrect = null) {
+			ConstructorAnswerBoard(correct = null) {
 				Text(text = "drop words here")
 			}
-			ConstructorAnswerBoard(isCorrect = true) {
+			ConstructorAnswerBoard(correct = true) {
 				Text(text = "correct answer")
 			}
-			ConstructorAnswerBoard(isCorrect = false) {
+			ConstructorAnswerBoard(correct = false) {
 				Text(text = "wrong answer")
 			}
 		}
