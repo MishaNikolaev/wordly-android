@@ -4,11 +4,18 @@ import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.value.Value
 import com.nmichail.wordly.android.features.words.domain.entity.WordFilter
 import com.nmichail.wordly.android.features.words.domain.entity.WordStatus
+import com.nmichail.wordly.android.features.words.presentation.detail.WordDetailStore
+import com.nmichail.wordly.android.features.words.presentation.dialog.AddWordStore
+import com.nmichail.wordly.android.features.words.presentation.list.WordsListStore
 
 @Suppress("TooManyFunctions")
 interface WordsComponent {
 
-	val model: Value<WordsStore.State>
+	val listModel: Value<WordsListStore.State>
+
+	val addWordModel: Value<AddWordStore.State>
+
+	val wordDetailModel: Value<WordDetailStore.State>
 
 	fun handleRetry()
 
@@ -36,7 +43,7 @@ interface WordsComponent {
 
 	fun handlePlayAudio()
 
-	fun handleCalendar(action: WordsStore.CalendarAction)
+	fun handleCalendar(action: WordDetailStore.CalendarAction)
 
 	fun interface Factory {
 

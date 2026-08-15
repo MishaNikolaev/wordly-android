@@ -3,76 +3,130 @@ package com.nmichail.wordly.android.features.words.presentation
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.value.Value
 import com.arkivanov.mvikotlin.core.instancekeeper.getStore
+import com.arkivanov.mvikotlin.extensions.coroutines.labelsChannel
+import com.nmichail.wordly.android.component.presentation.launchTry
 import com.nmichail.wordly.android.core.navigation.asValue
 import com.nmichail.wordly.android.features.words.domain.entity.WordFilter
 import com.nmichail.wordly.android.features.words.domain.entity.WordStatus
+import com.nmichail.wordly.android.features.words.presentation.detail.WordDetailStore
+import com.nmichail.wordly.android.features.words.presentation.detail.WordDetailStoreFactory
+import com.nmichail.wordly.android.features.words.presentation.dialog.AddWordStore
+import com.nmichail.wordly.android.features.words.presentation.dialog.AddWordStoreFactory
+import com.nmichail.wordly.android.features.words.presentation.list.WordsListStore
+import com.nmichail.wordly.android.features.words.presentation.list.WordsListStoreFactory
 
 @Suppress("TooManyFunctions")
 internal class DefaultWordsComponent(
-	componentContext: ComponentContext,
-	wordsStoreFactory: WordsStoreFactory,
+    componentContext: ComponentContext,
+    wordsListStoreFactory: WordsListStoreFactory,
+    addWordStoreFactory: AddWordStoreFactory,
+    wordDetailStoreFactory: WordDetailStoreFactory,
 ) : ComponentContext by componentContext,
 	WordsComponent {
 
-	private val store: WordsStore = instanceKeeper.getStore {
-		wordsStoreFactory.create()
+	private val listStore: WordsListStore = instanceKeeper.getStore {
+		wordsListStoreFactory.create()
 	}
 
-	override val model: Value<WordsStore.State> = store.asValue()
+	private val addWordStore: AddWordStore = instanceKeeper.getStore {
+		addWordStoreFactory.create()
+	}
+
+	private val wordDetailStore: WordDetailStore = instanceKeeper.getStore {
+		wordDetailStoreFactory.create()
+	}
+
+	override val listModel: Value<WordsListStore.State> = listStore.asValue()
+
+	override val addWordModel: Value<AddWordStore.State> = addWordStore.asValue()
+
+	override val wordDetailModel: Value<WordDetailStore.State> = wordDetailStore.asValue()
+
+	init {
+		launchTry {
+			for (label in addWordStore.labelsChannel(lifecycle)) {
+				when (label) {
+					AddWordStore.Label.Dismiss -> Unit
+					AddWordStore.Label.WordAdded -> {
+						listStore.accept(WordsListStore.Intent.Refresh)
+					}
+				}
+			}
+		} catch {
+			// ignored
+		}
+		launchTry {
+			for (label in wordDetailStore.labelsChannel(lifecycle)) {
+				when (label) {
+					WordDetailStore.Label.Dismiss -> Unit
+					WordDetailStore.Label.Changed -> {
+						listStore.accept(WordsListStore.Intent.Refresh)
+					}
+				}
+			}
+		} catch {
+			// ignored
+		}
+	}
 
 	override fun handleRetry() {
-		store.accept(WordsStore.Intent.Retry)
+		listStore.accept(WordsListStore.Intent.Retry)
 	}
 
 	override fun handleSearchQueryChange(query: String) {
-		store.accept(WordsStore.Intent.ChangeSearchQuery(query = query))
+		listStore.accept(WordsListStore.Intent.ChangeSearchQuery(query = query))
 	}
 
 	override fun handleFilterChange(filter: WordFilter) {
-		store.accept(WordsStore.Intent.ChangeFilter(filter = filter))
+		listStore.accept(WordsListStore.Intent.ChangeFilter(filter = filter))
 	}
 
 	override fun handleOpenAddWord() {
-		store.accept(WordsStore.Intent.OpenAddWord)
+		val content = listStore.state as? WordsListStore.State.Content ?: return
+		wordDetailStore.accept(WordDetailStore.Intent.Dismiss)
+		addWordStore.accept(AddWordStore.Intent.Open(availableTags = content.tags))
 	}
 
 	override fun handleDismissAddWord() {
-		store.accept(WordsStore.Intent.DismissAddWord)
+		addWordStore.accept(AddWordStore.Intent.Dismiss)
 	}
 
 	override fun handleAddWordInputChange(value: String) {
-		store.accept(WordsStore.Intent.ChangeWordInput(value = value))
+		addWordStore.accept(AddWordStore.Intent.ChangeWordInput(value = value))
 	}
 
 	override fun handleToggleTag(tagId: String) {
-		store.accept(WordsStore.Intent.ToggleTag(tagId = tagId))
+		addWordStore.accept(AddWordStore.Intent.ToggleTag(tagId = tagId))
 	}
 
 	override fun handleConfirmAddWord() {
-		store.accept(WordsStore.Intent.ConfirmAddWord)
+		addWordStore.accept(AddWordStore.Intent.Confirm)
 	}
 
 	override fun handleOpenWordDetail(wordId: String) {
-		store.accept(WordsStore.Intent.OpenWordDetail(wordId = wordId))
+		val content = listStore.state as? WordsListStore.State.Content ?: return
+		val word = content.words.find { it.id == wordId } ?: return
+		addWordStore.accept(AddWordStore.Intent.Dismiss)
+		wordDetailStore.accept(WordDetailStore.Intent.Open(word = word))
 	}
 
 	override fun handleDismissWordDetail() {
-		store.accept(WordsStore.Intent.DismissWordDetail)
+		wordDetailStore.accept(WordDetailStore.Intent.Dismiss)
 	}
 
 	override fun handleDetailStatusChange(status: WordStatus) {
-		store.accept(WordsStore.Intent.ChangeDetailStatus(status = status))
+		wordDetailStore.accept(WordDetailStore.Intent.ChangeStatus(status = status))
 	}
 
 	override fun handleConfirmAddToReview() {
-		store.accept(WordsStore.Intent.ConfirmAddToReview)
+		wordDetailStore.accept(WordDetailStore.Intent.ConfirmAddToReview)
 	}
 
 	override fun handlePlayAudio() {
-		store.accept(WordsStore.Intent.PlayAudio)
+		wordDetailStore.accept(WordDetailStore.Intent.PlayAudio)
 	}
 
-	override fun handleCalendar(action: WordsStore.CalendarAction) {
-		store.accept(WordsStore.Intent.Calendar(action = action))
+	override fun handleCalendar(action: WordDetailStore.CalendarAction) {
+		wordDetailStore.accept(WordDetailStore.Intent.Calendar(action = action))
 	}
 }

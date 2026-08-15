@@ -37,24 +37,31 @@ import com.nmichail.wordly.android.component.wui.components.field.WuiSearchField
 import com.nmichail.wordly.android.features.words.domain.entity.WordFilter
 import com.nmichail.wordly.android.features.words.domain.entity.WordItem
 import com.nmichail.wordly.android.features.words.list.R
+import com.nmichail.wordly.android.features.words.presentation.dialog.AddWordStore
+import com.nmichail.wordly.android.features.words.presentation.WordDetailDialogState
+import com.nmichail.wordly.android.features.words.presentation.detail.WordDetailStore
 import com.nmichail.wordly.android.features.words.presentation.WordsComponent
-import com.nmichail.wordly.android.features.words.presentation.WordsStore
+import com.nmichail.wordly.android.features.words.presentation.list.WordsListStore
 
 @Composable
 fun WordContent(
 	component: WordsComponent,
 	modifier: Modifier = Modifier,
 ) {
-	val state by component.model.subscribeAsState()
+	val listState by component.listModel.subscribeAsState()
+	val addWordState by component.addWordModel.subscribeAsState()
+	val wordDetailState by component.wordDetailModel.subscribeAsState()
 
-	when (val current = state) {
-		WordsStore.State.Loading -> WordsLoading(modifier = modifier)
-		is WordsStore.State.Content -> WordsLoaded(
+	when (val current = listState) {
+		WordsListStore.State.Loading -> WordsLoading(modifier = modifier)
+		is WordsListStore.State.Content -> WordsLoaded(
 			state = current,
+			addWordState = addWordState,
+			wordDetailState = wordDetailState,
 			component = component,
 			modifier = modifier,
 		)
-		WordsStore.State.Error -> WordsError(
+		WordsListStore.State.Error -> WordsError(
 			onRetryClick = component::handleRetry,
 			modifier = modifier.fillMaxSize(),
 		)
@@ -110,7 +117,9 @@ private fun WordsError(
 
 @Composable
 private fun WordsLoaded(
-	state: WordsStore.State.Content,
+	state: WordsListStore.State.Content,
+	addWordState: AddWordStore.State,
+	wordDetailState: WordDetailStore.State,
 	component: WordsComponent,
 	modifier: Modifier = Modifier,
 ) {
@@ -127,22 +136,23 @@ private fun WordsLoaded(
 			.fillMaxSize()
 			.background(MaterialTheme.colorScheme.background),
 	) {
-		state.wordDetailDialog?.let { dialog ->
-			WordsDetailOverlay(dialog = dialog, component = component)
-			return@Box
+		val detail = (wordDetailState as? WordDetailStore.State.Open)?.dialog
+		if (detail != null) {
+			WordsDetailOverlay(dialog = detail, component = component)
+		} else {
+			WordsMainContent(
+				state = state,
+				component = component,
+				clearSearchFocus = clearSearchFocus,
+				modifier = Modifier.fillMaxSize(),
+			)
 		}
-
-		WordsMainContent(
-			state = state,
-			component = component,
-			clearSearchFocus = clearSearchFocus,
-			modifier = Modifier.fillMaxSize(),
-		)
 	}
 
-	state.addWordDialog?.let { dialog ->
+	val addDialog = (addWordState as? AddWordStore.State.Open)?.dialog
+	if (addDialog != null) {
 		AddWordDialog(
-			state = dialog,
+			state = addDialog,
 			onDismiss = component::handleDismissAddWord,
 			onWordInputChange = component::handleAddWordInputChange,
 			onToggleTag = component::handleToggleTag,
@@ -153,7 +163,7 @@ private fun WordsLoaded(
 
 @Composable
 private fun WordsDetailOverlay(
-	dialog: com.nmichail.wordly.android.features.words.presentation.WordDetailDialogState,
+	dialog: WordDetailDialogState,
 	component: WordsComponent,
 ) {
 	WordDetailScreen(
@@ -161,22 +171,22 @@ private fun WordsDetailOverlay(
 		onDismiss = component::handleDismissWordDetail,
 		onStatusChange = component::handleDetailStatusChange,
 		onOpenCalendar = {
-			component.handleCalendar(WordsStore.CalendarAction.Open)
+			component.handleCalendar(WordDetailStore.CalendarAction.Open)
 		},
 		onDismissCalendar = {
-			component.handleCalendar(WordsStore.CalendarAction.Dismiss)
+			component.handleCalendar(WordDetailStore.CalendarAction.Dismiss)
 		},
 		onCalendarPreviousMonth = {
-			component.handleCalendar(WordsStore.CalendarAction.PreviousMonth)
+			component.handleCalendar(WordDetailStore.CalendarAction.PreviousMonth)
 		},
 		onCalendarNextMonth = {
-			component.handleCalendar(WordsStore.CalendarAction.NextMonth)
+			component.handleCalendar(WordDetailStore.CalendarAction.NextMonth)
 		},
 		onCalendarToday = {
-			component.handleCalendar(WordsStore.CalendarAction.Today)
+			component.handleCalendar(WordDetailStore.CalendarAction.Today)
 		},
 		onCalendarDayClick = { day ->
-			component.handleCalendar(WordsStore.CalendarAction.DayClick(day))
+			component.handleCalendar(WordDetailStore.CalendarAction.DayClick(day))
 		},
 		onConfirmAddToReview = component::handleConfirmAddToReview,
 		onPlayAudio = component::handlePlayAudio,
@@ -188,7 +198,7 @@ private fun WordsDetailOverlay(
 
 @Composable
 private fun WordsMainContent(
-	state: WordsStore.State.Content,
+	state: WordsListStore.State.Content,
 	component: WordsComponent,
 	clearSearchFocus: () -> Unit,
 	modifier: Modifier = Modifier,
@@ -229,7 +239,7 @@ private fun WordsMainContent(
 
 @Composable
 private fun WordsScreenBody(
-	state: WordsStore.State.Content,
+	state: WordsListStore.State.Content,
 	onSearchQueryChange: (String) -> Unit,
 	onFilterChange: (WordFilter) -> Unit,
 	onWordClick: (String) -> Unit,
@@ -261,7 +271,7 @@ private fun WordsScreenBody(
 }
 
 private fun LazyListScope.wordsHeader(
-	state: WordsStore.State.Content,
+	state: WordsListStore.State.Content,
 	onSearchQueryChange: (String) -> Unit,
 	onFilterChange: (WordFilter) -> Unit,
 ) {
