@@ -1,7 +1,7 @@
 package com.nmichail.wordly.android.features.words.presentation
 
 import com.arkivanov.mvikotlin.core.store.Store
-import com.nmichail.wordly.android.features.words.detail.presentation.WordDetailDialogState
+
 import com.nmichail.wordly.android.features.words.domain.entity.WordFilter
 import com.nmichail.wordly.android.features.words.domain.entity.WordItem
 import com.nmichail.wordly.android.features.words.domain.entity.WordStatus

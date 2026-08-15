@@ -34,7 +34,6 @@ import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import com.nmichail.wordly.android.component.wui.components.button.WuiButton
 import com.nmichail.wordly.android.component.wui.components.field.WuiSearchField
-import com.nmichail.wordly.android.features.words.detail.ui.WordDetailScreen
 import com.nmichail.wordly.android.features.words.domain.entity.WordFilter
 import com.nmichail.wordly.android.features.words.domain.entity.WordItem
 import com.nmichail.wordly.android.features.words.list.R
@@ -154,7 +153,7 @@ private fun WordsLoaded(
 
 @Composable
 private fun WordsDetailOverlay(
-	dialog: com.nmichail.wordly.android.features.words.detail.presentation.WordDetailDialogState,
+	dialog: com.nmichail.wordly.android.features.words.presentation.WordDetailDialogState,
 	component: WordsComponent,
 ) {
 	WordDetailScreen(

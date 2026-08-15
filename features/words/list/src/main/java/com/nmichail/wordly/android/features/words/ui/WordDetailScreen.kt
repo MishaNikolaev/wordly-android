@@ -1,6 +1,6 @@
 @file:Suppress("LongMethod", "TooManyFunctions")
 
-package com.nmichail.wordly.android.features.words.detail.ui
+package com.nmichail.wordly.android.features.words.ui
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -54,8 +54,8 @@ import com.nmichail.wordly.android.component.wui.components.calendar.WuiCalendar
 import com.nmichail.wordly.android.component.wui.theme.Wui
 import com.nmichail.wordly.android.component.wui.theme.WuiTypography
 import com.nmichail.wordly.android.component.wui.theme.isAppInDarkTheme
-import com.nmichail.wordly.android.features.words.detail.R
-import com.nmichail.wordly.android.features.words.detail.presentation.WordDetailDialogState
+import com.nmichail.wordly.android.features.words.list.R
+import com.nmichail.wordly.android.features.words.presentation.WordDetailDialogState
 import com.nmichail.wordly.android.features.words.domain.entity.WordExample
 import com.nmichail.wordly.android.features.words.domain.entity.WordStatus
 
