@@ -46,6 +46,7 @@ import com.nmichail.wordly.android.component.wui.components.button.WuiTextLink
 import com.nmichail.wordly.android.features.constructor.R
 import com.nmichail.wordly.android.features.constructor.domain.entity.ConstructorLevelBanner
 import com.nmichail.wordly.android.features.constructor.presentation.ConstructorComponent
+import com.nmichail.wordly.android.features.constructor.presentation.ConstructorStore
 import com.nmichail.wordly.android.shared.catalog.CatalogRemoteImage
 
 @Composable
@@ -56,7 +57,7 @@ fun ConstructorContent(
 	val state by component.model.subscribeAsState()
 
 	when (val currentState = state) {
-		ConstructorComponent.State.Loading -> {
+		ConstructorStore.State.Loading -> {
 			Box(
 				modifier = modifier
 					.fillMaxSize()
@@ -66,14 +67,14 @@ fun ConstructorContent(
 				CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
 			}
 		}
-		ConstructorComponent.State.Error -> {
+		ConstructorStore.State.Error -> {
 			ConstructorError(
 				onRetryClick = component::handleRetry,
 				onBackClick = component::handleBack,
 				modifier = modifier.fillMaxSize(),
 			)
 		}
-		is ConstructorComponent.State.Content -> {
+		is ConstructorStore.State.Content -> {
 			ConstructorLoaded(
 				state = currentState,
 				component = component,
@@ -127,7 +128,7 @@ private fun ConstructorError(
 
 @Composable
 private fun ConstructorLoaded(
-	state: ConstructorComponent.State.Content,
+	state: ConstructorStore.State.Content,
 	component: ConstructorComponent,
 	modifier: Modifier = Modifier,
 ) {

@@ -98,7 +98,7 @@ class CardsStoreTest {
 
 		val store = createStore()
 
-		assertEquals(CardsComponent.State.Error, store.state)
+		assertEquals(CardsStore.State.Error, store.state)
 	}
 
 	@Test
@@ -142,7 +142,7 @@ class CardsStoreTest {
 
 		store.accept(CardsStore.Intent.Back)
 
-		assertEquals(CardsComponent.Label.Close, labelsChannel.receive())
+		assertEquals(CardsStore.Label.Close, labelsChannel.receive())
 	}
 
 	@Test
@@ -153,29 +153,31 @@ class CardsStoreTest {
 
 		store.accept(CardsStore.Intent.SelectCard(scienceItem.id))
 
-		assertEquals(CardsComponent.Label.OpenCard(scienceItem), labelsChannel.receive())
+		assertEquals(CardsStore.Label.OpenCard(scienceItem), labelsChannel.receive())
 	}
 
 	@Test
 	fun `change level EXPECT updated level label`() = runTest {
 		whenever(getCardsUseCase()) doReturn cards
 		val store = createStore()
+		val updatedSections = listOf(
+			CardsSection(
+				title = "Под ваш уровень · C1",
+				items = listOf(scienceItem, journalismItem),
+			),
+			CardsSection(
+				title = "Другие уровни",
+				items = listOf(engineeringItem),
+			),
+		)
 
 		store.accept(CardsStore.Intent.ChangeLevel("C1"))
 
 		verify(updateEnglishLevelUseCase).invoke("C1")
 		assertEquals(
 			content(
-				sections = listOf(
-					CardsSection(
-						title = "Под ваш уровень · C1",
-						items = listOf(scienceItem, journalismItem),
-					),
-					CardsSection(
-						title = "Другие уровни",
-						items = listOf(engineeringItem),
-					),
-				),
+				allSections = updatedSections,
+				sections = updatedSections,
 			).copy(
 				levelBanner = cards.levelBanner?.copy(levelLabel = "C1"),
 			),
@@ -185,13 +187,15 @@ class CardsStoreTest {
 
 	private fun content(
 		searchQuery: String = "",
+		allSections: List<CardsSection> = levelSections,
 		sections: List<CardsSection> = levelSections,
-	): CardsComponent.State.Content =
-		CardsComponent.State.Content(
+	): CardsStore.State.Content =
+		CardsStore.State.Content(
 			title = cards.title,
 			searchQuery = searchQuery,
 			searchPlaceholder = cards.searchPlaceholder,
 			levelBanner = cards.levelBanner,
+			allSections = allSections,
 			sections = sections,
 		)
 

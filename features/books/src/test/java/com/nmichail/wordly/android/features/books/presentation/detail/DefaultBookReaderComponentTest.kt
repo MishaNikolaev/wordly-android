@@ -80,11 +80,11 @@ class DefaultBookReaderComponentTest {
 	@Test
 	fun `init EXPECT content state`() {
 		assertEquals(
-			BookReaderComponent.State.Content(
+			BookReaderStore.State.Content(
 				book = book,
 				translation = null,
-				isTranslationVisible = false,
-				isTranslating = false,
+				translationVisible = false,
+				translating = false,
 				selectedWord = null,
 				showWordAddedDialog = false,
 			),
@@ -97,11 +97,11 @@ class DefaultBookReaderComponentTest {
 		component.handleSelectWord(wordId = "prince")
 
 		assertEquals(
-			BookReaderComponent.State.Content(
+			BookReaderStore.State.Content(
 				book = book,
 				translation = null,
-				isTranslationVisible = false,
-				isTranslating = false,
+				translationVisible = false,
+				translating = false,
 				selectedWord = wordDefinition,
 				showWordAddedDialog = false,
 			),

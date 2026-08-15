@@ -23,11 +23,11 @@ internal class ConstructorPracticeStoreFactory @Inject constructor(
 			ConstructorPracticeStore,
 			Store<
 				ConstructorPracticeStore.Intent,
-				ConstructorPracticeComponent.State,
-				ConstructorPracticeComponent.Label,
+				ConstructorPracticeStore.State,
+				ConstructorPracticeStore.Label,
 				> by storeFactory.create(
 				name = "ConstructorPracticeStore",
-				initialState = ConstructorPracticeComponent.State.Loading,
+				initialState = ConstructorPracticeStore.State.Loading,
 				bootstrapper = SimpleBootstrapper(Action.Load(themeId = themeId)),
 				executorFactory = { ExecutorImpl(themeId = themeId) },
 				reducer = ReducerImpl,
@@ -58,7 +58,7 @@ internal class ConstructorPracticeStoreFactory @Inject constructor(
 
 		data class AnswerReordered(val answer: List<ConstructorWord>) : Msg
 
-		data class AnswerChecked(val isCorrect: Boolean) : Msg
+		data class AnswerChecked(val correct: Boolean) : Msg
 
 		data class MoveNext(
 			val nextIndex: Int,
@@ -71,15 +71,25 @@ internal class ConstructorPracticeStoreFactory @Inject constructor(
 		) : Msg
 	}
 
-	private object ReducerImpl : Reducer<ConstructorPracticeComponent.State, Msg> {
+	private object ReducerImpl : Reducer<ConstructorPracticeStore.State, Msg> {
 
-		override fun ConstructorPracticeComponent.State.reduce(
+		override fun ConstructorPracticeStore.State.reduce(
 			msg: Msg,
-		): ConstructorPracticeComponent.State {
+		): ConstructorPracticeStore.State {
 			return when (msg) {
-				Msg.Loading -> ConstructorPracticeComponent.State.Loading
-				is Msg.SessionLoaded -> createInProgress(session = msg.session)
-				Msg.SetError -> ConstructorPracticeComponent.State.Error
+				Msg.Loading -> ConstructorPracticeStore.State.Loading
+				is Msg.SessionLoaded -> {
+					val phrase = msg.session.phrases.first()
+					ConstructorPracticeStore.State.InProgress(
+						session = msg.session,
+						currentIndex = 0,
+						bank = phrase.words,
+						answer = emptyList(),
+						checkResult = null,
+						correctCount = 0,
+					)
+				}
+				Msg.SetError -> ConstructorPracticeStore.State.Error
 				is Msg.WordPlaced -> updateAnswer(
 					state = this,
 					bank = msg.bank,
@@ -98,46 +108,34 @@ internal class ConstructorPracticeStoreFactory @Inject constructor(
 				is Msg.AnswerChecked -> {
 					val inProgress = asInProgress() ?: return this
 					if (inProgress.checkResult != null) return this
-					inProgress.copy(checkResult = msg.isCorrect)
+					inProgress.copy(checkResult = msg.correct)
 				}
 				is Msg.MoveNext -> moveToNext(state = this, msg = msg)
-				is Msg.Finished -> ConstructorPracticeComponent.State.Finished(
+				is Msg.Finished -> ConstructorPracticeStore.State.Finished(
 					totalCount = msg.totalCount,
 					correctCount = msg.correctCount,
 				)
 			}
 		}
 
-		private fun ConstructorPracticeComponent.State.asInProgress():
-			ConstructorPracticeComponent.State.InProgress? =
-			this as? ConstructorPracticeComponent.State.InProgress
-
-		private fun createInProgress(session: ConstructorSession): ConstructorPracticeComponent.State {
-			val phrase = session.phrases.first()
-			return ConstructorPracticeComponent.State.InProgress(
-				session = session,
-				currentIndex = 0,
-				bank = phrase.words,
-				answer = emptyList(),
-				checkResult = null,
-				correctCount = 0,
-			)
-		}
+		private fun ConstructorPracticeStore.State.asInProgress():
+			ConstructorPracticeStore.State.InProgress? =
+			this as? ConstructorPracticeStore.State.InProgress
 
 		private fun updateAnswer(
-			state: ConstructorPracticeComponent.State,
+			state: ConstructorPracticeStore.State,
 			bank: List<ConstructorWord>,
 			answer: List<ConstructorWord>,
-		): ConstructorPracticeComponent.State {
+		): ConstructorPracticeStore.State {
 			val inProgress = state.asInProgress() ?: return state
 			if (inProgress.checkResult != null) return state
 			return inProgress.copy(bank = bank, answer = answer)
 		}
 
 		private fun moveToNext(
-			state: ConstructorPracticeComponent.State,
+			state: ConstructorPracticeStore.State,
 			msg: Msg.MoveNext,
-		): ConstructorPracticeComponent.State {
+		): ConstructorPracticeStore.State {
 			val inProgress = state.asInProgress() ?: return state
 			val nextPhrase = inProgress.session.phrases[msg.nextIndex]
 			return inProgress.copy(
@@ -155,9 +153,9 @@ internal class ConstructorPracticeStoreFactory @Inject constructor(
 	) : BaseCoroutineExecutor<
 		ConstructorPracticeStore.Intent,
 		Action,
-		ConstructorPracticeComponent.State,
+			ConstructorPracticeStore.State,
 		Msg,
-		ConstructorPracticeComponent.Label,
+			ConstructorPracticeStore.Label,
 		>() {
 
 		override fun executeAction(action: Action) {
@@ -170,7 +168,7 @@ internal class ConstructorPracticeStoreFactory @Inject constructor(
 			when (intent) {
 				ConstructorPracticeStore.Intent.Close,
 				ConstructorPracticeStore.Intent.Finish,
-				-> publish(ConstructorPracticeComponent.Label.Close)
+				-> publish(ConstructorPracticeStore.Label.Close)
 				ConstructorPracticeStore.Intent.Retry -> loadSession(themeId = themeId)
 				is ConstructorPracticeStore.Intent.PlaceWord -> placeWord(wordId = intent.wordId)
 				is ConstructorPracticeStore.Intent.RemoveWord -> removeWord(wordId = intent.wordId)
@@ -199,8 +197,8 @@ internal class ConstructorPracticeStoreFactory @Inject constructor(
 			}
 		}
 
-		private fun currentState(): ConstructorPracticeComponent.State.InProgress? =
-			state() as? ConstructorPracticeComponent.State.InProgress
+		private fun currentState(): ConstructorPracticeStore.State.InProgress? =
+			state() as? ConstructorPracticeStore.State.InProgress
 
 		private fun placeWord(wordId: String) {
 			val inProgress = currentState() ?: return
@@ -245,8 +243,8 @@ internal class ConstructorPracticeStoreFactory @Inject constructor(
 			if (inProgress.checkResult != null) return
 
 			val phrase = inProgress.session.phrases[inProgress.currentIndex]
-			val isCorrect = inProgress.answer.map { it.id } == phrase.correctOrder
-			dispatch(Msg.AnswerChecked(isCorrect = isCorrect))
+			val correct = inProgress.answer.map { it.id } == phrase.correctOrder
+			dispatch(Msg.AnswerChecked(correct = correct))
 		}
 
 		private fun handleContinue() {

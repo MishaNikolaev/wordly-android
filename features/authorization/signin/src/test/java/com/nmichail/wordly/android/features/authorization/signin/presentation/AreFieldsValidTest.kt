@@ -12,15 +12,21 @@ class AreFieldsValidTest {
 
 	@Test
 	fun `all fields unverified EXPECT false`() {
-		val state = SignInComponent.State()
+		val state = SignInStore.State.Content(
+			email = EmailValidationItem(),
+			password = PasswordValidationItem(),
+			submitting = false,
+		)
 
 		assertEquals(false, state.areFieldsValid())
 	}
 
 	@Test
 	fun `only email valid EXPECT false`() {
-		val state = SignInComponent.State(
+		val state = SignInStore.State.Content(
 			email = EmailValidationItem(validationState = DefaultValidationState.Valid),
+			password = PasswordValidationItem(),
+			submitting = false,
 		)
 
 		assertEquals(false, state.areFieldsValid())
@@ -28,9 +34,10 @@ class AreFieldsValidTest {
 
 	@Test
 	fun `all fields valid EXPECT true`() {
-		val state = SignInComponent.State(
+		val state = SignInStore.State.Content(
 			email = EmailValidationItem(validationState = DefaultValidationState.Valid),
 			password = PasswordValidationItem(validationState = DefaultValidationState.Valid),
+			submitting = false,
 		)
 
 		assertEquals(true, state.areFieldsValid())

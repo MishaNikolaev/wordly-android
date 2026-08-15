@@ -23,11 +23,11 @@ internal class MaterialDetailStoreFactory @Inject constructor(
 			MaterialDetailStore,
 			Store<
 				MaterialDetailStore.Intent,
-				MaterialDetailComponent.State,
-				MaterialDetailComponent.Label,
+				MaterialDetailStore.State,
+				MaterialDetailStore.Label,
 				> by storeFactory.create(
 				name = "MaterialDetailStore",
-				initialState = MaterialDetailComponent.State.Loading,
+				initialState = MaterialDetailStore.State.Loading,
 				bootstrapper = SimpleBootstrapper(Action.Load(materialId = materialId)),
 				executorFactory = { ExecutorImpl(materialId = materialId) },
 				reducer = ReducerImpl,
@@ -49,23 +49,20 @@ internal class MaterialDetailStoreFactory @Inject constructor(
 		data class ReactionUpdated(val reaction: MaterialReaction?) : Msg
 	}
 
-	private object ReducerImpl : Reducer<MaterialDetailComponent.State, Msg> {
+	private object ReducerImpl : Reducer<MaterialDetailStore.State, Msg> {
 
-		override fun MaterialDetailComponent.State.reduce(
-			msg: Msg,
-		): MaterialDetailComponent.State =
-			when (msg) {
-				Msg.Loading -> MaterialDetailComponent.State.Loading
-				Msg.SetError -> MaterialDetailComponent.State.Error
-				is Msg.Loaded -> MaterialDetailComponent.State.Content(
+		override fun MaterialDetailStore.State.reduce(msg: Msg): MaterialDetailStore.State {
+			val content = this as? MaterialDetailStore.State.Content
+			return when (msg) {
+				Msg.Loading -> MaterialDetailStore.State.Loading
+				Msg.SetError -> MaterialDetailStore.State.Error
+				is Msg.Loaded -> MaterialDetailStore.State.Content(
 					material = msg.material,
 					selectedReaction = null,
 				)
-				is Msg.ReactionUpdated -> {
-					val content = this as? MaterialDetailComponent.State.Content ?: return this
-					content.copy(selectedReaction = msg.reaction)
-				}
+				is Msg.ReactionUpdated -> content?.copy(selectedReaction = msg.reaction) ?: this
 			}
+		}
 	}
 
 	private inner class ExecutorImpl(
@@ -73,9 +70,9 @@ internal class MaterialDetailStoreFactory @Inject constructor(
 	) : BaseCoroutineExecutor<
 		MaterialDetailStore.Intent,
 		Action,
-		MaterialDetailComponent.State,
+		MaterialDetailStore.State,
 		Msg,
-		MaterialDetailComponent.Label,
+		MaterialDetailStore.Label,
 		>() {
 
 		override fun executeAction(action: Action) {
@@ -87,10 +84,10 @@ internal class MaterialDetailStoreFactory @Inject constructor(
 		override fun executeIntent(intent: MaterialDetailStore.Intent) {
 			when (intent) {
 				MaterialDetailStore.Intent.Retry -> load(materialId = materialId)
-				MaterialDetailStore.Intent.Back -> publish(MaterialDetailComponent.Label.Close)
+				MaterialDetailStore.Intent.Back -> publish(MaterialDetailStore.Label.Close)
 				MaterialDetailStore.Intent.Share -> {
-					val content = state() as? MaterialDetailComponent.State.Content ?: return
-					publish(MaterialDetailComponent.Label.Share(title = content.material.title))
+					val content = state() as? MaterialDetailStore.State.Content ?: return
+					publish(MaterialDetailStore.Label.Share(title = content.material.title))
 				}
 				MaterialDetailStore.Intent.Like -> toggleReaction(MaterialReaction.Like)
 				MaterialDetailStore.Intent.Dislike -> toggleReaction(MaterialReaction.Dislike)
@@ -98,7 +95,7 @@ internal class MaterialDetailStoreFactory @Inject constructor(
 		}
 
 		private fun toggleReaction(reaction: MaterialReaction) {
-			val content = state() as? MaterialDetailComponent.State.Content ?: return
+			val content = state() as? MaterialDetailStore.State.Content ?: return
 			val next = if (content.selectedReaction == reaction) null else reaction
 			dispatch(Msg.ReactionUpdated(reaction = next))
 		}

@@ -33,26 +33,30 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import com.nmichail.wordly.android.component.wui.components.button.WuiButton
+import com.nmichail.wordly.android.core.preferences.domain.entity.AppThemeMode
 import com.nmichail.wordly.android.features.profile.R
 import com.nmichail.wordly.android.features.profile.presentation.ProfileComponent
+import com.nmichail.wordly.android.features.profile.presentation.ProfileStore
 
 @Composable
 fun ProfileContent(
 	component: ProfileComponent,
+	themeMode: AppThemeMode,
 	modifier: Modifier = Modifier,
 ) {
 	val state by component.model.subscribeAsState()
 
 	when (val current = state) {
-		ProfileComponent.State.Loading -> ProfileLoading(modifier = modifier)
-		ProfileComponent.State.Error -> ProfileError(
-			onRetryClick = component::handleRetry,
-			modifier = modifier.fillMaxSize(),
-		)
-		is ProfileComponent.State.Content -> ProfileLoaded(
+		ProfileStore.State.Loading -> ProfileLoading(modifier = modifier)
+		is ProfileStore.State.Content -> ProfileLoaded(
 			state = current,
+			themeMode = themeMode,
 			component = component,
 			modifier = modifier,
+		)
+		ProfileStore.State.Error -> ProfileError(
+			onRetryClick = component::handleRetry,
+			modifier = modifier.fillMaxSize(),
 		)
 	}
 }
@@ -106,50 +110,59 @@ private fun ProfileError(
 
 @Composable
 private fun ProfileLoaded(
-	state: ProfileComponent.State.Content,
+	state: ProfileStore.State.Content,
+	themeMode: AppThemeMode,
 	component: ProfileComponent,
 	modifier: Modifier = Modifier,
 ) {
-	Column(
-		modifier = modifier
-			.fillMaxSize()
-			.background(MaterialTheme.colorScheme.background)
-			.padding(horizontal = 20.dp)
-			.padding(top = 12.dp, bottom = 24.dp),
-	) {
+	ProfileDialogHost(
+		profile = state.profile,
+		themeMode = themeMode,
+		loggingOut = state.loggingOut,
+		component = component,
+	) { openDialog ->
 		Column(
-			modifier = Modifier
-				.weight(1f)
-				.verticalScroll(rememberScrollState()),
+			modifier = modifier
+				.fillMaxSize()
+				.background(MaterialTheme.colorScheme.background)
+				.padding(horizontal = 20.dp)
+				.padding(top = 12.dp, bottom = 24.dp),
 		) {
-			ProfileHeader(
-				fullName = state.profile.fullName,
-			)
-			ProfileLevelRow(
-				level = state.profile.englishLevel,
-				onClick = component::handleOpenLevel,
-				modifier = Modifier.padding(top = 20.dp),
-			)
-			WuiButton(
-				text = stringResource(R.string.profile_edit),
-				onClick = component::handleOpenEdit,
-				modifier = Modifier.padding(top = 20.dp),
-				containerColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.08f),
-				contentColor = MaterialTheme.colorScheme.onSurface,
-			)
-			ProfileSettingsSection(
-				state = state,
-				component = component,
-				modifier = Modifier.padding(top = 28.dp, bottom = 24.dp),
+			Column(
+				modifier = Modifier
+					.weight(1f)
+					.verticalScroll(rememberScrollState()),
+			) {
+				ProfileHeader(fullName = state.profile.fullName)
+				ProfileLevelRow(
+					level = state.profile.englishLevel,
+					onClick = { openDialog(ProfileDialog.Level) },
+					modifier = Modifier.padding(top = 20.dp),
+				)
+				WuiButton(
+					text = stringResource(R.string.profile_edit),
+					onClick = component::handleOpenEdit,
+					modifier = Modifier.padding(top = 20.dp),
+					containerColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.08f),
+					contentColor = MaterialTheme.colorScheme.onSurface,
+				)
+				ProfileSettingsSection(
+					state = state,
+					themeMode = themeMode,
+					onOpenNotifications = { openDialog(ProfileDialog.Notifications) },
+					onOpenDailyGoal = { openDialog(ProfileDialog.DailyGoal) },
+					onOpenTheme = { openDialog(ProfileDialog.Theme) },
+					onToggleNotificationsEnabled = component::handleToggleNotificationsEnabled,
+					modifier = Modifier.padding(top = 28.dp, bottom = 24.dp),
+				)
+			}
+			ProfileLogoutButton(
+				onClick = { openDialog(ProfileDialog.Logout) },
+				loading = state.loggingOut,
+				modifier = Modifier.padding(top = 8.dp),
 			)
 		}
-		ProfileLogoutButton(
-			onClick = component::handleOpenLogout,
-			loading = state.loggingOut,
-			modifier = Modifier.padding(top = 8.dp),
-		)
 	}
-	ProfileDialogs(state = state, component = component)
 }
 
 @Composable

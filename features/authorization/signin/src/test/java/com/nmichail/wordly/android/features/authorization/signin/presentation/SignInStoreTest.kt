@@ -63,19 +63,16 @@ class SignInStoreTest {
 		refreshToken = "refresh-token",
 	)
 	private val exception = IOException("network")
-	private val invalidCredentialsError = NetworkException.ErrorMessage(
+	private val networkError = NetworkException.ErrorMessage(
 		statusCode = StatusCodes.NEEDS_AUTHORIZATION,
 		messageId = StatusCodes.NEEDS_AUTHORIZATION.statusCode,
 		message = "Unauthorized",
 	)
-	private val noConnectionError = NetworkException.ErrorMessage(
-		statusCode = StatusCodes.NO_CONNECTION,
-		messageId = StatusCodes.NO_CONNECTION.statusCode,
-		message = "No connection",
-	)
 
 	private lateinit var lifecycle: LifecycleRegistry
 	private lateinit var store: SignInStore
+
+	private val content get() = store.state as SignInStore.State.Content
 
 	@BeforeEach
 	fun setUp() {
@@ -90,7 +87,14 @@ class SignInStoreTest {
 
 	@Test
 	fun `init EXPECT init state`() {
-		assertEquals(SignInComponent.State(), store.state)
+		assertEquals(
+			SignInStore.State.Content(
+				email = EmailValidationItem(),
+				password = PasswordValidationItem(),
+				submitting = false,
+			),
+			store.state,
+		)
 	}
 
 	@Test
@@ -99,7 +103,7 @@ class SignInStoreTest {
 
 		store.accept(SignInStore.Intent.ChangeEmail(email))
 
-		assertEquals(emailValidItem, store.state.email)
+		assertEquals(emailValidItem, content.email)
 	}
 
 	@Test
@@ -108,7 +112,7 @@ class SignInStoreTest {
 
 		store.accept(SignInStore.Intent.ChangePassword(password))
 
-		assertEquals(passwordValidItem, store.state.password)
+		assertEquals(passwordValidItem, content.password)
 	}
 
 	@Test
@@ -117,7 +121,7 @@ class SignInStoreTest {
 
 		store.accept(SignInStore.Intent.NavigateToSignUp)
 
-		assertEquals(SignInComponent.Label.OpenSignUp, labelsChannel.receive())
+		assertEquals(SignInStore.Label.OpenSignUp, labelsChannel.receive())
 	}
 
 	@Test
@@ -156,36 +160,54 @@ class SignInStoreTest {
 
 		store.accept(SignInStore.Intent.Submit)
 
-		assertEquals(SignInComponent.Label.OpenMainHost, labelsChannel.receive())
+		assertEquals(SignInStore.Label.OpenMainHost, labelsChannel.receive())
 	}
 
 	@Test
-	fun `submit with invalid credentials EXPECT invalid credentials error`() = runTest {
+	fun `submit with error EXPECT error state`() = runTest {
 		whenever(validateEmailUseCase(email)) doReturn emailValidItem
 		whenever(validatePasswordUseCase(password)) doReturn passwordValidItem
 		whenever(signInUseCase(signInData)) doThrowSafe exception
-		whenever(networkExceptionConverter.convert(exception)) doReturn invalidCredentialsError
+		whenever(networkExceptionConverter.convert(exception)) doReturn networkError
 		store.accept(SignInStore.Intent.ChangeEmail(email))
 		store.accept(SignInStore.Intent.ChangePassword(password))
 
 		store.accept(SignInStore.Intent.Submit)
 
-		assertEquals(SignInComponent.Error.InvalidCredentials, store.state.error)
+		assertEquals(
+			SignInStore.State.Error(
+				content = SignInStore.State.Content(
+					email = emailValidItem,
+					password = passwordValidItem,
+					submitting = false,
+				),
+			),
+			store.state,
+		)
 	}
 
 	@Test
-	fun `submit with no connection EXPECT no connection error`() = runTest {
+	fun `retry after error EXPECT content restored`() = runTest {
 		whenever(validateEmailUseCase(email)) doReturn emailValidItem
 		whenever(validatePasswordUseCase(password)) doReturn passwordValidItem
 		whenever(signInUseCase(signInData)) doThrowSafe exception
-		whenever(networkExceptionConverter.convert(exception)) doReturn noConnectionError
+		whenever(networkExceptionConverter.convert(exception)) doReturn networkError
 		store.accept(SignInStore.Intent.ChangeEmail(email))
 		store.accept(SignInStore.Intent.ChangePassword(password))
-
 		store.accept(SignInStore.Intent.Submit)
 
-		assertEquals(SignInComponent.Error.NoConnection, store.state.error)
+		store.accept(SignInStore.Intent.Retry)
+
+		assertEquals(
+			SignInStore.State.Content(
+				email = emailValidItem,
+				password = passwordValidItem,
+				submitting = false,
+			),
+			store.state,
+		)
 	}
+
 	private fun createStore(): SignInStore =
 		SignInStoreFactory(
 			validateEmailUseCase = validateEmailUseCase,

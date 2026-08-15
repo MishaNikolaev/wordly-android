@@ -19,17 +19,17 @@ internal class DefaultSignUpComponent(
 		signUpStoreFactory.create()
 	}
 
-	override val model: Value<SignUpComponent.State> = store.asValue()
+	override val model: Value<SignUpStore.State> = store.asValue()
 
-	override fun labelsChannel(): ReceiveChannel<SignUpComponent.Label> =
+	override fun labelsChannel(): ReceiveChannel<SignUpStore.Label> =
 		store.labelsChannel(lifecycle)
 
 	init {
 		launchTry {
 			for (label in store.labelsChannel(lifecycle)) {
 				when (label) {
-					SignUpComponent.Label.OpenSignIn -> signUpRouter.navigateToSignIn()
-					SignUpComponent.Label.OpenMainHost -> signUpRouter.navigateToMain()
+					SignUpStore.Label.OpenSignIn -> signUpRouter.navigateToSignIn()
+					SignUpStore.Label.OpenMainHost -> signUpRouter.navigateToMain()
 				}
 			}
 		} catch {
@@ -69,7 +69,7 @@ internal class DefaultSignUpComponent(
 		signUpRouter.openTermsOfUse()
 	}
 
-	override fun handleErrorShown() {
-		store.accept(SignUpStore.Intent.ErrorShown)
+	override fun handleRetry() {
+		store.accept(SignUpStore.Intent.Retry)
 	}
 }

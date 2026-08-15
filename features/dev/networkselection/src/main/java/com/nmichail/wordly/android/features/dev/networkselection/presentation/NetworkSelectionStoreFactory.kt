@@ -25,9 +25,9 @@ internal class NetworkSelectionStoreFactory @Inject constructor(
 	fun create(): NetworkSelectionStore =
 		object :
 			NetworkSelectionStore,
-			Store<NetworkSelectionStore.Intent, NetworkSelectionComponent.State, NetworkSelectionComponent.Label> by storeFactory.create(
+			Store<NetworkSelectionStore.Intent, NetworkSelectionStore.State, NetworkSelectionStore.Label> by storeFactory.create(
 				name = "NetworkSelectionStore",
-				initialState = NetworkSelectionComponent.State(
+				initialState = NetworkSelectionStore.State(
 					stands = getNetworkStandsUseCase(),
 					selectedStand = getSelectedNetworkStandUseCase(),
 				),
@@ -40,9 +40,9 @@ internal class NetworkSelectionStoreFactory @Inject constructor(
 		data class StandSelected(val stand: NetworkStand) : Msg
 	}
 
-	private object ReducerImpl : Reducer<NetworkSelectionComponent.State, Msg> {
+	private object ReducerImpl : Reducer<NetworkSelectionStore.State, Msg> {
 
-		override fun NetworkSelectionComponent.State.reduce(msg: Msg): NetworkSelectionComponent.State =
+		override fun NetworkSelectionStore.State.reduce(msg: Msg): NetworkSelectionStore.State =
 			when (msg) {
 				is Msg.StandSelected -> copy(selectedStand = msg.stand)
 			}
@@ -52,15 +52,15 @@ internal class NetworkSelectionStoreFactory @Inject constructor(
 		BaseCoroutineExecutor<
 			NetworkSelectionStore.Intent,
 			Nothing,
-			NetworkSelectionComponent.State,
+			NetworkSelectionStore.State,
 			Msg,
-			NetworkSelectionComponent.Label,
+			NetworkSelectionStore.Label,
 		>() {
 
 		override fun executeIntent(intent: NetworkSelectionStore.Intent) {
 			when (intent) {
 				is NetworkSelectionStore.Intent.SelectStand -> handleSelectStand(intent.stand)
-				NetworkSelectionStore.Intent.NavigateBack -> publish(NetworkSelectionComponent.Label.NavigateBack)
+				NetworkSelectionStore.Intent.NavigateBack -> publish(NetworkSelectionStore.Label.NavigateBack)
 			}
 		}
 
@@ -70,7 +70,7 @@ internal class NetworkSelectionStoreFactory @Inject constructor(
 			setNetworkStandUseCase(stand)
 			clearAuthTokensUseCase()
 			dispatch(Msg.StandSelected(stand))
-			publish(NetworkSelectionComponent.Label.RestartApp)
+			publish(NetworkSelectionStore.Label.RestartApp)
 		}
 	}
 }

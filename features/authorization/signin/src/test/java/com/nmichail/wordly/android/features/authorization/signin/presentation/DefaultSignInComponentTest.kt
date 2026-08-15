@@ -71,7 +71,14 @@ class DefaultSignInComponentTest {
 
 	@Test
 	fun `init EXPECT init state`() {
-		assertEquals(SignInComponent.State(), model)
+		assertEquals(
+			SignInStore.State.Content(
+				email = EmailValidationItem(),
+				password = PasswordValidationItem(),
+				submitting = false,
+			),
+			model,
+		)
 	}
 
 	@Test

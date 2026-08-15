@@ -20,10 +20,10 @@ internal class CardPracticeStoreFactory @Inject constructor(
 	fun create(cardId: String): CardPracticeStore =
 		object :
 			CardPracticeStore,
-			Store<CardPracticeStore.Intent, CardPracticeComponent.State, CardPracticeComponent.Label>
+			Store<CardPracticeStore.Intent, CardPracticeStore.State, CardPracticeStore.Label>
 			by storeFactory.create(
 				name = "CardPracticeStore",
-				initialState = CardPracticeComponent.State.Loading,
+				initialState = CardPracticeStore.State.Loading,
 				bootstrapper = SimpleBootstrapper(Action.Load(cardId = cardId)),
 				executorFactory = { ExecutorImpl(cardId = cardId) },
 				reducer = ReducerImpl,
@@ -55,61 +55,56 @@ internal class CardPracticeStoreFactory @Inject constructor(
 		) : Msg
 	}
 
-	private object ReducerImpl : Reducer<CardPracticeComponent.State, Msg> {
+	private object ReducerImpl : Reducer<CardPracticeStore.State, Msg> {
 
-		override fun CardPracticeComponent.State.reduce(msg: Msg): CardPracticeComponent.State =
+		override fun CardPracticeStore.State.reduce(msg: Msg): CardPracticeStore.State =
 			when (msg) {
-				Msg.Loading -> CardPracticeComponent.State.Loading
-				is Msg.SessionLoaded -> createInProgress(words = msg.words)
-				Msg.SetError -> CardPracticeComponent.State.Error
+				Msg.Loading -> CardPracticeStore.State.Loading
+				is Msg.SessionLoaded -> CardPracticeStore.State.InProgress(
+					words = msg.words,
+					currentIndex = 0,
+					currentWord = msg.words[0],
+					totalCount = msg.words.size,
+					progressIndex = 1,
+					selectedOptionId = null,
+					answerRevealed = false,
+					correct = false,
+					correctCount = 0,
+				)
+				Msg.SetError -> CardPracticeStore.State.Error
 				is Msg.OptionSelected -> selectOption(state = this, optionId = msg.optionId)
 				is Msg.MoveNext -> moveToNext(state = this, msg = msg)
-				is Msg.Finished -> CardPracticeComponent.State.Finished(
+				is Msg.Finished -> CardPracticeStore.State.Finished(
 					totalCount = msg.totalCount,
 					correctCount = msg.correctCount,
 				)
 			}
 
-		private fun createInProgress(words: List<CardPracticeWord>): CardPracticeComponent.State {
-			val currentIndex = 0
-			return CardPracticeComponent.State.InProgress(
-				words = words,
-				currentIndex = currentIndex,
-				currentWord = words[currentIndex],
-				totalCount = words.size,
-				progressIndex = currentIndex + 1,
-				selectedOptionId = null,
-				isAnswerRevealed = false,
-				isCorrect = false,
-				correctCount = 0,
-			)
-		}
-
 		private fun selectOption(
-			state: CardPracticeComponent.State,
+			state: CardPracticeStore.State,
 			optionId: String,
-		): CardPracticeComponent.State {
-			if (state !is CardPracticeComponent.State.InProgress) return state
-			if (state.isAnswerRevealed) return state
+		): CardPracticeStore.State {
+			if (state !is CardPracticeStore.State.InProgress) return state
+			if (state.answerRevealed) return state
 			return state.copy(
 				selectedOptionId = optionId,
-				isAnswerRevealed = true,
-				isCorrect = optionId == state.currentWord.correctOptionId,
+				answerRevealed = true,
+				correct = optionId == state.currentWord.correctOptionId,
 			)
 		}
 
 		private fun moveToNext(
-			state: CardPracticeComponent.State,
+			state: CardPracticeStore.State,
 			msg: Msg.MoveNext,
-		): CardPracticeComponent.State {
-			if (state !is CardPracticeComponent.State.InProgress) return state
+		): CardPracticeStore.State {
+			if (state !is CardPracticeStore.State.InProgress) return state
 			return state.copy(
 				currentIndex = msg.nextIndex,
 				currentWord = state.words[msg.nextIndex],
 				progressIndex = msg.nextIndex + 1,
 				selectedOptionId = null,
-				isAnswerRevealed = false,
-				isCorrect = false,
+				answerRevealed = false,
+				correct = false,
 				correctCount = msg.correctCount,
 			)
 		}
@@ -120,9 +115,9 @@ internal class CardPracticeStoreFactory @Inject constructor(
 	) : BaseCoroutineExecutor<
 		CardPracticeStore.Intent,
 		Action,
-		CardPracticeComponent.State,
+			CardPracticeStore.State,
 		Msg,
-		CardPracticeComponent.Label,
+			CardPracticeStore.Label,
 		>() {
 
 		override fun executeAction(action: Action) {
@@ -135,7 +130,7 @@ internal class CardPracticeStoreFactory @Inject constructor(
 			when (intent) {
 				CardPracticeStore.Intent.Close,
 				CardPracticeStore.Intent.Finish,
-				-> publish(CardPracticeComponent.Label.Close)
+				-> publish(CardPracticeStore.Label.Close)
 				CardPracticeStore.Intent.Retry -> loadSession(cardId = cardId)
 				CardPracticeStore.Intent.PlayAudio -> Unit
 				is CardPracticeStore.Intent.SelectOption -> {
@@ -160,10 +155,10 @@ internal class CardPracticeStoreFactory @Inject constructor(
 		}
 
 		private fun handleContinue() {
-			val progress = state() as? CardPracticeComponent.State.InProgress ?: return
-			if (!progress.isAnswerRevealed) return
+			val progress = state() as? CardPracticeStore.State.InProgress ?: return
+			if (!progress.answerRevealed) return
 
-			val nextCorrectCount = if (progress.isCorrect) {
+			val nextCorrectCount = if (progress.correct) {
 				progress.correctCount + 1
 			} else {
 				progress.correctCount

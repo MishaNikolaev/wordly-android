@@ -25,13 +25,13 @@ import com.nmichail.wordly.android.component.wui.theme.Wui
 
 @Composable
 fun PracticeAnswerFeedback(
-	isCorrect: Boolean,
+	correct: Boolean,
 	correctText: String,
 	incorrectText: String,
 	modifier: Modifier = Modifier,
 	correctAnswerText: String? = null,
 ) {
-	val color = if (isCorrect) {
+	val color = if (correct) {
 		Wui.colors.success
 	} else {
 		MaterialTheme.colorScheme.error
@@ -45,18 +45,18 @@ fun PracticeAnswerFeedback(
 			horizontalArrangement = Arrangement.spacedBy(8.dp),
 		) {
 			Icon(
-				imageVector = if (isCorrect) Icons.Rounded.CheckCircle else Icons.Rounded.Cancel,
+				imageVector = if (correct) Icons.Rounded.CheckCircle else Icons.Rounded.Cancel,
 				contentDescription = null,
 				tint = color,
 				modifier = Modifier.size(22.dp),
 			)
 			Text(
-				text = if (isCorrect) correctText else incorrectText,
+				text = if (correct) correctText else incorrectText,
 				style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
 				color = color,
 			)
 		}
-		if (!isCorrect && !correctAnswerText.isNullOrBlank()) {
+		if (!correct && !correctAnswerText.isNullOrBlank()) {
 			Text(
 				text = correctAnswerText,
 				style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Medium),
@@ -77,12 +77,12 @@ private fun PracticeAnswerFeedbackPreview(
 			verticalArrangement = Arrangement.spacedBy(16.dp),
 		) {
 			PracticeAnswerFeedback(
-				isCorrect = true,
+				correct = true,
 				correctText = "Верно",
 				incorrectText = "Неверно",
 			)
 			PracticeAnswerFeedback(
-				isCorrect = false,
+				correct = false,
 				correctText = "Верно",
 				incorrectText = "Неверно",
 				correctAnswerText = "correct",

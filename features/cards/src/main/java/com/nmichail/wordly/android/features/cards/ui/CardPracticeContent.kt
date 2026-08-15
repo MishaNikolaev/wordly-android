@@ -23,6 +23,7 @@ import com.nmichail.wordly.android.component.wui.components.button.WuiButton
 import com.nmichail.wordly.android.component.wui.components.button.WuiTextLink
 import com.nmichail.wordly.android.features.cards.R
 import com.nmichail.wordly.android.features.cards.presentation.detail.CardPracticeComponent
+import com.nmichail.wordly.android.features.cards.presentation.detail.CardPracticeStore
 import com.nmichail.wordly.android.features.cards.ui.detail.CardPracticeInProgressContent
 import com.nmichail.wordly.android.shared.practice.PracticeFinishedContent
 
@@ -34,7 +35,7 @@ fun CardPracticeContent(
 	val state by component.model.subscribeAsState()
 
 	when (val currentState = state) {
-		CardPracticeComponent.State.Loading -> {
+		CardPracticeStore.State.Loading -> {
 			Box(
 				modifier = modifier
 					.fillMaxSize()
@@ -44,21 +45,21 @@ fun CardPracticeContent(
 				CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
 			}
 		}
-		CardPracticeComponent.State.Error -> {
+		CardPracticeStore.State.Error -> {
 			CardPracticeError(
 				onRetryClick = component::handleRetry,
 				onCloseClick = component::handleClose,
 				modifier = modifier.fillMaxSize(),
 			)
 		}
-		is CardPracticeComponent.State.InProgress -> {
+		is CardPracticeStore.State.InProgress -> {
 			CardPracticeInProgressContent(
 				state = currentState,
 				component = component,
 				modifier = modifier,
 			)
 		}
-		is CardPracticeComponent.State.Finished -> {
+		is CardPracticeStore.State.Finished -> {
 			PracticeFinishedContent(
 				correctCount = currentState.correctCount,
 				totalCount = currentState.totalCount,

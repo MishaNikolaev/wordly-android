@@ -25,11 +25,11 @@ internal class ProfileEditStoreFactory @Inject constructor(
 			ProfileEditStore,
 			Store<
 				ProfileEditStore.Intent,
-				ProfileEditComponent.State,
-				ProfileEditComponent.Label,
+				ProfileEditStore.State,
+				ProfileEditStore.Label,
 				> by storeFactory.create(
 				name = "ProfileEditStore",
-				initialState = ProfileEditComponent.State.Loading,
+				initialState = ProfileEditStore.State.Loading,
 				bootstrapper = SimpleBootstrapper(Action.Load),
 				executorFactory = ::ExecutorImpl,
 				reducer = ReducerImpl,
@@ -59,13 +59,14 @@ internal class ProfileEditStoreFactory @Inject constructor(
 		data object Saved : Msg
 	}
 
-	private object ReducerImpl : Reducer<ProfileEditComponent.State, Msg> {
+	private object ReducerImpl : Reducer<ProfileEditStore.State, Msg> {
 
-		override fun ProfileEditComponent.State.reduce(msg: Msg): ProfileEditComponent.State =
-			when (msg) {
-				Msg.Loading -> ProfileEditComponent.State.Loading
-				Msg.SetError -> ProfileEditComponent.State.Error
-				is Msg.Loaded -> ProfileEditComponent.State.Content(
+		override fun ProfileEditStore.State.reduce(msg: Msg): ProfileEditStore.State {
+			val content = this as? ProfileEditStore.State.Content
+			return when (msg) {
+				Msg.Loading -> ProfileEditStore.State.Loading
+				Msg.SetError -> ProfileEditStore.State.Error
+				is Msg.Loaded -> ProfileEditStore.State.Content(
 					email = msg.profile.email,
 					firstName = msg.profile.firstName,
 					lastName = msg.profile.lastName,
@@ -73,24 +74,12 @@ internal class ProfileEditStoreFactory @Inject constructor(
 					saving = false,
 					saved = false,
 				)
-				is Msg.FirstNameChanged -> contentOrThis {
-					copy(firstName = msg.value, saved = false)
-				}
-				is Msg.LastNameChanged -> contentOrThis {
-					copy(lastName = msg.value, saved = false)
-				}
-				is Msg.EnglishLevelChanged -> contentOrThis {
-					copy(englishLevel = msg.value, saved = false)
-				}
-				is Msg.Saving -> contentOrThis { copy(saving = msg.saving) }
-				Msg.Saved -> contentOrThis { copy(saving = false, saved = true) }
+				is Msg.FirstNameChanged -> content?.copy(firstName = msg.value, saved = false) ?: this
+				is Msg.LastNameChanged -> content?.copy(lastName = msg.value, saved = false) ?: this
+				is Msg.EnglishLevelChanged -> content?.copy(englishLevel = msg.value, saved = false) ?: this
+				is Msg.Saving -> content?.copy(saving = msg.saving) ?: this
+				Msg.Saved -> content?.copy(saving = false, saved = true) ?: this
 			}
-
-		private fun ProfileEditComponent.State.contentOrThis(
-			update: ProfileEditComponent.State.Content.() -> ProfileEditComponent.State.Content,
-		): ProfileEditComponent.State {
-			val content = this as? ProfileEditComponent.State.Content ?: return this
-			return content.update()
 		}
 	}
 
@@ -98,9 +87,9 @@ internal class ProfileEditStoreFactory @Inject constructor(
 		BaseCoroutineExecutor<
 			ProfileEditStore.Intent,
 			Action,
-			ProfileEditComponent.State,
+			ProfileEditStore.State,
 			Msg,
-			ProfileEditComponent.Label,
+			ProfileEditStore.Label,
 			>() {
 
 		override fun executeAction(action: Action) {
@@ -112,7 +101,7 @@ internal class ProfileEditStoreFactory @Inject constructor(
 		override fun executeIntent(intent: ProfileEditStore.Intent) {
 			when (intent) {
 				ProfileEditStore.Intent.Retry -> load()
-				ProfileEditStore.Intent.Back -> publish(ProfileEditComponent.Label.Close)
+				ProfileEditStore.Intent.Back -> publish(ProfileEditStore.Label.Close)
 				is ProfileEditStore.Intent.ChangeFirstName -> {
 					dispatch(Msg.FirstNameChanged(value = intent.value))
 				}
@@ -136,7 +125,7 @@ internal class ProfileEditStoreFactory @Inject constructor(
 		}
 
 		private fun save() {
-			val content = state() as? ProfileEditComponent.State.Content ?: return
+			val content = state() as? ProfileEditStore.State.Content ?: return
 			if (content.saving) return
 			dispatch(Msg.Saving(saving = true))
 			launchTry {

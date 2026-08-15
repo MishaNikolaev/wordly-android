@@ -24,8 +24,8 @@ internal class DefaultNetworkSelectionComponent(
 		launchTry {
 			for (label in store.labelsChannel(lifecycle)) {
 				when (label) {
-					NetworkSelectionComponent.Label.NavigateBack -> onFinished()
-					NetworkSelectionComponent.Label.RestartApp -> networkSelectionRouter.restartApp()
+					NetworkSelectionStore.Label.NavigateBack -> onFinished()
+					NetworkSelectionStore.Label.RestartApp -> networkSelectionRouter.restartApp()
 				}
 			}
 		} catch {
@@ -33,7 +33,7 @@ internal class DefaultNetworkSelectionComponent(
 		}
 	}
 
-	override val model: Value<NetworkSelectionComponent.State> = store.asValue()
+	override val model: Value<NetworkSelectionStore.State> = store.asValue()
 
 	override fun handleSelectStand(stand: NetworkStand) {
 		store.accept(NetworkSelectionStore.Intent.SelectStand(stand))

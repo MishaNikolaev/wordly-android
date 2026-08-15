@@ -5,7 +5,7 @@ import com.arkivanov.decompose.value.Value
 
 interface ProfileEditComponent {
 
-	val model: Value<State>
+	val model: Value<ProfileEditStore.State>
 
 	fun handleBack()
 
@@ -18,27 +18,6 @@ interface ProfileEditComponent {
 	fun handleChangeEnglishLevel(value: String)
 
 	fun handleSave()
-
-	sealed interface State {
-
-		data object Loading : State
-
-		data object Error : State
-
-		data class Content(
-			val email: String,
-			val firstName: String,
-			val lastName: String,
-			val englishLevel: String,
-			val saving: Boolean,
-			val saved: Boolean = false,
-		) : State
-	}
-
-	sealed interface Label {
-
-		data object Close : Label
-	}
 
 	fun interface Factory {
 

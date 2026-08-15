@@ -25,11 +25,11 @@ import androidx.compose.ui.window.DialogProperties
 import com.nmichail.wordly.android.component.wui.R as ComponentR
 import com.nmichail.wordly.android.features.profile.R
 import com.nmichail.wordly.android.features.profile.domain.entity.NotificationTimeSlot
-import com.nmichail.wordly.android.features.profile.presentation.ProfileComponent
 
 @Composable
 fun NotificationsDialog(
-	dialog: ProfileComponent.NotificationsDialogState,
+	options: List<NotificationTimeSlot>,
+	selected: Set<String>,
 	onToggle: (NotificationTimeSlot) -> Unit,
 	onConfirm: () -> Unit,
 	onDismiss: () -> Unit,
@@ -58,10 +58,10 @@ fun NotificationsDialog(
 					color = MaterialTheme.colorScheme.onSurface,
 				)
 				Column(modifier = Modifier.padding(top = 16.dp)) {
-					dialog.options.forEach { slot ->
+					options.forEach { slot ->
 						NotificationOptionRow(
 							time = slot.time,
-							checked = slot.time in dialog.selected,
+							checked = slot.time in selected,
 							onClick = { onToggle(slot) },
 						)
 					}

@@ -26,6 +26,7 @@ import com.nmichail.wordly.android.features.materials.R
 import com.nmichail.wordly.android.features.materials.domain.entity.MaterialFilter
 import com.nmichail.wordly.android.features.materials.domain.entity.MaterialItem
 import com.nmichail.wordly.android.features.materials.presentation.MaterialsComponent
+import com.nmichail.wordly.android.features.materials.presentation.MaterialsStore
 
 @Composable
 fun MaterialsContent(
@@ -35,12 +36,12 @@ fun MaterialsContent(
 	val state by component.model.subscribeAsState()
 
 	when (val current = state) {
-		MaterialsComponent.State.Loading -> MaterialsLoading(modifier = modifier)
-		MaterialsComponent.State.Error -> MaterialsError(
+		MaterialsStore.State.Loading -> MaterialsLoading(modifier = modifier)
+		is MaterialsStore.State.Error -> MaterialsError(
 			onRetryClick = component::handleRetry,
 			modifier = modifier.fillMaxSize(),
 		)
-		is MaterialsComponent.State.Content -> MaterialsLoaded(
+		is MaterialsStore.State.Content -> MaterialsLoaded(
 			state = current,
 			onFilterChange = component::handleFilterChange,
 			onOpenMaterial = component::handleOpenMaterial,
@@ -98,7 +99,7 @@ private fun MaterialsError(
 
 @Composable
 private fun MaterialsLoaded(
-	state: MaterialsComponent.State.Content,
+	state: MaterialsStore.State.Content,
 	onFilterChange: (MaterialFilter) -> Unit,
 	onOpenMaterial: (String) -> Unit,
 	modifier: Modifier = Modifier,

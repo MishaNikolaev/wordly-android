@@ -1,9 +1,31 @@
 package com.nmichail.wordly.android.features.authorization.signin.presentation
 
 import com.arkivanov.mvikotlin.core.store.Store
+import com.nmichail.wordly.android.core.validation.email.EmailValidationItem
+import com.nmichail.wordly.android.core.validation.password.PasswordValidationItem
 
-internal interface SignInStore :
-	Store<SignInStore.Intent, SignInComponent.State, SignInComponent.Label> {
+interface SignInStore :
+	Store<SignInStore.Intent, SignInStore.State, SignInStore.Label> {
+
+	sealed interface State {
+
+		data object Loading : State
+
+		data class Error(val content: Content) : State
+
+		data class Content(
+			val email: EmailValidationItem,
+			val password: PasswordValidationItem,
+			val submitting: Boolean,
+		) : State
+	}
+
+	sealed interface Label {
+
+		data object OpenSignUp : Label
+
+		data object OpenMainHost : Label
+	}
 
 	sealed interface Intent {
 
@@ -15,6 +37,6 @@ internal interface SignInStore :
 
 		data object NavigateToSignUp : Intent
 
-		data object ErrorShown : Intent
+		data object Retry : Intent
 	}
 }

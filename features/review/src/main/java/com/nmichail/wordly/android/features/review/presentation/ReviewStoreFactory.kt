@@ -22,9 +22,9 @@ internal class ReviewStoreFactory @Inject constructor(
 	fun create(): ReviewStore =
 		object :
 			ReviewStore,
-			Store<ReviewStore.Intent, ReviewComponent.State, ReviewComponent.Label> by storeFactory.create(
+			Store<ReviewStore.Intent, ReviewStore.State, ReviewStore.Label> by storeFactory.create(
 				name = "ReviewStore",
-				initialState = ReviewComponent.State.Loading,
+				initialState = ReviewStore.State.Loading,
 				bootstrapper = SimpleBootstrapper(Action.Load),
 				executorFactory = ::ExecutorImpl,
 				reducer = ReducerImpl,
@@ -52,76 +52,78 @@ internal class ReviewStoreFactory @Inject constructor(
 			val correctCount: Int,
 		) : Msg
 
-		data class Finished(
-			val totalCount: Int,
-			val correctCount: Int,
-		) : Msg
+		data class Finished(val correctCount: Int) : Msg
 	}
 
-	private object ReducerImpl : Reducer<ReviewComponent.State, Msg> {
+	private object ReducerImpl : Reducer<ReviewStore.State, Msg> {
 
-		override fun ReviewComponent.State.reduce(msg: Msg): ReviewComponent.State =
+		override fun ReviewStore.State.reduce(msg: Msg): ReviewStore.State =
 			when (msg) {
-				is Msg.Loading -> ReviewComponent.State.Loading
-				is Msg.SessionLoaded -> createInProgress(words = msg.words)
-				is Msg.SetError -> ReviewComponent.State.Error
-				is Msg.OptionSelected -> selectOption(state = this, optionId = msg.optionId)
-				is Msg.Submitting -> setSubmitting(state = this)
-				is Msg.MoveNext -> moveToNext(state = this, msg = msg)
-				is Msg.Finished -> ReviewComponent.State.Finished(
-					totalCount = msg.totalCount,
-					correctCount = msg.correctCount,
+				Msg.Loading -> ReviewStore.State.Loading
+				is Msg.SessionLoaded -> ReviewStore.State.Content(
+					words = msg.words,
+					currentIndex = 0,
+					currentWord = msg.words[0],
+					totalCount = msg.words.size,
+					progressIndex = 1,
+					selectedOptionId = null,
+					answerRevealed = false,
+					correct = false,
+					correctCount = 0,
+					submitting = false,
+					finished = false,
 				)
+				Msg.SetError -> ReviewStore.State.Error
+				is Msg.OptionSelected -> selectOption(state = this, optionId = msg.optionId)
+				Msg.Submitting -> setSubmitting(state = this)
+				is Msg.MoveNext -> moveToNext(state = this, msg = msg)
+				is Msg.Finished -> finish(state = this, correctCount = msg.correctCount)
 			}
 
-		private fun createInProgress(words: List<ReviewWord>): ReviewComponent.State {
-			val currentIndex = 0
-			return ReviewComponent.State.InProgress(
-				words = words,
-				currentIndex = currentIndex,
-				currentWord = words[currentIndex],
-				totalCount = words.size,
-				progressIndex = currentIndex + 1,
-				selectedOptionId = null,
-				isAnswerRevealed = false,
-				isCorrect = false,
-				correctCount = 0,
-				isSubmitting = false,
-			)
-		}
-
 		private fun selectOption(
-			state: ReviewComponent.State,
+			state: ReviewStore.State,
 			optionId: String,
-		): ReviewComponent.State {
-			if (state !is ReviewComponent.State.InProgress) return state
-			if (state.isAnswerRevealed || state.isSubmitting) return state
+		): ReviewStore.State {
+			if (state !is ReviewStore.State.Content || state.finished) return state
+			if (state.answerRevealed || state.submitting) return state
 			return state.copy(
 				selectedOptionId = optionId,
-				isAnswerRevealed = true,
-				isCorrect = optionId == state.currentWord.correctOptionId,
+				answerRevealed = true,
+				correct = optionId == state.currentWord.correctOptionId,
 			)
 		}
 
-		private fun setSubmitting(state: ReviewComponent.State): ReviewComponent.State {
-			if (state !is ReviewComponent.State.InProgress) return state
-			return state.copy(isSubmitting = true)
+		private fun setSubmitting(state: ReviewStore.State): ReviewStore.State {
+			if (state !is ReviewStore.State.Content || state.finished) return state
+			return state.copy(submitting = true)
 		}
 
 		private fun moveToNext(
-			state: ReviewComponent.State,
+			state: ReviewStore.State,
 			msg: Msg.MoveNext,
-		): ReviewComponent.State {
-			if (state !is ReviewComponent.State.InProgress) return state
+		): ReviewStore.State {
+			if (state !is ReviewStore.State.Content || state.finished) return state
 			return state.copy(
 				currentIndex = msg.nextIndex,
 				currentWord = state.words[msg.nextIndex],
 				progressIndex = msg.nextIndex + 1,
 				selectedOptionId = null,
-				isAnswerRevealed = false,
-				isCorrect = false,
+				answerRevealed = false,
+				correct = false,
 				correctCount = msg.correctCount,
-				isSubmitting = false,
+				submitting = false,
+			)
+		}
+
+		private fun finish(
+			state: ReviewStore.State,
+			correctCount: Int,
+		): ReviewStore.State {
+			if (state !is ReviewStore.State.Content) return state
+			return state.copy(
+				correctCount = correctCount,
+				submitting = false,
+				finished = true,
 			)
 		}
 	}
@@ -130,9 +132,9 @@ internal class ReviewStoreFactory @Inject constructor(
 		BaseCoroutineExecutor<
 			ReviewStore.Intent,
 			Action,
-			ReviewComponent.State,
+			ReviewStore.State,
 			Msg,
-			ReviewComponent.Label,
+			ReviewStore.Label,
 			>() {
 
 		override fun executeAction(action: Action) {
@@ -145,7 +147,7 @@ internal class ReviewStoreFactory @Inject constructor(
 			when (intent) {
 				ReviewStore.Intent.Close,
 				ReviewStore.Intent.Finish,
-				-> publish(ReviewComponent.Label.Close)
+				-> publish(ReviewStore.Label.Close)
 				ReviewStore.Intent.Retry -> loadSession()
 				ReviewStore.Intent.PlayAudio -> Unit
 				is ReviewStore.Intent.SelectOption -> {
@@ -170,30 +172,25 @@ internal class ReviewStoreFactory @Inject constructor(
 		}
 
 		private fun submitAndAdvance() {
-			val progress = state() as? ReviewComponent.State.InProgress ?: return
-			if (!progress.isAnswerRevealed || progress.isSubmitting) return
-			val selectedOptionId = progress.selectedOptionId ?: return
+			val content = state() as? ReviewStore.State.Content ?: return
+			if (content.finished || !content.answerRevealed || content.submitting) return
+			val selectedOptionId = content.selectedOptionId ?: return
 
 			dispatch(Msg.Submitting)
 			launchTry {
 				submitReviewAnswerUseCase(
-					progress.currentWord.id,
+					content.currentWord.id,
 					selectedOptionId,
-					progress.isCorrect,
+					content.correct,
 				)
-				val nextCorrectCount = if (progress.isCorrect) {
-					progress.correctCount + 1
+				val nextCorrectCount = if (content.correct) {
+					content.correctCount + 1
 				} else {
-					progress.correctCount
+					content.correctCount
 				}
-				val nextIndex = progress.currentIndex + 1
-				if (nextIndex >= progress.totalCount) {
-					dispatch(
-						Msg.Finished(
-							totalCount = progress.totalCount,
-							correctCount = nextCorrectCount,
-						),
-					)
+				val nextIndex = content.currentIndex + 1
+				if (nextIndex >= content.totalCount) {
+					dispatch(Msg.Finished(correctCount = nextCorrectCount))
 				} else {
 					dispatch(
 						Msg.MoveNext(

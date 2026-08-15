@@ -20,14 +20,14 @@ internal class DefaultBooksComponent(
 		booksStoreFactory.create()
 	}
 
-	override val model: Value<BooksComponent.State> = store.asValue()
+	override val model: Value<BooksStore.State> = store.asValue()
 
 	init {
 		launchTry {
 			for (label in store.labelsChannel(lifecycle)) {
 				when (label) {
-					BooksComponent.Label.Close -> booksRouter.navigateBack()
-					is BooksComponent.Label.OpenBook -> onBookClick(label.book)
+					BooksStore.Label.Close -> booksRouter.navigateBack()
+					is BooksStore.Label.OpenBook -> onBookClick(label.book)
 				}
 			}
 		} catch {

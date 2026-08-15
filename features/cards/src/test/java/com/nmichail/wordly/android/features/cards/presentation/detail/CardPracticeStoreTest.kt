@@ -79,7 +79,7 @@ class CardPracticeStoreTest {
 
 		val store = createStore()
 
-		assertEquals(CardPracticeComponent.State.Error, store.state)
+		assertEquals(CardPracticeStore.State.Error, store.state)
 	}
 
 	@Test
@@ -88,7 +88,7 @@ class CardPracticeStoreTest {
 
 		val store = createStore()
 
-		assertEquals(CardPracticeComponent.State.Error, store.state)
+		assertEquals(CardPracticeStore.State.Error, store.state)
 	}
 
 	@Test
@@ -101,8 +101,8 @@ class CardPracticeStoreTest {
 		assertEquals(
 			inProgress(
 				selectedOptionId = firstWord.correctOptionId,
-				isAnswerRevealed = true,
-				isCorrect = true,
+				answerRevealed = true,
+				correct = true,
 			),
 			store.state,
 		)
@@ -118,8 +118,8 @@ class CardPracticeStoreTest {
 		assertEquals(
 			inProgress(
 				selectedOptionId = "hypothesis-1",
-				isAnswerRevealed = true,
-				isCorrect = false,
+				answerRevealed = true,
+				correct = false,
 			),
 			store.state,
 		)
@@ -165,7 +165,7 @@ class CardPracticeStoreTest {
 		store.accept(CardPracticeStore.Intent.Continue)
 
 		assertEquals(
-			CardPracticeComponent.State.Finished(
+			CardPracticeStore.State.Finished(
 				totalCount = 2,
 				correctCount = 1,
 			),
@@ -204,7 +204,7 @@ class CardPracticeStoreTest {
 
 		store.accept(CardPracticeStore.Intent.Close)
 
-		assertEquals(CardPracticeComponent.Label.Close, labelsChannel.receive())
+		assertEquals(CardPracticeStore.Label.Close, labelsChannel.receive())
 	}
 
 	@Test
@@ -215,25 +215,25 @@ class CardPracticeStoreTest {
 
 		store.accept(CardPracticeStore.Intent.Finish)
 
-		assertEquals(CardPracticeComponent.Label.Close, labelsChannel.receive())
+		assertEquals(CardPracticeStore.Label.Close, labelsChannel.receive())
 	}
 
 	private fun inProgress(
 		currentIndex: Int = 0,
 		selectedOptionId: String? = null,
-		isAnswerRevealed: Boolean = false,
-		isCorrect: Boolean = false,
+		answerRevealed: Boolean = false,
+		correct: Boolean = false,
 		correctCount: Int = 0,
-	): CardPracticeComponent.State.InProgress =
-		CardPracticeComponent.State.InProgress(
+	): CardPracticeStore.State.InProgress =
+		CardPracticeStore.State.InProgress(
 			words = words,
 			currentIndex = currentIndex,
 			currentWord = words[currentIndex],
 			totalCount = words.size,
 			progressIndex = currentIndex + 1,
 			selectedOptionId = selectedOptionId,
-			isAnswerRevealed = isAnswerRevealed,
-			isCorrect = isCorrect,
+			answerRevealed = answerRevealed,
+			correct = correct,
 			correctCount = correctCount,
 		)
 

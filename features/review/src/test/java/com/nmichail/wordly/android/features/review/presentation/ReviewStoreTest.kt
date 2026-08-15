@@ -70,12 +70,12 @@ class ReviewStoreTest {
 	}
 
 	@Test
-	fun `load session success EXPECT in progress with first word`() = runTest {
+	fun `load session success EXPECT content with first word`() = runTest {
 		whenever(getReviewSessionUseCase()) doReturn words
 
 		val store = createStore()
 
-		assertEquals(inProgress(), store.state)
+		assertEquals(content(), store.state)
 	}
 
 	@Test
@@ -84,7 +84,7 @@ class ReviewStoreTest {
 
 		val store = createStore()
 
-		assertEquals(ReviewComponent.State.Error, store.state)
+		assertEquals(ReviewStore.State.Error, store.state)
 	}
 
 	@Test
@@ -93,7 +93,7 @@ class ReviewStoreTest {
 
 		val store = createStore()
 
-		assertEquals(ReviewComponent.State.Error, store.state)
+		assertEquals(ReviewStore.State.Error, store.state)
 	}
 
 	@Test
@@ -104,10 +104,10 @@ class ReviewStoreTest {
 		store.accept(ReviewStore.Intent.SelectOption(firstWord.correctOptionId))
 
 		assertEquals(
-			inProgress(
+			content(
 				selectedOptionId = firstWord.correctOptionId,
-				isAnswerRevealed = true,
-				isCorrect = true,
+				answerRevealed = true,
+				correct = true,
 			),
 			store.state,
 		)
@@ -121,10 +121,10 @@ class ReviewStoreTest {
 		store.accept(ReviewStore.Intent.SelectOption("recall-1"))
 
 		assertEquals(
-			inProgress(
+			content(
 				selectedOptionId = "recall-1",
-				isAnswerRevealed = true,
-				isCorrect = false,
+				answerRevealed = true,
+				correct = false,
 			),
 			store.state,
 		)
@@ -181,7 +181,7 @@ class ReviewStoreTest {
 		store.accept(ReviewStore.Intent.Continue)
 
 		assertEquals(
-			inProgress(
+			content(
 				currentIndex = 1,
 				correctCount = 1,
 			),
@@ -190,7 +190,7 @@ class ReviewStoreTest {
 	}
 
 	@Test
-	fun `continue on last word EXPECT finished`() = runTest {
+	fun `continue on last word EXPECT finished content`() = runTest {
 		whenever(getReviewSessionUseCase()) doReturn words
 		val store = createStore()
 		store.accept(ReviewStore.Intent.SelectOption(firstWord.correctOptionId))
@@ -200,9 +200,13 @@ class ReviewStoreTest {
 		store.accept(ReviewStore.Intent.Continue)
 
 		assertEquals(
-			ReviewComponent.State.Finished(
-				totalCount = 2,
+			content(
+				currentIndex = 1,
+				selectedOptionId = "resilience-2",
+				answerRevealed = true,
+				correct = false,
 				correctCount = 1,
+				finished = true,
 			),
 			store.state,
 		)
@@ -227,7 +231,7 @@ class ReviewStoreTest {
 
 		store.accept(ReviewStore.Intent.Retry)
 
-		assertEquals(inProgress(), store.state)
+		assertEquals(content(), store.state)
 	}
 
 	@Test
@@ -238,7 +242,7 @@ class ReviewStoreTest {
 
 		store.accept(ReviewStore.Intent.Close)
 
-		assertEquals(ReviewComponent.Label.Close, labelsChannel.receive())
+		assertEquals(ReviewStore.Label.Close, labelsChannel.receive())
 	}
 
 	@Test
@@ -249,28 +253,30 @@ class ReviewStoreTest {
 
 		store.accept(ReviewStore.Intent.Finish)
 
-		assertEquals(ReviewComponent.Label.Close, labelsChannel.receive())
+		assertEquals(ReviewStore.Label.Close, labelsChannel.receive())
 	}
 
-	private fun inProgress(
+	private fun content(
 		currentIndex: Int = 0,
 		selectedOptionId: String? = null,
-		isAnswerRevealed: Boolean = false,
-		isCorrect: Boolean = false,
+		answerRevealed: Boolean = false,
+		correct: Boolean = false,
 		correctCount: Int = 0,
-		isSubmitting: Boolean = false,
-	): ReviewComponent.State.InProgress =
-		ReviewComponent.State.InProgress(
+		submitting: Boolean = false,
+		finished: Boolean = false,
+	): ReviewStore.State.Content =
+		ReviewStore.State.Content(
 			words = words,
 			currentIndex = currentIndex,
 			currentWord = words[currentIndex],
 			totalCount = words.size,
 			progressIndex = currentIndex + 1,
 			selectedOptionId = selectedOptionId,
-			isAnswerRevealed = isAnswerRevealed,
-			isCorrect = isCorrect,
+			answerRevealed = answerRevealed,
+			correct = correct,
 			correctCount = correctCount,
-			isSubmitting = isSubmitting,
+			submitting = submitting,
+			finished = finished,
 		)
 
 	private fun createStore(): ReviewStore =

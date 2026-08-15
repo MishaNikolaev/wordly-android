@@ -45,13 +45,14 @@ import com.nmichail.wordly.android.component.wui.theme.WuiTypography
 import com.nmichail.wordly.android.features.cards.R
 import com.nmichail.wordly.android.features.cards.domain.entity.CardPracticeWord
 import com.nmichail.wordly.android.features.cards.presentation.detail.CardPracticeComponent
+import com.nmichail.wordly.android.features.cards.presentation.detail.CardPracticeStore
 import com.nmichail.wordly.android.shared.practice.PracticeAnswerFeedback
 import com.nmichail.wordly.android.shared.practice.PracticeOption
 import com.nmichail.wordly.android.shared.practice.PracticeOptions
 
 @Composable
 internal fun CardPracticeInProgressContent(
-	state: CardPracticeComponent.State.InProgress,
+	state: CardPracticeStore.State.InProgress,
 	component: CardPracticeComponent,
 	modifier: Modifier = Modifier,
 ) {
@@ -84,24 +85,24 @@ internal fun CardPracticeInProgressContent(
 				options = state.currentWord.options.map { PracticeOption(id = it.id, text = it.text) },
 				correctOptionId = state.currentWord.correctOptionId,
 				selectedOptionId = state.selectedOptionId,
-				isAnswerRevealed = state.isAnswerRevealed,
-				enabled = !state.isAnswerRevealed,
+				answerRevealed = state.answerRevealed,
+				enabled = !state.answerRevealed,
 				onOptionClick = component::handleSelectOption,
 			)
-			if (state.isAnswerRevealed) {
+			if (state.answerRevealed) {
 				val correctAnswerText = state.currentWord.options
 					.firstOrNull { it.id == state.currentWord.correctOptionId }
 					?.text
 				Spacer(modifier = Modifier.height(16.dp))
 				PracticeAnswerFeedback(
-					isCorrect = state.isCorrect,
+					correct = state.correct,
 					correctText = stringResource(R.string.card_practice_correct),
 					incorrectText = stringResource(R.string.card_practice_incorrect),
-					correctAnswerText = correctAnswerText.takeUnless { state.isCorrect },
+					correctAnswerText = correctAnswerText.takeUnless { state.correct },
 				)
 			}
 		}
-		if (state.isAnswerRevealed) {
+		if (state.answerRevealed) {
 			WuiButton(
 				text = stringResource(R.string.card_practice_continue),
 				onClick = component::handleContinue,

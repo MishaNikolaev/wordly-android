@@ -19,13 +19,13 @@ internal class DefaultCardPracticeComponent(
 		cardPracticeStoreFactory.create(cardId = cardId)
 	}
 
-	override val model: Value<CardPracticeComponent.State> = store.asValue()
+	override val model: Value<CardPracticeStore.State> = store.asValue()
 
 	init {
 		launchTry {
 			for (label in store.labelsChannel(lifecycle)) {
 				when (label) {
-					CardPracticeComponent.Label.Close -> cardPracticeRouter.navigateBack()
+					CardPracticeStore.Label.Close -> cardPracticeRouter.navigateBack()
 				}
 			}
 		} catch {

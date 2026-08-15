@@ -1,9 +1,35 @@
 package com.nmichail.wordly.android.features.constructor.presentation
 
 import com.arkivanov.mvikotlin.core.store.Store
+import com.nmichail.wordly.android.features.constructor.domain.entity.ConstructorLevelBanner
+import com.nmichail.wordly.android.features.constructor.domain.entity.ConstructorSection
+import com.nmichail.wordly.android.features.constructor.domain.entity.ConstructorTheme
 
-internal interface ConstructorStore :
-	Store<ConstructorStore.Intent, ConstructorComponent.State, ConstructorComponent.Label> {
+interface ConstructorStore :
+	Store<ConstructorStore.Intent, ConstructorStore.State, ConstructorStore.Label> {
+
+	sealed interface State {
+
+		data object Loading : State
+
+		data object Error : State
+
+		data class Content(
+			val title: String,
+			val searchQuery: String,
+			val searchPlaceholder: String,
+			val levelBanner: ConstructorLevelBanner?,
+			val allSections: List<ConstructorSection>,
+			val sections: List<ConstructorSection>,
+		) : State
+	}
+
+	sealed interface Label {
+
+		data object Close : Label
+
+		data class OpenTheme(val theme: ConstructorTheme) : Label
+	}
 
 	sealed interface Intent {
 

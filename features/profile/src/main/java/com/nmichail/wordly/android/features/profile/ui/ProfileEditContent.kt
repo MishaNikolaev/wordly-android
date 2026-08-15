@@ -35,6 +35,7 @@ import com.nmichail.wordly.android.component.wui.components.field.WuiSelectionFi
 import com.nmichail.wordly.android.component.wui.components.field.WuiTextField
 import com.nmichail.wordly.android.features.profile.R
 import com.nmichail.wordly.android.features.profile.presentation.edit.ProfileEditComponent
+import com.nmichail.wordly.android.features.profile.presentation.edit.ProfileEditStore
 
 @Composable
 fun ProfileEditContent(
@@ -44,16 +45,16 @@ fun ProfileEditContent(
 	val state by component.model.subscribeAsState()
 
 	when (val current = state) {
-		ProfileEditComponent.State.Loading -> ProfileEditLoading(modifier = modifier)
-		ProfileEditComponent.State.Error -> ProfileEditError(
-			onRetryClick = component::handleRetry,
-			onBackClick = component::handleBack,
-			modifier = modifier.fillMaxSize(),
-		)
-		is ProfileEditComponent.State.Content -> ProfileEditLoaded(
+		ProfileEditStore.State.Loading -> ProfileEditLoading(modifier = modifier)
+		is ProfileEditStore.State.Content -> ProfileEditLoaded(
 			state = current,
 			component = component,
 			modifier = modifier,
+		)
+		ProfileEditStore.State.Error -> ProfileEditError(
+			onRetryClick = component::handleRetry,
+			onBackClick = component::handleBack,
+			modifier = modifier.fillMaxSize(),
 		)
 	}
 }
@@ -110,7 +111,7 @@ private fun ProfileEditError(
 
 @Composable
 private fun ProfileEditLoaded(
-	state: ProfileEditComponent.State.Content,
+	state: ProfileEditStore.State.Content,
 	component: ProfileEditComponent,
 	modifier: Modifier = Modifier,
 ) {
@@ -170,7 +171,7 @@ private fun ProfileEditBackButton(
 
 @Composable
 private fun ProfileEditForm(
-	state: ProfileEditComponent.State.Content,
+	state: ProfileEditStore.State.Content,
 	component: ProfileEditComponent,
 	modifier: Modifier = Modifier,
 ) {

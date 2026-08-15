@@ -60,8 +60,8 @@ class DefaultReviewComponentTest {
 	}
 
 	@Test
-	fun `init EXPECT in progress state`() {
-		assertEquals(inProgress(), component.model.value)
+	fun `init EXPECT content state`() {
+		assertEquals(content(), component.model.value)
 	}
 
 	@Test
@@ -69,10 +69,10 @@ class DefaultReviewComponentTest {
 		component.handleSelectOption(firstWord.correctOptionId)
 
 		assertEquals(
-			inProgress(
+			content(
 				selectedOptionId = firstWord.correctOptionId,
-				isAnswerRevealed = true,
-				isCorrect = true,
+				answerRevealed = true,
+				correct = true,
 			),
 			component.model.value,
 		)
@@ -92,21 +92,22 @@ class DefaultReviewComponentTest {
 		verify(reviewRouter).navigateBack()
 	}
 
-	private fun inProgress(
+	private fun content(
 		selectedOptionId: String? = null,
-		isAnswerRevealed: Boolean = false,
-		isCorrect: Boolean = false,
-	): ReviewComponent.State.InProgress =
-		ReviewComponent.State.InProgress(
+		answerRevealed: Boolean = false,
+		correct: Boolean = false,
+	): ReviewStore.State.Content =
+		ReviewStore.State.Content(
 			words = words,
 			currentIndex = 0,
 			currentWord = firstWord,
 			totalCount = 1,
 			progressIndex = 1,
 			selectedOptionId = selectedOptionId,
-			isAnswerRevealed = isAnswerRevealed,
-			isCorrect = isCorrect,
+			answerRevealed = answerRevealed,
+			correct = correct,
 			correctCount = 0,
-			isSubmitting = false,
+			submitting = false,
+			finished = false,
 		)
 }

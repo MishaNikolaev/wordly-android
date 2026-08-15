@@ -20,14 +20,14 @@ internal class DefaultCardsComponent(
 		cardsStoreFactory.create()
 	}
 
-	override val model: Value<CardsComponent.State> = store.asValue()
+	override val model: Value<CardsStore.State> = store.asValue()
 
 	init {
 		launchTry {
 			for (label in store.labelsChannel(lifecycle)) {
 				when (label) {
-					CardsComponent.Label.Close -> cardsRouter.navigateBack()
-					is CardsComponent.Label.OpenCard -> onCardClick(label.item)
+					CardsStore.Label.Close -> cardsRouter.navigateBack()
+					is CardsStore.Label.OpenCard -> onCardClick(label.item)
 				}
 			}
 		} catch {

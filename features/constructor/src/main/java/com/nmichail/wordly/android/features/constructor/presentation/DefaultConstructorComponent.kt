@@ -20,14 +20,14 @@ internal class DefaultConstructorComponent(
 		constructorStoreFactory.create()
 	}
 
-	override val model: Value<ConstructorComponent.State> = store.asValue()
+	override val model: Value<ConstructorStore.State> = store.asValue()
 
 	init {
 		launchTry {
 			for (label in store.labelsChannel(lifecycle)) {
 				when (label) {
-					ConstructorComponent.Label.Close -> constructorRouter.navigateBack()
-					is ConstructorComponent.Label.OpenTheme -> onThemeClick(label.theme)
+					ConstructorStore.Label.Close -> constructorRouter.navigateBack()
+					is ConstructorStore.Label.OpenTheme -> onThemeClick(label.theme)
 				}
 			}
 		} catch {

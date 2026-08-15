@@ -46,6 +46,7 @@ import com.nmichail.wordly.android.component.wui.components.button.WuiTextLink
 import com.nmichail.wordly.android.features.books.R
 import com.nmichail.wordly.android.features.books.domain.entity.BooksLevelBanner
 import com.nmichail.wordly.android.features.books.presentation.BooksComponent
+import com.nmichail.wordly.android.features.books.presentation.BooksStore
 import com.nmichail.wordly.android.shared.catalog.CatalogRemoteImage
 
 @Composable
@@ -56,7 +57,7 @@ fun BooksContent(
 	val state by component.model.subscribeAsState()
 
 	when (val currentState = state) {
-		BooksComponent.State.Loading -> {
+		BooksStore.State.Loading -> {
 			Box(
 				modifier = modifier
 					.fillMaxSize()
@@ -66,14 +67,14 @@ fun BooksContent(
 				CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
 			}
 		}
-		BooksComponent.State.Error -> {
+		BooksStore.State.Error -> {
 			BooksError(
 				onRetryClick = component::handleRetry,
 				onBackClick = component::handleBack,
 				modifier = modifier.fillMaxSize(),
 			)
 		}
-		is BooksComponent.State.Content -> {
+		is BooksStore.State.Content -> {
 			BooksLoaded(
 				state = currentState,
 				component = component,
@@ -127,7 +128,7 @@ private fun BooksError(
 
 @Composable
 private fun BooksLoaded(
-	state: BooksComponent.State.Content,
+	state: BooksStore.State.Content,
 	component: BooksComponent,
 	modifier: Modifier = Modifier,
 ) {

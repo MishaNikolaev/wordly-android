@@ -1,9 +1,10 @@
 package com.nmichail.wordly.android.features.cards.presentation.detail
 
 import com.arkivanov.mvikotlin.core.store.Store
+import com.nmichail.wordly.android.features.cards.domain.entity.CardPracticeWord
 
-internal interface CardPracticeStore :
-	Store<CardPracticeStore.Intent, CardPracticeComponent.State, CardPracticeComponent.Label> {
+interface CardPracticeStore :
+	Store<CardPracticeStore.Intent, CardPracticeStore.State, CardPracticeStore.Label> {
 
 	sealed interface Intent {
 
@@ -18,5 +19,34 @@ internal interface CardPracticeStore :
 		data object Continue : Intent
 
 		data object Finish : Intent
+	}
+
+	sealed interface State {
+
+		data object Loading : State
+
+		data object Error : State
+
+		data class InProgress(
+			val words: List<CardPracticeWord>,
+			val currentIndex: Int,
+			val currentWord: CardPracticeWord,
+			val totalCount: Int,
+			val progressIndex: Int,
+			val selectedOptionId: String?,
+			val answerRevealed: Boolean,
+			val correct: Boolean,
+			val correctCount: Int,
+		) : State
+
+		data class Finished(
+			val totalCount: Int,
+			val correctCount: Int,
+		) : State
+	}
+
+	sealed interface Label {
+
+		data object Close : Label
 	}
 }

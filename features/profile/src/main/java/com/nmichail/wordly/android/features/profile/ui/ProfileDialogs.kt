@@ -8,6 +8,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringArrayResource
@@ -23,82 +27,156 @@ import com.nmichail.wordly.android.component.wui.components.dialog.WuiSelectionD
 import com.nmichail.wordly.android.core.preferences.domain.entity.AppThemeMode
 import com.nmichail.wordly.android.features.profile.R
 import com.nmichail.wordly.android.features.profile.domain.entity.DailyGoal
+import com.nmichail.wordly.android.features.profile.domain.entity.DailyGoals
+import com.nmichail.wordly.android.features.profile.domain.entity.EnglishLevels
+import com.nmichail.wordly.android.features.profile.domain.entity.NotificationTimeSlots
+import com.nmichail.wordly.android.features.profile.domain.entity.UserProfile
 import com.nmichail.wordly.android.features.profile.presentation.ProfileComponent
 
 private val LogoutDialogMaxWidth = 320.dp
 
+internal enum class ProfileDialog {
+	Level,
+	DailyGoal,
+	Notifications,
+	Theme,
+	Logout,
+}
+
 @Composable
-internal fun ProfileDialogs(
-	state: ProfileComponent.State.Content,
+internal fun ProfileDialogHost(
+	profile: UserProfile,
+	themeMode: AppThemeMode,
+	loggingOut: Boolean,
 	component: ProfileComponent,
+	content: @Composable (openDialog: (ProfileDialog) -> Unit) -> Unit,
 ) {
-	state.levelDialog?.let { dialog ->
-		LevelDialog(
-			dialog = dialog,
-			onConfirm = component::handleConfirmLevel,
-			onDismiss = component::handleDismissLevel,
-		)
+	var openDialog by remember { mutableStateOf<ProfileDialog?>(null) }
+	var notificationDraft by remember { mutableStateOf<Set<String>>(emptySet()) }
+	var themeInitial by remember { mutableStateOf<AppThemeMode?>(null) }
+
+	content { dialog ->
+		when (dialog) {
+			ProfileDialog.Notifications -> {
+				notificationDraft = profile.notificationTimes.map { it.time }.toSet()
+			}
+			ProfileDialog.Theme -> {
+				themeInitial = themeMode
+			}
+			else -> Unit
+		}
+		openDialog = dialog
 	}
-	state.dailyGoalDialog?.let { dialog ->
-		DailyGoalDialog(
-			dialog = dialog,
-			onConfirm = component::handleConfirmDailyGoal,
-			onDismiss = component::handleDismissDailyGoal,
+
+	ProfileDialogs(
+		profile = profile,
+		themeMode = themeMode,
+		loggingOut = loggingOut,
+		openDialog = openDialog,
+		notificationDraft = notificationDraft,
+		themeInitial = themeInitial,
+		component = component,
+		onOpenDialogChange = { openDialog = it },
+		onNotificationDraftChange = { notificationDraft = it },
+	)
+}
+
+@Composable
+private fun ProfileDialogs(
+	profile: UserProfile,
+	themeMode: AppThemeMode,
+	loggingOut: Boolean,
+	openDialog: ProfileDialog?,
+	notificationDraft: Set<String>,
+	themeInitial: AppThemeMode?,
+	component: ProfileComponent,
+	onOpenDialogChange: (ProfileDialog?) -> Unit,
+	onNotificationDraftChange: (Set<String>) -> Unit,
+) {
+	when (openDialog) {
+		ProfileDialog.Level -> LevelDialog(
+			selected = profile.englishLevel,
+			onConfirm = { level ->
+				component.handleUpdateLevel(level = level)
+				onOpenDialogChange(null)
+			},
+			onDismiss = { onOpenDialogChange(null) },
 		)
-	}
-	state.notificationsDialog?.let { dialog ->
-		NotificationsDialog(
-			dialog = dialog,
-			onToggle = component::handleToggleNotification,
-			onConfirm = component::handleConfirmNotifications,
-			onDismiss = component::handleDismissNotifications,
+		ProfileDialog.DailyGoal -> DailyGoalDialog(
+			selected = profile.dailyGoal,
+			onConfirm = { goal ->
+				component.handleUpdateDailyGoal(goal = goal)
+				onOpenDialogChange(null)
+			},
+			onDismiss = { onOpenDialogChange(null) },
 		)
-	}
-	state.themeDialog?.let { dialog ->
-		ThemeDialog(
-			dialog = dialog,
-			onSelect = component::handleSelectTheme,
-			onConfirm = component::handleConfirmTheme,
-			onDismiss = component::handleDismissTheme,
+		ProfileDialog.Notifications -> NotificationsDialog(
+			options = NotificationTimeSlots.options,
+			selected = notificationDraft,
+			onToggle = { slot ->
+				val next = notificationDraft.toMutableSet()
+				if (slot.time in next) {
+					next.remove(slot.time)
+				} else {
+					next.add(slot.time)
+				}
+				onNotificationDraftChange(next)
+			},
+			onConfirm = {
+				component.handleUpdateNotificationTimes(times = notificationDraft.toList())
+				onOpenDialogChange(null)
+			},
+			onDismiss = { onOpenDialogChange(null) },
 		)
-	}
-	if (state.logoutDialogVisible) {
-		LogoutDialog(
-			loggingOut = state.loggingOut,
-			onConfirm = component::handleConfirmLogout,
-			onDismiss = component::handleDismissLogout,
+		ProfileDialog.Theme -> ThemeDialog(
+			selected = themeMode,
+			onSelect = component::handleSetThemeMode,
+			onConfirm = { onOpenDialogChange(null) },
+			onDismiss = {
+				val initial = themeInitial
+				if (initial != null && themeMode != initial) {
+					component.handleSetThemeMode(mode = initial)
+				}
+				onOpenDialogChange(null)
+			},
 		)
+		ProfileDialog.Logout -> LogoutDialog(
+			loggingOut = loggingOut,
+			onConfirm = component::handleLogout,
+			onDismiss = { if (!loggingOut) onOpenDialogChange(null) },
+		)
+		null -> Unit
 	}
 }
 
 @Composable
 private fun LevelDialog(
-	dialog: ProfileComponent.LevelDialogState,
+	selected: String,
 	onConfirm: (String) -> Unit,
 	onDismiss: () -> Unit,
 ) {
 	val levelCodes = stringArrayResource(R.array.profile_english_level_codes).toList()
 	val levelLabels = stringArrayResource(R.array.profile_english_levels).toList()
-	val options = dialog.options.map { code ->
+	val options = EnglishLevels.codes.map { code ->
 		val index = levelCodes.indexOf(code)
 		if (index >= 0) levelLabels[index] else code
 	}
-	val selected = run {
-		val index = levelCodes.indexOf(dialog.selected)
-		if (index >= 0) levelLabels[index] else dialog.selected
+	val selectedLabel = run {
+		val index = levelCodes.indexOf(selected)
+		if (index >= 0) levelLabels[index] else selected
 	}
 
 	WuiSelectionDialog(
 		title = stringResource(R.string.profile_level_dialog_title),
 		options = options,
-		selectedOption = selected,
+		selectedOption = selectedLabel,
 		saveButtonText = stringResource(ComponentR.string.common_ok),
 		cancelButtonText = stringResource(ComponentR.string.common_cancel),
 		onDismiss = onDismiss,
 		onSave = { label ->
 			val index = options.indexOf(label)
 			if (index >= 0) {
-				onConfirm(dialog.options[index])
+				onConfirm(EnglishLevels.codes[index])
 			}
 		},
 	)
@@ -106,29 +184,30 @@ private fun LevelDialog(
 
 @Composable
 private fun DailyGoalDialog(
-	dialog: ProfileComponent.DailyGoalDialogState,
+	selected: DailyGoal,
 	onConfirm: (DailyGoal) -> Unit,
 	onDismiss: () -> Unit,
 ) {
-	val options = dialog.options.map { goal ->
+	val goals = DailyGoals.options
+	val options = goals.map { goal ->
 		stringResource(R.string.profile_daily_goal_value, goal.wordsPerDay)
 	}
-	val selected = stringResource(
+	val selectedLabel = stringResource(
 		R.string.profile_daily_goal_value,
-		dialog.selected.wordsPerDay,
+		selected.wordsPerDay,
 	)
 
 	WuiSelectionDialog(
 		title = stringResource(R.string.profile_daily_goal_dialog_title),
 		options = options,
-		selectedOption = selected,
+		selectedOption = selectedLabel,
 		saveButtonText = stringResource(ComponentR.string.common_ok),
 		cancelButtonText = stringResource(ComponentR.string.common_cancel),
 		onDismiss = onDismiss,
 		onSave = { label ->
 			val index = options.indexOf(label)
 			if (index >= 0) {
-				onConfirm(dialog.options[index])
+				onConfirm(goals[index])
 			}
 		},
 	)
@@ -136,18 +215,19 @@ private fun DailyGoalDialog(
 
 @Composable
 private fun ThemeDialog(
-	dialog: ProfileComponent.ThemeDialogState,
+	selected: AppThemeMode,
 	onSelect: (AppThemeMode) -> Unit,
 	onConfirm: () -> Unit,
 	onDismiss: () -> Unit,
 ) {
-	val options = dialog.options.map { themeModeLabel(mode = it) }
-	val selected = themeModeLabel(mode = dialog.selected)
+	val modes = AppThemeMode.entries
+	val options = modes.map { themeModeLabel(mode = it) }
+	val selectedLabel = themeModeLabel(mode = selected)
 
 	WuiSelectionDialog(
 		title = stringResource(R.string.profile_theme_dialog_title),
 		options = options,
-		selectedOption = selected,
+		selectedOption = selectedLabel,
 		saveButtonText = stringResource(ComponentR.string.common_ok),
 		cancelButtonText = stringResource(ComponentR.string.common_cancel),
 		onDismiss = onConfirm,
@@ -155,7 +235,7 @@ private fun ThemeDialog(
 		onOptionSelected = { label ->
 			val index = options.indexOf(label)
 			if (index >= 0) {
-				onSelect(dialog.options[index])
+				onSelect(modes[index])
 			}
 		},
 		onSave = { onConfirm() },
