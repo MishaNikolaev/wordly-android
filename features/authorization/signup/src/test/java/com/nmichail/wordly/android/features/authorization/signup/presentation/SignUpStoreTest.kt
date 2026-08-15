@@ -94,7 +94,7 @@ class SignUpStoreTest {
 		refreshToken = "refresh-token",
 	)
 	private val exception = IOException("network")
-	private val noConnectionError = NetworkException.ErrorMessage(
+	private val networkError = NetworkException.ErrorMessage(
 		statusCode = StatusCodes.NO_CONNECTION,
 		messageId = StatusCodes.NO_CONNECTION.statusCode,
 		message = "No connection",
@@ -108,16 +108,7 @@ class SignUpStoreTest {
 	@BeforeEach
 	fun setUp() {
 		lifecycle = createTestLifecycle()
-		store = createStore(
-			validateEmailUseCase = validateEmailUseCase,
-			validatePasswordUseCase = validatePasswordUseCase,
-			validateNameUseCase = validateNameUseCase,
-			validateNotEmptyUseCase = validateNotEmptyUseCase,
-			signUpUseCase = signUpUseCase,
-			saveAuthTokensUseCase = saveAuthTokensUseCase,
-			networkExceptionConverter = networkExceptionConverter,
-			errorDelegate = errorDelegate,
-		)
+		store = createStore()
 	}
 
 	@AfterEach
@@ -217,7 +208,7 @@ class SignUpStoreTest {
 	}
 
 	@Test
-	fun `submit with registration error EXPECT error state`() = runTest {
+	fun `submit with error EXPECT error state`() = runTest {
 		whenever(validateEmailUseCase(email)) doReturn emailValidItem
 		whenever(validatePasswordUseCase(password)) doReturn passwordValidItem
 		whenever(validateNameUseCase(firstName, NamePart.NAME)) doReturn firstNameValidItem
@@ -229,7 +220,7 @@ class SignUpStoreTest {
 		store.accept(SignUpStore.Intent.ChangeLastName(lastName))
 		store.accept(SignUpStore.Intent.ChangeEnglishLevel(englishLevel))
 		whenever(signUpUseCase(signUpForm)) doThrowSafe exception
-		whenever(networkExceptionConverter.convert(exception)) doReturn NetworkException.Unknown
+		whenever(networkExceptionConverter.convert(exception)) doReturn networkError
 
 		store.accept(SignUpStore.Intent.Submit)
 
@@ -249,7 +240,7 @@ class SignUpStoreTest {
 	}
 
 	@Test
-	fun `submit with no connection EXPECT error state`() = runTest {
+	fun `retry after error EXPECT content restored`() = runTest {
 		whenever(validateEmailUseCase(email)) doReturn emailValidItem
 		whenever(validatePasswordUseCase(password)) doReturn passwordValidItem
 		whenever(validateNameUseCase(firstName, NamePart.NAME)) doReturn firstNameValidItem
@@ -261,43 +252,33 @@ class SignUpStoreTest {
 		store.accept(SignUpStore.Intent.ChangeLastName(lastName))
 		store.accept(SignUpStore.Intent.ChangeEnglishLevel(englishLevel))
 		whenever(signUpUseCase(signUpForm)) doThrowSafe exception
-		whenever(networkExceptionConverter.convert(exception)) doReturn noConnectionError
-
+		whenever(networkExceptionConverter.convert(exception)) doReturn networkError
 		store.accept(SignUpStore.Intent.Submit)
 
+		store.accept(SignUpStore.Intent.Retry)
+
 		assertEquals(
-			SignUpStore.State.Error(
-				content = SignUpStore.State.Content(
-					email = emailValidItem,
-					password = passwordValidItem,
-					firstName = firstNameValidItem,
-					lastName = lastNameValidItem,
-					englishLevel = englishLevelValidItem,
-					submitting = false,
-				),
+			SignUpStore.State.Content(
+				email = emailValidItem,
+				password = passwordValidItem,
+				firstName = firstNameValidItem,
+				lastName = lastNameValidItem,
+				englishLevel = englishLevelValidItem,
+				submitting = false,
 			),
 			store.state,
 		)
 	}
-}
 
-private fun createStore(
-	validateEmailUseCase: ValidateEmailUseCase,
-	validatePasswordUseCase: ValidatePasswordUseCase,
-	validateNameUseCase: ValidateNameUseCase,
-	validateNotEmptyUseCase: ValidateNotEmptyUseCase,
-	signUpUseCase: SignUpUseCase,
-	saveAuthTokensUseCase: SaveAuthTokensUseCase,
-	networkExceptionConverter: NetworkExceptionConverter,
-	errorDelegate: ErrorDelegate,
-): SignUpStore =
-	SignUpStoreFactory(
-		validateEmailUseCase = validateEmailUseCase,
-		validatePasswordUseCase = validatePasswordUseCase,
-		validateNameUseCase = validateNameUseCase,
-		validateNotEmptyUseCase = validateNotEmptyUseCase,
-		signUpUseCase = signUpUseCase,
-		saveAuthTokensUseCase = saveAuthTokensUseCase,
-		networkExceptionConverter = networkExceptionConverter,
-		errorDelegate = errorDelegate,
-	).create()
+	private fun createStore(): SignUpStore =
+		SignUpStoreFactory(
+			validateEmailUseCase = validateEmailUseCase,
+			validatePasswordUseCase = validatePasswordUseCase,
+			validateNameUseCase = validateNameUseCase,
+			validateNotEmptyUseCase = validateNotEmptyUseCase,
+			signUpUseCase = signUpUseCase,
+			saveAuthTokensUseCase = saveAuthTokensUseCase,
+			networkExceptionConverter = networkExceptionConverter,
+			errorDelegate = errorDelegate,
+		).create()
+}

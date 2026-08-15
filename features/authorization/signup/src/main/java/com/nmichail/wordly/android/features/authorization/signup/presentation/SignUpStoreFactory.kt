@@ -24,145 +24,170 @@ import com.nmichail.wordly.android.shared.error.presentation.HandleErrorResult
 import javax.inject.Inject
 
 internal class SignUpStoreFactory @Inject constructor(
-	private val validateEmailUseCase: ValidateEmailUseCase,
-	private val validatePasswordUseCase: ValidatePasswordUseCase,
-	private val validateNameUseCase: ValidateNameUseCase,
-	private val validateNotEmptyUseCase: ValidateNotEmptyUseCase,
-	private val signUpUseCase: SignUpUseCase,
-	private val saveAuthTokensUseCase: SaveAuthTokensUseCase,
-	private val networkExceptionConverter: NetworkExceptionConverter,
-	private val errorDelegate: ErrorDelegate,
+    private val validateEmailUseCase: ValidateEmailUseCase,
+    private val validatePasswordUseCase: ValidatePasswordUseCase,
+    private val validateNameUseCase: ValidateNameUseCase,
+    private val validateNotEmptyUseCase: ValidateNotEmptyUseCase,
+    private val signUpUseCase: SignUpUseCase,
+    private val saveAuthTokensUseCase: SaveAuthTokensUseCase,
+    private val networkExceptionConverter: NetworkExceptionConverter,
+    private val errorDelegate: ErrorDelegate,
 ) {
 
-	private val storeFactory: StoreFactory = LoggingStoreFactory(DefaultStoreFactory())
+    private val storeFactory: StoreFactory = LoggingStoreFactory(DefaultStoreFactory())
 
-	fun create(): SignUpStore = object : SignUpStore,
-		Store<SignUpStore.Intent, SignUpStore.State, SignUpStore.Label> by storeFactory.create(
-			name = "SignUpStore",
-			initialState = SignUpStore.State.Content(
-				email = EmailValidationItem(),
-				password = PasswordValidationItem(),
-				firstName = NameValidationItem(namePart = NamePart.NAME),
-				lastName = NameValidationItem(namePart = NamePart.SURNAME),
-				englishLevel = NotEmptyValidationItem(),
-				submitting = false,
-			),
-			reducer = ReducerImpl,
-			executorFactory = ::ExecutorImpl,
-		) {}
+    fun create(): SignUpStore = object : SignUpStore,
+        Store<SignUpStore.Intent, SignUpStore.State, SignUpStore.Label> by storeFactory.create(
+            name = "SignUpStore",
+            initialState = SignUpStore.State.Content(
+                email = EmailValidationItem(),
+                password = PasswordValidationItem(),
+                firstName = NameValidationItem(namePart = NamePart.NAME),
+                lastName = NameValidationItem(namePart = NamePart.SURNAME),
+                englishLevel = NotEmptyValidationItem(),
+                submitting = false,
+            ),
+            reducer = ReducerImpl,
+            executorFactory = ::ExecutorImpl,
+        ) {}
 
-	private sealed interface Msg {
+    private sealed interface Msg {
 
-		data class ChangeEmail(val email: EmailValidationItem) : Msg
+        data class ChangeEmail(val email: EmailValidationItem) : Msg
 
-		data class ChangePassword(val password: PasswordValidationItem) : Msg
+        data class ChangePassword(val password: PasswordValidationItem) : Msg
 
-		data class ChangeFirstName(val firstName: NameValidationItem) : Msg
+        data class ChangeFirstName(val firstName: NameValidationItem) : Msg
 
-		data class ChangeLastName(val lastName: NameValidationItem) : Msg
+        data class ChangeLastName(val lastName: NameValidationItem) : Msg
 
-		data class ChangeEnglishLevel(val englishLevel: NotEmptyValidationItem) : Msg
+        data class ChangeEnglishLevel(val englishLevel: NotEmptyValidationItem) : Msg
 
-		data class SetSubmitting(val submitting: Boolean) : Msg
+        data class SetSubmitting(val submitting: Boolean) : Msg
 
-		data class SetError(val content: SignUpStore.State.Content) : Msg
+        data class SetError(val content: SignUpStore.State.Content) : Msg
 
-		data object RestoreContent : Msg
-	}
+        data object RestoreContent : Msg
+    }
 
-	private inner class ExecutorImpl :
-		BaseCoroutineExecutor<SignUpStore.Intent, Nothing, SignUpStore.State, Msg, SignUpStore.Label>() {
+    private inner class ExecutorImpl :
+        BaseCoroutineExecutor<SignUpStore.Intent, Nothing, SignUpStore.State, Msg, SignUpStore.Label>() {
 
-		override fun executeIntent(intent: SignUpStore.Intent) {
-			when (intent) {
-				is SignUpStore.Intent.ChangeEmail -> {
-					dispatch(Msg.ChangeEmail(validateEmailUseCase(intent.email.trim())))
-				}
-				is SignUpStore.Intent.ChangePassword -> {
-					dispatch(Msg.ChangePassword(validatePasswordUseCase(intent.password)))
-				}
-				is SignUpStore.Intent.ChangeFirstName -> {
-					dispatch(Msg.ChangeFirstName(validateNameUseCase(intent.firstName.trim(), NamePart.NAME)))
-				}
-				is SignUpStore.Intent.ChangeLastName -> {
-					dispatch(Msg.ChangeLastName(validateNameUseCase(intent.lastName.trim(), NamePart.SURNAME)))
-				}
-				is SignUpStore.Intent.ChangeEnglishLevel -> {
-					dispatch(Msg.ChangeEnglishLevel(validateNotEmptyUseCase(intent.englishLevel)))
-				}
-				SignUpStore.Intent.NavigateToSignIn -> {
-					val content = state() as? SignUpStore.State.Content ?: return
-					if (!content.submitting) {
-						publish(SignUpStore.Label.OpenSignIn)
-					}
-				}
-				SignUpStore.Intent.Submit -> submit()
-				SignUpStore.Intent.Retry -> dispatch(Msg.RestoreContent)
-			}
-		}
+        override fun executeIntent(intent: SignUpStore.Intent) {
+            when (intent) {
+                is SignUpStore.Intent.ChangeEmail -> {
+                    dispatch(Msg.ChangeEmail(validateEmailUseCase(intent.email.trim())))
+                }
 
-		private fun submit() {
-			val currentState = state() as? SignUpStore.State.Content ?: return
-			if (currentState.submitting) return
+                is SignUpStore.Intent.ChangePassword -> {
+                    dispatch(Msg.ChangePassword(validatePasswordUseCase(intent.password)))
+                }
 
-			val email = validateEmailUseCase(currentState.email.data.trim())
-			val password = validatePasswordUseCase(currentState.password.data)
-			val firstName = validateNameUseCase(currentState.firstName.data.trim(), NamePart.NAME)
-			val lastName = validateNameUseCase(currentState.lastName.data.trim(), NamePart.SURNAME)
-			val englishLevel = validateNotEmptyUseCase(currentState.englishLevel.data)
+                is SignUpStore.Intent.ChangeFirstName -> {
+                    dispatch(
+                        Msg.ChangeFirstName(
+                            validateNameUseCase(
+                                intent.firstName.trim(),
+                                NamePart.NAME
+                            )
+                        )
+                    )
+                }
 
-			dispatch(Msg.ChangeEmail(email))
-			dispatch(Msg.ChangePassword(password))
-			dispatch(Msg.ChangeFirstName(firstName))
-			dispatch(Msg.ChangeLastName(lastName))
-			dispatch(Msg.ChangeEnglishLevel(englishLevel))
-			val content = state() as? SignUpStore.State.Content ?: return
-			if (!content.areFieldsValid()) return
+                is SignUpStore.Intent.ChangeLastName -> {
+                    dispatch(
+                        Msg.ChangeLastName(
+                            validateNameUseCase(
+                                intent.lastName.trim(),
+                                NamePart.SURNAME
+                            )
+                        )
+                    )
+                }
 
-			dispatch(Msg.SetSubmitting(submitting = true))
-			launchTry {
-				val tokens = signUpUseCase(
-					SignUpForm(
-						email = email.data,
-						password = password.data,
-						firstName = firstName.data,
-						lastName = lastName.data,
-						englishLevel = englishLevel.data,
-					),
-				)
-				saveAuthTokensUseCase(tokens)
-				dispatch(Msg.SetSubmitting(submitting = false))
-				publish(SignUpStore.Label.OpenMainHost)
-			} catch { error ->
-				handleError(error)
-			}
-		}
+                is SignUpStore.Intent.ChangeEnglishLevel -> {
+                    dispatch(Msg.ChangeEnglishLevel(validateNotEmptyUseCase(intent.englishLevel)))
+                }
 
-		private fun handleError(error: Exception) {
-			val networkError = networkExceptionConverter.convert(error)
-			if (errorDelegate.handleError(networkError) == HandleErrorResult.HANDLED) {
-				dispatch(Msg.SetSubmitting(submitting = false))
-				return
-			}
-			val content = (state() as? SignUpStore.State.Content)?.copy(submitting = false) ?: return
-			dispatch(Msg.SetError(content = content))
-		}
-	}
+                SignUpStore.Intent.NavigateToSignIn -> {
+                    val content = state() as? SignUpStore.State.Content ?: return
+                    if (!content.submitting) {
+                        publish(SignUpStore.Label.OpenSignIn)
+                    }
+                }
 
-	private object ReducerImpl : Reducer<SignUpStore.State, Msg> {
+                SignUpStore.Intent.Submit -> submit()
 
-		override fun SignUpStore.State.reduce(msg: Msg): SignUpStore.State {
-			val content = this as? SignUpStore.State.Content
-			return when (msg) {
-				is Msg.ChangeEmail -> content?.copy(email = msg.email) ?: this
-				is Msg.ChangePassword -> content?.copy(password = msg.password) ?: this
-				is Msg.ChangeFirstName -> content?.copy(firstName = msg.firstName) ?: this
-				is Msg.ChangeLastName -> content?.copy(lastName = msg.lastName) ?: this
-				is Msg.ChangeEnglishLevel -> content?.copy(englishLevel = msg.englishLevel) ?: this
-				is Msg.SetSubmitting -> content?.copy(submitting = msg.submitting) ?: this
-				is Msg.SetError -> SignUpStore.State.Error(content = msg.content)
-				Msg.RestoreContent -> (this as? SignUpStore.State.Error)?.content ?: this
-			}
-		}
-	}
+                SignUpStore.Intent.Retry -> dispatch(Msg.RestoreContent)
+            }
+        }
+
+        private fun submit() {
+            val currentState = state() as? SignUpStore.State.Content ?: return
+            if (currentState.submitting) return
+
+            val email = validateEmailUseCase(currentState.email.data.trim())
+            val password = validatePasswordUseCase(currentState.password.data)
+            val firstName = validateNameUseCase(currentState.firstName.data.trim(), NamePart.NAME)
+            val lastName = validateNameUseCase(currentState.lastName.data.trim(), NamePart.SURNAME)
+            val englishLevel = validateNotEmptyUseCase(currentState.englishLevel.data)
+
+            dispatch(Msg.ChangeEmail(email))
+            dispatch(Msg.ChangePassword(password))
+            dispatch(Msg.ChangeFirstName(firstName))
+            dispatch(Msg.ChangeLastName(lastName))
+            dispatch(Msg.ChangeEnglishLevel(englishLevel))
+
+            val content = state() as? SignUpStore.State.Content ?: return
+            if (!content.areFieldsValid()) return
+
+            dispatch(Msg.SetSubmitting(submitting = true))
+            launchTry {
+                val tokens = signUpUseCase(
+                    SignUpForm(
+                        email = email.data,
+                        password = password.data,
+                        firstName = firstName.data,
+                        lastName = lastName.data,
+                        englishLevel = englishLevel.data,
+                    ),
+                )
+                saveAuthTokensUseCase(tokens)
+                dispatch(Msg.SetSubmitting(submitting = false))
+                publish(SignUpStore.Label.OpenMainHost)
+            } catch { error ->
+                handleError(error)
+            }
+        }
+
+        private fun handleError(error: Exception) {
+            val networkError = networkExceptionConverter.convert(error)
+            if (errorDelegate.handleError(networkError) == HandleErrorResult.HANDLED) {
+                dispatch(Msg.SetSubmitting(submitting = false))
+                return
+            }
+            val content =
+                (state() as? SignUpStore.State.Content)?.copy(submitting = false) ?: return
+            dispatch(Msg.SetError(content = content))
+        }
+    }
+
+    private object ReducerImpl : Reducer<SignUpStore.State, Msg> {
+
+        @Suppress("CyclomaticComplexMethod")
+        override fun SignUpStore.State.reduce(msg: Msg): SignUpStore.State {
+            val content = this as? SignUpStore.State.Content
+
+            return when (msg) {
+                is Msg.ChangeEmail -> content?.copy(email = msg.email) ?: this
+                is Msg.ChangePassword -> content?.copy(password = msg.password) ?: this
+                is Msg.ChangeFirstName -> content?.copy(firstName = msg.firstName) ?: this
+                is Msg.ChangeLastName -> content?.copy(lastName = msg.lastName) ?: this
+                is Msg.ChangeEnglishLevel -> content?.copy(englishLevel = msg.englishLevel) ?: this
+                is Msg.SetSubmitting -> content?.copy(submitting = msg.submitting) ?: this
+                is Msg.SetError -> SignUpStore.State.Error(content = msg.content)
+                Msg.RestoreContent -> (this as? SignUpStore.State.Error)?.content ?: this
+            }
+        }
+    }
 }
