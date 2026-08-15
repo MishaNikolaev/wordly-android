@@ -1,4 +1,4 @@
-package com.nmichail.wordly.android.features.words.presentation
+package com.nmichail.wordly.android.features.words.presentation.dialog
 
 import com.nmichail.wordly.android.features.words.domain.entity.WordExample
 import com.nmichail.wordly.android.features.words.domain.entity.WordTag

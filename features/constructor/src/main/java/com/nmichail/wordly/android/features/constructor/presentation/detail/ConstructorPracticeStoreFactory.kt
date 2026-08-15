@@ -65,30 +65,18 @@ internal class ConstructorPracticeStoreFactory @Inject constructor(
 			val correctCount: Int,
 		) : Msg
 
-		data class Finished(
-			val totalCount: Int,
-			val correctCount: Int,
-		) : Msg
+		data class Finished(val correctCount: Int) : Msg
 	}
 
 	private object ReducerImpl : Reducer<ConstructorPracticeStore.State, Msg> {
 
+		@Suppress("CyclomaticComplexMethod")
 		override fun ConstructorPracticeStore.State.reduce(
 			msg: Msg,
 		): ConstructorPracticeStore.State {
 			return when (msg) {
 				Msg.Loading -> ConstructorPracticeStore.State.Loading
-				is Msg.SessionLoaded -> {
-					val phrase = msg.session.phrases.first()
-					ConstructorPracticeStore.State.InProgress(
-						session = msg.session,
-						currentIndex = 0,
-						bank = phrase.words,
-						answer = emptyList(),
-						checkResult = null,
-						correctCount = 0,
-					)
-				}
+				is Msg.SessionLoaded -> sessionLoaded(session = msg.session)
 				Msg.SetError -> ConstructorPracticeStore.State.Error
 				is Msg.WordPlaced -> updateAnswer(
 					state = this,
@@ -100,45 +88,73 @@ internal class ConstructorPracticeStoreFactory @Inject constructor(
 					bank = msg.bank,
 					answer = msg.answer,
 				)
-				is Msg.AnswerReordered -> {
-					val inProgress = asInProgress() ?: return this
-					if (inProgress.checkResult != null) return this
-					inProgress.copy(answer = msg.answer)
-				}
-				is Msg.AnswerChecked -> {
-					val inProgress = asInProgress() ?: return this
-					if (inProgress.checkResult != null) return this
-					inProgress.copy(checkResult = msg.correct)
-				}
+				is Msg.AnswerReordered -> reorderAnswer(state = this, answer = msg.answer)
+				is Msg.AnswerChecked -> checkAnswer(state = this, correct = msg.correct)
 				is Msg.MoveNext -> moveToNext(state = this, msg = msg)
-				is Msg.Finished -> ConstructorPracticeStore.State.Finished(
-					totalCount = msg.totalCount,
-					correctCount = msg.correctCount,
-				)
+				is Msg.Finished -> {
+					val content = asContent() ?: return this
+					content.copy(
+						correctCount = msg.correctCount,
+						finished = true,
+					)
+				}
 			}
 		}
 
-		private fun ConstructorPracticeStore.State.asInProgress():
-			ConstructorPracticeStore.State.InProgress? =
-			this as? ConstructorPracticeStore.State.InProgress
+		private fun sessionLoaded(session: ConstructorSession): ConstructorPracticeStore.State {
+			val phrase = session.phrases.first()
+			return ConstructorPracticeStore.State.Content(
+				session = session,
+				currentIndex = 0,
+				bank = phrase.words,
+				answer = emptyList(),
+				checkResult = null,
+				correctCount = 0,
+				totalCount = session.phrases.size,
+				finished = false,
+			)
+		}
+
+		private fun ConstructorPracticeStore.State.asContent():
+			ConstructorPracticeStore.State.Content? =
+			this as? ConstructorPracticeStore.State.Content
+
+		private fun reorderAnswer(
+			state: ConstructorPracticeStore.State,
+			answer: List<ConstructorWord>,
+		): ConstructorPracticeStore.State {
+			val content = state.asContent() ?: return state
+			if (content.finished || content.checkResult != null) return state
+			return content.copy(answer = answer)
+		}
+
+		private fun checkAnswer(
+			state: ConstructorPracticeStore.State,
+			correct: Boolean,
+		): ConstructorPracticeStore.State {
+			val content = state.asContent() ?: return state
+			if (content.finished || content.checkResult != null) return state
+			return content.copy(checkResult = correct)
+		}
 
 		private fun updateAnswer(
 			state: ConstructorPracticeStore.State,
 			bank: List<ConstructorWord>,
 			answer: List<ConstructorWord>,
 		): ConstructorPracticeStore.State {
-			val inProgress = state.asInProgress() ?: return state
-			if (inProgress.checkResult != null) return state
-			return inProgress.copy(bank = bank, answer = answer)
+			val content = state.asContent() ?: return state
+			if (content.finished || content.checkResult != null) return state
+			return content.copy(bank = bank, answer = answer)
 		}
 
 		private fun moveToNext(
 			state: ConstructorPracticeStore.State,
 			msg: Msg.MoveNext,
 		): ConstructorPracticeStore.State {
-			val inProgress = state.asInProgress() ?: return state
-			val nextPhrase = inProgress.session.phrases[msg.nextIndex]
-			return inProgress.copy(
+			val content = state.asContent() ?: return state
+			if (content.finished) return state
+			val nextPhrase = content.session.phrases[msg.nextIndex]
+			return content.copy(
 				currentIndex = msg.nextIndex,
 				bank = nextPhrase.words,
 				answer = emptyList(),
@@ -197,74 +213,68 @@ internal class ConstructorPracticeStoreFactory @Inject constructor(
 			}
 		}
 
-		private fun currentState(): ConstructorPracticeStore.State.InProgress? =
-			state() as? ConstructorPracticeStore.State.InProgress
+		private fun currentContent(): ConstructorPracticeStore.State.Content? =
+			state() as? ConstructorPracticeStore.State.Content
 
 		private fun placeWord(wordId: String) {
-			val inProgress = currentState() ?: return
-			if (inProgress.checkResult != null) return
+			val content = currentContent() ?: return
+			if (content.finished || content.checkResult != null) return
 
-			val word = inProgress.bank.firstOrNull { it.id == wordId } ?: return
+			val word = content.bank.firstOrNull { it.id == wordId } ?: return
 			dispatch(
 				Msg.WordPlaced(
-					bank = inProgress.bank.filterNot { it.id == wordId },
-					answer = inProgress.answer + word,
+					bank = content.bank.filterNot { it.id == wordId },
+					answer = content.answer + word,
 				),
 			)
 		}
 
 		private fun removeWord(wordId: String) {
-			val inProgress = currentState() ?: return
-			if (inProgress.checkResult != null) return
+			val content = currentContent() ?: return
+			if (content.finished || content.checkResult != null) return
 
-			val word = inProgress.answer.firstOrNull { it.id == wordId } ?: return
+			val word = content.answer.firstOrNull { it.id == wordId } ?: return
 			dispatch(
 				Msg.WordRemoved(
-					bank = inProgress.bank + word,
-					answer = inProgress.answer.filterNot { it.id == wordId },
+					bank = content.bank + word,
+					answer = content.answer.filterNot { it.id == wordId },
 				),
 			)
 		}
 
 		private fun moveAnswerWord(fromIndex: Int, toIndex: Int) {
-			val inProgress = currentState() ?: return
-			if (inProgress.checkResult != null) return
-			if (fromIndex !in inProgress.answer.indices || toIndex !in inProgress.answer.indices) return
+			val content = currentContent() ?: return
+			if (content.finished || content.checkResult != null) return
+			if (fromIndex !in content.answer.indices || toIndex !in content.answer.indices) return
 			if (fromIndex == toIndex) return
 
-			val answer = inProgress.answer.toMutableList()
+			val answer = content.answer.toMutableList()
 			val word = answer.removeAt(fromIndex)
 			answer.add(toIndex, word)
 			dispatch(Msg.AnswerReordered(answer = answer))
 		}
 
 		private fun checkAnswer() {
-			val inProgress = currentState() ?: return
-			if (inProgress.checkResult != null) return
+			val content = currentContent() ?: return
+			if (content.finished || content.checkResult != null) return
 
-			val phrase = inProgress.session.phrases[inProgress.currentIndex]
-			val correct = inProgress.answer.map { it.id } == phrase.correctOrder
+			val phrase = content.session.phrases[content.currentIndex]
+			val correct = content.answer.map { it.id } == phrase.correctOrder
 			dispatch(Msg.AnswerChecked(correct = correct))
 		}
 
 		private fun handleContinue() {
-			val inProgress = currentState() ?: return
-			if (inProgress.checkResult == null) return
+			val content = currentContent() ?: return
+			if (content.finished || content.checkResult == null) return
 
-			val nextCorrectCount = if (inProgress.checkResult == true) {
-				inProgress.correctCount + 1
+			val nextCorrectCount = if (content.checkResult == true) {
+				content.correctCount + 1
 			} else {
-				inProgress.correctCount
+				content.correctCount
 			}
-			val nextIndex = inProgress.currentIndex + 1
-			val totalCount = inProgress.session.phrases.size
-			if (nextIndex >= totalCount) {
-				dispatch(
-					Msg.Finished(
-						totalCount = totalCount,
-						correctCount = nextCorrectCount,
-					),
-				)
+			val nextIndex = content.currentIndex + 1
+			if (nextIndex >= content.totalCount) {
+				dispatch(Msg.Finished(correctCount = nextCorrectCount))
 			} else {
 				dispatch(
 					Msg.MoveNext(

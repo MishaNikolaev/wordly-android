@@ -52,26 +52,27 @@ fun CardPracticeContent(
 				modifier = modifier.fillMaxSize(),
 			)
 		}
-		is CardPracticeStore.State.InProgress -> {
-			CardPracticeInProgressContent(
-				state = currentState,
-				component = component,
-				modifier = modifier,
-			)
-		}
-		is CardPracticeStore.State.Finished -> {
-			PracticeFinishedContent(
-				correctCount = currentState.correctCount,
-				totalCount = currentState.totalCount,
-				subtitle = stringResource(
-					R.string.card_practice_finished_subtitle,
-					currentState.correctCount,
-					currentState.totalCount,
-				),
-				primaryActionText = stringResource(R.string.card_practice_finished_back),
-				onPrimaryClick = component::handleFinish,
-				modifier = modifier,
-			)
+		is CardPracticeStore.State.Content -> {
+			if (currentState.finished) {
+				PracticeFinishedContent(
+					correctCount = currentState.correctCount,
+					totalCount = currentState.totalCount,
+					subtitle = stringResource(
+						R.string.card_practice_finished_subtitle,
+						currentState.correctCount,
+						currentState.totalCount,
+					),
+					primaryActionText = stringResource(R.string.card_practice_finished_back),
+					onPrimaryClick = component::handleFinish,
+					modifier = modifier,
+				)
+			} else {
+				CardPracticeInProgressContent(
+					state = currentState,
+					component = component,
+					modifier = modifier,
+				)
+			}
 		}
 	}
 }

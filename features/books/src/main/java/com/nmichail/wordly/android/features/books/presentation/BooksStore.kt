@@ -12,8 +12,6 @@ interface BooksStore :
 
 		data object Loading : State
 
-		data object Error : State
-
 		data class Content(
 			val title: String,
 			val searchQuery: String,
@@ -22,6 +20,8 @@ interface BooksStore :
 			val allSections: List<BooksSection>,
 			val sections: List<BooksSection>,
 		) : State
+
+		data object Error : State
 	}
 
 	sealed interface Label {

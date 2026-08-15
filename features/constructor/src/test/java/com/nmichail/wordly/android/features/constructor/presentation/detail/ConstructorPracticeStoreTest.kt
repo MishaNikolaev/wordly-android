@@ -230,9 +230,17 @@ class ConstructorPracticeStoreTest {
 		store.accept(ConstructorPracticeStore.Intent.Continue)
 
 		assertEquals(
-			ConstructorPracticeStore.State.Finished(
-				totalCount = 2,
+			inProgress(
+				currentIndex = 1,
+				bank = listOf(
+					ConstructorWord(id = "d1", text = "I"),
+					ConstructorWord(id = "d2", text = "think"),
+					ConstructorWord(id = "d3", text = "am"),
+				),
+				answer = listOf(ConstructorWord(id = "d4", text = "so")),
+				checkResult = false,
 				correctCount = 1,
+				finished = true,
 			),
 			store.state,
 		)
@@ -289,14 +297,17 @@ class ConstructorPracticeStoreTest {
 		answer: List<ConstructorWord> = emptyList(),
 		checkResult: Boolean? = null,
 		correctCount: Int = 0,
-	): ConstructorPracticeStore.State.InProgress =
-		ConstructorPracticeStore.State.InProgress(
+		finished: Boolean = false,
+	): ConstructorPracticeStore.State.Content =
+		ConstructorPracticeStore.State.Content(
 			session = session,
 			currentIndex = currentIndex,
 			bank = bank,
 			answer = answer,
 			checkResult = checkResult,
 			correctCount = correctCount,
+			totalCount = session.phrases.size,
+			finished = finished,
 		)
 
 	private fun createStore(): ConstructorPracticeStore =

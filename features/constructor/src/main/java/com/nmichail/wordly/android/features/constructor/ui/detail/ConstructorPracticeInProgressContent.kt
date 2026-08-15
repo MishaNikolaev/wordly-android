@@ -64,7 +64,7 @@ private const val DRAG_CHIP_ALPHA = 0.92f
 
 @Composable
 internal fun ConstructorPracticeInProgressContent(
-	state: ConstructorPracticeStore.State.InProgress,
+	state: ConstructorPracticeStore.State.Content,
 	component: ConstructorPracticeComponent,
 	modifier: Modifier = Modifier,
 ) {
@@ -106,7 +106,7 @@ internal fun ConstructorPracticeInProgressContent(
 
 @Composable
 private fun ConstructorPracticeScrollBody(
-	state: ConstructorPracticeStore.State.InProgress,
+	state: ConstructorPracticeStore.State.Content,
 	question: String,
 	author: String?,
 	correctPhraseText: String,

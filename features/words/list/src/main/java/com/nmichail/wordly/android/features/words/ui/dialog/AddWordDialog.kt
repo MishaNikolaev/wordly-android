@@ -1,4 +1,4 @@
-package com.nmichail.wordly.android.features.words.ui
+package com.nmichail.wordly.android.features.words.ui.dialog
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -37,7 +37,7 @@ import androidx.compose.ui.unit.dp
 import com.nmichail.wordly.android.component.wui.theme.WuiTypography
 import com.nmichail.wordly.android.features.words.domain.entity.WordExample
 import com.nmichail.wordly.android.features.words.list.R
-import com.nmichail.wordly.android.features.words.presentation.AddWordDialogState
+import com.nmichail.wordly.android.features.words.presentation.dialog.AddWordDialogState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

@@ -49,10 +49,7 @@ internal class CardPracticeStoreFactory @Inject constructor(
 			val correctCount: Int,
 		) : Msg
 
-		data class Finished(
-			val totalCount: Int,
-			val correctCount: Int,
-		) : Msg
+		data class Finished(val correctCount: Int) : Msg
 	}
 
 	private object ReducerImpl : Reducer<CardPracticeStore.State, Msg> {
@@ -60,7 +57,7 @@ internal class CardPracticeStoreFactory @Inject constructor(
 		override fun CardPracticeStore.State.reduce(msg: Msg): CardPracticeStore.State =
 			when (msg) {
 				Msg.Loading -> CardPracticeStore.State.Loading
-				is Msg.SessionLoaded -> CardPracticeStore.State.InProgress(
+				is Msg.SessionLoaded -> CardPracticeStore.State.Content(
 					words = msg.words,
 					currentIndex = 0,
 					currentWord = msg.words[0],
@@ -70,21 +67,22 @@ internal class CardPracticeStoreFactory @Inject constructor(
 					answerRevealed = false,
 					correct = false,
 					correctCount = 0,
+					finished = false,
 				)
 				Msg.SetError -> CardPracticeStore.State.Error
 				is Msg.OptionSelected -> selectOption(state = this, optionId = msg.optionId)
 				is Msg.MoveNext -> moveToNext(state = this, msg = msg)
-				is Msg.Finished -> CardPracticeStore.State.Finished(
-					totalCount = msg.totalCount,
+				is Msg.Finished -> (this as? CardPracticeStore.State.Content)?.copy(
 					correctCount = msg.correctCount,
-				)
+					finished = true,
+				) ?: this
 			}
 
 		private fun selectOption(
 			state: CardPracticeStore.State,
 			optionId: String,
 		): CardPracticeStore.State {
-			if (state !is CardPracticeStore.State.InProgress) return state
+			if (state !is CardPracticeStore.State.Content || state.finished) return state
 			if (state.answerRevealed) return state
 			return state.copy(
 				selectedOptionId = optionId,
@@ -97,7 +95,7 @@ internal class CardPracticeStoreFactory @Inject constructor(
 			state: CardPracticeStore.State,
 			msg: Msg.MoveNext,
 		): CardPracticeStore.State {
-			if (state !is CardPracticeStore.State.InProgress) return state
+			if (state !is CardPracticeStore.State.Content || state.finished) return state
 			return state.copy(
 				currentIndex = msg.nextIndex,
 				currentWord = state.words[msg.nextIndex],
@@ -155,22 +153,17 @@ internal class CardPracticeStoreFactory @Inject constructor(
 		}
 
 		private fun handleContinue() {
-			val progress = state() as? CardPracticeStore.State.InProgress ?: return
-			if (!progress.answerRevealed) return
+			val content = state() as? CardPracticeStore.State.Content ?: return
+			if (content.finished || !content.answerRevealed) return
 
-			val nextCorrectCount = if (progress.correct) {
-				progress.correctCount + 1
+			val nextCorrectCount = if (content.correct) {
+				content.correctCount + 1
 			} else {
-				progress.correctCount
+				content.correctCount
 			}
-			val nextIndex = progress.currentIndex + 1
-			if (nextIndex >= progress.totalCount) {
-				dispatch(
-					Msg.Finished(
-						totalCount = progress.totalCount,
-						correctCount = nextCorrectCount,
-					),
-				)
+			val nextIndex = content.currentIndex + 1
+			if (nextIndex >= content.totalCount) {
+				dispatch(Msg.Finished(correctCount = nextCorrectCount))
 			} else {
 				dispatch(
 					Msg.MoveNext(

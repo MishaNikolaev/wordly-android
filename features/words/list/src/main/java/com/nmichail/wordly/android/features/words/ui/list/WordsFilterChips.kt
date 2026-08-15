@@ -1,4 +1,4 @@
-package com.nmichail.wordly.android.features.words.ui
+package com.nmichail.wordly.android.features.words.ui.list
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

@@ -11,14 +11,14 @@ interface MaterialsStore :
 
 		data object Loading : State
 
-		data class Error(
-			val locallyReadIds: Set<String>,
-		) : State
-
 		data class Content(
 			val title: String,
 			val selectedFilter: MaterialFilter,
 			val items: List<MaterialItem>,
+			val locallyReadIds: Set<String>,
+		) : State
+
+		data class Error(
 			val locallyReadIds: Set<String>,
 		) : State
 	}

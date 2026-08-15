@@ -12,8 +12,6 @@ interface ConstructorStore :
 
 		data object Loading : State
 
-		data object Error : State
-
 		data class Content(
 			val title: String,
 			val searchQuery: String,
@@ -22,6 +20,8 @@ interface ConstructorStore :
 			val allSections: List<ConstructorSection>,
 			val sections: List<ConstructorSection>,
 		) : State
+
+		data object Error : State
 	}
 
 	sealed interface Label {

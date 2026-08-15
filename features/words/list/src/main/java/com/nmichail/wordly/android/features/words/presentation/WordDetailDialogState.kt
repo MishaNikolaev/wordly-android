@@ -1,4 +1,4 @@
-package com.nmichail.wordly.android.features.words.detail.presentation
+package com.nmichail.wordly.android.features.words.presentation
 
 import com.nmichail.wordly.android.component.wui.components.calendar.WuiCalendarDay
 import com.nmichail.wordly.android.features.words.domain.entity.WordExample

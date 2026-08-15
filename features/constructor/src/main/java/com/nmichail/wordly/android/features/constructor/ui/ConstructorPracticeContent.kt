@@ -52,26 +52,27 @@ fun ConstructorPracticeContent(
 				modifier = modifier.fillMaxSize(),
 			)
 		}
-		is ConstructorPracticeStore.State.InProgress -> {
-			ConstructorPracticeInProgressContent(
-				state = currentState,
-				component = component,
-				modifier = modifier,
-			)
-		}
-		is ConstructorPracticeStore.State.Finished -> {
-			PracticeFinishedContent(
-				correctCount = currentState.correctCount,
-				totalCount = currentState.totalCount,
-				subtitle = stringResource(
-					R.string.constructor_practice_finished_subtitle,
-					currentState.correctCount,
-					currentState.totalCount,
-				),
-				primaryActionText = stringResource(R.string.constructor_practice_finished_back),
-				onPrimaryClick = component::handleFinish,
-				modifier = modifier,
-			)
+		is ConstructorPracticeStore.State.Content -> {
+			if (currentState.finished) {
+				PracticeFinishedContent(
+					correctCount = currentState.correctCount,
+					totalCount = currentState.totalCount,
+					subtitle = stringResource(
+						R.string.constructor_practice_finished_subtitle,
+						currentState.correctCount,
+						currentState.totalCount,
+					),
+					primaryActionText = stringResource(R.string.constructor_practice_finished_back),
+					onPrimaryClick = component::handleFinish,
+					modifier = modifier,
+				)
+			} else {
+				ConstructorPracticeInProgressContent(
+					state = currentState,
+					component = component,
+					modifier = modifier,
+				)
+			}
 		}
 	}
 }

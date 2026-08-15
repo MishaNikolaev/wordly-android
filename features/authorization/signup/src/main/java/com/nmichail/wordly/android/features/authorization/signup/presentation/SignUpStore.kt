@@ -13,8 +13,6 @@ interface SignUpStore :
 
 		data object Loading : State
 
-		data class Error(val content: Content) : State
-
 		data class Content(
 			val email: EmailValidationItem,
 			val password: PasswordValidationItem,
@@ -23,6 +21,8 @@ interface SignUpStore :
 			val englishLevel: NotEmptyValidationItem,
 			val submitting: Boolean,
 		) : State
+
+		data class Error(val content: Content) : State
 	}
 
 	sealed interface Label {

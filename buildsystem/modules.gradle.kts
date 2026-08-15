@@ -9,7 +9,6 @@ include(
 	":features:constructor",
 	":features:books",
 	":features:words:list",
-	":features:words:detail",
 	":features:materials",
 	":features:profile",
 	":features:authorization:signin",

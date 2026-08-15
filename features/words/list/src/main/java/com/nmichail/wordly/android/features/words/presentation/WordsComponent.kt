@@ -2,41 +2,27 @@ package com.nmichail.wordly.android.features.words.presentation
 
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.value.Value
-import com.nmichail.wordly.android.features.words.domain.entity.WordFilter
-import com.nmichail.wordly.android.features.words.domain.entity.WordStatus
+import com.nmichail.wordly.android.features.words.presentation.detail.WordDetailStore
+import com.nmichail.wordly.android.features.words.presentation.dialog.AddWordStore
+import com.nmichail.wordly.android.features.words.presentation.list.WordsListStore
 
-@Suppress("TooManyFunctions")
 interface WordsComponent {
 
-	val model: Value<WordsStore.State>
+	val listStore: WordsListStore
 
-	fun handleRetry()
+	val addWordStore: AddWordStore
 
-	fun handleSearchQueryChange(query: String)
+	val wordDetailStore: WordDetailStore
 
-	fun handleFilterChange(filter: WordFilter)
+	val listModel: Value<WordsListStore.State>
 
-	fun handleOpenAddWord()
+	val addWordModel: Value<AddWordStore.State>
 
-	fun handleDismissAddWord()
+	val wordDetailModel: Value<WordDetailStore.State>
 
-	fun handleAddWordInputChange(value: String)
+	fun openAddWord()
 
-	fun handleToggleTag(tagId: String)
-
-	fun handleConfirmAddWord()
-
-	fun handleOpenWordDetail(wordId: String)
-
-	fun handleDismissWordDetail()
-
-	fun handleDetailStatusChange(status: WordStatus)
-
-	fun handleConfirmAddToReview()
-
-	fun handlePlayAudio()
-
-	fun handleCalendar(action: WordsStore.CalendarAction)
+	fun openWordDetail(wordId: String)
 
 	fun interface Factory {
 
