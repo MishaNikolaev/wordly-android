@@ -32,7 +32,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
-import com.nmichail.wordly.android.component.ui.components.button.CustomButton
+import com.nmichail.wordly.android.component.wui.components.button.WuiButton
 import com.nmichail.wordly.android.features.profile.R
 import com.nmichail.wordly.android.features.profile.presentation.ProfileComponent
 
@@ -94,7 +94,7 @@ private fun ProfileError(
 			textAlign = TextAlign.Center,
 			modifier = Modifier.padding(top = 8.dp),
 		)
-		CustomButton(
+		WuiButton(
 			text = stringResource(R.string.profile_retry),
 			onClick = onRetryClick,
 			modifier = Modifier
@@ -130,7 +130,7 @@ private fun ProfileLoaded(
 				onClick = component::handleOpenLevel,
 				modifier = Modifier.padding(top = 20.dp),
 			)
-			CustomButton(
+			WuiButton(
 				text = stringResource(R.string.profile_edit),
 				onClick = component::handleOpenEdit,
 				modifier = Modifier.padding(top = 20.dp),

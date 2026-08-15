@@ -20,11 +20,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
-import com.nmichail.wordly.android.component.ui.theme.WordlyTypography
-import com.nmichail.wordly.android.component.ui.components.card.AppCard
+import com.nmichail.wordly.android.component.wui.theme.WuiTypography
+import com.nmichail.wordly.android.component.wui.components.card.WuiAppCard
 import androidx.compose.material.icons.automirrored.rounded.MenuBook
 import androidx.compose.ui.tooling.preview.Preview
-import com.nmichail.wordly.android.component.ui.theme.WordlyAndroidTheme
+import com.nmichail.wordly.android.component.wui.theme.WuiTheme
 
 @Composable
 fun TrainingListItem(
@@ -37,7 +37,7 @@ fun TrainingListItem(
 	val colorScheme = MaterialTheme.colorScheme
 	val iconTint = colorScheme.onPrimaryContainer
 
-	AppCard(
+	WuiAppCard(
 		modifier = modifier.fillMaxWidth(),
 		onClick = onClick,
 		contentPadding = PaddingValues(0.dp),
@@ -66,12 +66,12 @@ fun TrainingListItem(
 			Column(modifier = Modifier.weight(1f)) {
 				Text(
 					text = title,
-					style = WordlyTypography.trainingTileTitle,
+					style = WuiTypography.trainingTileTitle,
 					color = colorScheme.onSurface,
 				)
 				Text(
 					text = subtitle,
-					style = WordlyTypography.trainingTileSubtitle,
+					style = WuiTypography.trainingTileSubtitle,
 					color = colorScheme.onSurfaceVariant,
 					modifier = Modifier.padding(top = 2.dp),
 				)
@@ -89,7 +89,7 @@ fun TrainingListItem(
 @Preview(showBackground = true)
 @Composable
 private fun TrainingListItemPreview() {
-	WordlyAndroidTheme {
+	WuiTheme {
 		TrainingListItem(
 			title = "Карточки",
 			subtitle = "8 слов",

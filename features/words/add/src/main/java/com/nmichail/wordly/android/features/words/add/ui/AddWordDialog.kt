@@ -34,7 +34,7 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
-import com.nmichail.wordly.android.component.ui.theme.WordlyTypography
+import com.nmichail.wordly.android.component.wui.theme.WuiTypography
 import com.nmichail.wordly.android.features.words.add.R
 import com.nmichail.wordly.android.features.words.add.presentation.AddWordDialogState
 import com.nmichail.wordly.android.features.words.domain.entity.WordExample
@@ -100,7 +100,7 @@ private fun AddWordDialogBody(
 		when {
 			state.isLookingUp -> Text(
 				text = stringResource(R.string.words_looking_up),
-				style = WordlyTypography.addWordAutofillLabel,
+				style = WuiTypography.addWordAutofillLabel,
 				color = MaterialTheme.colorScheme.onSurfaceVariant,
 			)
 			state.wordInput.isNotBlank() && hasLookupContent(state) -> {
@@ -150,7 +150,7 @@ private fun AddWordAutofillCard(
 		if (!phonetic.isNullOrBlank()) {
 			Text(
 				text = phonetic,
-				style = WordlyTypography.addWordPhonetic,
+				style = WuiTypography.addWordPhonetic,
 				color = colorScheme.onSurfaceVariant,
 			)
 		}
@@ -174,7 +174,7 @@ private fun AddWordAutofillBadge() {
 		)
 		Text(
 			text = stringResource(R.string.words_add_autofilled),
-			style = WordlyTypography.addWordAutofillLabel,
+			style = WuiTypography.addWordAutofillLabel,
 			color = colorScheme.onSurfaceVariant,
 		)
 	}
@@ -185,13 +185,13 @@ private fun AddWordAutofillExamples(examples: List<WordExample>) {
 	val colorScheme = MaterialTheme.colorScheme
 	Text(
 		text = stringResource(R.string.words_add_examples_label),
-		style = WordlyTypography.addWordExamplesTitle,
+		style = WuiTypography.addWordExamplesTitle,
 		color = colorScheme.onSurfaceVariant,
 	)
 	if (examples.isEmpty()) {
 		Text(
 			text = "—",
-			style = WordlyTypography.addWordExample,
+			style = WuiTypography.addWordExample,
 			color = colorScheme.onSurfaceVariant,
 		)
 		return
@@ -200,7 +200,7 @@ private fun AddWordAutofillExamples(examples: List<WordExample>) {
 		examples.forEach { example ->
 			Text(
 				text = example.text,
-				style = WordlyTypography.addWordExample,
+				style = WuiTypography.addWordExample,
 				color = colorScheme.onSurface,
 			)
 		}
@@ -230,7 +230,7 @@ private fun AddWordDialogHeader(onDismiss: () -> Unit) {
 	) {
 		Text(
 			text = stringResource(R.string.words_add_title),
-			style = WordlyTypography.addWordTitle,
+			style = WuiTypography.addWordTitle,
 			color = colorScheme.onSurface,
 		)
 		Box(
@@ -273,7 +273,7 @@ private fun AddWordInput(
 			onValueChange = onValueChange,
 			singleLine = true,
 			cursorBrush = SolidColor(colorScheme.primary),
-			textStyle = WordlyTypography.addWordInput.copy(color = colorScheme.onSurface),
+			textStyle = WuiTypography.addWordInput.copy(color = colorScheme.onSurface),
 			decorationBox = { inner ->
 				Box(
 					modifier = Modifier

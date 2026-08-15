@@ -32,8 +32,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
-import com.nmichail.wordly.android.component.ui.components.button.CustomButton
-import com.nmichail.wordly.android.component.ui.components.field.SearchField
+import com.nmichail.wordly.android.component.wui.components.button.WuiButton
+import com.nmichail.wordly.android.component.wui.components.field.WuiSearchField
 import com.nmichail.wordly.android.features.words.add.ui.AddWordDialog
 import com.nmichail.wordly.android.features.words.detail.ui.WordDetailScreen
 import com.nmichail.wordly.android.features.words.R
@@ -99,7 +99,7 @@ private fun WordsError(
 			textAlign = TextAlign.Center,
 			modifier = Modifier.padding(top = 8.dp),
 		)
-		CustomButton(
+		WuiButton(
 			text = stringResource(R.string.words_retry),
 			onClick = onRetryClick,
 			modifier = Modifier
@@ -276,7 +276,7 @@ private fun LazyListScope.wordsHeader(
 		)
 	}
 	item(key = "search") {
-		SearchField(
+		WuiSearchField(
 			value = state.searchQuery,
 			onValueChange = onSearchQueryChange,
 			placeholder = state.searchPlaceholder.ifBlank {

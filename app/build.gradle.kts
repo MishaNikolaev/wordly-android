@@ -33,7 +33,7 @@ dependencies {
 	implementation(projects.features.words)
 	implementation(projects.features.materials)
 	implementation(projects.features.profile)
-	implementation(projects.component.ui)
+	implementation(projects.component.wui)
 	implementation(projects.core.network)
 	implementation(projects.core.preferences)
 	implementation(projects.core.fakenetwork)

@@ -1,6 +1,6 @@
 package com.nmichail.wordly.android.features.review.ui.component
 
-import com.nmichail.wordly.android.component.ui.theme.WordlyTheme
+import com.nmichail.wordly.android.component.wui.theme.Wui
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -40,8 +40,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.nmichail.wordly.android.component.ui.components.button.CustomButton
-import com.nmichail.wordly.android.component.ui.theme.WordlyTypography
+import com.nmichail.wordly.android.component.wui.components.button.WuiButton
+import com.nmichail.wordly.android.component.wui.theme.WuiTypography
 import com.nmichail.wordly.android.features.review.R
 import com.nmichail.wordly.android.features.review.domain.entity.ReviewWord
 import com.nmichail.wordly.android.features.review.presentation.ReviewComponent
@@ -89,7 +89,7 @@ internal fun ReviewInProgressContent(
 			)
 		}
 		if (state.isAnswerRevealed) {
-			CustomButton(
+			WuiButton(
 				text = stringResource(R.string.review_continue),
 				onClick = component::handleContinue,
 				loading = state.isSubmitting,
@@ -144,7 +144,7 @@ private fun ReviewTopBar(
 		)
 		Text(
 			text = stringResource(R.string.review_progress_format, currentIndex, totalCount),
-			style = WordlyTypography.mono.copy(
+			style = WuiTypography.mono.copy(
 				fontWeight = FontWeight.Bold,
 				fontSize = 14.sp,
 				lineHeight = 14.sp,
@@ -162,7 +162,7 @@ private fun ReviewQuestionCard(
 	onPlayAudioClick: () -> Unit,
 ) {
 	val colorScheme = MaterialTheme.colorScheme
-	val extended = WordlyTheme.colors
+	val extended = Wui.colors
 	val borderColor = extended.outlineSoft
 	val taskChipBackground = colorScheme.primaryContainer
 	Column(
@@ -188,7 +188,7 @@ private fun ReviewQuestionCard(
 		Spacer(modifier = Modifier.height(14.dp))
 		Text(
 			text = word.word,
-			style = WordlyTypography.wordCardWord.copy(
+			style = WuiTypography.wordCardWord.copy(
 				fontSize = 38.sp,
 				lineHeight = 40.sp,
 				letterSpacing = (-0.76).sp,
@@ -237,7 +237,7 @@ private fun ReviewPhoneticRow(
 	) {
 		Text(
 			text = phonetic,
-			style = WordlyTypography.wordCardPhonetic.copy(
+			style = WuiTypography.wordCardPhonetic.copy(
 				fontWeight = FontWeight.Medium,
 				fontSize = 15.sp,
 				lineHeight = 15.sp,

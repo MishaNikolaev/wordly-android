@@ -1,6 +1,6 @@
 package com.nmichail.wordly.android.features.words.add.ui
 
-import com.nmichail.wordly.android.component.ui.theme.WordlyTheme
+import com.nmichail.wordly.android.component.wui.theme.Wui
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -117,7 +117,7 @@ private fun TagChip(
 @Composable
 private fun tagPalette(index: Int): Color {
 	val colorScheme = MaterialTheme.colorScheme
-	val extended = WordlyTheme.colors
+	val extended = Wui.colors
 	val colors = listOf(
 		colorScheme.primary,
 		colorScheme.secondary,

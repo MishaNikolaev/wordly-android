@@ -19,11 +19,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.nmichail.wordly.android.component.ui.theme.WordlyAndroidTheme
+import com.nmichail.wordly.android.component.wui.theme.WuiTheme
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import com.nmichail.wordly.android.component.ui.theme.PreviewTheme
-import com.nmichail.wordly.android.component.ui.theme.PreviewThemeProvider
-import com.nmichail.wordly.android.component.ui.theme.isAppInDarkTheme
+import com.nmichail.wordly.android.component.wui.theme.PreviewTheme
+import com.nmichail.wordly.android.component.wui.theme.PreviewThemeProvider
+import com.nmichail.wordly.android.component.wui.theme.isAppInDarkTheme
 
 @Composable
 fun Logo(
@@ -61,7 +61,7 @@ fun Logo(
 private fun LogoPreview(
 	@PreviewParameter(PreviewThemeProvider::class) theme: PreviewTheme,
 ) {
-	WordlyAndroidTheme(darkTheme = theme == PreviewTheme.Dark) {
+	WuiTheme(darkTheme = theme == PreviewTheme.Dark) {
 		Box(
 			modifier = Modifier
 				.fillMaxWidth()

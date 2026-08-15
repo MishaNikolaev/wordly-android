@@ -26,11 +26,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.nmichail.wordly.android.component.ui.theme.WordlyAndroidTheme
+import com.nmichail.wordly.android.component.wui.theme.WuiTheme
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import com.nmichail.wordly.android.component.ui.theme.PreviewTheme
-import com.nmichail.wordly.android.component.ui.theme.PreviewThemeProvider
-import com.nmichail.wordly.android.component.ui.theme.WordlyTypography
+import com.nmichail.wordly.android.component.wui.theme.PreviewTheme
+import com.nmichail.wordly.android.component.wui.theme.PreviewThemeProvider
+import com.nmichail.wordly.android.component.wui.theme.WuiTypography
 
 @Composable
 fun AuthPhoneticWordCard(
@@ -132,12 +132,12 @@ private fun AuthPhoneticWordCardContent(
 	) {
 		Text(
 			text = word,
-			style = WordlyTypography.wordCardWord,
+			style = WuiTypography.wordCardWord,
 			color = wordColor,
 		)
 		Text(
 			text = phonetic,
-			style = WordlyTypography.wordCardPhonetic,
+			style = WuiTypography.wordCardPhonetic,
 			color = phoneticColor,
 			modifier = Modifier.padding(top = 4.dp),
 		)
@@ -149,7 +149,7 @@ private fun AuthPhoneticWordCardContent(
 private fun AuthPhoneticWordCardPreview(
 	@PreviewParameter(PreviewThemeProvider::class) theme: PreviewTheme,
 ) {
-	WordlyAndroidTheme(darkTheme = theme == PreviewTheme.Dark) {
+	WuiTheme(darkTheme = theme == PreviewTheme.Dark) {
 		AuthPhoneticWordCard(word = "resilience", phonetic = "/rɪˈzɪliəns/", onPlayClick = {})
 	}
 }

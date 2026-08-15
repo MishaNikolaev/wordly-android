@@ -21,7 +21,7 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.tooling.preview.Preview
-import com.nmichail.wordly.android.component.ui.theme.WordlyAndroidTheme
+import com.nmichail.wordly.android.component.wui.theme.WuiTheme
 
 @Composable
 fun HomeTopBar(
@@ -88,7 +88,7 @@ private fun StreakChip(
 @Preview(showBackground = true)
 @Composable
 private fun HomeTopBarPreview() {
-	WordlyAndroidTheme {
+	WuiTheme {
 		HomeTopBar(
 			title = "Доброе утро, Alex",
 			streakDays = 5,

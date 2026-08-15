@@ -21,8 +21,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.nmichail.wordly.android.component.ui.components.button.CustomButton
-import com.nmichail.wordly.android.component.ui.theme.WordlyTheme
+import com.nmichail.wordly.android.component.wui.components.button.WuiButton
+import com.nmichail.wordly.android.component.wui.theme.Wui
 
 @Composable
 fun PracticeFinishedContent(
@@ -50,7 +50,7 @@ fun PracticeFinishedContent(
 				.weight(1f)
 				.fillMaxWidth(),
 		)
-		CustomButton(
+		WuiButton(
 			text = primaryActionText,
 			onClick = onPrimaryClick,
 			modifier = Modifier
@@ -77,7 +77,7 @@ private fun PracticeFinishedResult(
 		Icon(
 			imageVector = Icons.Rounded.CheckCircle,
 			contentDescription = null,
-			tint = WordlyTheme.colors.success,
+			tint = Wui.colors.success,
 			modifier = Modifier.size(72.dp),
 		)
 		Text(

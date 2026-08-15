@@ -19,7 +19,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.layout.Row
 import androidx.compose.ui.tooling.preview.Preview
-import com.nmichail.wordly.android.component.ui.theme.WordlyAndroidTheme
+import com.nmichail.wordly.android.component.wui.theme.WuiTheme
 
 object WeekDayStatusId {
 	const val Completed = "completed"
@@ -132,7 +132,7 @@ private fun PlainDaySlot(dayOfMonth: Int) {
 @Preview(showBackground = true)
 @Composable
 private fun WeekDayIndicatorPreview() {
-	WordlyAndroidTheme {
+	WuiTheme {
 		Row(
 			modifier = Modifier.padding(16.dp),
 			horizontalArrangement = Arrangement.spacedBy(8.dp),

@@ -15,8 +15,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.nmichail.wordly.android.component.ui.theme.WordlyAndroidTheme
-import com.nmichail.wordly.android.component.ui.theme.isAppInDarkTheme
+import com.nmichail.wordly.android.component.wui.theme.WuiTheme
+import com.nmichail.wordly.android.component.wui.theme.isAppInDarkTheme
 
 enum class MaterialsCardBackgroundStyle {
 	Scatter,
@@ -172,7 +172,7 @@ private fun DrawScope.drawContainedCircles(circles: List<CircleSpec>) {
 @Preview(showBackground = true, widthDp = 378)
 @Composable
 private fun MaterialsCardBackgroundPreview() {
-	WordlyAndroidTheme {
+	WuiTheme {
 		Column(
 			modifier = Modifier.padding(16.dp),
 			verticalArrangement = Arrangement.spacedBy(12.dp),

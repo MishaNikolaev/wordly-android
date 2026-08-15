@@ -13,7 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.tooling.preview.Preview
-import com.nmichail.wordly.android.component.ui.theme.WordlyAndroidTheme
+import com.nmichail.wordly.android.component.wui.theme.WuiTheme
 
 @Composable
 fun BookTranslatingOverlay(
@@ -48,7 +48,7 @@ fun BookTranslatingOverlay(
 @Preview(showBackground = true, heightDp = 240)
 @Composable
 private fun BookTranslatingOverlayPreview() {
-	WordlyAndroidTheme {
+	WuiTheme {
 		Box(modifier = Modifier.fillMaxSize()) {
 			BookTranslatingOverlay(message = "Переводим…")
 		}

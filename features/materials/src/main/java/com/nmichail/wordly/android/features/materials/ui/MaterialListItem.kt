@@ -29,7 +29,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.nmichail.wordly.android.features.materials.ui.component.MaterialsCardBackground
 import com.nmichail.wordly.android.features.materials.ui.component.materialsCardBackgroundStyleFor
-import com.nmichail.wordly.android.component.ui.theme.WordlyTheme
+import com.nmichail.wordly.android.component.wui.theme.Wui
 import com.nmichail.wordly.android.features.materials.R
 import com.nmichail.wordly.android.features.materials.domain.entity.MaterialCategory
 import com.nmichail.wordly.android.features.materials.domain.entity.MaterialItem
@@ -81,7 +81,7 @@ private fun MaterialCategoryChip(text: String) {
 	Box(
 		modifier = Modifier
 			.clip(RoundedCornerShape(4.dp))
-			.background(WordlyTheme.colors.primaryMuted)
+			.background(Wui.colors.primaryMuted)
 			.padding(horizontal = 6.dp, vertical = 2.dp),
 	) {
 		Text(

@@ -25,10 +25,10 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.nmichail.wordly.android.component.ui.theme.WordlyAndroidTheme
+import com.nmichail.wordly.android.component.wui.theme.WuiTheme
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import com.nmichail.wordly.android.component.ui.theme.PreviewTheme
-import com.nmichail.wordly.android.component.ui.theme.PreviewThemeProvider
+import com.nmichail.wordly.android.component.wui.theme.PreviewTheme
+import com.nmichail.wordly.android.component.wui.theme.PreviewThemeProvider
 
 @Composable
 fun AuthBackground(
@@ -78,7 +78,7 @@ fun AuthBackground(
 private fun AuthBackgroundPreview(
 	@PreviewParameter(PreviewThemeProvider::class) theme: PreviewTheme,
 ) {
-	WordlyAndroidTheme(darkTheme = theme == PreviewTheme.Dark) {
+	WuiTheme(darkTheme = theme == PreviewTheme.Dark) {
 		AuthBackground(
 			header = {
 				Text(

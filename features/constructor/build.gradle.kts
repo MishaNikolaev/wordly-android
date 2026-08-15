@@ -19,7 +19,7 @@ dependencies {
 	implementation(libs.mvikotlin.extensions.coroutines)
 	ksp(libs.dagger.compiler)
 
-	implementation(projects.component.ui)
+	implementation(projects.component.wui)
 	implementation(projects.shared.catalog)
 	implementation(projects.shared.practice)
 	implementation(projects.component.presentation)

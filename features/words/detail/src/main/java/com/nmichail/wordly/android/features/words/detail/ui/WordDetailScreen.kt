@@ -49,11 +49,11 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.nmichail.wordly.android.component.ui.components.button.CustomButton
-import com.nmichail.wordly.android.component.ui.components.calendar.CalendarDialog
-import com.nmichail.wordly.android.component.ui.theme.WordlyTheme
-import com.nmichail.wordly.android.component.ui.theme.WordlyTypography
-import com.nmichail.wordly.android.component.ui.theme.isAppInDarkTheme
+import com.nmichail.wordly.android.component.wui.components.button.WuiButton
+import com.nmichail.wordly.android.component.wui.components.calendar.WuiCalendarDialog
+import com.nmichail.wordly.android.component.wui.theme.Wui
+import com.nmichail.wordly.android.component.wui.theme.WuiTypography
+import com.nmichail.wordly.android.component.wui.theme.isAppInDarkTheme
 import com.nmichail.wordly.android.features.words.detail.R
 import com.nmichail.wordly.android.features.words.detail.presentation.WordDetailDialogState
 import com.nmichail.wordly.android.features.words.domain.entity.WordExample
@@ -84,7 +84,7 @@ fun WordDetailScreen(
 		modifier = modifier,
 	)
 	state.calendar?.let { calendar ->
-		CalendarDialog(
+		WuiCalendarDialog(
 			monthTitle = calendar.monthTitle,
 			days = calendar.days,
 			onDismiss = onDismissCalendar,
@@ -131,7 +131,7 @@ private fun WordDetailBody(
 				) {
 					Text(
 						text = state.word,
-						style = WordlyTypography.wordDetailWord,
+						style = WuiTypography.wordDetailWord,
 						color = colorScheme.onSurface,
 					)
 					WordDetailPhonetic(
@@ -153,7 +153,7 @@ private fun WordDetailBody(
 			if (!state.translation.isNullOrBlank()) {
 				Text(
 					text = state.translation,
-					style = WordlyTypography.wordDetailTranslation,
+					style = WuiTypography.wordDetailTranslation,
 					color = colorScheme.onSurface,
 				)
 			}
@@ -199,7 +199,7 @@ private fun WordDetailBody(
 				modifier = Modifier.padding(top = 4.dp),
 			)
 		}
-		CustomButton(
+		WuiButton(
 			text = if (state.isAddedToReview) {
 				stringResource(R.string.words_detail_added_to_review)
 			} else {
@@ -210,7 +210,7 @@ private fun WordDetailBody(
 			loading = state.isSubmittingReview,
 			leadingIcon = if (state.isAddedToReview) null else Icons.AutoMirrored.Outlined.PlaylistAdd,
 			containerColor = if (state.isAddedToReview) {
-				WordlyTheme.colors.success
+				Wui.colors.success
 			} else {
 				MaterialTheme.colorScheme.primary
 			},
@@ -253,14 +253,14 @@ private fun WordDetailPhonetic(
 	onPlayAudio: () -> Unit,
 ) {
 	if (phonetic.isNullOrBlank()) return
-	val muted = WordlyTheme.colors.muted
+	val muted = Wui.colors.muted
 	Row(
 		verticalAlignment = Alignment.CenterVertically,
 		horizontalArrangement = Arrangement.spacedBy(6.dp),
 	) {
 		Text(
 			text = phonetic,
-			style = WordlyTypography.addWordPhonetic,
+			style = WuiTypography.addWordPhonetic,
 			color = muted,
 		)
 		Icon(
@@ -422,7 +422,7 @@ private fun WordDetailExamples(examples: List<WordExample>) {
 	if (examples.isEmpty()) return
 	val colorScheme = MaterialTheme.colorScheme
 	val shape = RoundedCornerShape(16.dp)
-	val translationColor = WordlyTheme.colors.muted
+	val translationColor = Wui.colors.muted
 	Column(
 		modifier = Modifier
 			.fillMaxWidth()
@@ -433,21 +433,21 @@ private fun WordDetailExamples(examples: List<WordExample>) {
 	) {
 		Text(
 			text = stringResource(R.string.words_detail_examples_label),
-			style = WordlyTypography.wordDetailExamplesTitle,
+			style = WuiTypography.wordDetailExamplesTitle,
 			color = colorScheme.onSurfaceVariant,
 		)
 		examples.forEach { example ->
 			Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
 				Text(
 					text = example.text,
-					style = WordlyTypography.wordDetailExample,
+					style = WuiTypography.wordDetailExample,
 					color = colorScheme.onSurface,
 				)
 				val translation = example.translation
 				if (!translation.isNullOrBlank()) {
 					Text(
 						text = translation,
-						style = WordlyTypography.wordDetailExampleTranslation,
+						style = WuiTypography.wordDetailExampleTranslation,
 						color = translationColor,
 					)
 				}
@@ -548,7 +548,7 @@ private fun RepeatDateBox(
 
 @Composable
 private fun statusAccentColor(status: WordStatus): Color {
-	val extended = WordlyTheme.colors
+	val extended = Wui.colors
 	return when (status) {
 		WordStatus.New -> extended.muted
 		WordStatus.InProgress -> extended.warning
@@ -559,7 +559,7 @@ private fun statusAccentColor(status: WordStatus): Color {
 @Composable
 private fun detailTagPalette(index: Int): Color {
 	val colorScheme = MaterialTheme.colorScheme
-	val extended = WordlyTheme.colors
+	val extended = Wui.colors
 	val colors = listOf(
 		extended.success,
 		colorScheme.primary,

@@ -46,8 +46,8 @@ import androidx.compose.ui.unit.dp
 import com.nmichail.wordly.android.features.books.ui.component.BookReaderPageControls
 import com.nmichail.wordly.android.features.books.ui.component.BookTranslateButton
 import com.nmichail.wordly.android.features.books.ui.component.BookTranslatingOverlay
-import com.nmichail.wordly.android.component.ui.pagination.paginateMeasuredTexts
-import com.nmichail.wordly.android.component.ui.theme.WordlyTypography
+import com.nmichail.wordly.android.component.wui.pagination.wuiPaginateMeasuredTexts
+import com.nmichail.wordly.android.component.wui.theme.WuiTypography
 import com.nmichail.wordly.android.features.books.R
 import com.nmichail.wordly.android.features.books.domain.entity.BookParagraph
 import com.nmichail.wordly.android.features.books.domain.entity.BookTranslation
@@ -251,7 +251,7 @@ private fun BookReaderPagedContent(
 ) {
 	val density = LocalDensity.current
 	val textMeasurer = rememberTextMeasurer()
-	val bodyStyle = WordlyTypography.bookReaderBody
+	val bodyStyle = WuiTypography.bookReaderBody
 	val paragraphSpacingPx = with(density) { 16.dp.roundToPx() }
 	val hintReservedPx = with(density) { 36.dp.roundToPx() }
 	val horizontalPaddingPx = with(density) { 32.dp.roundToPx() }
@@ -368,7 +368,7 @@ private fun paginateBookParagraphs(
 	style: TextStyle,
 	measure: (String, TextStyle, Int) -> Int,
 ): List<IntRange> =
-	paginateMeasuredTexts(
+	wuiPaginateMeasuredTexts(
 		primaryTexts = paragraphs.map { paragraph ->
 			paragraph.segments.joinToString(separator = "") { it.text }
 		},

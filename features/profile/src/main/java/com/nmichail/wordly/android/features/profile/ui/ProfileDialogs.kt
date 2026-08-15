@@ -17,9 +17,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import com.nmichail.wordly.android.component.ui.R as ComponentR
-import com.nmichail.wordly.android.component.ui.components.button.CustomButton
-import com.nmichail.wordly.android.component.ui.components.dialog.SelectionDialog
+import com.nmichail.wordly.android.component.wui.R as ComponentR
+import com.nmichail.wordly.android.component.wui.components.button.WuiButton
+import com.nmichail.wordly.android.component.wui.components.dialog.WuiSelectionDialog
 import com.nmichail.wordly.android.core.preferences.domain.entity.AppThemeMode
 import com.nmichail.wordly.android.features.profile.R
 import com.nmichail.wordly.android.features.profile.domain.entity.DailyGoal
@@ -88,7 +88,7 @@ private fun LevelDialog(
 		if (index >= 0) levelLabels[index] else dialog.selected
 	}
 
-	SelectionDialog(
+	WuiSelectionDialog(
 		title = stringResource(R.string.profile_level_dialog_title),
 		options = options,
 		selectedOption = selected,
@@ -118,7 +118,7 @@ private fun DailyGoalDialog(
 		dialog.selected.wordsPerDay,
 	)
 
-	SelectionDialog(
+	WuiSelectionDialog(
 		title = stringResource(R.string.profile_daily_goal_dialog_title),
 		options = options,
 		selectedOption = selected,
@@ -144,7 +144,7 @@ private fun ThemeDialog(
 	val options = dialog.options.map { themeModeLabel(mode = it) }
 	val selected = themeModeLabel(mode = dialog.selected)
 
-	SelectionDialog(
+	WuiSelectionDialog(
 		title = stringResource(R.string.profile_theme_dialog_title),
 		options = options,
 		selectedOption = selected,
@@ -201,13 +201,13 @@ private fun LogoutDialog(
 					textAlign = TextAlign.Center,
 					modifier = Modifier.padding(top = 8.dp),
 				)
-				CustomButton(
+				WuiButton(
 					text = stringResource(R.string.profile_logout_confirm),
 					onClick = onConfirm,
 					loading = loggingOut,
 					modifier = Modifier.padding(top = 24.dp),
 				)
-				CustomButton(
+				WuiButton(
 					text = stringResource(R.string.profile_logout_cancel),
 					onClick = onDismiss,
 					enabled = !loggingOut,

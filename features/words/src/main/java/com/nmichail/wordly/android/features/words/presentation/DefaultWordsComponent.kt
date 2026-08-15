@@ -74,6 +74,6 @@ internal class DefaultWordsComponent(
 	}
 
 	override fun handleCalendar(action: WordsComponent.CalendarAction) {
-		store.accept(WordsStore.Intent.Calendar(action = action))
+		store.accept(WordsStore.Intent.WuiCalendar(action = action))
 	}
 }

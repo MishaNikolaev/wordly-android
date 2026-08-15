@@ -16,8 +16,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.nmichail.wordly.android.component.ui.theme.WordlyAndroidTheme
-import com.nmichail.wordly.android.component.ui.theme.isAppInDarkTheme
+import com.nmichail.wordly.android.component.wui.theme.WuiTheme
+import com.nmichail.wordly.android.component.wui.theme.isAppInDarkTheme
 
 enum class ConstructorWordChipStyle {
 	Bank,
@@ -72,7 +72,7 @@ fun ConstructorWordChip(
 @Preview(showBackground = true)
 @Composable
 private fun ConstructorWordChipPreview() {
-	WordlyAndroidTheme {
+	WuiTheme {
 		Row(
 			modifier = Modifier.padding(16.dp),
 			horizontalArrangement = Arrangement.spacedBy(8.dp),

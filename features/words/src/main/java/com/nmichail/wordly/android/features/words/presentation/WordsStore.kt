@@ -31,7 +31,7 @@ internal interface WordsStore :
 
 		data class ChangeDetailStatus(val status: WordStatus) : Intent
 
-		data class Calendar(val action: WordsComponent.CalendarAction) : Intent
+		data class WuiCalendar(val action: WordsComponent.CalendarAction) : Intent
 
 		data object ConfirmAddToReview : Intent
 

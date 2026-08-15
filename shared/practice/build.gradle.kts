@@ -11,5 +11,5 @@ dependencies {
 
 	debugImplementation(libs.androidx.ui.tooling)
 
-	implementation(projects.component.ui)
+	implementation(projects.component.wui)
 }

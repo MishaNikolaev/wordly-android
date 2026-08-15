@@ -8,6 +8,6 @@ dependencies {
 	implementation(libs.androidx.material3)
 	implementation(libs.androidx.material.icons.extended)
 
-	implementation(projects.component.ui)
+	implementation(projects.component.wui)
 	implementation(projects.shared.words.domain)
 }

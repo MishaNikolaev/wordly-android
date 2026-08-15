@@ -1,6 +1,6 @@
 package com.nmichail.wordly.android.features.words.detail.presentation
 
-import com.nmichail.wordly.android.component.ui.components.calendar.CalendarDay
+import com.nmichail.wordly.android.component.wui.components.calendar.WuiCalendarDay
 import com.nmichail.wordly.android.features.words.domain.entity.WordExample
 import com.nmichail.wordly.android.features.words.domain.entity.WordStatus
 
@@ -26,6 +26,6 @@ data class CalendarState(
 	val monthTitle: String,
 	val year: Int,
 	val month: Int,
-	val days: List<CalendarDay?>,
+	val days: List<WuiCalendarDay?>,
 	val selectedEpochDay: Long,
 )

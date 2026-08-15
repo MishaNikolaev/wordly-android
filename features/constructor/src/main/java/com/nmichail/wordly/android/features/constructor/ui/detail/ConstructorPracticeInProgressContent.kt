@@ -47,12 +47,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
-import com.nmichail.wordly.android.component.ui.components.button.CustomButton
+import com.nmichail.wordly.android.component.wui.components.button.WuiButton
 import com.nmichail.wordly.android.features.constructor.ui.component.ConstructorAnswerBoard
 import com.nmichail.wordly.android.features.constructor.ui.component.ConstructorWordChip
 import com.nmichail.wordly.android.features.constructor.ui.component.ConstructorWordChipStyle
 import com.nmichail.wordly.android.shared.practice.PracticeAnswerFeedback
-import com.nmichail.wordly.android.component.ui.theme.WordlyTypography
+import com.nmichail.wordly.android.component.wui.theme.WuiTypography
 import com.nmichail.wordly.android.features.constructor.R
 import com.nmichail.wordly.android.features.constructor.domain.entity.ConstructorWord
 import com.nmichail.wordly.android.features.constructor.presentation.detail.ConstructorPracticeComponent
@@ -230,7 +230,7 @@ private fun ConstructorPracticeTopBar(
 				currentIndex,
 				totalCount,
 			),
-			style = WordlyTypography.mono.copy(
+			style = WuiTypography.mono.copy(
 				fontWeight = FontWeight.Bold,
 				fontSize = 14.sp,
 				lineHeight = 14.sp,
@@ -402,7 +402,7 @@ private fun ConstructorPracticeBottomAction(
 	} else {
 		stringResource(R.string.constructor_practice_check)
 	}
-	CustomButton(
+	WuiButton(
 		text = text,
 		onClick = if (isAnswerRevealed) onContinueClick else onCheckClick,
 		enabled = isAnswerRevealed || canCheck,

@@ -22,15 +22,15 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import com.nmichail.wordly.android.shared.authorization.AuthBackground
-import com.nmichail.wordly.android.component.ui.components.button.CustomButton
-import com.nmichail.wordly.android.component.ui.components.text.LinkedText
-import com.nmichail.wordly.android.component.ui.components.text.ScreenTitle
-import com.nmichail.wordly.android.component.ui.components.field.SelectionField
+import com.nmichail.wordly.android.component.wui.components.button.WuiButton
+import com.nmichail.wordly.android.component.wui.components.text.WuiLinkedText
+import com.nmichail.wordly.android.component.wui.components.text.WuiScreenTitle
+import com.nmichail.wordly.android.component.wui.components.field.WuiSelectionField
 import com.nmichail.wordly.android.features.authorization.signup.ui.component.SignUpAuthHeader
-import com.nmichail.wordly.android.component.ui.components.field.CustomTextField
-import com.nmichail.wordly.android.component.ui.components.button.TextLink
-import com.nmichail.wordly.android.component.ui.components.snackbar.SnackBarHost
-import com.nmichail.wordly.android.component.ui.components.snackbar.showErrorSnackBar
+import com.nmichail.wordly.android.component.wui.components.field.WuiTextField
+import com.nmichail.wordly.android.component.wui.components.button.WuiTextLink
+import com.nmichail.wordly.android.component.wui.components.snackbar.WuiSnackBarHost
+import com.nmichail.wordly.android.component.wui.components.snackbar.showWuiErrorSnackBar
 import com.nmichail.wordly.android.core.validation.ui.emailErrorMessage
 import com.nmichail.wordly.android.core.validation.ui.nameErrorMessage
 import com.nmichail.wordly.android.core.validation.ui.notEmptyErrorMessage
@@ -57,7 +57,7 @@ fun SignUpContent(
 			SignUpComponent.Error.RegistrationFailed -> context.getString(R.string.sign_up_registration_error)
 			SignUpComponent.Error.NoConnection -> context.getString(R.string.sign_up_no_connection)
 		}
-		showErrorSnackBar(
+		showWuiErrorSnackBar(
 			snackBarHostState = snackBarHostState,
 			message = message,
 		)
@@ -68,7 +68,7 @@ fun SignUpContent(
 		modifier = modifier.fillMaxSize(),
 		containerColor = Color.Transparent,
 		contentWindowInsets = WindowInsets(0, 0, 0, 0),
-		snackbarHost = { SnackBarHost(snackBarHostState = snackBarHostState) },
+		snackbarHost = { WuiSnackBarHost(snackBarHostState = snackBarHostState) },
 	) {
 		AuthBackground(
 			modifier = Modifier.fillMaxSize(),
@@ -93,13 +93,13 @@ private fun SignUpForm(
 	modifier: Modifier = Modifier,
 ) {
 	Column(modifier = modifier.fillMaxWidth()) {
-		ScreenTitle(
+		WuiScreenTitle(
 			title = stringResource(R.string.sign_up_title),
 			subtitle = stringResource(R.string.sign_up_subtitle),
 			textAlign = TextAlign.Start,
 		)
 
-		CustomTextField(
+		WuiTextField(
 			label = stringResource(R.string.sign_up_label_email),
 			value = state.email.data,
 			onValueChange = component::handleChangeEmail,
@@ -108,7 +108,7 @@ private fun SignUpForm(
 			errorMessage = stringResource(id = emailErrorMessage(state = state.email.validationState)),
 			modifier = Modifier.padding(top = 24.dp),
 		)
-		CustomTextField(
+		WuiTextField(
 			label = stringResource(R.string.sign_up_label_password),
 			value = state.password.data,
 			onValueChange = component::handleChangePassword,
@@ -121,14 +121,14 @@ private fun SignUpForm(
 		SignUpNameFields(state = state, component = component)
 		SignUpEnglishLevelField(state = state, component = component)
 
-		CustomButton(
+		WuiButton(
 			text = stringResource(R.string.sign_up_submit),
 			onClick = component::handleSubmit,
 			enabled = state.areFieldsValid(),
 			loading = state.isSubmitting,
 			modifier = Modifier.padding(top = 24.dp),
 		)
-		LinkedText(
+		WuiLinkedText(
 			text = stringResource(R.string.sign_up_terms),
 			linkText = stringResource(R.string.sign_up_terms_link),
 			onLinkClick = { component.handleOpenTermsOfUse() },
@@ -136,7 +136,7 @@ private fun SignUpForm(
 				.fillMaxWidth()
 				.padding(top = 20.dp),
 		)
-		TextLink(
+		WuiTextLink(
 			text = stringResource(R.string.sign_up_has_account),
 			onClick = component::handleNavigateToSignIn,
 			enabled = !state.isSubmitting,
@@ -157,7 +157,7 @@ private fun SignUpNameFields(
 			.fillMaxWidth()
 			.padding(top = 16.dp),
 	) {
-		CustomTextField(
+		WuiTextField(
 			label = stringResource(R.string.sign_up_first_name_label),
 			value = state.firstName.data,
 			onValueChange = component::handleChangeFirstName,
@@ -172,7 +172,7 @@ private fun SignUpNameFields(
 				.weight(1f)
 				.padding(end = 8.dp),
 		)
-		CustomTextField(
+		WuiTextField(
 			label = stringResource(R.string.sign_up_last_name_label),
 			value = state.lastName.data,
 			onValueChange = component::handleChangeLastName,
@@ -199,7 +199,7 @@ private fun SignUpEnglishLevelField(
 	val englishLevelLabels = stringArrayResource(R.array.sign_up_english_levels).toList()
 	val selectedLabel = englishLevelLabels.getOrElse(englishLevelCodes.indexOf(state.englishLevel.data)) { "" }
 
-	SelectionField(
+	WuiSelectionField(
 		label = stringResource(R.string.sign_up_english_level_label),
 		value = selectedLabel,
 		options = englishLevelLabels,

@@ -15,11 +15,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.nmichail.wordly.android.component.ui.theme.WordlyAndroidTheme
+import com.nmichail.wordly.android.component.wui.theme.WuiTheme
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import com.nmichail.wordly.android.component.ui.theme.PreviewTheme
-import com.nmichail.wordly.android.component.ui.theme.PreviewThemeProvider
-import com.nmichail.wordly.android.component.ui.theme.WordlyTypography
+import com.nmichail.wordly.android.component.wui.theme.PreviewTheme
+import com.nmichail.wordly.android.component.wui.theme.PreviewThemeProvider
+import com.nmichail.wordly.android.component.wui.theme.WuiTypography
 
 @Composable
 fun AuthPreviewWordCard(
@@ -46,12 +46,12 @@ fun AuthPreviewWordCard(
 		) {
 			Text(
 				text = word,
-				style = WordlyTypography.authPreviewWord,
+				style = WuiTypography.authPreviewWord,
 				color = colorScheme.onSurface,
 			)
 			Text(
 				text = translation,
-				style = WordlyTypography.authPreviewTranslation,
+				style = WuiTypography.authPreviewTranslation,
 				color = colorScheme.onSurfaceVariant,
 				modifier = Modifier.padding(top = 4.dp),
 			)
@@ -64,7 +64,7 @@ fun AuthPreviewWordCard(
 private fun AuthPreviewWordCardPreview(
 	@PreviewParameter(PreviewThemeProvider::class) theme: PreviewTheme,
 ) {
-	WordlyAndroidTheme(darkTheme = theme == PreviewTheme.Dark) {
+	WuiTheme(darkTheme = theme == PreviewTheme.Dark) {
 		AuthPreviewWordCard(word = "serendipity", translation = "удача")
 	}
 }

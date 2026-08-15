@@ -197,7 +197,7 @@ internal class WordsStoreFactory @Inject constructor(
 					dispatch(Msg.DetailDialogUpdated(dialog = null))
 				}
 				is WordsStore.Intent.ChangeDetailStatus -> changeDetailStatus(intent.status)
-				is WordsStore.Intent.Calendar -> handleCalendar(intent.action)
+				is WordsStore.Intent.WuiCalendar -> handleCalendar(intent.action)
 				WordsStore.Intent.ConfirmAddToReview -> confirmAddToReview()
 				WordsStore.Intent.PlayAudio -> Unit
 			}
