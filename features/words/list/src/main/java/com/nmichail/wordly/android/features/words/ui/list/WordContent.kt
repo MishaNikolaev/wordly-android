@@ -1,4 +1,4 @@
-package com.nmichail.wordly.android.features.words.ui
+package com.nmichail.wordly.android.features.words.ui.list
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -42,6 +42,8 @@ import com.nmichail.wordly.android.features.words.presentation.WordDetailDialogS
 import com.nmichail.wordly.android.features.words.presentation.detail.WordDetailStore
 import com.nmichail.wordly.android.features.words.presentation.WordsComponent
 import com.nmichail.wordly.android.features.words.presentation.list.WordsListStore
+import com.nmichail.wordly.android.features.words.ui.detail.WordDetailScreen
+import com.nmichail.wordly.android.features.words.ui.dialog.AddWordDialog
 
 @Composable
 fun WordContent(
@@ -62,7 +64,7 @@ fun WordContent(
 			modifier = modifier,
 		)
 		WordsListStore.State.Error -> WordsError(
-			onRetryClick = component::handleRetry,
+			onRetryClick = { component.listStore.accept(WordsListStore.Intent.Retry) },
 			modifier = modifier.fillMaxSize(),
 		)
 	}
@@ -153,10 +155,10 @@ private fun WordsLoaded(
 	if (addDialog != null) {
 		AddWordDialog(
 			state = addDialog,
-			onDismiss = component::handleDismissAddWord,
-			onWordInputChange = component::handleAddWordInputChange,
-			onToggleTag = component::handleToggleTag,
-			onConfirm = component::handleConfirmAddWord,
+			onDismiss = { component.addWordStore.accept(AddWordStore.Intent.Dismiss) },
+			onWordInputChange = { value -> component.addWordStore.accept(AddWordStore.Intent.ChangeWordInput(value)) },
+			onToggleTag = { tagId -> component.addWordStore.accept(AddWordStore.Intent.ToggleTag(tagId)) },
+			onConfirm = { component.addWordStore.accept(AddWordStore.Intent.Confirm) },
 		)
 	}
 }
@@ -168,28 +170,28 @@ private fun WordsDetailOverlay(
 ) {
 	WordDetailScreen(
 		state = dialog,
-		onDismiss = component::handleDismissWordDetail,
-		onStatusChange = component::handleDetailStatusChange,
+		onDismiss = { component.wordDetailStore.accept(WordDetailStore.Intent.Dismiss) },
+		onStatusChange = { status -> component.wordDetailStore.accept(WordDetailStore.Intent.ChangeStatus(status)) },
 		onOpenCalendar = {
-			component.handleCalendar(WordDetailStore.CalendarAction.Open)
+			component.wordDetailStore.accept(WordDetailStore.Intent.Calendar(WordDetailStore.CalendarAction.Open))
 		},
 		onDismissCalendar = {
-			component.handleCalendar(WordDetailStore.CalendarAction.Dismiss)
+			component.wordDetailStore.accept(WordDetailStore.Intent.Calendar(WordDetailStore.CalendarAction.Dismiss))
 		},
 		onCalendarPreviousMonth = {
-			component.handleCalendar(WordDetailStore.CalendarAction.PreviousMonth)
+			component.wordDetailStore.accept(WordDetailStore.Intent.Calendar(WordDetailStore.CalendarAction.PreviousMonth))
 		},
 		onCalendarNextMonth = {
-			component.handleCalendar(WordDetailStore.CalendarAction.NextMonth)
+			component.wordDetailStore.accept(WordDetailStore.Intent.Calendar(WordDetailStore.CalendarAction.NextMonth))
 		},
 		onCalendarToday = {
-			component.handleCalendar(WordDetailStore.CalendarAction.Today)
+			component.wordDetailStore.accept(WordDetailStore.Intent.Calendar(WordDetailStore.CalendarAction.Today))
 		},
 		onCalendarDayClick = { day ->
-			component.handleCalendar(WordDetailStore.CalendarAction.DayClick(day))
+			component.wordDetailStore.accept(WordDetailStore.Intent.Calendar(WordDetailStore.CalendarAction.DayClick(day)))
 		},
-		onConfirmAddToReview = component::handleConfirmAddToReview,
-		onPlayAudio = component::handlePlayAudio,
+		onConfirmAddToReview = { component.wordDetailStore.accept(WordDetailStore.Intent.ConfirmAddToReview) },
+		onPlayAudio = { component.wordDetailStore.accept(WordDetailStore.Intent.PlayAudio) },
 		modifier = Modifier
 			.fillMaxSize()
 			.background(MaterialTheme.colorScheme.background),
@@ -206,21 +208,21 @@ private fun WordsMainContent(
 	Box(modifier = modifier) {
 		WordsScreenBody(
 			state = state,
-			onSearchQueryChange = component::handleSearchQueryChange,
+			onSearchQueryChange = { query -> component.listStore.accept(WordsListStore.Intent.ChangeSearchQuery(query)) },
 			onFilterChange = { filter ->
 				clearSearchFocus()
-				component.handleFilterChange(filter)
+				component.listStore.accept(WordsListStore.Intent.ChangeFilter(filter))
 			},
 			onWordClick = { wordId ->
 				clearSearchFocus()
-				component.handleOpenWordDetail(wordId)
+				component.openWordDetail(wordId)
 			},
 			onScroll = clearSearchFocus,
 		)
 		FloatingActionButton(
 			onClick = {
 				clearSearchFocus()
-				component.handleOpenAddWord()
+				component.openAddWord()
 			},
 			modifier = Modifier
 				.align(Alignment.BottomEnd)

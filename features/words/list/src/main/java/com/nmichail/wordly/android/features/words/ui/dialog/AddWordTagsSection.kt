@@ -1,4 +1,4 @@
-package com.nmichail.wordly.android.features.words.ui
+package com.nmichail.wordly.android.features.words.ui.dialog
 
 import com.nmichail.wordly.android.component.wui.theme.Wui
 import androidx.compose.foundation.background

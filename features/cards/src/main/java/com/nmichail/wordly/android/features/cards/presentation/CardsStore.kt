@@ -25,8 +25,6 @@ interface CardsStore :
 
 		data object Loading : State
 
-		data object Error : State
-
 		data class Content(
 			val title: String,
 			val searchQuery: String,
@@ -35,6 +33,8 @@ interface CardsStore :
 			val allSections: List<CardsSection>,
 			val sections: List<CardsSection>,
 		) : State
+
+		data object Error : State
 	}
 
 	sealed interface Label {

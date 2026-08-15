@@ -1,6 +1,6 @@
 @file:Suppress("LongMethod", "TooManyFunctions")
 
-package com.nmichail.wordly.android.features.words.ui
+package com.nmichail.wordly.android.features.words.ui.detail
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background

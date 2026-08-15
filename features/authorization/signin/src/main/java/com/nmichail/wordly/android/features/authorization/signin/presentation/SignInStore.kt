@@ -11,13 +11,13 @@ interface SignInStore :
 
 		data object Loading : State
 
-		data class Error(val content: Content) : State
-
 		data class Content(
 			val email: EmailValidationItem,
 			val password: PasswordValidationItem,
 			val submitting: Boolean,
 		) : State
+
+		data class Error(val content: Content) : State
 	}
 
 	sealed interface Label {
