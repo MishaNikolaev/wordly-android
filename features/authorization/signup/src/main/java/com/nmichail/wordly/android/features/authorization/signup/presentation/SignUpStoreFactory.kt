@@ -1,5 +1,6 @@
 package com.nmichail.wordly.android.features.authorization.signup.presentation
 
+import kotlinx.coroutines.launch
 import com.arkivanov.mvikotlin.core.store.Reducer
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.store.StoreFactory
@@ -142,21 +143,23 @@ internal class SignUpStoreFactory @Inject constructor(
             if (!content.areFieldsValid()) return
 
             dispatch(Msg.SetSubmitting(submitting = true))
-            launchTry {
-                val tokens = signUpUseCase(
-                    SignUpForm(
-                        email = email.data,
-                        password = password.data,
-                        firstName = firstName.data,
-                        lastName = lastName.data,
-                        englishLevel = englishLevel.data,
-                    ),
-                )
-                saveAuthTokensUseCase(tokens)
-                dispatch(Msg.SetSubmitting(submitting = false))
-                publish(SignUpStore.Label.OpenMainHost)
-            } catch { error ->
-                handleError(error)
+            scope.launch {
+            	try {
+            		val tokens = signUpUseCase(
+            		    SignUpForm(
+            		        email = email.data,
+            		        password = password.data,
+            		        firstName = firstName.data,
+            		        lastName = lastName.data,
+            		        englishLevel = englishLevel.data,
+            		    ),
+            		)
+            		saveAuthTokensUseCase(tokens)
+            		dispatch(Msg.SetSubmitting(submitting = false))
+            		publish(SignUpStore.Label.OpenMainHost)
+            	} catch (error: Exception) {
+            		handleError(error)
+            	}
             }
         }
 

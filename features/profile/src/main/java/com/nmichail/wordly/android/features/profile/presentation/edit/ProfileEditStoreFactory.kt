@@ -1,5 +1,6 @@
 package com.nmichail.wordly.android.features.profile.presentation.edit
 
+import kotlinx.coroutines.launch
 import com.arkivanov.mvikotlin.core.store.Reducer
 import com.arkivanov.mvikotlin.core.store.SimpleBootstrapper
 import com.arkivanov.mvikotlin.core.store.Store
@@ -117,10 +118,12 @@ internal class ProfileEditStoreFactory @Inject constructor(
 
 		private fun load() {
 			dispatch(Msg.Loading)
-			launchTry {
-				dispatch(Msg.Loaded(profile = getProfileUseCase()))
-			} catch {
-				dispatch(Msg.SetError)
+			scope.launch {
+				try {
+					dispatch(Msg.Loaded(profile = getProfileUseCase()))
+				} catch (_: Exception) {
+					dispatch(Msg.SetError)
+				}
 			}
 		}
 
@@ -128,19 +131,21 @@ internal class ProfileEditStoreFactory @Inject constructor(
 			val content = state() as? ProfileEditStore.State.Content ?: return
 			if (content.saving) return
 			dispatch(Msg.Saving(saving = true))
-			launchTry {
-				updateProfileUseCase(
-					params = UpdateProfileParams(
-						firstName = content.firstName.trim(),
-						lastName = content.lastName.trim(),
-						englishLevel = content.englishLevel,
-						dailyGoalWords = null,
-						notificationTimes = null,
-					),
-				)
-				dispatch(Msg.Saved)
-			} catch {
-				dispatch(Msg.Saving(saving = false))
+			scope.launch {
+				try {
+					updateProfileUseCase(
+						params = UpdateProfileParams(
+							firstName = content.firstName.trim(),
+							lastName = content.lastName.trim(),
+							englishLevel = content.englishLevel,
+							dailyGoalWords = null,
+							notificationTimes = null,
+						),
+					)
+					dispatch(Msg.Saved)
+				} catch (_: Exception) {
+					dispatch(Msg.Saving(saving = false))
+				}
 			}
 		}
 	}

@@ -2,6 +2,7 @@
 
 package com.nmichail.wordly.android.features.words.presentation.detail
 
+import kotlinx.coroutines.launch
 import com.arkivanov.mvikotlin.core.store.Reducer
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.store.StoreFactory
@@ -113,11 +114,9 @@ internal class WordDetailStoreFactory @Inject constructor(
 		private fun changeStatus(status: WordStatus) {
 			val dialog = currentDialog() ?: return
 			dispatch(Msg.DialogUpdated(dialog = dialog.copy(status = status)))
-			launchTry {
+			scope.launch {
 				updateWordStatusUseCase(wordId = dialog.wordId, status = status)
 				publish(WordDetailStore.Label.Changed)
-			} catch {
-				// ignored
 			}
 		}
 
@@ -210,26 +209,28 @@ internal class WordDetailStoreFactory @Inject constructor(
 			val todayEpoch = LocalDate.now().toEpochDay()
 			val epochDay = (dialog.repeatEpochDay ?: todayEpoch).coerceAtLeast(todayEpoch)
 			dispatch(Msg.DialogUpdated(dialog = dialog.copy(submittingReview = true)))
-			launchTry {
-				addWordToReviewUseCase(
-					WordReview(
-						wordId = dialog.wordId,
-						epochDay = epochDay,
-					),
-				)
-				val current = currentDialog() ?: return@launchTry
-				dispatch(
-					Msg.DialogUpdated(
-						dialog = current.copy(
-							submittingReview = false,
-							addedToReview = true,
+			scope.launch {
+				try {
+					addWordToReviewUseCase(
+						WordReview(
+							wordId = dialog.wordId,
+							epochDay = epochDay,
 						),
-					),
-				)
-				publish(WordDetailStore.Label.Changed)
-			} catch {
-				val current = currentDialog() ?: return@catch
-				dispatch(Msg.DialogUpdated(dialog = current.copy(submittingReview = false)))
+					)
+					val current = currentDialog() ?: return@launch
+					dispatch(
+						Msg.DialogUpdated(
+							dialog = current.copy(
+								submittingReview = false,
+								addedToReview = true,
+							),
+						),
+					)
+					publish(WordDetailStore.Label.Changed)
+				} catch (_: Exception) {
+					val current = currentDialog() ?: return@launch
+					dispatch(Msg.DialogUpdated(dialog = current.copy(submittingReview = false)))
+				}
 			}
 		}
 	}

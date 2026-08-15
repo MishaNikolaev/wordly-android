@@ -1,10 +1,11 @@
 package com.nmichail.wordly.android.features.constructor.presentation.detail
 
+import com.nmichail.wordly.android.core.navigation.componentScope
+import kotlinx.coroutines.launch
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.value.Value
 import com.arkivanov.mvikotlin.core.instancekeeper.getStore
 import com.arkivanov.mvikotlin.extensions.coroutines.labelsChannel
-import com.nmichail.wordly.android.component.presentation.launchTry
 import com.nmichail.wordly.android.core.navigation.asValue
 
 internal class DefaultConstructorPracticeComponent(
@@ -22,14 +23,12 @@ internal class DefaultConstructorPracticeComponent(
 	override val model: Value<ConstructorPracticeStore.State> = store.asValue()
 
 	init {
-		launchTry {
+		componentScope().launch {
 			for (label in store.labelsChannel(lifecycle)) {
 				when (label) {
 					ConstructorPracticeStore.Label.Close -> constructorPracticeRouter.navigateBack()
 				}
 			}
-		} catch {
-			// ignored
 		}
 	}
 

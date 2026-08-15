@@ -14,7 +14,11 @@ class EndpointDataSourceImpl(
 
 	override fun getEndpoint(): Endpoint {
 		val name = preferences.getString(ENDPOINT_NAME, Endpoint.DEV.name) ?: Endpoint.DEV.name
-		return runCatching { Endpoint.valueOf(name) }.getOrDefault(Endpoint.DEV)
+		return try {
+			Endpoint.valueOf(name)
+		} catch (_: Exception) {
+			Endpoint.DEV
+		}
 	}
 
 	override fun setEndpoint(endpoint: Endpoint) {

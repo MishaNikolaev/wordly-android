@@ -1,5 +1,6 @@
 package com.nmichail.wordly.android.features.constructor.presentation
 
+import kotlinx.coroutines.launch
 import com.arkivanov.mvikotlin.core.store.Reducer
 import com.arkivanov.mvikotlin.core.store.SimpleBootstrapper
 import com.arkivanov.mvikotlin.core.store.Store
@@ -149,7 +150,7 @@ internal class ConstructorStoreFactory @Inject constructor(
 
 		private fun changeLevel(level: String) {
 			val content = state() as? ConstructorStore.State.Content ?: return
-			launchTry {
+			scope.launch {
 				updateEnglishLevelUseCase(level)
 				val allSections = updateCatalogLevelSectionTitles(
 					sections = content.allSections,
@@ -178,18 +179,18 @@ internal class ConstructorStoreFactory @Inject constructor(
 						sections = sections,
 					),
 				)
-			} catch {
-				// keep previous level
 			}
 		}
 
 		private fun loadCatalog() {
 			dispatch(Msg.Loading)
-			launchTry {
-				val catalog = getConstructorCatalogUseCase()
-				dispatch(Msg.CatalogLoaded(catalog = catalog))
-			} catch {
-				dispatch(Msg.SetError)
+			scope.launch {
+				try {
+					val catalog = getConstructorCatalogUseCase()
+					dispatch(Msg.CatalogLoaded(catalog = catalog))
+				} catch (_: Exception) {
+					dispatch(Msg.SetError)
+				}
 			}
 		}
 	}

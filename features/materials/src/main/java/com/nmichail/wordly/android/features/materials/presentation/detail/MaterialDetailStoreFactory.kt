@@ -1,5 +1,6 @@
 package com.nmichail.wordly.android.features.materials.presentation.detail
 
+import kotlinx.coroutines.launch
 import com.arkivanov.mvikotlin.core.store.Reducer
 import com.arkivanov.mvikotlin.core.store.SimpleBootstrapper
 import com.arkivanov.mvikotlin.core.store.Store
@@ -102,11 +103,13 @@ internal class MaterialDetailStoreFactory @Inject constructor(
 
 		private fun load(materialId: String) {
 			dispatch(Msg.Loading)
-			launchTry {
-				val material = getMaterialUseCase(id = materialId)
-				dispatch(Msg.Loaded(material = material))
-			} catch {
-				dispatch(Msg.SetError)
+			scope.launch {
+				try {
+					val material = getMaterialUseCase(id = materialId)
+					dispatch(Msg.Loaded(material = material))
+				} catch (_: Exception) {
+					dispatch(Msg.SetError)
+				}
 			}
 		}
 	}

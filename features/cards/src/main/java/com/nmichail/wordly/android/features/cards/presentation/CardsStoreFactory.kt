@@ -1,5 +1,6 @@
 package com.nmichail.wordly.android.features.cards.presentation
 
+import kotlinx.coroutines.launch
 import com.arkivanov.mvikotlin.core.store.Reducer
 import com.arkivanov.mvikotlin.core.store.SimpleBootstrapper
 import com.arkivanov.mvikotlin.core.store.Store
@@ -149,7 +150,7 @@ internal class CardsStoreFactory @Inject constructor(
 
 		private fun changeLevel(level: String) {
 			val content = state() as? CardsStore.State.Content ?: return
-			launchTry {
+			scope.launch {
 				updateEnglishLevelUseCase(level)
 				val allSections = updateCatalogLevelSectionTitles(
 					sections = content.allSections,
@@ -178,18 +179,18 @@ internal class CardsStoreFactory @Inject constructor(
 						sections = sections,
 					),
 				)
-			} catch {
-				// keep previous level
 			}
 		}
 
 		private fun loadCards() {
 			dispatch(Msg.Loading)
-			launchTry {
-				val cards = getCardsUseCase()
-				dispatch(Msg.CardsLoaded(cards = cards))
-			} catch {
-				dispatch(Msg.SetError)
+			scope.launch {
+				try {
+					val cards = getCardsUseCase()
+					dispatch(Msg.CardsLoaded(cards = cards))
+				} catch (_: Exception) {
+					dispatch(Msg.SetError)
+				}
 			}
 		}
 	}

@@ -1,9 +1,10 @@
 package com.nmichail.wordly.android.features.profile.presentation
 
+import com.nmichail.wordly.android.core.navigation.componentScope
+import kotlinx.coroutines.launch
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.mvikotlin.core.instancekeeper.getStore
 import com.arkivanov.mvikotlin.extensions.coroutines.labelsChannel
-import com.nmichail.wordly.android.component.presentation.launchTry
 import com.nmichail.wordly.android.core.navigation.asValue
 import com.nmichail.wordly.android.core.preferences.domain.entity.AppThemeMode
 import com.nmichail.wordly.android.features.profile.domain.entity.DailyGoal
@@ -22,14 +23,12 @@ internal class DefaultProfileComponent(
 	override val model = store.asValue()
 
 	init {
-		launchTry {
+		componentScope().launch {
 			for (label in store.labelsChannel(lifecycle)) {
 				when (label) {
 					ProfileStore.Label.OpenEdit -> onOpenEdit()
 				}
 			}
-		} catch {
-			// ignored
 		}
 	}
 

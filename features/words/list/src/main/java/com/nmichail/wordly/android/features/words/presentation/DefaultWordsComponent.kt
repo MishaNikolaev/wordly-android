@@ -1,10 +1,11 @@
 package com.nmichail.wordly.android.features.words.presentation
 
+import com.nmichail.wordly.android.core.navigation.componentScope
+import kotlinx.coroutines.launch
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.value.Value
 import com.arkivanov.mvikotlin.core.instancekeeper.getStore
 import com.arkivanov.mvikotlin.extensions.coroutines.labelsChannel
-import com.nmichail.wordly.android.component.presentation.launchTry
 import com.nmichail.wordly.android.core.navigation.asValue
 import com.nmichail.wordly.android.features.words.presentation.detail.WordDetailStore
 import com.nmichail.wordly.android.features.words.presentation.detail.WordDetailStoreFactory
@@ -41,7 +42,7 @@ internal class DefaultWordsComponent(
 	override val wordDetailModel: Value<WordDetailStore.State> = wordDetailStore.asValue()
 
 	init {
-		launchTry {
+		componentScope().launch {
 			for (label in addWordStore.labelsChannel(lifecycle)) {
 				when (label) {
 					AddWordStore.Label.Dismiss -> Unit
@@ -50,10 +51,8 @@ internal class DefaultWordsComponent(
 					}
 				}
 			}
-		} catch {
-			// ignored
 		}
-		launchTry {
+		componentScope().launch {
 			for (label in wordDetailStore.labelsChannel(lifecycle)) {
 				when (label) {
 					WordDetailStore.Label.Dismiss -> Unit
@@ -62,8 +61,6 @@ internal class DefaultWordsComponent(
 					}
 				}
 			}
-		} catch {
-			// ignored
 		}
 	}
 

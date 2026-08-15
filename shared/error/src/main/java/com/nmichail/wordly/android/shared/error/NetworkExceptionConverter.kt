@@ -18,15 +18,15 @@ class NetworkExceptionConverter @Inject constructor(
 			else -> NetworkException.Unknown
 		}
 
-	private fun HttpException.getHttpErrorMessage(): NetworkException =
-		response()?.errorBody()?.string()
-			.takeIf { !it.isNullOrBlank() }
-			?.let { body ->
-				runCatching { gson.fromJson(body, ErrorMessageModel::class.java) }.getOrNull()
-			}
-			?.toEntity(code())
-			?: getErrorWithoutBody(code())
-
+	private fun HttpException.getHttpErrorMessage(): NetworkException {
+		val body = response()?.errorBody()?.string().takeIf { !it.isNullOrBlank() } ?: return getErrorWithoutBody(code())
+		val model = try {
+			gson.fromJson(body, ErrorMessageModel::class.java)
+		} catch (_: Exception) {
+			null
+		}
+		return model?.toEntity(code()) ?: getErrorWithoutBody(code())
+	}
 	private fun getErrorWithoutBody(statusCode: Int): NetworkException.ErrorMessage =
 		NetworkException.ErrorMessage(
 			statusCode = StatusCodes.entries.find { it.statusCode == statusCode } ?: StatusCodes.UNKNOWN,

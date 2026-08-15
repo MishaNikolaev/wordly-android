@@ -24,13 +24,15 @@ class TokenRepositoryImpl @Inject constructor(
 
 	override fun get(): AuthTokens? {
 		val json = preferences.getString(TOKEN_KEY, null) ?: return null
-		return runCatching { gson.fromJson(json, AuthTokens::class.java) }
-			.getOrNull()
-			.also { tokens ->
-				if (tokens == null) {
-					clear()
-				}
-			}
+		val tokens = try {
+			gson.fromJson(json, AuthTokens::class.java)
+		} catch (_: Exception) {
+			null
+		}
+		if (tokens == null) {
+			clear()
+		}
+		return tokens
 	}
 
 	override fun getAccessToken(): String? =

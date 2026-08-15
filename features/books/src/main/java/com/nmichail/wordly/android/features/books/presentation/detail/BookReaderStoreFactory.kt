@@ -1,5 +1,6 @@
 package com.nmichail.wordly.android.features.books.presentation.detail
 
+import kotlinx.coroutines.launch
 import com.arkivanov.mvikotlin.core.store.Reducer
 import com.arkivanov.mvikotlin.core.store.SimpleBootstrapper
 import com.arkivanov.mvikotlin.core.store.Store
@@ -136,11 +137,13 @@ internal class BookReaderStoreFactory @Inject constructor(
 
 		private fun loadBook() {
 			dispatch(Msg.Loading)
-			launchTry {
-				val book = getBookContentUseCase(bookId)
-				dispatch(Msg.BookLoaded(book = book))
-			} catch {
-				dispatch(Msg.SetError)
+			scope.launch {
+				try {
+					val book = getBookContentUseCase(bookId)
+					dispatch(Msg.BookLoaded(book = book))
+				} catch (_: Exception) {
+					dispatch(Msg.SetError)
+				}
 			}
 		}
 
@@ -152,11 +155,13 @@ internal class BookReaderStoreFactory @Inject constructor(
 				content.translating -> return
 				else -> {
 					dispatch(Msg.Translating)
-					launchTry {
-						val translation = getBookTranslationUseCase(bookId)
-						dispatch(Msg.TranslationLoaded(translation = translation))
-					} catch {
-						dispatch(Msg.TranslationFailed)
+					scope.launch {
+						try {
+							val translation = getBookTranslationUseCase(bookId)
+							dispatch(Msg.TranslationLoaded(translation = translation))
+						} catch (_: Exception) {
+							dispatch(Msg.TranslationFailed)
+						}
 					}
 				}
 			}

@@ -1,5 +1,6 @@
 package com.nmichail.wordly.android.features.authorization.signin.presentation
 
+import kotlinx.coroutines.launch
 import com.arkivanov.mvikotlin.core.store.Reducer
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.store.StoreFactory
@@ -89,18 +90,20 @@ internal class SignInStoreFactory @Inject constructor(
 			if (!email.isValid() || !password.isValid()) return
 
 			dispatch(Msg.SetSubmitting(submitting = true))
-			launchTry {
-				val tokens = signInUseCase(
-					SignInData(
-						email = email.data,
-						password = password.data,
-					),
-				)
-				saveAuthTokensUseCase(tokens)
-				dispatch(Msg.SetSubmitting(submitting = false))
-				publish(SignInStore.Label.OpenMainHost)
-			} catch { error ->
-				handleError(error)
+			scope.launch {
+				try {
+					val tokens = signInUseCase(
+						SignInData(
+							email = email.data,
+							password = password.data,
+						),
+					)
+					saveAuthTokensUseCase(tokens)
+					dispatch(Msg.SetSubmitting(submitting = false))
+					publish(SignInStore.Label.OpenMainHost)
+				} catch (error: Exception) {
+					handleError(error)
+				}
 			}
 		}
 
