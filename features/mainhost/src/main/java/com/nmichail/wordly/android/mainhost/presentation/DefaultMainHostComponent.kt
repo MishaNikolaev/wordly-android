@@ -1,5 +1,6 @@
 package com.nmichail.wordly.android.mainhost.presentation
 
+import android.os.Parcelable
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.DelicateDecomposeApi
 import com.arkivanov.decompose.router.stack.ChildStack
@@ -32,7 +33,7 @@ import com.nmichail.wordly.android.features.profile.presentation.edit.ProfileEdi
 import com.nmichail.wordly.android.features.review.presentation.ReviewComponent
 import com.nmichail.wordly.android.features.review.presentation.ReviewRouter
 import com.nmichail.wordly.android.features.words.presentation.WordsComponent
-import kotlinx.serialization.Serializable
+import kotlinx.parcelize.Parcelize
 
 @Suppress("TooManyFunctions")
 internal class DefaultMainHostComponent(
@@ -57,7 +58,7 @@ internal class DefaultMainHostComponent(
 
 	override val stack: Value<ChildStack<*, MainHostComponent.Child>> = childStack(
 		source = navigation,
-		serializer = MainHostConfig.serializer(),
+		serializer = null,
 		initialStack = { listOf(MainHostConfig.Home) },
 		handleBackButton = true,
 		childFactory = ::child,
@@ -293,52 +294,52 @@ internal class DefaultMainHostComponent(
 	}
 }
 
-@Serializable
-private sealed interface MainHostConfig {
+@Parcelize
+private sealed interface MainHostConfig : Parcelable {
 
-	@Serializable
+	@Parcelize
 	data object Home : MainHostConfig
 
-	@Serializable
+	@Parcelize
 	data object Words : MainHostConfig
 
-	@Serializable
+	@Parcelize
 	data object Materials : MainHostConfig
 
-	@Serializable
+	@Parcelize
 	data class MaterialDetail(
 		val materialId: String,
 	) : MainHostConfig
 
-	@Serializable
+	@Parcelize
 	data object Profile : MainHostConfig
 
-	@Serializable
+	@Parcelize
 	data object ProfileEdit : MainHostConfig
 
-	@Serializable
+	@Parcelize
 	data object Review : MainHostConfig
 
-	@Serializable
+	@Parcelize
 	data object Cards : MainHostConfig
 
-	@Serializable
+	@Parcelize
 	data class CardPractice(
 		val cardId: String,
 	) : MainHostConfig
 
-	@Serializable
+	@Parcelize
 	data object Constructor : MainHostConfig
 
-	@Serializable
+	@Parcelize
 	data class ConstructorPractice(
 		val themeId: String,
 	) : MainHostConfig
 
-	@Serializable
+	@Parcelize
 	data object Books : MainHostConfig
 
-	@Serializable
+	@Parcelize
 	data class BookReader(
 		val bookId: String,
 	) : MainHostConfig

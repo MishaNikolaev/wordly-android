@@ -1,6 +1,5 @@
 plugins {
 	alias(libs.plugins.wordlyAndroidLibrary)
-	alias(libs.plugins.kotlin.serialization)
 	alias(libs.plugins.ksp)
 }
 
