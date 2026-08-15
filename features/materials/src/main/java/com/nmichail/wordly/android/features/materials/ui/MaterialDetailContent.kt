@@ -50,6 +50,7 @@ import com.nmichail.wordly.android.features.materials.R
 import com.nmichail.wordly.android.features.materials.domain.entity.MaterialDetail
 import com.nmichail.wordly.android.features.materials.domain.entity.MaterialReaction
 import com.nmichail.wordly.android.features.materials.presentation.detail.MaterialDetailComponent
+import com.nmichail.wordly.android.features.materials.presentation.detail.MaterialDetailStore
 
 @Composable
 fun MaterialDetailContent(
@@ -64,18 +65,18 @@ fun MaterialDetailContent(
 			.background(MaterialTheme.colorScheme.background),
 	) {
 		when (val current = state) {
-			MaterialDetailComponent.State.Loading -> {
+			MaterialDetailStore.State.Loading -> {
 				CircularProgressIndicator(
 					modifier = Modifier.align(Alignment.Center),
 					color = MaterialTheme.colorScheme.primary,
 				)
 			}
-			MaterialDetailComponent.State.Error -> MaterialDetailError(
+			MaterialDetailStore.State.Error -> MaterialDetailError(
 				onBackClick = component::handleBack,
 				onRetryClick = component::handleRetry,
 				modifier = Modifier.fillMaxSize(),
 			)
-			is MaterialDetailComponent.State.Content -> MaterialDetailLoaded(
+			is MaterialDetailStore.State.Content -> MaterialDetailLoaded(
 				state = current,
 				onBackClick = component::handleBack,
 				onLikeClick = component::handleLike,
@@ -127,7 +128,7 @@ private fun MaterialDetailError(
 
 @Composable
 private fun MaterialDetailLoaded(
-	state: MaterialDetailComponent.State.Content,
+	state: MaterialDetailStore.State.Content,
 	onBackClick: () -> Unit,
 	onLikeClick: () -> Unit,
 	onDislikeClick: () -> Unit,

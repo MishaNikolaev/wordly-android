@@ -7,31 +7,13 @@ import com.nmichail.wordly.android.features.materials.domain.entity.MaterialItem
 
 interface MaterialsComponent {
 
-	val model: Value<State>
+	val model: Value<MaterialsStore.State>
 
 	fun handleRetry()
 
 	fun handleFilterChange(filter: MaterialFilter)
 
 	fun handleOpenMaterial(materialId: String)
-
-	sealed interface State {
-
-		data object Loading : State
-
-		data object Error : State
-
-		data class Content(
-			val title: String,
-			val selectedFilter: MaterialFilter,
-			val items: List<MaterialItem>,
-		) : State
-	}
-
-	sealed interface Label {
-
-		data class OpenMaterial(val material: MaterialItem) : Label
-	}
 
 	fun interface Factory {
 

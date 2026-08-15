@@ -19,14 +19,14 @@ internal class DefaultMaterialDetailComponent(
 		materialDetailStoreFactory.create(materialId = materialId)
 	}
 
-	override val model: Value<MaterialDetailComponent.State> = store.asValue()
+	override val model: Value<MaterialDetailStore.State> = store.asValue()
 
 	init {
 		launchTry {
 			for (label in store.labelsChannel(lifecycle)) {
 				when (label) {
-					MaterialDetailComponent.Label.Close -> materialDetailRouter.navigateBack()
-					is MaterialDetailComponent.Label.Share -> Unit
+					MaterialDetailStore.Label.Close -> materialDetailRouter.navigateBack()
+					is MaterialDetailStore.Label.Share -> Unit
 				}
 			}
 		} catch {

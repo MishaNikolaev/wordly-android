@@ -24,9 +24,9 @@ internal class MaterialsStoreFactory @Inject constructor(
 	fun create(): MaterialsStore =
 		object :
 			MaterialsStore,
-			Store<MaterialsStore.Intent, MaterialsComponent.State, MaterialsComponent.Label> by storeFactory.create(
+			Store<MaterialsStore.Intent, MaterialsStore.State, MaterialsStore.Label> by storeFactory.create(
 				name = "MaterialsStore",
-				initialState = MaterialsComponent.State.Loading,
+				initialState = MaterialsStore.State.Loading,
 				bootstrapper = SimpleBootstrapper(Action.Load),
 				executorFactory = ::ExecutorImpl,
 				reducer = ReducerImpl,
@@ -41,50 +41,55 @@ internal class MaterialsStoreFactory @Inject constructor(
 
 		data object Loading : Msg
 
-		data object SetError : Msg
+		data class SetError(
+			val locallyReadIds: Set<String>,
+		) : Msg
 
 		data class CatalogLoaded(
 			val catalog: MaterialsCatalog,
 			val filter: MaterialFilter,
+			val locallyReadIds: Set<String>,
 		) : Msg
 
 		data class FilterUpdated(
 			val filter: MaterialFilter,
 			val items: List<MaterialItem>,
+			val locallyReadIds: Set<String>,
 		) : Msg
 	}
 
-	private object ReducerImpl : Reducer<MaterialsComponent.State, Msg> {
+	private object ReducerImpl : Reducer<MaterialsStore.State, Msg> {
 
-		override fun MaterialsComponent.State.reduce(msg: Msg): MaterialsComponent.State =
-			when (msg) {
-				Msg.Loading -> MaterialsComponent.State.Loading
-				Msg.SetError -> MaterialsComponent.State.Error
-				is Msg.CatalogLoaded -> MaterialsComponent.State.Content(
+		override fun MaterialsStore.State.reduce(msg: Msg): MaterialsStore.State {
+			val content = this as? MaterialsStore.State.Content
+			return when (msg) {
+				Msg.Loading -> MaterialsStore.State.Loading
+				is Msg.SetError -> MaterialsStore.State.Error(
+					locallyReadIds = msg.locallyReadIds,
+				)
+				is Msg.CatalogLoaded -> MaterialsStore.State.Content(
 					title = msg.catalog.title,
 					selectedFilter = msg.filter,
 					items = msg.catalog.items,
+					locallyReadIds = msg.locallyReadIds,
 				)
-				is Msg.FilterUpdated -> {
-					val content = this as? MaterialsComponent.State.Content ?: return this
-					content.copy(
-						selectedFilter = msg.filter,
-						items = msg.items,
-					)
-				}
+				is Msg.FilterUpdated -> content?.copy(
+					selectedFilter = msg.filter,
+					items = msg.items,
+					locallyReadIds = msg.locallyReadIds,
+				) ?: this
 			}
+		}
 	}
 
 	private inner class ExecutorImpl :
 		BaseCoroutineExecutor<
 			MaterialsStore.Intent,
 			Action,
-			MaterialsComponent.State,
+			MaterialsStore.State,
 			Msg,
-			MaterialsComponent.Label,
+			MaterialsStore.Label,
 			>() {
-
-		private val locallyReadIds = mutableSetOf<String>()
 
 		override fun executeAction(action: Action) {
 			when (action) {
@@ -98,34 +103,38 @@ internal class MaterialsStoreFactory @Inject constructor(
 				is MaterialsStore.Intent.ChangeFilter -> {
 					load(filter = intent.filter, showLoading = false)
 				}
-				is MaterialsStore.Intent.OpenMaterial -> {
-					val content = state() as? MaterialsComponent.State.Content ?: return
-					val material = content.items.find { it.id == intent.materialId } ?: return
-					val openedMaterial = if (material.status == MaterialReadStatus.New) {
-						locallyReadIds += material.id
-						val updated = material.copy(status = MaterialReadStatus.Read)
-						dispatch(
-							Msg.FilterUpdated(
-								filter = content.selectedFilter,
-								items = content.items.map { item ->
-									if (item.id == updated.id) updated else item
-								},
-							),
-						)
-						updated
-					} else {
-						material
-					}
-					publish(MaterialsComponent.Label.OpenMaterial(material = openedMaterial))
-				}
+				is MaterialsStore.Intent.OpenMaterial -> openMaterial(materialId = intent.materialId)
 			}
 		}
 
+		private fun openMaterial(materialId: String) {
+			val content = state() as? MaterialsStore.State.Content ?: return
+			val material = content.items.find { it.id == materialId } ?: return
+			val openedMaterial = if (material.status == MaterialReadStatus.New) {
+				val updated = material.copy(status = MaterialReadStatus.Read)
+				val locallyReadIds = content.locallyReadIds + material.id
+				dispatch(
+					Msg.FilterUpdated(
+						filter = content.selectedFilter,
+						items = content.items.map { item ->
+							if (item.id == updated.id) updated else item
+						},
+						locallyReadIds = locallyReadIds,
+					),
+				)
+				updated
+			} else {
+				material
+			}
+			publish(MaterialsStore.Label.OpenMaterial(material = openedMaterial))
+		}
+
 		private fun load(
-			filter: MaterialFilter = (state() as? MaterialsComponent.State.Content)?.selectedFilter
+			filter: MaterialFilter = (state() as? MaterialsStore.State.Content)?.selectedFilter
 				?: MaterialFilter.All,
 			showLoading: Boolean,
 		) {
+			val locallyReadIds = currentLocallyReadIds()
 			if (showLoading) {
 				dispatch(Msg.Loading)
 			}
@@ -143,6 +152,7 @@ internal class MaterialsStoreFactory @Inject constructor(
 						Msg.CatalogLoaded(
 							catalog = catalog.copy(items = items),
 							filter = filter,
+							locallyReadIds = locallyReadIds,
 						),
 					)
 				} else {
@@ -150,14 +160,22 @@ internal class MaterialsStoreFactory @Inject constructor(
 						Msg.FilterUpdated(
 							filter = filter,
 							items = items,
+							locallyReadIds = locallyReadIds,
 						),
 					)
 				}
 			} catch {
 				if (showLoading) {
-					dispatch(Msg.SetError)
+					dispatch(Msg.SetError(locallyReadIds = locallyReadIds))
 				}
 			}
 		}
+
+		private fun currentLocallyReadIds(): Set<String> =
+			when (val current = state()) {
+				is MaterialsStore.State.Content -> current.locallyReadIds
+				is MaterialsStore.State.Error -> current.locallyReadIds
+				MaterialsStore.State.Loading -> emptySet()
+			}
 	}
 }

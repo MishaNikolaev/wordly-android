@@ -20,13 +20,13 @@ internal class DefaultMaterialsComponent(
 		materialsStoreFactory.create()
 	}
 
-	override val model: Value<MaterialsComponent.State> = store.asValue()
+	override val model: Value<MaterialsStore.State> = store.asValue()
 
 	init {
 		launchTry {
 			for (label in store.labelsChannel(lifecycle)) {
 				when (label) {
-					is MaterialsComponent.Label.OpenMaterial -> onMaterialClick(label.material)
+					is MaterialsStore.Label.OpenMaterial -> onMaterialClick(label.material)
 				}
 			}
 		} catch {
