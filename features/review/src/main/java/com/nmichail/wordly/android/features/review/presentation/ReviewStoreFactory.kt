@@ -77,7 +77,11 @@ internal class ReviewStoreFactory @Inject constructor(
 				is Msg.OptionSelected -> selectOption(state = this, optionId = msg.optionId)
 				Msg.Submitting -> setSubmitting(state = this)
 				is Msg.MoveNext -> moveToNext(state = this, msg = msg)
-				is Msg.Finished -> finish(state = this, correctCount = msg.correctCount)
+				is Msg.Finished -> (this as? ReviewStore.State.Content)?.copy(
+					correctCount = msg.correctCount,
+					submitting = false,
+					finished = true,
+				) ?: this
 			}
 
 		private fun selectOption(
@@ -112,18 +116,6 @@ internal class ReviewStoreFactory @Inject constructor(
 				correct = false,
 				correctCount = msg.correctCount,
 				submitting = false,
-			)
-		}
-
-		private fun finish(
-			state: ReviewStore.State,
-			correctCount: Int,
-		): ReviewStore.State {
-			if (state !is ReviewStore.State.Content) return state
-			return state.copy(
-				correctCount = correctCount,
-				submitting = false,
-				finished = true,
 			)
 		}
 	}

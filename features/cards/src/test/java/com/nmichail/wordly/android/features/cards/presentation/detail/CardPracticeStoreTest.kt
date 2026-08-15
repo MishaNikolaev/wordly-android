@@ -165,9 +165,13 @@ class CardPracticeStoreTest {
 		store.accept(CardPracticeStore.Intent.Continue)
 
 		assertEquals(
-			CardPracticeStore.State.Finished(
-				totalCount = 2,
+			inProgress(
+				currentIndex = 1,
+				selectedOptionId = "molecule-2",
+				answerRevealed = true,
+				correct = false,
 				correctCount = 1,
+				finished = true,
 			),
 			store.state,
 		)
@@ -224,8 +228,9 @@ class CardPracticeStoreTest {
 		answerRevealed: Boolean = false,
 		correct: Boolean = false,
 		correctCount: Int = 0,
-	): CardPracticeStore.State.InProgress =
-		CardPracticeStore.State.InProgress(
+		finished: Boolean = false,
+	): CardPracticeStore.State.Content =
+		CardPracticeStore.State.Content(
 			words = words,
 			currentIndex = currentIndex,
 			currentWord = words[currentIndex],
@@ -235,6 +240,7 @@ class CardPracticeStoreTest {
 			answerRevealed = answerRevealed,
 			correct = correct,
 			correctCount = correctCount,
+			finished = finished,
 		)
 
 	private fun createStore(): CardPracticeStore =

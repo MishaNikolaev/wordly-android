@@ -25,9 +25,7 @@ interface CardPracticeStore :
 
 		data object Loading : State
 
-		data object Error : State
-
-		data class InProgress(
+		data class Content(
 			val words: List<CardPracticeWord>,
 			val currentIndex: Int,
 			val currentWord: CardPracticeWord,
@@ -37,12 +35,10 @@ interface CardPracticeStore :
 			val answerRevealed: Boolean,
 			val correct: Boolean,
 			val correctCount: Int,
+			val finished: Boolean,
 		) : State
 
-		data class Finished(
-			val totalCount: Int,
-			val correctCount: Int,
-		) : State
+		data object Error : State
 	}
 
 	sealed interface Label {

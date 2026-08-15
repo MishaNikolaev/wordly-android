@@ -11,21 +11,18 @@ interface ConstructorPracticeStore :
 
 		data object Loading : State
 
-		data object Error : State
-
-		data class InProgress(
+		data class Content(
 			val session: ConstructorSession,
 			val currentIndex: Int,
 			val bank: List<ConstructorWord>,
 			val answer: List<ConstructorWord>,
 			val checkResult: Boolean?,
 			val correctCount: Int,
+			val totalCount: Int,
+			val finished: Boolean,
 		) : State
 
-		data class Finished(
-			val totalCount: Int,
-			val correctCount: Int,
-		) : State
+		data object Error : State
 	}
 
 	sealed interface Label {
