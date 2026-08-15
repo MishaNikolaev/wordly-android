@@ -79,7 +79,7 @@ class CardPracticeStoreTest {
 
 		val store = createStore()
 
-		assertEquals(CardPracticeComponent.State.Error, store.state)
+		assertEquals(CardPracticeStore.State.Error, store.state)
 	}
 
 	@Test
@@ -88,7 +88,7 @@ class CardPracticeStoreTest {
 
 		val store = createStore()
 
-		assertEquals(CardPracticeComponent.State.Error, store.state)
+		assertEquals(CardPracticeStore.State.Error, store.state)
 	}
 
 	@Test
@@ -165,7 +165,7 @@ class CardPracticeStoreTest {
 		store.accept(CardPracticeStore.Intent.Continue)
 
 		assertEquals(
-			CardPracticeComponent.State.Finished(
+			CardPracticeStore.State.Finished(
 				totalCount = 2,
 				correctCount = 1,
 			),
@@ -204,7 +204,7 @@ class CardPracticeStoreTest {
 
 		store.accept(CardPracticeStore.Intent.Close)
 
-		assertEquals(CardPracticeComponent.Label.Close, labelsChannel.receive())
+		assertEquals(CardPracticeStore.Label.Close, labelsChannel.receive())
 	}
 
 	@Test
@@ -215,7 +215,7 @@ class CardPracticeStoreTest {
 
 		store.accept(CardPracticeStore.Intent.Finish)
 
-		assertEquals(CardPracticeComponent.Label.Close, labelsChannel.receive())
+		assertEquals(CardPracticeStore.Label.Close, labelsChannel.receive())
 	}
 
 	private fun inProgress(
@@ -224,8 +224,8 @@ class CardPracticeStoreTest {
 		answerRevealed: Boolean = false,
 		correct: Boolean = false,
 		correctCount: Int = 0,
-	): CardPracticeComponent.State.InProgress =
-		CardPracticeComponent.State.InProgress(
+	): CardPracticeStore.State.InProgress =
+		CardPracticeStore.State.InProgress(
 			words = words,
 			currentIndex = currentIndex,
 			currentWord = words[currentIndex],

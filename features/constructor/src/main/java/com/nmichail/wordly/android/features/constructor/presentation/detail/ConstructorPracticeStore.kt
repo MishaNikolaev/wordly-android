@@ -1,9 +1,37 @@
 package com.nmichail.wordly.android.features.constructor.presentation.detail
 
 import com.arkivanov.mvikotlin.core.store.Store
+import com.nmichail.wordly.android.features.constructor.domain.entity.ConstructorSession
+import com.nmichail.wordly.android.features.constructor.domain.entity.ConstructorWord
 
-internal interface ConstructorPracticeStore :
-	Store<ConstructorPracticeStore.Intent, ConstructorPracticeComponent.State, ConstructorPracticeComponent.Label> {
+interface ConstructorPracticeStore :
+	Store<ConstructorPracticeStore.Intent, ConstructorPracticeStore.State, ConstructorPracticeStore.Label> {
+
+	sealed interface State {
+
+		data object Loading : State
+
+		data object Error : State
+
+		data class InProgress(
+			val session: ConstructorSession,
+			val currentIndex: Int,
+			val bank: List<ConstructorWord>,
+			val answer: List<ConstructorWord>,
+			val checkResult: Boolean?,
+			val correctCount: Int,
+		) : State
+
+		data class Finished(
+			val totalCount: Int,
+			val correctCount: Int,
+		) : State
+	}
+
+	sealed interface Label {
+
+		data object Close : Label
+	}
 
 	sealed interface Intent {
 

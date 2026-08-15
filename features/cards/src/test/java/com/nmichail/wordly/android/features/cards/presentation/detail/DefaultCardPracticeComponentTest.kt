@@ -94,8 +94,8 @@ class DefaultCardPracticeComponentTest {
 		selectedOptionId: String? = null,
 		answerRevealed: Boolean = false,
 		correct: Boolean = false,
-	): CardPracticeComponent.State.InProgress =
-		CardPracticeComponent.State.InProgress(
+	): CardPracticeStore.State.InProgress =
+		CardPracticeStore.State.InProgress(
 			words = words,
 			currentIndex = 0,
 			currentWord = firstWord,

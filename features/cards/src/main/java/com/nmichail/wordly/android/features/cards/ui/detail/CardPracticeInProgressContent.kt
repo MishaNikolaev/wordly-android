@@ -45,13 +45,14 @@ import com.nmichail.wordly.android.component.wui.theme.WuiTypography
 import com.nmichail.wordly.android.features.cards.R
 import com.nmichail.wordly.android.features.cards.domain.entity.CardPracticeWord
 import com.nmichail.wordly.android.features.cards.presentation.detail.CardPracticeComponent
+import com.nmichail.wordly.android.features.cards.presentation.detail.CardPracticeStore
 import com.nmichail.wordly.android.shared.practice.PracticeAnswerFeedback
 import com.nmichail.wordly.android.shared.practice.PracticeOption
 import com.nmichail.wordly.android.shared.practice.PracticeOptions
 
 @Composable
 internal fun CardPracticeInProgressContent(
-	state: CardPracticeComponent.State.InProgress,
+	state: CardPracticeStore.State.InProgress,
 	component: CardPracticeComponent,
 	modifier: Modifier = Modifier,
 ) {

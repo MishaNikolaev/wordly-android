@@ -29,6 +29,7 @@ import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import com.nmichail.wordly.android.features.dev.networkselection.R
 import com.nmichail.wordly.android.features.dev.networkselection.domain.entity.NetworkStand
 import com.nmichail.wordly.android.features.dev.networkselection.presentation.NetworkSelectionComponent
+import com.nmichail.wordly.android.features.dev.networkselection.presentation.NetworkSelectionStore
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -71,7 +72,7 @@ fun NetworkSelectionContent(
 
 @Composable
 private fun NetworkSelectionList(
-	state: NetworkSelectionComponent.State,
+	state: NetworkSelectionStore.State,
 	onStandSelected: (NetworkStand) -> Unit,
 ) {
 	val radioColors = RadioButtonDefaults.colors(

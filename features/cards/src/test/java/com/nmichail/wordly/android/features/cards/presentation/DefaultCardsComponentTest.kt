@@ -89,7 +89,7 @@ class DefaultCardsComponentTest {
 	fun `level change EXPECT updated level in state`() = runTest {
 		component.handleLevelChange("C1")
 
-		val content = component.model.value as CardsComponent.State.Content
+		val content = component.model.value as CardsStore.State.Content
 		assertEquals("C1", content.levelBanner?.levelLabel)
 	}
 }

@@ -84,7 +84,7 @@ class ConstructorPracticeStoreTest {
 
 		val store = createStore()
 
-		assertEquals(ConstructorPracticeComponent.State.Error, store.state)
+		assertEquals(ConstructorPracticeStore.State.Error, store.state)
 	}
 
 	@Test
@@ -93,7 +93,7 @@ class ConstructorPracticeStoreTest {
 
 		val store = createStore()
 
-		assertEquals(ConstructorPracticeComponent.State.Error, store.state)
+		assertEquals(ConstructorPracticeStore.State.Error, store.state)
 	}
 
 	@Test
@@ -230,7 +230,7 @@ class ConstructorPracticeStoreTest {
 		store.accept(ConstructorPracticeStore.Intent.Continue)
 
 		assertEquals(
-			ConstructorPracticeComponent.State.Finished(
+			ConstructorPracticeStore.State.Finished(
 				totalCount = 2,
 				correctCount = 1,
 			),
@@ -269,7 +269,7 @@ class ConstructorPracticeStoreTest {
 
 		store.accept(ConstructorPracticeStore.Intent.Close)
 
-		assertEquals(ConstructorPracticeComponent.Label.Close, labelsChannel.receive())
+		assertEquals(ConstructorPracticeStore.Label.Close, labelsChannel.receive())
 	}
 
 	@Test
@@ -280,7 +280,7 @@ class ConstructorPracticeStoreTest {
 
 		store.accept(ConstructorPracticeStore.Intent.Finish)
 
-		assertEquals(ConstructorPracticeComponent.Label.Close, labelsChannel.receive())
+		assertEquals(ConstructorPracticeStore.Label.Close, labelsChannel.receive())
 	}
 
 	private fun inProgress(
@@ -289,8 +289,8 @@ class ConstructorPracticeStoreTest {
 		answer: List<ConstructorWord> = emptyList(),
 		checkResult: Boolean? = null,
 		correctCount: Int = 0,
-	): ConstructorPracticeComponent.State.InProgress =
-		ConstructorPracticeComponent.State.InProgress(
+	): ConstructorPracticeStore.State.InProgress =
+		ConstructorPracticeStore.State.InProgress(
 			session = session,
 			currentIndex = currentIndex,
 			bank = bank,

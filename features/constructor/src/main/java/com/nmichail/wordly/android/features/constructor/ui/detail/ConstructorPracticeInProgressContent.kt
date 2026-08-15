@@ -56,6 +56,7 @@ import com.nmichail.wordly.android.component.wui.theme.WuiTypography
 import com.nmichail.wordly.android.features.constructor.R
 import com.nmichail.wordly.android.features.constructor.domain.entity.ConstructorWord
 import com.nmichail.wordly.android.features.constructor.presentation.detail.ConstructorPracticeComponent
+import com.nmichail.wordly.android.features.constructor.presentation.detail.ConstructorPracticeStore
 import kotlin.math.roundToInt
 
 private const val DRAG_CHIP_SCALE = 1.05f
@@ -63,7 +64,7 @@ private const val DRAG_CHIP_ALPHA = 0.92f
 
 @Composable
 internal fun ConstructorPracticeInProgressContent(
-	state: ConstructorPracticeComponent.State.InProgress,
+	state: ConstructorPracticeStore.State.InProgress,
 	component: ConstructorPracticeComponent,
 	modifier: Modifier = Modifier,
 ) {
@@ -105,7 +106,7 @@ internal fun ConstructorPracticeInProgressContent(
 
 @Composable
 private fun ConstructorPracticeScrollBody(
-	state: ConstructorPracticeComponent.State.InProgress,
+	state: ConstructorPracticeStore.State.InProgress,
 	question: String,
 	author: String?,
 	correctPhraseText: String,

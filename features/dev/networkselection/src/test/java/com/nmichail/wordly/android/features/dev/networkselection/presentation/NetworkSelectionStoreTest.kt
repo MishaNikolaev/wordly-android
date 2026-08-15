@@ -56,7 +56,7 @@ class NetworkSelectionStoreTest {
 
 	@Test
 	fun `init EXPECT init state with data`() {
-		val expected = NetworkSelectionComponent.State(
+		val expected = NetworkSelectionStore.State(
 			stands = stands,
 			selectedStand = NetworkStand.DEV,
 		)
@@ -80,7 +80,7 @@ class NetworkSelectionStoreTest {
 
 	@Test
 	fun `select new stand EXPECT state with new stand`() {
-		val expected = NetworkSelectionComponent.State(
+		val expected = NetworkSelectionStore.State(
 			stands = stands,
 			selectedStand = NetworkStand.MOCK,
 		)
@@ -96,7 +96,7 @@ class NetworkSelectionStoreTest {
 
 		store.accept(NetworkSelectionStore.Intent.SelectStand(NetworkStand.MOCK))
 
-		assertEquals(NetworkSelectionComponent.Label.RestartApp, labelsChannel.receive())
+		assertEquals(NetworkSelectionStore.Label.RestartApp, labelsChannel.receive())
 	}
 
 	@Test
@@ -119,7 +119,7 @@ class NetworkSelectionStoreTest {
 
 		store.accept(NetworkSelectionStore.Intent.NavigateBack)
 
-		assertEquals(NetworkSelectionComponent.Label.NavigateBack, labelsChannel.receive())
+		assertEquals(NetworkSelectionStore.Label.NavigateBack, labelsChannel.receive())
 	}
 
 	private fun createStore(): NetworkSelectionStore =

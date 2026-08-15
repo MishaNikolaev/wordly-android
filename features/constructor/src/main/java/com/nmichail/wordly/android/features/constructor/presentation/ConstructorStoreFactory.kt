@@ -27,9 +27,9 @@ internal class ConstructorStoreFactory @Inject constructor(
 	fun create(): ConstructorStore =
 		object :
 			ConstructorStore,
-			Store<ConstructorStore.Intent, ConstructorComponent.State, ConstructorComponent.Label> by storeFactory.create(
+			Store<ConstructorStore.Intent, ConstructorStore.State, ConstructorStore.Label> by storeFactory.create(
 				name = "ConstructorStore",
-				initialState = ConstructorComponent.State.Loading,
+				initialState = ConstructorStore.State.Loading,
 				bootstrapper = SimpleBootstrapper(Action.Load),
 				executorFactory = ::ExecutorImpl,
 				reducer = ReducerImpl,
@@ -60,12 +60,12 @@ internal class ConstructorStoreFactory @Inject constructor(
 		) : Msg
 	}
 
-	private object ReducerImpl : Reducer<ConstructorComponent.State, Msg> {
+	private object ReducerImpl : Reducer<ConstructorStore.State, Msg> {
 
-		override fun ConstructorComponent.State.reduce(msg: Msg): ConstructorComponent.State =
+		override fun ConstructorStore.State.reduce(msg: Msg): ConstructorStore.State =
 			when (msg) {
-				Msg.Loading -> ConstructorComponent.State.Loading
-				is Msg.CatalogLoaded -> ConstructorComponent.State.Content(
+				Msg.Loading -> ConstructorStore.State.Loading
+				is Msg.CatalogLoaded -> ConstructorStore.State.Content(
 					title = msg.catalog.title,
 					searchQuery = "",
 					searchPlaceholder = msg.catalog.searchPlaceholder,
@@ -73,16 +73,16 @@ internal class ConstructorStoreFactory @Inject constructor(
 					allSections = msg.catalog.sections,
 					sections = msg.catalog.sections,
 				)
-				Msg.SetError -> ConstructorComponent.State.Error
+				Msg.SetError -> ConstructorStore.State.Error
 				is Msg.SearchUpdated -> {
-					val content = this as? ConstructorComponent.State.Content ?: return this
+					val content = this as? ConstructorStore.State.Content ?: return this
 					content.copy(
 						searchQuery = msg.query,
 						sections = msg.sections,
 					)
 				}
 				is Msg.LevelUpdated -> {
-					val content = this as? ConstructorComponent.State.Content ?: return this
+					val content = this as? ConstructorStore.State.Content ?: return this
 					val banner = content.levelBanner ?: return this
 					content.copy(
 						levelBanner = banner.copy(levelLabel = msg.level),
@@ -97,9 +97,9 @@ internal class ConstructorStoreFactory @Inject constructor(
 		BaseCoroutineExecutor<
 			ConstructorStore.Intent,
 			Action,
-			ConstructorComponent.State,
+			ConstructorStore.State,
 			Msg,
-			ConstructorComponent.Label,
+			ConstructorStore.Label,
 			>() {
 
 		override fun executeAction(action: Action) {
@@ -110,10 +110,10 @@ internal class ConstructorStoreFactory @Inject constructor(
 
 		override fun executeIntent(intent: ConstructorStore.Intent) {
 			when (intent) {
-				ConstructorStore.Intent.Back -> publish(ConstructorComponent.Label.Close)
+				ConstructorStore.Intent.Back -> publish(ConstructorStore.Label.Close)
 				ConstructorStore.Intent.Retry -> loadCatalog()
 				is ConstructorStore.Intent.ChangeSearchQuery -> {
-					val content = state() as? ConstructorComponent.State.Content ?: return
+					val content = state() as? ConstructorStore.State.Content ?: return
 					dispatch(
 						Msg.SearchUpdated(
 							query = intent.query,
@@ -135,20 +135,20 @@ internal class ConstructorStoreFactory @Inject constructor(
 					)
 				}
 				is ConstructorStore.Intent.SelectTheme -> {
-					val content = state() as? ConstructorComponent.State.Content ?: return
+					val content = state() as? ConstructorStore.State.Content ?: return
 					val theme = findCatalogItem(
 						sections = content.allSections,
 						getItems = { it.items },
 						predicate = { it.id == intent.themeId },
 					) ?: return
-					publish(ConstructorComponent.Label.OpenTheme(theme = theme))
+					publish(ConstructorStore.Label.OpenTheme(theme = theme))
 				}
 				is ConstructorStore.Intent.ChangeLevel -> changeLevel(level = intent.level)
 			}
 		}
 
 		private fun changeLevel(level: String) {
-			val content = state() as? ConstructorComponent.State.Content ?: return
+			val content = state() as? ConstructorStore.State.Content ?: return
 			launchTry {
 				updateEnglishLevelUseCase(level)
 				val allSections = updateCatalogLevelSectionTitles(

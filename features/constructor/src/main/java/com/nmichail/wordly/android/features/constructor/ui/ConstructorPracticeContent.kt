@@ -23,6 +23,7 @@ import com.nmichail.wordly.android.component.wui.components.button.WuiButton
 import com.nmichail.wordly.android.component.wui.components.button.WuiTextLink
 import com.nmichail.wordly.android.features.constructor.R
 import com.nmichail.wordly.android.features.constructor.presentation.detail.ConstructorPracticeComponent
+import com.nmichail.wordly.android.features.constructor.presentation.detail.ConstructorPracticeStore
 import com.nmichail.wordly.android.features.constructor.ui.detail.ConstructorPracticeInProgressContent
 import com.nmichail.wordly.android.shared.practice.PracticeFinishedContent
 
@@ -34,7 +35,7 @@ fun ConstructorPracticeContent(
 	val state by component.model.subscribeAsState()
 
 	when (val currentState = state) {
-		ConstructorPracticeComponent.State.Loading -> {
+		ConstructorPracticeStore.State.Loading -> {
 			Box(
 				modifier = modifier
 					.fillMaxSize()
@@ -44,21 +45,21 @@ fun ConstructorPracticeContent(
 				CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
 			}
 		}
-		ConstructorPracticeComponent.State.Error -> {
+		ConstructorPracticeStore.State.Error -> {
 			ConstructorPracticeError(
 				onRetryClick = component::handleRetry,
 				onCloseClick = component::handleClose,
 				modifier = modifier.fillMaxSize(),
 			)
 		}
-		is ConstructorPracticeComponent.State.InProgress -> {
+		is ConstructorPracticeStore.State.InProgress -> {
 			ConstructorPracticeInProgressContent(
 				state = currentState,
 				component = component,
 				modifier = modifier,
 			)
 		}
-		is ConstructorPracticeComponent.State.Finished -> {
+		is ConstructorPracticeStore.State.Finished -> {
 			PracticeFinishedContent(
 				correctCount = currentState.correctCount,
 				totalCount = currentState.totalCount,

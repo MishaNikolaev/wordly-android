@@ -19,13 +19,13 @@ internal class DefaultConstructorPracticeComponent(
 		constructorPracticeStoreFactory.create(themeId = themeId)
 	}
 
-	override val model: Value<ConstructorPracticeComponent.State> = store.asValue()
+	override val model: Value<ConstructorPracticeStore.State> = store.asValue()
 
 	init {
 		launchTry {
 			for (label in store.labelsChannel(lifecycle)) {
 				when (label) {
-					ConstructorPracticeComponent.Label.Close -> constructorPracticeRouter.navigateBack()
+					ConstructorPracticeStore.Label.Close -> constructorPracticeRouter.navigateBack()
 				}
 			}
 		} catch {

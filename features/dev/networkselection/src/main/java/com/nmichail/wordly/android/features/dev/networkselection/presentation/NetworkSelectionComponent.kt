@@ -6,23 +6,11 @@ import com.nmichail.wordly.android.features.dev.networkselection.domain.entity.N
 
 interface NetworkSelectionComponent {
 
-	val model: Value<State>
+	val model: Value<NetworkSelectionStore.State>
 
 	fun handleSelectStand(stand: NetworkStand)
 
 	fun handleNavigateBack()
-
-	data class State(
-		val stands: List<NetworkStand> = emptyList(),
-		val selectedStand: NetworkStand = NetworkStand.DEV,
-	)
-
-	sealed interface Label {
-
-		data object NavigateBack : Label
-
-		data object RestartApp : Label
-	}
 
 	fun interface Factory {
 

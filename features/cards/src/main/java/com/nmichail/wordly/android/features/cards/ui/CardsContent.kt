@@ -46,6 +46,7 @@ import com.nmichail.wordly.android.component.wui.components.button.WuiTextLink
 import com.nmichail.wordly.android.features.cards.R
 import com.nmichail.wordly.android.features.cards.domain.entity.CardsLevelBanner
 import com.nmichail.wordly.android.features.cards.presentation.CardsComponent
+import com.nmichail.wordly.android.features.cards.presentation.CardsStore
 import com.nmichail.wordly.android.shared.catalog.CatalogRemoteImage
 
 @Composable
@@ -56,7 +57,7 @@ fun CardsContent(
 	val state by component.model.subscribeAsState()
 
 	when (val currentState = state) {
-		CardsComponent.State.Loading -> {
+		CardsStore.State.Loading -> {
 			Box(
 				modifier = modifier
 					.fillMaxSize()
@@ -66,14 +67,14 @@ fun CardsContent(
 				CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
 			}
 		}
-		CardsComponent.State.Error -> {
+		CardsStore.State.Error -> {
 			CardsError(
 				onRetryClick = component::handleRetry,
 				onBackClick = component::handleBack,
 				modifier = modifier.fillMaxSize(),
 			)
 		}
-		is CardsComponent.State.Content -> {
+		is CardsStore.State.Content -> {
 			CardsLoaded(
 				state = currentState,
 				component = component,
@@ -127,7 +128,7 @@ private fun CardsError(
 
 @Composable
 private fun CardsLoaded(
-	state: CardsComponent.State.Content,
+	state: CardsStore.State.Content,
 	component: CardsComponent,
 	modifier: Modifier = Modifier,
 ) {

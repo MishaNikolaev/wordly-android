@@ -27,9 +27,9 @@ internal class CardsStoreFactory @Inject constructor(
 	fun create(): CardsStore =
 		object :
 			CardsStore,
-			Store<CardsStore.Intent, CardsComponent.State, CardsComponent.Label> by storeFactory.create(
+			Store<CardsStore.Intent, CardsStore.State, CardsStore.Label> by storeFactory.create(
 				name = "CardsStore",
-				initialState = CardsComponent.State.Loading,
+				initialState = CardsStore.State.Loading,
 				bootstrapper = SimpleBootstrapper(Action.Load),
 				executorFactory = ::ExecutorImpl,
 				reducer = ReducerImpl,
@@ -60,12 +60,12 @@ internal class CardsStoreFactory @Inject constructor(
 		) : Msg
 	}
 
-	private object ReducerImpl : Reducer<CardsComponent.State, Msg> {
+	private object ReducerImpl : Reducer<CardsStore.State, Msg> {
 
-		override fun CardsComponent.State.reduce(msg: Msg): CardsComponent.State =
+		override fun CardsStore.State.reduce(msg: Msg): CardsStore.State =
 			when (msg) {
-				Msg.Loading -> CardsComponent.State.Loading
-				is Msg.CardsLoaded -> CardsComponent.State.Content(
+				Msg.Loading -> CardsStore.State.Loading
+				is Msg.CardsLoaded -> CardsStore.State.Content(
 					title = msg.cards.title,
 					searchQuery = "",
 					searchPlaceholder = msg.cards.searchPlaceholder,
@@ -73,16 +73,16 @@ internal class CardsStoreFactory @Inject constructor(
 					allSections = msg.cards.sections,
 					sections = msg.cards.sections,
 				)
-				Msg.SetError -> CardsComponent.State.Error
+				Msg.SetError -> CardsStore.State.Error
 				is Msg.SearchUpdated -> {
-					val content = this as? CardsComponent.State.Content ?: return this
+					val content = this as? CardsStore.State.Content ?: return this
 					content.copy(
 						searchQuery = msg.query,
 						sections = msg.sections,
 					)
 				}
 				is Msg.LevelUpdated -> {
-					val content = this as? CardsComponent.State.Content ?: return this
+					val content = this as? CardsStore.State.Content ?: return this
 					val banner = content.levelBanner ?: return this
 					content.copy(
 						levelBanner = banner.copy(levelLabel = msg.level),
@@ -97,9 +97,9 @@ internal class CardsStoreFactory @Inject constructor(
 		BaseCoroutineExecutor<
 			CardsStore.Intent,
 			Action,
-			CardsComponent.State,
+			CardsStore.State,
 			Msg,
-			CardsComponent.Label,
+			CardsStore.Label,
 			>() {
 
 		override fun executeAction(action: Action) {
@@ -110,10 +110,10 @@ internal class CardsStoreFactory @Inject constructor(
 
 		override fun executeIntent(intent: CardsStore.Intent) {
 			when (intent) {
-				CardsStore.Intent.Back -> publish(CardsComponent.Label.Close)
+				CardsStore.Intent.Back -> publish(CardsStore.Label.Close)
 				CardsStore.Intent.Retry -> loadCards()
 				is CardsStore.Intent.ChangeSearchQuery -> {
-					val content = state() as? CardsComponent.State.Content ?: return
+					val content = state() as? CardsStore.State.Content ?: return
 					dispatch(
 						Msg.SearchUpdated(
 							query = intent.query,
@@ -135,20 +135,20 @@ internal class CardsStoreFactory @Inject constructor(
 					)
 				}
 				is CardsStore.Intent.SelectCard -> {
-					val content = state() as? CardsComponent.State.Content ?: return
+					val content = state() as? CardsStore.State.Content ?: return
 					val item = findCatalogItem(
 						sections = content.allSections,
 						getItems = { it.items },
 						predicate = { it.id == intent.cardId },
 					) ?: return
-					publish(CardsComponent.Label.OpenCard(item = item))
+					publish(CardsStore.Label.OpenCard(item = item))
 				}
 				is CardsStore.Intent.ChangeLevel -> changeLevel(level = intent.level)
 			}
 		}
 
 		private fun changeLevel(level: String) {
-			val content = state() as? CardsComponent.State.Content ?: return
+			val content = state() as? CardsStore.State.Content ?: return
 			launchTry {
 				updateEnglishLevelUseCase(level)
 				val allSections = updateCatalogLevelSectionTitles(
