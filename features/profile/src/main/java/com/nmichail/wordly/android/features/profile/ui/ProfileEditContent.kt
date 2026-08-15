@@ -45,6 +45,7 @@ fun ProfileEditContent(
 	val state by component.model.subscribeAsState()
 
 	when (val current = state) {
+		ProfileEditStore.State.Initial -> ProfileEditLoading(modifier = modifier)
 		ProfileEditStore.State.Loading -> ProfileEditLoading(modifier = modifier)
 		is ProfileEditStore.State.Content -> ProfileEditLoaded(
 			state = current,

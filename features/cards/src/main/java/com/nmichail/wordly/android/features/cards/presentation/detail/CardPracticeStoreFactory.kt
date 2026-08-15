@@ -24,7 +24,7 @@ internal class CardPracticeStoreFactory @Inject constructor(
 			Store<CardPracticeStore.Intent, CardPracticeStore.State, CardPracticeStore.Label>
 			by storeFactory.create(
 				name = "CardPracticeStore",
-				initialState = CardPracticeStore.State.Loading,
+				initialState = CardPracticeStore.State.Initial,
 				bootstrapper = SimpleBootstrapper(Action.Load(cardId = cardId)),
 				executorFactory = { ExecutorImpl(cardId = cardId) },
 				reducer = ReducerImpl,

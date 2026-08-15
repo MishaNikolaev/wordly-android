@@ -28,7 +28,7 @@ internal class MaterialDetailStoreFactory @Inject constructor(
 				MaterialDetailStore.Label,
 				> by storeFactory.create(
 				name = "MaterialDetailStore",
-				initialState = MaterialDetailStore.State.Loading,
+				initialState = MaterialDetailStore.State.Initial,
 				bootstrapper = SimpleBootstrapper(Action.Load(materialId = materialId)),
 				executorFactory = { ExecutorImpl(materialId = materialId) },
 				reducer = ReducerImpl,

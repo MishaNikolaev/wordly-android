@@ -28,7 +28,7 @@ internal class ConstructorPracticeStoreFactory @Inject constructor(
 				ConstructorPracticeStore.Label,
 				> by storeFactory.create(
 				name = "ConstructorPracticeStore",
-				initialState = ConstructorPracticeStore.State.Loading,
+				initialState = ConstructorPracticeStore.State.Initial,
 				bootstrapper = SimpleBootstrapper(Action.Load(themeId = themeId)),
 				executorFactory = { ExecutorImpl(themeId = themeId) },
 				reducer = ReducerImpl,

@@ -2,6 +2,7 @@ package com.nmichail.wordly.android.features.authorization.signup.presentation
 
 import kotlinx.coroutines.launch
 import com.arkivanov.mvikotlin.core.store.Reducer
+import com.arkivanov.mvikotlin.core.store.SimpleBootstrapper
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.logging.store.LoggingStoreFactory
@@ -40,19 +41,20 @@ internal class SignUpStoreFactory @Inject constructor(
     fun create(): SignUpStore = object : SignUpStore,
         Store<SignUpStore.Intent, SignUpStore.State, SignUpStore.Label> by storeFactory.create(
             name = "SignUpStore",
-            initialState = SignUpStore.State.Content(
-                email = EmailValidationItem(),
-                password = PasswordValidationItem(),
-                firstName = NameValidationItem(namePart = NamePart.NAME),
-                lastName = NameValidationItem(namePart = NamePart.SURNAME),
-                englishLevel = NotEmptyValidationItem(),
-                submitting = false,
-            ),
+            initialState = SignUpStore.State.Initial,
+            bootstrapper = SimpleBootstrapper(Action.Initialize),
             reducer = ReducerImpl,
             executorFactory = ::ExecutorImpl,
         ) {}
 
+    private sealed interface Action {
+
+        data object Initialize : Action
+    }
+
     private sealed interface Msg {
+
+        data object Initialized : Msg
 
         data class ChangeEmail(val email: EmailValidationItem) : Msg
 
@@ -72,7 +74,13 @@ internal class SignUpStoreFactory @Inject constructor(
     }
 
     private inner class ExecutorImpl :
-        BaseCoroutineExecutor<SignUpStore.Intent, Nothing, SignUpStore.State, Msg, SignUpStore.Label>() {
+        BaseCoroutineExecutor<SignUpStore.Intent, Action, SignUpStore.State, Msg, SignUpStore.Label>() {
+
+        override fun executeAction(action: Action) {
+            when (action) {
+                Action.Initialize -> dispatch(Msg.Initialized)
+            }
+        }
 
         override fun executeIntent(intent: SignUpStore.Intent) {
             when (intent) {
@@ -182,6 +190,14 @@ internal class SignUpStoreFactory @Inject constructor(
             val content = this as? SignUpStore.State.Content
 
             return when (msg) {
+                Msg.Initialized -> SignUpStore.State.Content(
+                    email = EmailValidationItem(),
+                    password = PasswordValidationItem(),
+                    firstName = NameValidationItem(namePart = NamePart.NAME),
+                    lastName = NameValidationItem(namePart = NamePart.SURNAME),
+                    englishLevel = NotEmptyValidationItem(),
+                    submitting = false,
+                )
                 is Msg.ChangeEmail -> content?.copy(email = msg.email) ?: this
                 is Msg.ChangePassword -> content?.copy(password = msg.password) ?: this
                 is Msg.ChangeFirstName -> content?.copy(firstName = msg.firstName) ?: this

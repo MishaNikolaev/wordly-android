@@ -30,7 +30,7 @@ internal class CardsStoreFactory @Inject constructor(
 			CardsStore,
 			Store<CardsStore.Intent, CardsStore.State, CardsStore.Label> by storeFactory.create(
 				name = "CardsStore",
-				initialState = CardsStore.State.Loading,
+				initialState = CardsStore.State.Initial,
 				bootstrapper = SimpleBootstrapper(Action.Load),
 				executorFactory = ::ExecutorImpl,
 				reducer = ReducerImpl,

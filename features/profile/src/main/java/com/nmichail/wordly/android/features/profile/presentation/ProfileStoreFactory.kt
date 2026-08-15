@@ -35,7 +35,7 @@ internal class ProfileStoreFactory @Inject constructor(
 			ProfileStore,
 			Store<ProfileStore.Intent, ProfileStore.State, ProfileStore.Label> by storeFactory.create(
 				name = "ProfileStore",
-				initialState = ProfileStore.State.Loading,
+				initialState = ProfileStore.State.Initial,
 				bootstrapper = SimpleBootstrapper(Action.Load),
 				executorFactory = ::ExecutorImpl,
 				reducer = ReducerImpl,

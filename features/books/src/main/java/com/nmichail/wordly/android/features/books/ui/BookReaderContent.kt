@@ -35,6 +35,16 @@ fun BookReaderContent(
 	val state by component.model.subscribeAsState()
 
 	when (val currentState = state) {
+		BookReaderStore.State.Initial -> {
+			Box(
+				modifier = modifier
+					.fillMaxSize()
+					.background(MaterialTheme.colorScheme.background),
+				contentAlignment = Alignment.Center,
+			) {
+				CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
+			}
+		}
 		BookReaderStore.State.Loading -> {
 			Box(
 				modifier = modifier

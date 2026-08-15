@@ -25,7 +25,7 @@ internal class ReviewStoreFactory @Inject constructor(
 			ReviewStore,
 			Store<ReviewStore.Intent, ReviewStore.State, ReviewStore.Label> by storeFactory.create(
 				name = "ReviewStore",
-				initialState = ReviewStore.State.Loading,
+				initialState = ReviewStore.State.Initial,
 				bootstrapper = SimpleBootstrapper(Action.Load),
 				executorFactory = ::ExecutorImpl,
 				reducer = ReducerImpl,

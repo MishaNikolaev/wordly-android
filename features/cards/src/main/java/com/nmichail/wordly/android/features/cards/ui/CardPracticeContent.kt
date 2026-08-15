@@ -35,6 +35,16 @@ fun CardPracticeContent(
 	val state by component.model.subscribeAsState()
 
 	when (val currentState = state) {
+		CardPracticeStore.State.Initial -> {
+			Box(
+				modifier = modifier
+					.fillMaxSize()
+					.background(MaterialTheme.colorScheme.background),
+				contentAlignment = Alignment.Center,
+			) {
+				CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
+			}
+		}
 		CardPracticeStore.State.Loading -> {
 			Box(
 				modifier = modifier

@@ -57,6 +57,16 @@ fun CardsContent(
 	val state by component.model.subscribeAsState()
 
 	when (val currentState = state) {
+		CardsStore.State.Initial -> {
+			Box(
+				modifier = modifier
+					.fillMaxSize()
+					.background(MaterialTheme.colorScheme.background),
+				contentAlignment = Alignment.Center,
+			) {
+				CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
+			}
+		}
 		CardsStore.State.Loading -> {
 			Box(
 				modifier = modifier

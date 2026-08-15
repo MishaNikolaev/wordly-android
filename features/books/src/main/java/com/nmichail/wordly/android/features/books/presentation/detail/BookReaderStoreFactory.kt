@@ -28,7 +28,7 @@ internal class BookReaderStoreFactory @Inject constructor(
 			BookReaderStore,
 			Store<BookReaderStore.Intent, BookReaderStore.State, BookReaderStore.Label> by storeFactory.create(
 				name = "BookReaderStore",
-				initialState = BookReaderStore.State.Loading,
+				initialState = BookReaderStore.State.Initial,
 				bootstrapper = SimpleBootstrapper(Action.Load),
 				executorFactory = { ExecutorImpl(bookId = bookId) },
 				reducer = ReducerImpl,

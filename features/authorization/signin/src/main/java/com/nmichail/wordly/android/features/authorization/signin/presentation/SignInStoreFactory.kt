@@ -2,6 +2,7 @@ package com.nmichail.wordly.android.features.authorization.signin.presentation
 
 import kotlinx.coroutines.launch
 import com.arkivanov.mvikotlin.core.store.Reducer
+import com.arkivanov.mvikotlin.core.store.SimpleBootstrapper
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.logging.store.LoggingStoreFactory
@@ -35,16 +36,20 @@ internal class SignInStoreFactory @Inject constructor(
 	fun create(): SignInStore = object : SignInStore,
 		Store<SignInStore.Intent, SignInStore.State, SignInStore.Label> by storeFactory.create(
 			name = "SignInStore",
-			initialState = SignInStore.State.Content(
-				email = EmailValidationItem(),
-				password = PasswordValidationItem(),
-				submitting = false,
-			),
+			initialState = SignInStore.State.Initial,
+			bootstrapper = SimpleBootstrapper(Action.Initialize),
 			reducer = ReducerImpl,
 			executorFactory = ::ExecutorImpl,
 		) {}
 
+	private sealed interface Action {
+
+		data object Initialize : Action
+	}
+
 	private sealed interface Msg {
+
+		data object Initialized : Msg
 
 		data class ChangeEmail(val email: EmailValidationItem) : Msg
 
@@ -58,7 +63,13 @@ internal class SignInStoreFactory @Inject constructor(
 	}
 
 	private inner class ExecutorImpl :
-		BaseCoroutineExecutor<SignInStore.Intent, Nothing, SignInStore.State, Msg, SignInStore.Label>() {
+		BaseCoroutineExecutor<SignInStore.Intent, Action, SignInStore.State, Msg, SignInStore.Label>() {
+
+		override fun executeAction(action: Action) {
+			when (action) {
+				Action.Initialize -> dispatch(Msg.Initialized)
+			}
+		}
 
 		override fun executeIntent(intent: SignInStore.Intent) {
 			when (intent) {
@@ -123,6 +134,11 @@ internal class SignInStoreFactory @Inject constructor(
 		override fun SignInStore.State.reduce(msg: Msg): SignInStore.State {
 			val content = this as? SignInStore.State.Content
 			return when (msg) {
+				Msg.Initialized -> SignInStore.State.Content(
+					email = EmailValidationItem(),
+					password = PasswordValidationItem(),
+					submitting = false,
+				)
 				is Msg.ChangeEmail -> content?.copy(email = msg.email) ?: this
 				is Msg.ChangePassword -> content?.copy(password = msg.password) ?: this
 				is Msg.SetSubmitting -> content?.copy(submitting = msg.submitting) ?: this

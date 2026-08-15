@@ -36,6 +36,7 @@ fun MaterialsContent(
 	val state by component.model.subscribeAsState()
 
 	when (val current = state) {
+		MaterialsStore.State.Initial -> MaterialsLoading(modifier = modifier)
 		MaterialsStore.State.Loading -> MaterialsLoading(modifier = modifier)
 		is MaterialsStore.State.Error -> MaterialsError(
 			onRetryClick = component::handleRetry,

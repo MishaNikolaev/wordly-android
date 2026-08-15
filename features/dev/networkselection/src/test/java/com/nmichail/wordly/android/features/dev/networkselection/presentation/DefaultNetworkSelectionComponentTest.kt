@@ -57,7 +57,7 @@ class DefaultNetworkSelectionComponentTest {
 
 	@Test
 	fun `init EXPECT init state with data`() {
-		val expected = NetworkSelectionStore.State(
+		val expected = NetworkSelectionStore.State.Content(
 			stands = stands,
 			selectedStand = NetworkStand.DEV,
 		)

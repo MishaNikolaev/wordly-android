@@ -35,6 +35,16 @@ fun ConstructorPracticeContent(
 	val state by component.model.subscribeAsState()
 
 	when (val currentState = state) {
+		ConstructorPracticeStore.State.Initial -> {
+			Box(
+				modifier = modifier
+					.fillMaxSize()
+					.background(MaterialTheme.colorScheme.background),
+				contentAlignment = Alignment.Center,
+			) {
+				CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
+			}
+		}
 		ConstructorPracticeStore.State.Loading -> {
 			Box(
 				modifier = modifier
