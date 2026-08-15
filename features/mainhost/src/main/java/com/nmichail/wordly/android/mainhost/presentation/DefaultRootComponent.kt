@@ -1,5 +1,6 @@
 package com.nmichail.wordly.android.mainhost.presentation
 
+import android.os.Parcelable
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.DelicateDecomposeApi
 import com.arkivanov.decompose.router.stack.ChildStack
@@ -17,7 +18,7 @@ import com.nmichail.wordly.android.features.authorization.signup.presentation.Si
 import com.nmichail.wordly.android.features.authorization.signup.presentation.SignUpRouter
 import com.nmichail.wordly.android.features.dev.networkselection.presentation.NetworkSelectionComponent
 import com.nmichail.wordly.android.shared.error.presentation.ErrorLogoutRouter
-import kotlinx.serialization.Serializable
+import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
 
 internal class DefaultRootComponent(
@@ -34,7 +35,7 @@ internal class DefaultRootComponent(
 
 	override val stack: Value<ChildStack<*, RootComponent.Child>> = childStack(
 		source = navigation,
-		serializer = Config.serializer(),
+		serializer = null,
 		initialStack = {
 			listOf(
 				if (isAuthTokensExistUseCase()) {
@@ -120,19 +121,19 @@ internal class DefaultRootComponent(
 		}
 	}
 
-	@Serializable
-	private sealed interface Config {
+	@Parcelize
+	private sealed interface Config : Parcelable {
 
-		@Serializable
+		@Parcelize
 		data object SignIn : Config
 
-		@Serializable
+		@Parcelize
 		data object SignUp : Config
 
-		@Serializable
+		@Parcelize
 		data object MainHost : Config
 
-		@Serializable
+		@Parcelize
 		data object NetworkSelection : Config
 	}
 }
