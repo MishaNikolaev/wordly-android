@@ -23,7 +23,7 @@ internal class DefaultProfileEditComponent(
 		launchTry {
 			for (label in store.labelsChannel(lifecycle)) {
 				when (label) {
-					ProfileEditComponent.Label.Close -> profileEditRouter.navigateBack()
+					ProfileEditStore.Label.Close -> profileEditRouter.navigateBack()
 				}
 			}
 		} catch {

@@ -26,15 +26,20 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.nmichail.wordly.android.component.wui.theme.OnestFontFamily
+import com.nmichail.wordly.android.core.preferences.domain.entity.AppThemeMode
 import com.nmichail.wordly.android.features.profile.R
-import com.nmichail.wordly.android.features.profile.presentation.ProfileComponent
+import com.nmichail.wordly.android.features.profile.presentation.ProfileStore
 
 private val SettingsCardShape = RoundedCornerShape(20.dp)
 
 @Composable
 internal fun ProfileSettingsSection(
-	state: ProfileComponent.State.Content,
-	component: ProfileComponent,
+	state: ProfileStore.State.Content,
+	themeMode: AppThemeMode,
+	onOpenNotifications: () -> Unit,
+	onOpenDailyGoal: () -> Unit,
+	onOpenTheme: () -> Unit,
+	onToggleNotificationsEnabled: () -> Unit,
 	modifier: Modifier = Modifier,
 ) {
 	val profile = state.profile
@@ -49,13 +54,13 @@ internal fun ProfileSettingsSection(
 			ProfileSettingsToggleRow(
 				title = stringResource(R.string.profile_notifications),
 				checked = state.notificationsEnabled,
-				onCheckedChange = { component.handleToggleNotificationsEnabled() },
+				onCheckedChange = { onToggleNotificationsEnabled() },
 			)
 			SettingsDivider()
 			ProfileSettingsNavRow(
 				title = stringResource(R.string.profile_reminder_time),
 				value = reminderValue,
-				onClick = component::handleOpenNotifications,
+				onClick = onOpenNotifications,
 			)
 			SettingsDivider()
 			ProfileSettingsNavRow(
@@ -64,7 +69,7 @@ internal fun ProfileSettingsSection(
 					R.string.profile_daily_goal_value,
 					profile.dailyGoal.wordsPerDay,
 				),
-				onClick = component::handleOpenDailyGoal,
+				onClick = onOpenDailyGoal,
 			)
 		}
 		Text(
@@ -79,8 +84,8 @@ internal fun ProfileSettingsSection(
 		ProfileSettingsCard {
 			ProfileSettingsNavRow(
 				title = stringResource(R.string.profile_theme),
-				value = themeModeLabel(mode = state.themeMode),
-				onClick = component::handleOpenTheme,
+				value = themeModeLabel(mode = themeMode),
+				onClick = onOpenTheme,
 			)
 		}
 	}

@@ -3,10 +3,28 @@ package com.nmichail.wordly.android.features.profile.presentation
 import com.arkivanov.mvikotlin.core.store.Store
 import com.nmichail.wordly.android.core.preferences.domain.entity.AppThemeMode
 import com.nmichail.wordly.android.features.profile.domain.entity.DailyGoal
-import com.nmichail.wordly.android.features.profile.domain.entity.NotificationTimeSlot
+import com.nmichail.wordly.android.features.profile.domain.entity.UserProfile
 
-internal interface ProfileStore :
-	Store<ProfileStore.Intent, ProfileComponent.State, ProfileComponent.Label> {
+interface ProfileStore :
+	Store<ProfileStore.Intent, ProfileStore.State, ProfileStore.Label> {
+
+	sealed interface State {
+
+		data object Loading : State
+
+		data class Content(
+			val profile: UserProfile,
+			val notificationsEnabled: Boolean,
+			val loggingOut: Boolean,
+		) : State
+
+		data object Error : State
+	}
+
+	sealed interface Label {
+
+		data object OpenEdit : Label
+	}
 
 	sealed interface Intent {
 
@@ -16,40 +34,16 @@ internal interface ProfileStore :
 
 		data object OpenEdit : Intent
 
-		data object OpenLevel : Intent
-
-		data class ConfirmLevel(val level: String) : Intent
-
-		data object DismissLevel : Intent
+		data class UpdateLevel(val level: String) : Intent
 
 		data object ToggleNotificationsEnabled : Intent
 
-		data object OpenDailyGoal : Intent
+		data class UpdateDailyGoal(val goal: DailyGoal) : Intent
 
-		data class ConfirmDailyGoal(val goal: DailyGoal) : Intent
+		data class UpdateNotificationTimes(val times: List<String>) : Intent
 
-		data object DismissDailyGoal : Intent
+		data class SetThemeMode(val mode: AppThemeMode) : Intent
 
-		data object OpenNotifications : Intent
-
-		data class ToggleNotification(val slot: NotificationTimeSlot) : Intent
-
-		data object ConfirmNotifications : Intent
-
-		data object DismissNotifications : Intent
-
-		data object OpenTheme : Intent
-
-		data class SelectTheme(val mode: AppThemeMode) : Intent
-
-		data object ConfirmTheme : Intent
-
-		data object DismissTheme : Intent
-
-		data object OpenLogout : Intent
-
-		data object ConfirmLogout : Intent
-
-		data object DismissLogout : Intent
+		data object Logout : Intent
 	}
 }

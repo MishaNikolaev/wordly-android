@@ -22,12 +22,14 @@ import com.nmichail.wordly.android.features.review.ui.ReviewContent
 import com.nmichail.wordly.android.features.materials.ui.MaterialDetailContent
 import com.nmichail.wordly.android.features.materials.ui.MaterialsContent
 import com.nmichail.wordly.android.features.words.ui.WordContent
+import com.nmichail.wordly.android.core.preferences.domain.entity.AppThemeMode
 import com.nmichail.wordly.android.mainhost.presentation.MainHostComponent
 import com.nmichail.wordly.android.mainhost.presentation.toTab
 
 @Composable
 fun MainHostContent(
 	component: MainHostComponent,
+	themeMode: AppThemeMode,
 	modifier: Modifier = Modifier,
 ) {
 	val stack by component.stack.subscribeAsState()
@@ -49,6 +51,7 @@ fun MainHostContent(
 		Children(stack = component.stack) { child ->
 			MainHostChildContent(
 				child = child.instance,
+				themeMode = themeMode,
 				innerPadding = innerPadding,
 			)
 		}
@@ -58,6 +61,7 @@ fun MainHostContent(
 @Composable
 private fun MainHostChildContent(
 	child: MainHostComponent.Child,
+	themeMode: AppThemeMode,
 	innerPadding: PaddingValues,
 ) {
 	when (child) {
@@ -78,6 +82,7 @@ private fun MainHostChildContent(
 		)
 		is MainHostComponent.Child.Profile -> ProfileContent(
 			component = child.component,
+			themeMode = themeMode,
 			modifier = Modifier.padding(innerPadding),
 		)
 		is MainHostComponent.Child.ProfileEdit -> ProfileEditContent(
