@@ -8,6 +8,7 @@
 	<string name="words_detail_play_audio">Произношение</string>
 	<string name="words_detail_definition_label">Описание</string>
 	<string name="words_detail_difficulty_label">сложность слова</string>
+	<string name="words_detail_difficulty_value">%1$d</string>
 	<string name="words_detail_difficulty_max">/%1$d</string>
 	<string name="words_detail_repeat_label">выбрать дату повторения</string>
 	<string name="words_detail_add_to_review">Добавить в повторение</string>

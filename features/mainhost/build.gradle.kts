@@ -23,7 +23,7 @@ dependencies {
 	implementation(projects.features.cards)
 	implementation(projects.features.constructor)
 	implementation(projects.features.books)
-	implementation(projects.features.words)
+	implementation(projects.features.words.list)
 	implementation(projects.features.materials)
 	implementation(projects.features.profile)
 	implementation(projects.core.network)
