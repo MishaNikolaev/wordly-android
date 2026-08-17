@@ -13,6 +13,7 @@ internal class DefaultProfileComponent(
 	componentContext: ComponentContext,
 	profileStoreFactory: ProfileStoreFactory,
 	val onOpenEdit: () -> Unit,
+	val onOpenReminderTimes: () -> Unit,
 ) : ComponentContext by componentContext,
 	ProfileComponent {
 
@@ -27,6 +28,7 @@ internal class DefaultProfileComponent(
 			for (label in store.labelsChannel(lifecycle)) {
 				when (label) {
 					ProfileStore.Label.OpenEdit -> onOpenEdit()
+					ProfileStore.Label.OpenReminderTimes -> onOpenReminderTimes()
 				}
 			}
 		}
@@ -40,6 +42,10 @@ internal class DefaultProfileComponent(
 		store.accept(ProfileStore.Intent.OpenEdit)
 	}
 
+	override fun handleOpenReminderTimes() {
+		store.accept(ProfileStore.Intent.OpenReminderTimes)
+	}
+
 	override fun handleUpdateLevel(level: String) {
 		store.accept(ProfileStore.Intent.UpdateLevel(level = level))
 	}
@@ -50,10 +56,6 @@ internal class DefaultProfileComponent(
 
 	override fun handleUpdateDailyGoal(goal: DailyGoal) {
 		store.accept(ProfileStore.Intent.UpdateDailyGoal(goal = goal))
-	}
-
-	override fun handleUpdateNotificationTimes(times: List<String>) {
-		store.accept(ProfileStore.Intent.UpdateNotificationTimes(times = times))
 	}
 
 	override fun handleSetThemeMode(mode: AppThemeMode) {

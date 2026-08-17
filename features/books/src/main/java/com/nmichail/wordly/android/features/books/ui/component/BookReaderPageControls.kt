@@ -32,114 +32,114 @@ import com.nmichail.wordly.android.component.wui.theme.WuiTheme
 
 @Composable
 fun BookReaderPageControls(
-	currentPage: Int,
-	pageCount: Int,
-	onPreviousClick: () -> Unit,
-	onNextClick: () -> Unit,
-	previousContentDescription: String,
-	nextContentDescription: String,
-	modifier: Modifier = Modifier,
+    currentPage: Int,
+    pageCount: Int,
+    onPreviousClick: () -> Unit,
+    onNextClick: () -> Unit,
+    previousContentDescription: String,
+    nextContentDescription: String,
+    modifier: Modifier = Modifier,
 ) {
-	val safePageCount = pageCount.coerceAtLeast(1)
-	val safeCurrent = currentPage.coerceIn(0, safePageCount - 1)
-	val progress = (safeCurrent + 1).toFloat() / safePageCount.toFloat()
+    val safePageCount = pageCount.coerceAtLeast(1)
+    val safeCurrent = currentPage.coerceIn(0, safePageCount - 1)
+    val progress = (safeCurrent + 1).toFloat() / safePageCount.toFloat()
 
-	Row(
-		modifier = modifier
+    Row(
+        modifier = modifier
 			.fillMaxWidth()
 			.background(MaterialTheme.colorScheme.surface)
 			.padding(horizontal = 20.dp, vertical = 13.dp),
-		verticalAlignment = Alignment.CenterVertically,
-		horizontalArrangement = Arrangement.spacedBy(14.dp),
-	) {
-		BookReaderPageButton(
-			enabled = safeCurrent > 0,
-			onClick = onPreviousClick,
-			contentDescription = previousContentDescription,
-			icon = {
-				Icon(
-					imageVector = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
-					contentDescription = null,
-					tint = MaterialTheme.colorScheme.onSurface,
-					modifier = Modifier.size(24.dp),
-				)
-			},
-		)
-		BookReaderPageProgress(
-			progress = progress,
-			label = "${safeCurrent + 1} / $safePageCount",
-			modifier = Modifier.weight(1f),
-		)
-		BookReaderPageButton(
-			enabled = safeCurrent < safePageCount - 1,
-			onClick = onNextClick,
-			contentDescription = nextContentDescription,
-			icon = {
-				Icon(
-					imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
-					contentDescription = null,
-					tint = MaterialTheme.colorScheme.onSurface,
-					modifier = Modifier.size(24.dp),
-				)
-			},
-		)
-	}
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(14.dp),
+    ) {
+        BookReaderPageButton(
+            enabled = safeCurrent > 0,
+            onClick = onPreviousClick,
+            contentDescription = previousContentDescription,
+            icon = {
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onSurface,
+                    modifier = Modifier.size(24.dp),
+                )
+            },
+        )
+        BookReaderPageProgress(
+            progress = progress,
+            label = "${safeCurrent + 1} / $safePageCount",
+            modifier = Modifier.weight(1f),
+        )
+        BookReaderPageButton(
+            enabled = safeCurrent < safePageCount - 1,
+            onClick = onNextClick,
+            contentDescription = nextContentDescription,
+            icon = {
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onSurface,
+                    modifier = Modifier.size(24.dp),
+                )
+            },
+        )
+    }
 }
 
 @Composable
 private fun BookReaderPageProgress(
-	progress: Float,
-	label: String,
-	modifier: Modifier = Modifier,
+    progress: Float,
+    label: String,
+    modifier: Modifier = Modifier,
 ) {
-	val colorScheme = MaterialTheme.colorScheme
+    val colorScheme = MaterialTheme.colorScheme
 
-	Column(
-		modifier = modifier,
-		verticalArrangement = Arrangement.spacedBy(7.dp),
-	) {
-		Box(
-			modifier = Modifier
+    Column(
+        modifier = modifier,
+        verticalArrangement = Arrangement.spacedBy(7.dp),
+    ) {
+        Box(
+            modifier = Modifier
 				.fillMaxWidth()
 				.height(5.dp)
 				.clip(RoundedCornerShape(percent = 50))
 				.background(colorScheme.surfaceContainerHigh),
-		) {
-			Box(
-				modifier = Modifier
+        ) {
+            Box(
+                modifier = Modifier
 					.fillMaxHeight()
 					.fillMaxWidth(fraction = progress)
 					.clip(RoundedCornerShape(percent = 50))
 					.background(colorScheme.primary),
-			)
-		}
-		Text(
-			text = label,
-			style = MaterialTheme.typography.labelMedium,
-			fontWeight = FontWeight.Medium,
-			color = colorScheme.onSurfaceVariant,
-			textAlign = TextAlign.Center,
-			modifier = Modifier.fillMaxWidth(),
-		)
-	}
+            )
+        }
+        Text(
+            text = label,
+            style = MaterialTheme.typography.labelMedium,
+            fontWeight = FontWeight.Medium,
+            color = colorScheme.onSurfaceVariant,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.fillMaxWidth(),
+        )
+    }
 }
 
 @Composable
 private fun BookReaderPageButton(
-	enabled: Boolean,
-	onClick: () -> Unit,
-	contentDescription: String,
-	icon: @Composable () -> Unit,
+    enabled: Boolean,
+    onClick: () -> Unit,
+    contentDescription: String,
+    icon: @Composable () -> Unit,
 ) {
-	val colorScheme = MaterialTheme.colorScheme
-	val background = if (enabled) {
-		colorScheme.surface
-	} else {
-		colorScheme.surfaceContainerHigh.copy(alpha = 0.4f)
-	}
+    val colorScheme = MaterialTheme.colorScheme
+    val background = if (enabled) {
+        colorScheme.surface
+    } else {
+        colorScheme.surfaceContainerHigh.copy(alpha = 0.4f)
+    }
 
-	Box(
-		modifier = Modifier
+    Box(
+        modifier = Modifier
 			.size(44.dp)
 			.clip(RoundedCornerShape(13.dp))
 			.background(background)
@@ -160,23 +160,23 @@ private fun BookReaderPageButton(
 				onClickLabel = contentDescription,
 				onClick = onClick,
 			),
-		contentAlignment = Alignment.Center,
-	) {
-		icon()
-	}
+        contentAlignment = Alignment.Center,
+    ) {
+        icon()
+    }
 }
 
 @Preview(showBackground = true)
 @Composable
 private fun BookReaderPageControlsPreview() {
-	WuiTheme {
-		BookReaderPageControls(
-			currentPage = 2,
-			pageCount = 10,
-			onPreviousClick = {},
-			onNextClick = {},
-			previousContentDescription = "Previous",
-			nextContentDescription = "Next",
-		)
-	}
+    WuiTheme {
+        BookReaderPageControls(
+            currentPage = 2,
+            pageCount = 10,
+            onPreviousClick = {},
+            onNextClick = {},
+            previousContentDescription = "Previous",
+            nextContentDescription = "Next",
+        )
+    }
 }

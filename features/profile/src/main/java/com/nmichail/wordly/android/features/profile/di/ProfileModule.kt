@@ -8,6 +8,8 @@ import com.nmichail.wordly.android.features.profile.presentation.DefaultProfileC
 import com.nmichail.wordly.android.features.profile.presentation.ProfileComponent
 import com.nmichail.wordly.android.features.profile.presentation.edit.DefaultProfileEditComponentFactory
 import com.nmichail.wordly.android.features.profile.presentation.edit.ProfileEditComponent
+import com.nmichail.wordly.android.features.profile.presentation.reminder.DefaultReminderTimesComponentFactory
+import com.nmichail.wordly.android.features.profile.presentation.reminder.ReminderTimesComponent
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -31,6 +33,11 @@ abstract class ProfileModule {
 	internal abstract fun bindProfileEditComponentFactory(
 		impl: DefaultProfileEditComponentFactory,
 	): ProfileEditComponent.Factory
+
+	@Binds
+	internal abstract fun bindReminderTimesComponentFactory(
+		impl: DefaultReminderTimesComponentFactory,
+	): ReminderTimesComponent.Factory
 
 	companion object {
 

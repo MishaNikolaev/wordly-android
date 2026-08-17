@@ -34,14 +34,14 @@ internal class HomeStoreFactory @Inject constructor(
 			Store<HomeStore.Intent, HomeStore.State, HomeStore.Label> by storeFactory.create(
 				name = "HomeStore",
 				initialState = HomeStore.State.Initial,
-				bootstrapper = SimpleBootstrapper(Action.Load),
+				bootstrapper = SimpleBootstrapper(Action.Init),
 				executorFactory = ::ExecutorImpl,
 				reducer = ReducerImpl,
 			) {}
 
 	private sealed interface Action {
 
-		data object Load : Action
+		data object Init : Action
 	}
 
 	private sealed interface Msg {
@@ -115,7 +115,7 @@ internal class HomeStoreFactory @Inject constructor(
 
 		override fun executeAction(action: Action) {
 			when (action) {
-				Action.Load -> loadHome()
+				Action.Init -> loadHome()
 			}
 		}
 

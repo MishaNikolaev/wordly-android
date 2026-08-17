@@ -55,116 +55,116 @@ import com.nmichail.wordly.android.features.books.presentation.detail.BookReader
 
 @Composable
 internal fun BookReaderLoaded(
-	state: BookReaderStore.State.Content,
-	onCloseClick: () -> Unit,
-	onToggleTranslate: () -> Unit,
-	onSelectWord: (String) -> Unit,
-	onDismissWordDialog: () -> Unit,
-	onAddWordToCard: () -> Unit,
-	onDismissWordAddedDialog: () -> Unit,
-	modifier: Modifier = Modifier,
+    state: BookReaderStore.State.Content,
+    onCloseClick: () -> Unit,
+    onToggleTranslate: () -> Unit,
+    onSelectWord: (String) -> Unit,
+    onDismissWordDialog: () -> Unit,
+    onAddWordToCard: () -> Unit,
+    onDismissWordAddedDialog: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-	Box(modifier = modifier.fillMaxSize()) {
-		Column(
-			modifier = Modifier
+    Box(modifier = modifier.fillMaxSize()) {
+        Column(
+            modifier = Modifier
 				.fillMaxSize()
 				.background(MaterialTheme.colorScheme.background)
 				.statusBarsPadding()
 				.navigationBarsPadding(),
-		) {
-			BookReaderTopBar(
-				title = state.book.title,
-				author = state.book.author,
-				translating = state.translating,
-				translated = state.translationVisible,
-				onCloseClick = onCloseClick,
-				onToggleTranslate = onToggleTranslate,
-			)
-			BookReaderBody(
-				state = state,
-				onSelectWord = onSelectWord,
-				modifier = Modifier.weight(1f),
-			)
-		}
-		val selectedWord = state.selectedWord
-		if (selectedWord != null) {
-			BookReaderWordLookupDialog(
-				definition = selectedWord,
-				added = state.showWordAddedDialog,
-				onAddClick = onAddWordToCard,
-				onDismiss = if (state.showWordAddedDialog) {
-					onDismissWordAddedDialog
-				} else {
-					onDismissWordDialog
-				},
-			)
-		}
-	}
+        ) {
+            BookReaderTopBar(
+                title = state.book.title,
+                author = state.book.author,
+                translating = state.translating,
+                translated = state.translationVisible,
+                onCloseClick = onCloseClick,
+                onToggleTranslate = onToggleTranslate,
+            )
+            BookReaderBody(
+                state = state,
+                onSelectWord = onSelectWord,
+                modifier = Modifier.weight(1f),
+            )
+        }
+        val selectedWord = state.selectedWord
+        if (selectedWord != null) {
+            BookReaderWordLookupDialog(
+                definition = selectedWord,
+                added = state.showWordAddedDialog,
+                onAddClick = onAddWordToCard,
+                onDismiss = if (state.showWordAddedDialog) {
+                    onDismissWordAddedDialog
+                } else {
+                    onDismissWordDialog
+                },
+            )
+        }
+    }
 }
 
 @Composable
 private fun BookReaderTopBar(
-	title: String,
-	author: String,
-	translating: Boolean,
-	translated: Boolean,
-	onCloseClick: () -> Unit,
-	onToggleTranslate: () -> Unit,
-	modifier: Modifier = Modifier,
+    title: String,
+    author: String,
+    translating: Boolean,
+    translated: Boolean,
+    onCloseClick: () -> Unit,
+    onToggleTranslate: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-	Row(
-		modifier = modifier
+    Row(
+        modifier = modifier
 			.fillMaxWidth()
 			.padding(horizontal = 16.dp, vertical = 12.dp),
-		verticalAlignment = Alignment.CenterVertically,
-	) {
-		BookReaderBackButton(onClick = onCloseClick)
-		Column(
-			modifier = Modifier
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        BookReaderBackButton(onClick = onCloseClick)
+        Column(
+            modifier = Modifier
 				.weight(1f)
 				.padding(horizontal = 12.dp),
-			horizontalAlignment = Alignment.CenterHorizontally,
-		) {
-			Text(
-				text = title,
-				style = MaterialTheme.typography.titleMedium,
-				fontWeight = FontWeight.SemiBold,
-				color = MaterialTheme.colorScheme.onBackground,
-				maxLines = 1,
-				overflow = TextOverflow.Ellipsis,
-				textAlign = TextAlign.Center,
-			)
-			Text(
-				text = author,
-				style = MaterialTheme.typography.labelMedium,
-				color = MaterialTheme.colorScheme.onSurfaceVariant,
-				maxLines = 1,
-				overflow = TextOverflow.Ellipsis,
-				textAlign = TextAlign.Center,
-			)
-		}
-		BookTranslateButton(
-			translating = translating,
-			translated = translated,
-			contentDescription = stringResource(
-				if (translated) {
-					R.string.book_reader_hide_translation
-				} else {
-					R.string.book_reader_translate
-				},
-			),
-			onClick = onToggleTranslate,
-		)
-	}
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            Text(
+                text = title,
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.SemiBold,
+                color = MaterialTheme.colorScheme.onBackground,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                textAlign = TextAlign.Center,
+            )
+            Text(
+                text = author,
+                style = MaterialTheme.typography.labelMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                textAlign = TextAlign.Center,
+            )
+        }
+        BookTranslateButton(
+            translating = translating,
+            translated = translated,
+            contentDescription = stringResource(
+                if (translated) {
+                    R.string.book_reader_hide_translation
+                } else {
+                    R.string.book_reader_translate
+                },
+            ),
+            onClick = onToggleTranslate,
+        )
+    }
 }
 
 @Composable
 private fun BookReaderBackButton(
-	onClick: () -> Unit,
-	modifier: Modifier = Modifier,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-	Box(
-		modifier = modifier
+    Box(
+        modifier = modifier
 			.size(40.dp)
 			.clip(RoundedCornerShape(12.dp))
 			.background(MaterialTheme.colorScheme.surfaceVariant)
@@ -172,216 +172,217 @@ private fun BookReaderBackButton(
 				role = Role.Button,
 				onClick = onClick,
 			),
-		contentAlignment = Alignment.Center,
-	) {
-		Icon(
-			imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-			contentDescription = stringResource(R.string.book_reader_close),
-			tint = MaterialTheme.colorScheme.onBackground,
-			modifier = Modifier.size(22.dp),
-		)
-	}
+        contentAlignment = Alignment.Center,
+    ) {
+        Icon(
+            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+            contentDescription = stringResource(R.string.book_reader_close),
+            tint = MaterialTheme.colorScheme.onBackground,
+            modifier = Modifier.size(22.dp),
+        )
+    }
 }
 
 @Composable
 private fun BookReaderHint(
-	modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier,
 ) {
-	Row(
-		modifier = modifier.fillMaxWidth(),
-		horizontalArrangement = Arrangement.Center,
-		verticalAlignment = Alignment.CenterVertically,
-	) {
-		Icon(
-			imageVector = Icons.Rounded.TouchApp,
-			contentDescription = null,
-			tint = MaterialTheme.colorScheme.onSurfaceVariant,
-			modifier = Modifier.size(15.dp),
-		)
-		Text(
-			text = stringResource(R.string.book_reader_hint),
-			style = MaterialTheme.typography.labelMedium,
-			color = MaterialTheme.colorScheme.onSurfaceVariant,
-			modifier = Modifier.padding(start = 6.dp),
-		)
-	}
+    Row(
+        modifier = modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Icon(
+            imageVector = Icons.Rounded.TouchApp,
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.size(15.dp),
+        )
+        Text(
+            text = stringResource(R.string.book_reader_hint),
+            style = MaterialTheme.typography.labelMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.padding(start = 6.dp),
+        )
+    }
 }
 
 @Composable
 private fun BookReaderBody(
-	state: BookReaderStore.State.Content,
-	onSelectWord: (String) -> Unit,
-	modifier: Modifier = Modifier,
+    state: BookReaderStore.State.Content,
+    onSelectWord: (String) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-	var currentPage by rememberSaveable { mutableIntStateOf(0) }
-	var pageCount by rememberSaveable { mutableIntStateOf(1) }
+    var currentPage by rememberSaveable { mutableIntStateOf(0) }
+    var pageCount by rememberSaveable { mutableIntStateOf(1) }
 
-	Column(modifier = modifier.fillMaxSize()) {
-		BookReaderPagedContent(
-			state = state,
-			currentPage = currentPage,
-			onPageCountChange = { count ->
-				pageCount = count
-				if (currentPage >= count) {
-					currentPage = count - 1
-				}
-			},
-			onSelectWord = onSelectWord,
-			modifier = Modifier.weight(1f),
-		)
-		BookReaderPageControls(
-			currentPage = currentPage,
-			pageCount = pageCount,
-			onPreviousClick = { currentPage = (currentPage - 1).coerceAtLeast(0) },
-			onNextClick = { currentPage = (currentPage + 1).coerceAtMost(pageCount - 1) },
-			previousContentDescription = stringResource(R.string.book_reader_previous_page),
-			nextContentDescription = stringResource(R.string.book_reader_next_page),
-		)
-	}
+    Column(modifier = modifier.fillMaxSize()) {
+        BookReaderPagedContent(
+            state = state,
+            currentPage = currentPage,
+            onPageCountChange = { count ->
+                pageCount = count
+                if (currentPage >= count) {
+                    currentPage = count - 1
+                }
+            },
+            onSelectWord = onSelectWord,
+            modifier = Modifier.weight(1f),
+        )
+        BookReaderPageControls(
+            currentPage = currentPage,
+            pageCount = pageCount,
+            onPreviousClick = { currentPage = (currentPage - 1).coerceAtLeast(0) },
+            onNextClick = { currentPage = (currentPage + 1).coerceAtMost(pageCount - 1) },
+            previousContentDescription = stringResource(R.string.book_reader_previous_page),
+            nextContentDescription = stringResource(R.string.book_reader_next_page),
+        )
+    }
 }
 
 @SuppressLint("UnusedBoxWithConstraintsScope")
 @Composable
 private fun BookReaderPagedContent(
-	state: BookReaderStore.State.Content,
-	currentPage: Int,
-	onPageCountChange: (Int) -> Unit,
-	onSelectWord: (String) -> Unit,
-	modifier: Modifier = Modifier,
+    state: BookReaderStore.State.Content,
+    currentPage: Int,
+    onPageCountChange: (Int) -> Unit,
+    onSelectWord: (String) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-	val density = LocalDensity.current
-	val textMeasurer = rememberTextMeasurer()
-	val bodyStyle = WuiTypography.bookReaderBody
-	val paragraphSpacingPx = with(density) { 16.dp.roundToPx() }
-	val hintReservedPx = with(density) { 36.dp.roundToPx() }
-	val horizontalPaddingPx = with(density) { 32.dp.roundToPx() }
-	val verticalPaddingPx = with(density) { 16.dp.roundToPx() }
+    val density = LocalDensity.current
+    val textMeasurer = rememberTextMeasurer()
+    val bodyStyle = WuiTypography.bookReaderBody
+    val paragraphSpacingPx = with(density) { 16.dp.roundToPx() }
+    val hintReservedPx = with(density) { 36.dp.roundToPx() }
+    val horizontalPaddingPx = with(density) { 32.dp.roundToPx() }
+    val verticalPaddingPx = with(density) { 16.dp.roundToPx() }
 
-	BoxWithConstraints(modifier = modifier.fillMaxSize()) {
-		val contentWidthPx = (constraints.maxWidth - horizontalPaddingPx).coerceAtLeast(0)
-		val pageHeightPx = ((constraints.maxHeight - verticalPaddingPx) * PAGE_CONTENT_HEIGHT_FACTOR)
-			.toInt()
-			.coerceAtLeast(0)
-		val showTranslation = state.translationVisible
-		val pages = remember(
-			state.book.paragraphs,
-			state.translation,
-			contentWidthPx,
-			pageHeightPx,
-			bodyStyle,
-		) {
-			paginateBookParagraphs(
-				paragraphs = state.book.paragraphs,
-				translation = state.translation,
-				contentWidthPx = contentWidthPx,
-				pageHeightPx = pageHeightPx,
-				spacingPx = paragraphSpacingPx,
-				firstPageReservedPx = hintReservedPx,
-				style = bodyStyle,
-				measure = { text, style, maxWidth ->
-					textMeasurer.measure(
-						text = text,
-						style = style,
-						constraints = Constraints(maxWidth = maxWidth),
-					).size.height
-				},
-			)
-		}
-		val pageCount = pages.size.coerceAtLeast(1)
-		LaunchedEffect(pageCount) {
-			onPageCountChange(pageCount)
-		}
-		val pageIndices = pages.getOrElse(currentPage.coerceAtMost(pageCount - 1)) {
-			IntRange.EMPTY
-		}
+    BoxWithConstraints(modifier = modifier.fillMaxSize()) {
+        val contentWidthPx = (constraints.maxWidth - horizontalPaddingPx).coerceAtLeast(0)
+        val pageHeightPx =
+            ((constraints.maxHeight - verticalPaddingPx) * PAGE_CONTENT_HEIGHT_FACTOR)
+                .toInt()
+                .coerceAtLeast(0)
+        val showTranslation = state.translationVisible
+        val pages = remember(
+            state.book.paragraphs,
+            state.translation,
+            contentWidthPx,
+            pageHeightPx,
+            bodyStyle,
+        ) {
+            paginateBookParagraphs(
+                paragraphs = state.book.paragraphs,
+                translation = state.translation,
+                contentWidthPx = contentWidthPx,
+                pageHeightPx = pageHeightPx,
+                spacingPx = paragraphSpacingPx,
+                firstPageReservedPx = hintReservedPx,
+                style = bodyStyle,
+                measure = { text, style, maxWidth ->
+                    textMeasurer.measure(
+                        text = text,
+                        style = style,
+                        constraints = Constraints(maxWidth = maxWidth),
+                    ).size.height
+                },
+            )
+        }
+        val pageCount = pages.size.coerceAtLeast(1)
+        LaunchedEffect(pageCount) {
+            onPageCountChange(pageCount)
+        }
+        val pageIndices = pages.getOrElse(currentPage.coerceAtMost(pageCount - 1)) {
+            IntRange.EMPTY
+        }
 
-		BookReaderPage(
-			showHint = currentPage == 0,
-			paragraphs = state.book.paragraphs,
-			pageIndices = pageIndices,
-			translation = state.translation,
-			showTranslation = showTranslation,
-			translating = state.translating,
-			onSelectWord = onSelectWord,
-		)
-	}
+        BookReaderPage(
+            showHint = currentPage == 0,
+            paragraphs = state.book.paragraphs,
+            pageIndices = pageIndices,
+            translation = state.translation,
+            showTranslation = showTranslation,
+            translating = state.translating,
+            onSelectWord = onSelectWord,
+        )
+    }
 }
 
 @Composable
 private fun BookReaderPage(
-	showHint: Boolean,
-	paragraphs: List<BookParagraph>,
-	pageIndices: IntRange,
-	translation: BookTranslation?,
-	showTranslation: Boolean,
-	translating: Boolean,
-	onSelectWord: (String) -> Unit,
-	modifier: Modifier = Modifier,
+    showHint: Boolean,
+    paragraphs: List<BookParagraph>,
+    pageIndices: IntRange,
+    translation: BookTranslation?,
+    showTranslation: Boolean,
+    translating: Boolean,
+    onSelectWord: (String) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-	val scrollState = rememberScrollState()
-	LaunchedEffect(pageIndices) {
-		scrollState.scrollTo(0)
-	}
+    val scrollState = rememberScrollState()
+    LaunchedEffect(pageIndices) {
+        scrollState.scrollTo(0)
+    }
 
-	Box(modifier = modifier.fillMaxSize()) {
-		if (translating) {
-			BookTranslatingOverlay(
-				message = stringResource(R.string.book_reader_translating),
-			)
-		} else {
-			Column(
-				modifier = Modifier
+    Box(modifier = modifier.fillMaxSize()) {
+        if (translating) {
+            BookTranslatingOverlay(
+                message = stringResource(R.string.book_reader_translating),
+            )
+        } else {
+            Column(
+                modifier = Modifier
 					.fillMaxSize()
 					.verticalScroll(scrollState)
 					.padding(horizontal = 16.dp, vertical = 8.dp),
-				verticalArrangement = Arrangement.spacedBy(16.dp),
-			) {
-				if (showHint) {
-					BookReaderHint()
-				}
-				pageIndices.forEach { index ->
-					val paragraph = paragraphs[index]
-					BookReaderParagraph(
-						paragraph = paragraph,
-						translatedText = translationFor(
-							translation = translation,
-							paragraphId = paragraph.id,
-						),
-						showTranslation = showTranslation,
-						onSelectWord = onSelectWord,
-					)
-				}
-			}
-		}
-	}
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+            ) {
+                if (showHint) {
+                    BookReaderHint()
+                }
+                pageIndices.forEach { index ->
+                    val paragraph = paragraphs[index]
+                    BookReaderParagraph(
+                        paragraph = paragraph,
+                        translatedText = translationFor(
+                            translation = translation,
+                            paragraphId = paragraph.id,
+                        ),
+                        showTranslation = showTranslation,
+                        onSelectWord = onSelectWord,
+                    )
+                }
+            }
+        }
+    }
 }
 
 private const val PAGE_CONTENT_HEIGHT_FACTOR = 1.5f
 
 private fun paginateBookParagraphs(
-	paragraphs: List<BookParagraph>,
-	translation: BookTranslation?,
-	contentWidthPx: Int,
-	pageHeightPx: Int,
-	spacingPx: Int,
-	firstPageReservedPx: Int,
-	style: TextStyle,
-	measure: (String, TextStyle, Int) -> Int,
+    paragraphs: List<BookParagraph>,
+    translation: BookTranslation?,
+    contentWidthPx: Int,
+    pageHeightPx: Int,
+    spacingPx: Int,
+    firstPageReservedPx: Int,
+    style: TextStyle,
+    measure: (String, TextStyle, Int) -> Int,
 ): List<IntRange> =
-	wuiPaginateMeasuredTexts(
-		primaryTexts = paragraphs.map { paragraph ->
-			paragraph.segments.joinToString(separator = "") { it.text }
-		},
-		alternateTexts = paragraphs.map { paragraph ->
-			translationFor(
-				translation = translation,
-				paragraphId = paragraph.id,
-			)
-		},
-		contentWidthPx = contentWidthPx,
-		pageHeightPx = pageHeightPx,
-		spacingPx = spacingPx,
-		firstPageReservedPx = firstPageReservedPx,
-		style = style,
-		measure = measure,
-	)
+    wuiPaginateMeasuredTexts(
+        primaryTexts = paragraphs.map { paragraph ->
+            paragraph.segments.joinToString(separator = "") { it.text }
+        },
+        alternateTexts = paragraphs.map { paragraph ->
+            translationFor(
+                translation = translation,
+                paragraphId = paragraph.id,
+            )
+        },
+        contentWidthPx = contentWidthPx,
+        pageHeightPx = pageHeightPx,
+        spacingPx = spacingPx,
+        firstPageReservedPx = firstPageReservedPx,
+        style = style,
+        measure = measure,
+    )

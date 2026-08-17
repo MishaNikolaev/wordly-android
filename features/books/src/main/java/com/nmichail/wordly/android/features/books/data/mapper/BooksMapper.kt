@@ -26,87 +26,89 @@ private const val SEGMENT_TYPE_TEXT = "text"
 private const val SEGMENT_TYPE_LOOKUP_WORD = "lookupWord"
 
 fun BooksCatalogResponse.toEntity(): BooksCatalog =
-	BooksCatalog(
-		title = title,
-		searchPlaceholder = searchPlaceholder,
-		levelBanner = levelBanner?.toEntity(),
-		sections = sections.map { it.toEntity() },
-	)
+    BooksCatalog(
+        title = title,
+        searchPlaceholder = searchPlaceholder,
+        levelBanner = levelBanner?.toEntity(),
+        sections = sections.map { it.toEntity() },
+    )
 
 fun BookContentResponse.toEntity(): BookContent =
-	BookContent(
-		id = id,
-		title = title,
-		author = author,
-		coverUrl = coverUrl,
-		paragraphs = paragraphs.map { it.toEntity() },
-	)
+    BookContent(
+        id = id,
+        title = title,
+        author = author,
+        coverUrl = coverUrl,
+        paragraphs = paragraphs.map { it.toEntity() },
+    )
 
 fun BookTranslationResponse.toEntity(): BookTranslation =
-	BookTranslation(
-		paragraphs = paragraphs.map { it.toEntity() },
-	)
+    BookTranslation(
+        paragraphs = paragraphs.map { it.toEntity() },
+    )
 
 private fun BooksLevelBannerResponse.toEntity(): BooksLevelBanner =
-	BooksLevelBanner(
-		text = text,
-		levelLabel = levelLabel,
-		levels = levels,
-	)
+    BooksLevelBanner(
+        text = text,
+        levelLabel = levelLabel,
+        levels = levels,
+    )
 
 private fun BooksSectionResponse.toEntity(): BooksSection =
-	BooksSection(
-		title = title,
-		items = items.map { it.toEntity() },
-	)
+    BooksSection(
+        title = title,
+        items = items.map { it.toEntity() },
+    )
 
 private fun BooksItemResponse.toEntity(): BooksItem =
-	BooksItem(
-		id = id,
-		title = title,
-		subtitle = subtitle,
-		badge = badge,
-		imageUrl = imageUrl,
-	)
+    BooksItem(
+        id = id,
+        title = title,
+        subtitle = subtitle,
+        badge = badge,
+        imageUrl = imageUrl,
+    )
 
 private fun BookParagraphResponse.toEntity(): BookParagraph =
-	BookParagraph(
-		id = id,
-		segments = segments.mapNotNull { it.toEntity() },
-	)
+    BookParagraph(
+        id = id,
+        segments = segments.mapNotNull { it.toEntity() },
+    )
 
 private fun BookTextSegmentResponse.toEntity(): BookTextSegment? =
-	when (type) {
-		SEGMENT_TYPE_TEXT -> BookTextSegment(
-			type = BookTextSegmentType.TEXT,
-			text = text,
-			id = null,
-			definition = null,
-		)
-		SEGMENT_TYPE_LOOKUP_WORD -> {
-			val segmentId = id ?: return null
-			val wordDefinition = definition?.toEntity() ?: return null
-			BookTextSegment(
-				type = BookTextSegmentType.LOOKUP_WORD,
-				text = text,
-				id = segmentId,
-				definition = wordDefinition,
-			)
-		}
-		else -> null
-	}
+    when (type) {
+        SEGMENT_TYPE_TEXT -> BookTextSegment(
+            type = BookTextSegmentType.TEXT,
+            text = text,
+            id = null,
+            definition = null,
+        )
+
+        SEGMENT_TYPE_LOOKUP_WORD -> {
+            val segmentId = id ?: return null
+            val wordDefinition = definition?.toEntity() ?: return null
+            BookTextSegment(
+                type = BookTextSegmentType.LOOKUP_WORD,
+                text = text,
+                id = segmentId,
+                definition = wordDefinition,
+            )
+        }
+
+        else -> null
+    }
 
 private fun BookWordDefinitionResponse.toEntity(): BookWordDefinition =
-	BookWordDefinition(
-		word = word,
-		phonetic = phonetic,
-		translation = translation,
-		partOfSpeech = partOfSpeech,
-		example = example,
-	)
+    BookWordDefinition(
+        word = word,
+        phonetic = phonetic,
+        translation = translation,
+        partOfSpeech = partOfSpeech,
+        example = example,
+    )
 
 private fun BookTranslatedParagraphResponse.toEntity(): BookTranslatedParagraph =
-	BookTranslatedParagraph(
-		id = id,
-		text = text,
-	)
+    BookTranslatedParagraph(
+        id = id,
+        text = text,
+    )

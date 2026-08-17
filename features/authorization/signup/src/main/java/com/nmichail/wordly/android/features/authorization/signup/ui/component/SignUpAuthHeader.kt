@@ -23,71 +23,71 @@ import com.nmichail.wordly.android.component.wui.theme.WuiTheme
 
 @Composable
 fun SignUpAuthHeader(
-	modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier,
 ) {
-	Column(
-		modifier = modifier
+    Column(
+        modifier = modifier
 			.fillMaxWidth()
 			.padding(horizontal = 20.dp)
 			.padding(top = 12.dp, bottom = 28.dp),
-		horizontalAlignment = Alignment.Start,
-	) {
-		Logo()
-		Box(
-			modifier = Modifier
+        horizontalAlignment = Alignment.Start,
+    ) {
+        Logo()
+        Box(
+            modifier = Modifier
 				.fillMaxWidth()
 				.padding(top = 20.dp)
 				.graphicsLayer { clip = false },
-			contentAlignment = Alignment.TopCenter,
-		) {
-			Box(
-				modifier = Modifier
+            contentAlignment = Alignment.TopCenter,
+        ) {
+            Box(
+                modifier = Modifier
 					.width(296.dp)
 					.height(164.dp)
 					.padding(vertical = 8.dp),
-			) {
-				AuthPreviewWordCard(
-					word = stringResource(R.string.auth_preview_serendipity_word),
-					translation = stringResource(R.string.auth_preview_serendipity_translation),
-					modifier = Modifier
+            ) {
+                AuthPreviewWordCard(
+                    word = stringResource(R.string.auth_preview_serendipity_word),
+                    translation = stringResource(R.string.auth_preview_serendipity_translation),
+                    modifier = Modifier
 						.align(Alignment.TopStart)
 						.offset(x = (-10).dp),
-					rotation = 10f,
-				)
-				AuthPreviewWordCard(
-					word = stringResource(R.string.auth_preview_deploy_word),
-					translation = stringResource(R.string.auth_preview_deploy_translation),
-					modifier = Modifier
+                    rotation = 10f,
+                )
+                AuthPreviewWordCard(
+                    word = stringResource(R.string.auth_preview_deploy_word),
+                    translation = stringResource(R.string.auth_preview_deploy_translation),
+                    modifier = Modifier
 						.align(Alignment.TopEnd)
 						.offset(
 							x = 22.dp,
 							y = (-14).dp,
 						),
-					rotation = -14f,
-				)
-				AuthPreviewWordCard(
-					word = stringResource(R.string.auth_preview_resilience_word),
-					translation = stringResource(R.string.auth_preview_resilience_translation),
-					modifier = Modifier
+                    rotation = -14f,
+                )
+                AuthPreviewWordCard(
+                    word = stringResource(R.string.auth_preview_resilience_word),
+                    translation = stringResource(R.string.auth_preview_resilience_translation),
+                    modifier = Modifier
 						.align(Alignment.BottomCenter)
 						.offset(y = (-16).dp),
-					rotation = 0f,
-				)
-			}
-		}
-	}
+                    rotation = 0f,
+                )
+            }
+        }
+    }
 }
 
 @Preview(showBackground = true, heightDp = 360)
 @Composable
 private fun SignUpAuthHeaderPreview() {
-	WuiTheme {
-		Box(
-			modifier = Modifier
+    WuiTheme {
+        Box(
+            modifier = Modifier
 				.fillMaxWidth()
 				.background(MaterialTheme.colorScheme.primary),
-		) {
-			SignUpAuthHeader()
-		}
-	}
+        ) {
+            SignUpAuthHeader()
+        }
+    }
 }

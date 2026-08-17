@@ -30,117 +30,119 @@ import com.nmichail.wordly.android.features.materials.presentation.MaterialsStor
 
 @Composable
 fun MaterialsContent(
-	component: MaterialsComponent,
-	modifier: Modifier = Modifier,
+    component: MaterialsComponent,
+    modifier: Modifier = Modifier,
 ) {
-	val state by component.model.subscribeAsState()
+    val state by component.model.subscribeAsState()
 
-	when (val current = state) {
-		MaterialsStore.State.Initial -> MaterialsLoading(modifier = modifier)
-		MaterialsStore.State.Loading -> MaterialsLoading(modifier = modifier)
-		is MaterialsStore.State.Error -> MaterialsError(
-			onRetryClick = component::handleRetry,
-			modifier = modifier.fillMaxSize(),
-		)
-		is MaterialsStore.State.Content -> MaterialsLoaded(
-			state = current,
-			onFilterChange = component::handleFilterChange,
-			onOpenMaterial = component::handleOpenMaterial,
-			modifier = modifier,
-		)
-	}
+    when (val uiState = state) {
+        MaterialsStore.State.Initial,
+        MaterialsStore.State.Loading -> MaterialsLoading(modifier = modifier)
+
+        is MaterialsStore.State.Error -> MaterialsError(
+            onRetryClick = component::handleRetry,
+            modifier = modifier.fillMaxSize(),
+        )
+
+        is MaterialsStore.State.Content -> MaterialsLoaded(
+            state = uiState,
+            onFilterChange = component::handleFilterChange,
+            onOpenMaterial = component::handleOpenMaterial,
+            modifier = modifier,
+        )
+    }
 }
 
 @Composable
 private fun MaterialsLoading(modifier: Modifier = Modifier) {
-	Box(
-		modifier = modifier
+    Box(
+        modifier = modifier
 			.fillMaxSize()
 			.background(MaterialTheme.colorScheme.background),
-		contentAlignment = Alignment.Center,
-	) {
-		CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
-	}
+        contentAlignment = Alignment.Center,
+    ) {
+        CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
+    }
 }
 
 @Composable
 private fun MaterialsError(
-	onRetryClick: () -> Unit,
-	modifier: Modifier = Modifier,
+    onRetryClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-	Column(
-		modifier = modifier
+    Column(
+        modifier = modifier
 			.background(MaterialTheme.colorScheme.background)
 			.padding(horizontal = 24.dp),
-		verticalArrangement = Arrangement.Center,
-		horizontalAlignment = Alignment.CenterHorizontally,
-	) {
-		Text(
-			text = stringResource(R.string.materials_error_title),
-			style = MaterialTheme.typography.titleLarge,
-			color = MaterialTheme.colorScheme.onBackground,
-			textAlign = TextAlign.Center,
-		)
-		Text(
-			text = stringResource(R.string.materials_error_subtitle),
-			style = MaterialTheme.typography.bodyMedium,
-			color = MaterialTheme.colorScheme.onSurfaceVariant,
-			textAlign = TextAlign.Center,
-			modifier = Modifier.padding(top = 8.dp),
-		)
-		WuiButton(
-			text = stringResource(R.string.materials_retry),
-			onClick = onRetryClick,
-			modifier = Modifier
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Text(
+            text = stringResource(R.string.materials_error_title),
+            style = MaterialTheme.typography.titleLarge,
+            color = MaterialTheme.colorScheme.onBackground,
+            textAlign = TextAlign.Center,
+        )
+        Text(
+            text = stringResource(R.string.materials_error_subtitle),
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.padding(top = 8.dp),
+        )
+        WuiButton(
+            text = stringResource(R.string.materials_retry),
+            onClick = onRetryClick,
+            modifier = Modifier
 				.fillMaxWidth()
 				.padding(top = 24.dp),
-		)
-	}
+        )
+    }
 }
 
 @Composable
 private fun MaterialsLoaded(
-	state: MaterialsStore.State.Content,
-	onFilterChange: (MaterialFilter) -> Unit,
-	onOpenMaterial: (String) -> Unit,
-	modifier: Modifier = Modifier,
+    state: MaterialsStore.State.Content,
+    onFilterChange: (MaterialFilter) -> Unit,
+    onOpenMaterial: (String) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-	LazyColumn(
-		modifier = modifier
+    LazyColumn(
+        modifier = modifier
 			.fillMaxSize()
 			.background(MaterialTheme.colorScheme.background),
-		contentPadding = PaddingValues(top = 8.dp, bottom = 24.dp),
-		verticalArrangement = Arrangement.spacedBy(12.dp),
-	) {
-		item {
-			MaterialsFilterChips(
-				selected = state.selectedFilter,
-				onSelect = onFilterChange,
-			)
-		}
-		if (state.items.isEmpty()) {
-			item {
-				Text(
-					text = stringResource(R.string.materials_empty),
-					style = MaterialTheme.typography.bodyMedium,
-					color = MaterialTheme.colorScheme.onSurfaceVariant,
-					textAlign = TextAlign.Center,
-					modifier = Modifier
+        contentPadding = PaddingValues(top = 8.dp, bottom = 24.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp),
+    ) {
+        item {
+            MaterialsFilterChips(
+                selected = state.selectedFilter,
+                onSelect = onFilterChange,
+            )
+        }
+        if (state.items.isEmpty()) {
+            item {
+                Text(
+                    text = stringResource(R.string.materials_empty),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
 						.fillMaxWidth()
 						.padding(horizontal = 24.dp, vertical = 32.dp),
-				)
-			}
-		} else {
-			items(
-				items = state.items,
-				key = MaterialItem::id,
-			) { item ->
-				MaterialListItem(
-					item = item,
-					onClick = { onOpenMaterial(item.id) },
-					modifier = Modifier.padding(horizontal = 16.dp),
-				)
-			}
-		}
-	}
+                )
+            }
+        } else {
+            items(
+                items = state.items,
+                key = MaterialItem::id,
+            ) { item ->
+                MaterialListItem(
+                    item = item,
+                    onClick = { onOpenMaterial(item.id) },
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                )
+            }
+        }
+    }
 }

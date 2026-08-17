@@ -23,128 +23,133 @@ import com.nmichail.wordly.android.shared.error.presentation.HandleErrorResult
 import javax.inject.Inject
 
 internal class SignInStoreFactory @Inject constructor(
-	private val validateEmailUseCase: ValidateEmailUseCase,
-	private val validatePasswordUseCase: ValidatePasswordUseCase,
-	private val signInUseCase: SignInUseCase,
-	private val saveAuthTokensUseCase: SaveAuthTokensUseCase,
-	private val networkExceptionConverter: NetworkExceptionConverter,
-	private val errorDelegate: ErrorDelegate,
+    private val validateEmailUseCase: ValidateEmailUseCase,
+    private val validatePasswordUseCase: ValidatePasswordUseCase,
+    private val signInUseCase: SignInUseCase,
+    private val saveAuthTokensUseCase: SaveAuthTokensUseCase,
+    private val networkExceptionConverter: NetworkExceptionConverter,
+    private val errorDelegate: ErrorDelegate,
 ) {
 
-	private val storeFactory: StoreFactory = LoggingStoreFactory(DefaultStoreFactory())
+    private val storeFactory: StoreFactory = LoggingStoreFactory(DefaultStoreFactory())
 
-	fun create(): SignInStore = object : SignInStore,
-		Store<SignInStore.Intent, SignInStore.State, SignInStore.Label> by storeFactory.create(
-			name = "SignInStore",
-			initialState = SignInStore.State.Initial,
-			bootstrapper = SimpleBootstrapper(Action.Initialize),
-			reducer = ReducerImpl,
-			executorFactory = ::ExecutorImpl,
-		) {}
+    fun create(): SignInStore = object : SignInStore,
+        Store<SignInStore.Intent, SignInStore.State, SignInStore.Label> by storeFactory.create(
+            name = "SignInStore",
+            initialState = SignInStore.State.Initial,
+            bootstrapper = SimpleBootstrapper(Action.Init),
+            reducer = ReducerImpl,
+            executorFactory = ::ExecutorImpl,
+        ) {}
 
-	private sealed interface Action {
+    private sealed interface Action {
 
-		data object Initialize : Action
-	}
+        data object Init : Action
+    }
 
-	private sealed interface Msg {
+    private sealed interface Msg {
 
-		data object Initialized : Msg
+        data object Initialized : Msg
 
-		data class ChangeEmail(val email: EmailValidationItem) : Msg
+        data class ChangeEmail(val email: EmailValidationItem) : Msg
 
-		data class ChangePassword(val password: PasswordValidationItem) : Msg
+        data class ChangePassword(val password: PasswordValidationItem) : Msg
 
-		data class SetSubmitting(val submitting: Boolean) : Msg
+        data class SetSubmitting(val submitting: Boolean) : Msg
 
-		data class SetError(val content: SignInStore.State.Content) : Msg
+        data class SetError(val content: SignInStore.State.Content) : Msg
 
-		data object RestoreContent : Msg
-	}
+        data object RestoreContent : Msg
+    }
 
-	private inner class ExecutorImpl :
-		BaseCoroutineExecutor<SignInStore.Intent, Action, SignInStore.State, Msg, SignInStore.Label>() {
+    private inner class ExecutorImpl :
+        BaseCoroutineExecutor<SignInStore.Intent, Action, SignInStore.State, Msg, SignInStore.Label>() {
 
-		override fun executeAction(action: Action) {
-			when (action) {
-				Action.Initialize -> dispatch(Msg.Initialized)
-			}
-		}
+        override fun executeAction(action: Action) {
+            when (action) {
+                Action.Init -> dispatch(Msg.Initialized)
+            }
+        }
 
-		override fun executeIntent(intent: SignInStore.Intent) {
-			when (intent) {
-				is SignInStore.Intent.ChangeEmail -> {
-					dispatch(Msg.ChangeEmail(validateEmailUseCase(intent.email.trim())))
-				}
-				is SignInStore.Intent.ChangePassword -> {
-					dispatch(Msg.ChangePassword(validatePasswordUseCase(intent.password)))
-				}
-				SignInStore.Intent.NavigateToSignUp -> {
-					val content = state() as? SignInStore.State.Content ?: return
-					if (!content.submitting) {
-						publish(SignInStore.Label.OpenSignUp)
-					}
-				}
-				SignInStore.Intent.Submit -> submit()
-				SignInStore.Intent.Retry -> dispatch(Msg.RestoreContent)
-			}
-		}
+        override fun executeIntent(intent: SignInStore.Intent) {
+            when (intent) {
+                is SignInStore.Intent.ChangeEmail -> {
+                    dispatch(Msg.ChangeEmail(validateEmailUseCase(intent.email.trim())))
+                }
 
-		private fun submit() {
-			val currentState = state() as? SignInStore.State.Content ?: return
-			if (currentState.submitting) return
+                is SignInStore.Intent.ChangePassword -> {
+                    dispatch(Msg.ChangePassword(validatePasswordUseCase(intent.password)))
+                }
 
-			val email = validateEmailUseCase(currentState.email.data.trim())
-			val password = validatePasswordUseCase(currentState.password.data)
-			dispatch(Msg.ChangeEmail(email))
-			dispatch(Msg.ChangePassword(password))
-			if (!email.isValid() || !password.isValid()) return
+                SignInStore.Intent.NavigateToSignUp -> {
+                    val content = state() as? SignInStore.State.Content ?: return
+                    if (!content.submitting) {
+                        publish(SignInStore.Label.OpenSignUp)
+                    }
+                }
 
-			dispatch(Msg.SetSubmitting(submitting = true))
-			scope.launch {
-				try {
-					val tokens = signInUseCase(
-						SignInData(
-							email = email.data,
-							password = password.data,
-						),
-					)
-					saveAuthTokensUseCase(tokens)
-					dispatch(Msg.SetSubmitting(submitting = false))
-					publish(SignInStore.Label.OpenMainHost)
-				} catch (error: Exception) {
-					handleError(error)
-				}
-			}
-		}
+                SignInStore.Intent.Submit -> submit()
+                SignInStore.Intent.Retry -> dispatch(Msg.RestoreContent)
+            }
+        }
 
-		private fun handleError(error: Exception) {
-			val networkError = networkExceptionConverter.convert(error)
-			if (errorDelegate.handleError(networkError) == HandleErrorResult.HANDLED) {
-				dispatch(Msg.SetSubmitting(submitting = false))
-				return
-			}
-			val content = (state() as? SignInStore.State.Content)?.copy(submitting = false) ?: return
-			dispatch(Msg.SetError(content = content))
-		}
-	}
+        private fun submit() {
+            val currentState = state() as? SignInStore.State.Content ?: return
+            if (currentState.submitting) return
 
-	private object ReducerImpl : Reducer<SignInStore.State, Msg> {
+            val email = validateEmailUseCase(currentState.email.data.trim())
+            val password = validatePasswordUseCase(currentState.password.data)
+            dispatch(Msg.ChangeEmail(email))
+            dispatch(Msg.ChangePassword(password))
+            if (!email.isValid() || !password.isValid()) return
 
-		override fun SignInStore.State.reduce(msg: Msg): SignInStore.State {
-			val content = this as? SignInStore.State.Content
-			return when (msg) {
-				Msg.Initialized -> SignInStore.State.Content(
-					email = EmailValidationItem(),
-					password = PasswordValidationItem(),
-					submitting = false,
-				)
-				is Msg.ChangeEmail -> content?.copy(email = msg.email) ?: this
-				is Msg.ChangePassword -> content?.copy(password = msg.password) ?: this
-				is Msg.SetSubmitting -> content?.copy(submitting = msg.submitting) ?: this
-				is Msg.SetError -> SignInStore.State.Error(content = msg.content)
-				Msg.RestoreContent -> (this as? SignInStore.State.Error)?.content ?: this
-			}
-		}
-	}
+            dispatch(Msg.SetSubmitting(submitting = true))
+            scope.launch {
+                try {
+                    val tokens = signInUseCase(
+                        SignInData(
+                            email = email.data,
+                            password = password.data,
+                        ),
+                    )
+                    saveAuthTokensUseCase(tokens)
+                    dispatch(Msg.SetSubmitting(submitting = false))
+                    publish(SignInStore.Label.OpenMainHost)
+                } catch (error: Exception) {
+                    handleError(error)
+                }
+            }
+        }
+
+        private fun handleError(error: Exception) {
+            val networkError = networkExceptionConverter.convert(error)
+            if (errorDelegate.handleError(networkError) == HandleErrorResult.HANDLED) {
+                dispatch(Msg.SetSubmitting(submitting = false))
+                return
+            }
+            val content =
+                (state() as? SignInStore.State.Content)?.copy(submitting = false) ?: return
+            dispatch(Msg.SetError(content = content))
+        }
+    }
+
+    private object ReducerImpl : Reducer<SignInStore.State, Msg> {
+
+        override fun SignInStore.State.reduce(msg: Msg): SignInStore.State {
+            val content = this as? SignInStore.State.Content
+            return when (msg) {
+                Msg.Initialized -> SignInStore.State.Content(
+                    email = EmailValidationItem(),
+                    password = PasswordValidationItem(),
+                    submitting = false,
+                )
+
+                is Msg.ChangeEmail -> content?.copy(email = msg.email) ?: this
+                is Msg.ChangePassword -> content?.copy(password = msg.password) ?: this
+                is Msg.SetSubmitting -> content?.copy(submitting = msg.submitting) ?: this
+                is Msg.SetError -> SignInStore.State.Error(content = msg.content)
+                Msg.RestoreContent -> (this as? SignInStore.State.Error)?.content ?: this
+            }
+        }
+    }
 }

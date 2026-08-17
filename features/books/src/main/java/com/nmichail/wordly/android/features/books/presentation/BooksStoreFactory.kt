@@ -19,179 +19,183 @@ import com.nmichail.wordly.android.shared.catalog.updateCatalogLevelSectionTitle
 import javax.inject.Inject
 
 internal class BooksStoreFactory @Inject constructor(
-	private val getBooksCatalogUseCase: GetBooksCatalogUseCase,
-	private val updateEnglishLevelUseCase: UpdateEnglishLevelUseCase,
+    private val getBooksCatalogUseCase: GetBooksCatalogUseCase,
+    private val updateEnglishLevelUseCase: UpdateEnglishLevelUseCase,
 ) {
 
-	private val storeFactory: StoreFactory = LoggingStoreFactory(DefaultStoreFactory())
+    private val storeFactory: StoreFactory = LoggingStoreFactory(DefaultStoreFactory())
 
-	fun create(): BooksStore =
-		object :
-			BooksStore,
-			Store<BooksStore.Intent, BooksStore.State, BooksStore.Label> by storeFactory.create(
-				name = "BooksStore",
-				initialState = BooksStore.State.Initial,
-				bootstrapper = SimpleBootstrapper(Action.Load),
-				executorFactory = ::ExecutorImpl,
-				reducer = ReducerImpl,
-			) {}
+    fun create(): BooksStore =
+        object :
+            BooksStore,
+            Store<BooksStore.Intent, BooksStore.State, BooksStore.Label> by storeFactory.create(
+                name = "BooksStore",
+                initialState = BooksStore.State.Initial,
+                bootstrapper = SimpleBootstrapper(Action.Init),
+                executorFactory = ::ExecutorImpl,
+                reducer = ReducerImpl,
+            ) {}
 
-	private sealed interface Action {
+    private sealed interface Action {
 
-		data object Load : Action
-	}
+        data object Init : Action
+    }
 
-	private sealed interface Msg {
+    private sealed interface Msg {
 
-		data object Loading : Msg
+        data object Loading : Msg
 
-		data class CatalogLoaded(val catalog: BooksCatalog) : Msg
+        data class CatalogLoaded(val catalog: BooksCatalog) : Msg
 
-		data object SetError : Msg
+        data object SetError : Msg
 
-		data class SearchUpdated(
-			val query: String,
-			val sections: List<BooksSection>,
-		) : Msg
+        data class SearchUpdated(
+            val query: String,
+            val sections: List<BooksSection>,
+        ) : Msg
 
-		data class LevelUpdated(
-			val level: String,
-			val allSections: List<BooksSection>,
-			val sections: List<BooksSection>,
-		) : Msg
-	}
+        data class LevelUpdated(
+            val level: String,
+            val allSections: List<BooksSection>,
+            val sections: List<BooksSection>,
+        ) : Msg
+    }
 
-	private object ReducerImpl : Reducer<BooksStore.State, Msg> {
+    private object ReducerImpl : Reducer<BooksStore.State, Msg> {
 
-		override fun BooksStore.State.reduce(msg: Msg): BooksStore.State =
-			when (msg) {
-				Msg.Loading -> BooksStore.State.Loading
-				is Msg.CatalogLoaded -> BooksStore.State.Content(
-					title = msg.catalog.title,
-					searchQuery = "",
-					searchPlaceholder = msg.catalog.searchPlaceholder,
-					levelBanner = msg.catalog.levelBanner,
-					allSections = msg.catalog.sections,
-					sections = msg.catalog.sections,
-				)
-				Msg.SetError -> BooksStore.State.Error
-				is Msg.SearchUpdated -> {
-					val content = this as? BooksStore.State.Content ?: return this
-					content.copy(
-						searchQuery = msg.query,
-						sections = msg.sections,
-					)
-				}
-				is Msg.LevelUpdated -> {
-					val content = this as? BooksStore.State.Content ?: return this
-					val banner = content.levelBanner ?: return this
-					content.copy(
-						levelBanner = banner.copy(levelLabel = msg.level),
-						allSections = msg.allSections,
-						sections = msg.sections,
-					)
-				}
-			}
-	}
+        override fun BooksStore.State.reduce(msg: Msg): BooksStore.State =
+            when (msg) {
+                Msg.Loading -> BooksStore.State.Loading
+                is Msg.CatalogLoaded -> BooksStore.State.Content(
+                    title = msg.catalog.title,
+                    searchQuery = "",
+                    searchPlaceholder = msg.catalog.searchPlaceholder,
+                    levelBanner = msg.catalog.levelBanner,
+                    allSections = msg.catalog.sections,
+                    sections = msg.catalog.sections,
+                )
 
-	private inner class ExecutorImpl :
-		BaseCoroutineExecutor<
-			BooksStore.Intent,
-			Action,
-			BooksStore.State,
-			Msg,
-			BooksStore.Label,
-			>() {
+                Msg.SetError -> BooksStore.State.Error
+                is Msg.SearchUpdated -> {
+                    val content = this as? BooksStore.State.Content ?: return this
+                    content.copy(
+                        searchQuery = msg.query,
+                        sections = msg.sections,
+                    )
+                }
 
-		override fun executeAction(action: Action) {
-			when (action) {
-				Action.Load -> loadCatalog()
-			}
-		}
+                is Msg.LevelUpdated -> {
+                    val content = this as? BooksStore.State.Content ?: return this
+                    val banner = content.levelBanner ?: return this
+                    content.copy(
+                        levelBanner = banner.copy(levelLabel = msg.level),
+                        allSections = msg.allSections,
+                        sections = msg.sections,
+                    )
+                }
+            }
+    }
 
-		override fun executeIntent(intent: BooksStore.Intent) {
-			when (intent) {
-				BooksStore.Intent.Back -> publish(BooksStore.Label.Close)
-				BooksStore.Intent.Retry -> loadCatalog()
-				is BooksStore.Intent.ChangeSearchQuery -> {
-					val content = state() as? BooksStore.State.Content ?: return
-					dispatch(
-						Msg.SearchUpdated(
-							query = intent.query,
-							sections = filterCatalogSections(
-								sections = content.allSections,
-								query = intent.query,
-								getItems = { it.items },
-								itemMatches = { item, query ->
-									matchesCatalogSearch(
-										title = item.title,
-										subtitle = item.subtitle,
-										badge = item.badge,
-										query = query,
-									)
-								},
-								copyWithItems = { section, items -> section.copy(items = items) },
-							),
-						),
-					)
-				}
-				is BooksStore.Intent.SelectBook -> {
-					val content = state() as? BooksStore.State.Content ?: return
-					val book = findCatalogItem(
-						sections = content.allSections,
-						getItems = { it.items },
-						predicate = { it.id == intent.bookId },
-					) ?: return
-					publish(BooksStore.Label.OpenBook(book = book))
-				}
-				is BooksStore.Intent.ChangeLevel -> changeLevel(level = intent.level)
-			}
-		}
+    private inner class ExecutorImpl :
+        BaseCoroutineExecutor<
+                BooksStore.Intent,
+                Action,
+                BooksStore.State,
+                Msg,
+                BooksStore.Label,
+                >() {
 
-		private fun changeLevel(level: String) {
-			val content = state() as? BooksStore.State.Content ?: return
-			scope.launch {
-				updateEnglishLevelUseCase(level)
-				val allSections = updateCatalogLevelSectionTitles(
-					sections = content.allSections,
-					level = level,
-					getTitle = { it.title },
-					copyWithTitle = { section, title -> section.copy(title = title) },
-				)
-				val sections = filterCatalogSections(
-					sections = allSections,
-					query = content.searchQuery,
-					getItems = { it.items },
-					itemMatches = { item, query ->
-						matchesCatalogSearch(
-							title = item.title,
-							subtitle = item.subtitle,
-							badge = item.badge,
-							query = query,
-						)
-					},
-					copyWithItems = { section, items -> section.copy(items = items) },
-				)
-				dispatch(
-					Msg.LevelUpdated(
-						level = level,
-						allSections = allSections,
-						sections = sections,
-					),
-				)
-			}
-		}
+        override fun executeAction(action: Action) {
+            when (action) {
+                Action.Init -> loadCatalog()
+            }
+        }
 
-		private fun loadCatalog() {
-			dispatch(Msg.Loading)
-			scope.launch {
-				try {
-					val catalog = getBooksCatalogUseCase()
-					dispatch(Msg.CatalogLoaded(catalog = catalog))
-				} catch (_: Exception) {
-					dispatch(Msg.SetError)
-				}
-			}
-		}
-	}
+        override fun executeIntent(intent: BooksStore.Intent) {
+            when (intent) {
+                BooksStore.Intent.Back -> publish(BooksStore.Label.Close)
+                BooksStore.Intent.Retry -> loadCatalog()
+                is BooksStore.Intent.ChangeSearchQuery -> {
+                    val content = state() as? BooksStore.State.Content ?: return
+                    dispatch(
+                        Msg.SearchUpdated(
+                            query = intent.query,
+                            sections = filterCatalogSections(
+                                sections = content.allSections,
+                                query = intent.query,
+                                getItems = { it.items },
+                                itemMatches = { item, query ->
+                                    matchesCatalogSearch(
+                                        title = item.title,
+                                        subtitle = item.subtitle,
+                                        badge = item.badge,
+                                        query = query,
+                                    )
+                                },
+                                copyWithItems = { section, items -> section.copy(items = items) },
+                            ),
+                        ),
+                    )
+                }
+
+                is BooksStore.Intent.SelectBook -> {
+                    val content = state() as? BooksStore.State.Content ?: return
+                    val book = findCatalogItem(
+                        sections = content.allSections,
+                        getItems = { it.items },
+                        predicate = { it.id == intent.bookId },
+                    ) ?: return
+                    publish(BooksStore.Label.OpenBook(book = book))
+                }
+
+                is BooksStore.Intent.ChangeLevel -> changeLevel(level = intent.level)
+            }
+        }
+
+        private fun changeLevel(level: String) {
+            val content = state() as? BooksStore.State.Content ?: return
+            scope.launch {
+                updateEnglishLevelUseCase(level)
+                val allSections = updateCatalogLevelSectionTitles(
+                    sections = content.allSections,
+                    level = level,
+                    getTitle = { it.title },
+                    copyWithTitle = { section, title -> section.copy(title = title) },
+                )
+                val sections = filterCatalogSections(
+                    sections = allSections,
+                    query = content.searchQuery,
+                    getItems = { it.items },
+                    itemMatches = { item, query ->
+                        matchesCatalogSearch(
+                            title = item.title,
+                            subtitle = item.subtitle,
+                            badge = item.badge,
+                            query = query,
+                        )
+                    },
+                    copyWithItems = { section, items -> section.copy(items = items) },
+                )
+                dispatch(
+                    Msg.LevelUpdated(
+                        level = level,
+                        allSections = allSections,
+                        sections = sections,
+                    ),
+                )
+            }
+        }
+
+        private fun loadCatalog() {
+            dispatch(Msg.Loading)
+            scope.launch {
+                try {
+                    val catalog = getBooksCatalogUseCase()
+                    dispatch(Msg.CatalogLoaded(catalog = catalog))
+                } catch (_: Exception) {
+                    dispatch(Msg.SetError)
+                }
+            }
+        }
+    }
 }

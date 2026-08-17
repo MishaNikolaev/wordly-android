@@ -6,33 +6,33 @@ import kotlinx.coroutines.channels.ReceiveChannel
 
 interface SignUpComponent {
 
-	val model: Value<SignUpStore.State>
+    val model: Value<SignUpStore.State>
 
-	fun labelsChannel(): ReceiveChannel<SignUpStore.Label>
+    fun labelsChannel(): ReceiveChannel<SignUpStore.Label>
 
-	fun handleChangeEmail(email: String)
+    fun handleChangeEmail(email: String)
 
-	fun handleChangePassword(password: String)
+    fun handleChangePassword(password: String)
 
-	fun handleChangeFirstName(firstName: String)
+    fun handleChangeFirstName(firstName: String)
 
-	fun handleChangeLastName(lastName: String)
+    fun handleChangeLastName(lastName: String)
 
-	fun handleChangeEnglishLevel(englishLevel: String)
+    fun handleChangeEnglishLevel(englishLevel: String)
 
-	fun handleSubmit()
+    fun handleSubmit()
 
-	fun handleNavigateToSignIn()
+    fun handleNavigateToSignIn()
 
-	fun handleOpenTermsOfUse()
+    fun handleOpenTermsOfUse()
 
-	fun handleRetry()
+    fun handleRetry()
 
-	fun interface Factory {
+    fun interface Factory {
 
-		operator fun invoke(
-			componentContext: ComponentContext,
-			signUpRouter: SignUpRouter,
-		): SignUpComponent
-	}
+        operator fun invoke(
+            componentContext: ComponentContext,
+            signUpRouter: SignUpRouter,
+        ): SignUpComponent
+    }
 }

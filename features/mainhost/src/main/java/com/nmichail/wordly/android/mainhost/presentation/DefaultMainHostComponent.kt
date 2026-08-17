@@ -29,6 +29,8 @@ import com.nmichail.wordly.android.features.materials.presentation.detail.Materi
 import com.nmichail.wordly.android.features.profile.presentation.ProfileComponent
 import com.nmichail.wordly.android.features.profile.presentation.edit.ProfileEditComponent
 import com.nmichail.wordly.android.features.profile.presentation.edit.ProfileEditRouter
+import com.nmichail.wordly.android.features.profile.presentation.reminder.ReminderTimesComponent
+import com.nmichail.wordly.android.features.profile.presentation.reminder.ReminderTimesRouter
 import com.nmichail.wordly.android.features.review.presentation.ReviewComponent
 import com.nmichail.wordly.android.features.review.presentation.ReviewRouter
 import com.nmichail.wordly.android.features.words.presentation.WordsComponent
@@ -43,6 +45,7 @@ internal class DefaultMainHostComponent(
 	private val materialDetailComponentFactory: MaterialDetailComponent.Factory,
 	private val profileComponentFactory: ProfileComponent.Factory,
 	private val profileEditComponentFactory: ProfileEditComponent.Factory,
+	private val reminderTimesComponentFactory: ReminderTimesComponent.Factory,
 	private val reviewComponentFactory: ReviewComponent.Factory,
 	private val cardsComponentFactory: CardsComponent.Factory,
 	private val cardPracticeComponentFactory: CardPracticeComponent.Factory,
@@ -81,6 +84,7 @@ internal class DefaultMainHostComponent(
 			is MainHostConfig.MaterialDetail -> materialDetailChild(config.materialId, componentContext)
 			MainHostConfig.Profile -> profileChild(componentContext)
 			MainHostConfig.ProfileEdit -> profileEditChild(componentContext)
+			MainHostConfig.ReminderTimes -> reminderTimesChild(componentContext)
 			MainHostConfig.Review -> reviewChild(componentContext)
 			MainHostConfig.Cards -> cardsChild(componentContext)
 			is MainHostConfig.CardPractice -> cardPracticeChild(config.cardId, componentContext)
@@ -130,6 +134,9 @@ internal class DefaultMainHostComponent(
 			onOpenEdit = {
 				navigation.push(MainHostConfig.ProfileEdit)
 			},
+			onOpenReminderTimes = {
+				navigation.push(MainHostConfig.ReminderTimes)
+			},
 		)
 		profileComponent = component
 		return MainHostComponent.Child.Profile(component = component)
@@ -146,6 +153,21 @@ internal class DefaultMainHostComponent(
 			component = profileEditComponentFactory(
 				componentContext = componentContext,
 				profileEditRouter = profileEditRouter,
+			),
+		)
+	}
+
+	private fun reminderTimesChild(componentContext: ComponentContext): MainHostComponent.Child {
+		val reminderTimesRouter = object : ReminderTimesRouter {
+			override fun navigateBack() {
+				navigation.pop()
+				profileComponent?.handleRefresh()
+			}
+		}
+		return MainHostComponent.Child.ReminderTimes(
+			component = reminderTimesComponentFactory(
+				componentContext = componentContext,
+				reminderTimesRouter = reminderTimesRouter,
 			),
 		)
 	}
@@ -317,6 +339,9 @@ private sealed interface MainHostConfig {
 	data object ProfileEdit : MainHostConfig
 
 	@Serializable
+	data object ReminderTimes : MainHostConfig
+
+	@Serializable
 	data object Review : MainHostConfig
 
 	@Serializable
@@ -359,6 +384,7 @@ fun MainHostComponent.Child.toTab(): MainHostTab? =
 		is MainHostComponent.Child.Materials -> MainHostTab.Materials
 		is MainHostComponent.Child.Profile -> MainHostTab.Profile
 		is MainHostComponent.Child.ProfileEdit -> null
+		is MainHostComponent.Child.ReminderTimes -> null
 		is MainHostComponent.Child.MaterialDetail -> null
 		is MainHostComponent.Child.Review -> null
 		is MainHostComponent.Child.Cards -> null

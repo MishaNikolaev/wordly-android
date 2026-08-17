@@ -6,8 +6,8 @@ import com.nmichail.wordly.android.core.validation.notEmpty.isValid
 import com.nmichail.wordly.android.core.validation.password.isValid
 
 internal fun SignUpStore.State.Content.areFieldsValid(): Boolean =
-	email.isValid()
-		&& password.isValid()
-		&& firstName.isValid()
-		&& lastName.isValid()
-		&& englishLevel.isValid()
+    email.isValid()
+            && password.isValid()
+            && firstName.isValid()
+            && lastName.isValid()
+            && englishLevel.isValid()

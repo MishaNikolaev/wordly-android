@@ -36,14 +36,14 @@ internal class ProfileStoreFactory @Inject constructor(
 			Store<ProfileStore.Intent, ProfileStore.State, ProfileStore.Label> by storeFactory.create(
 				name = "ProfileStore",
 				initialState = ProfileStore.State.Initial,
-				bootstrapper = SimpleBootstrapper(Action.Load),
+				bootstrapper = SimpleBootstrapper(Action.Init),
 				executorFactory = ::ExecutorImpl,
 				reducer = ReducerImpl,
 			) {}
 
 	private sealed interface Action {
 
-		data object Load : Action
+		data object Init : Action
 	}
 
 	private sealed interface Msg {
@@ -74,7 +74,9 @@ internal class ProfileStoreFactory @Inject constructor(
 					loggingOut = false,
 				)
 				is Msg.ProfileUpdated -> content?.copy(profile = msg.profile) ?: this
-				is Msg.NotificationsEnabled -> content?.copy(notificationsEnabled = msg.enabled) ?: this
+				is Msg.NotificationsEnabled -> content?.copy(
+					notificationsEnabled = msg.enabled,
+				) ?: this
 				is Msg.LoggingOut -> content?.copy(loggingOut = msg.loggingOut) ?: this
 			}
 		}
@@ -91,7 +93,7 @@ internal class ProfileStoreFactory @Inject constructor(
 
 		override fun executeAction(action: Action) {
 			when (action) {
-				Action.Load -> load(showLoading = true)
+				Action.Init -> load(showLoading = true)
 			}
 		}
 
@@ -100,12 +102,12 @@ internal class ProfileStoreFactory @Inject constructor(
 				ProfileStore.Intent.Retry -> load(showLoading = true)
 				ProfileStore.Intent.Refresh -> load(showLoading = false)
 				ProfileStore.Intent.OpenEdit -> publish(ProfileStore.Label.OpenEdit)
+				ProfileStore.Intent.OpenReminderTimes -> {
+					publish(ProfileStore.Label.OpenReminderTimes)
+				}
 				is ProfileStore.Intent.UpdateLevel -> updateLevel(intent.level)
 				ProfileStore.Intent.ToggleNotificationsEnabled -> toggleNotificationsEnabled()
 				is ProfileStore.Intent.UpdateDailyGoal -> updateDailyGoal(intent.goal)
-				is ProfileStore.Intent.UpdateNotificationTimes -> {
-					updateNotificationTimes(intent.times)
-				}
 				is ProfileStore.Intent.SetThemeMode -> setThemeModeUseCase(intent.mode)
 				ProfileStore.Intent.Logout -> logout()
 			}
@@ -155,19 +157,6 @@ internal class ProfileStoreFactory @Inject constructor(
 					params = content.profile.toUpdateParams(
 						dailyGoalWords = goal.wordsPerDay,
 						notificationTimes = null,
-					),
-				)
-				dispatch(Msg.ProfileUpdated(profile = updated))
-			}
-		}
-
-		private fun updateNotificationTimes(times: List<String>) {
-			val content = state() as? ProfileStore.State.Content ?: return
-			scope.launch {
-				val updated = updateProfileUseCase(
-					params = content.profile.toUpdateParams(
-						dailyGoalWords = null,
-						notificationTimes = times.sorted(),
 					),
 				)
 				dispatch(Msg.ProfileUpdated(profile = updated))

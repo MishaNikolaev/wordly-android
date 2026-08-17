@@ -4,7 +4,7 @@ import com.nmichail.wordly.android.features.authorization.signin.data.dto.SignIn
 import com.nmichail.wordly.android.features.authorization.signin.domain.entity.SignInData
 
 fun SignInData.toRequest(): SignInRequest =
-	SignInRequest(
-		email = email,
-		password = password,
-	)
+    SignInRequest(
+        email = email,
+        password = password,
+    )

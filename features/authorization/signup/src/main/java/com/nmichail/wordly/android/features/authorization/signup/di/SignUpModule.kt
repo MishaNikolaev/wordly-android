@@ -15,23 +15,23 @@ import javax.inject.Singleton
 @Module
 abstract class SignUpModule {
 
-	@Binds
-	abstract fun bindSignUpRepository(
-		impl: SignUpRepositoryImpl,
-	): SignUpRepository
+    @Binds
+    abstract fun bindSignUpRepository(
+        impl: SignUpRepositoryImpl,
+    ): SignUpRepository
 
-	@Binds
-	internal abstract fun bindSignUpComponentFactory(
-		impl: DefaultSignUpComponentFactory,
-	): SignUpComponent.Factory
+    @Binds
+    internal abstract fun bindSignUpComponentFactory(
+        impl: DefaultSignUpComponentFactory,
+    ): SignUpComponent.Factory
 
-	companion object {
+    companion object {
 
-		@Provides
-		@Singleton
-		fun provideSignUpApi(
-			@GeneralRetrofit retrofit: Retrofit,
-		): SignUpApi =
-			retrofit.create(SignUpApi::class.java)
-	}
+        @Provides
+        @Singleton
+        fun provideSignUpApi(
+            @GeneralRetrofit retrofit: Retrofit,
+        ): SignUpApi =
+            retrofit.create(SignUpApi::class.java)
+    }
 }

@@ -6,5 +6,5 @@ import com.nmichail.wordly.android.features.authorization.signup.domain.reposito
 import javax.inject.Inject
 
 class SignUpUseCase @Inject constructor(
-	signUpRepository: SignUpRepository,
+    signUpRepository: SignUpRepository,
 ) : suspend (SignUpForm) -> AuthTokens by signUpRepository::signUp

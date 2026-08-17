@@ -1,4 +1,4 @@
-package com.nmichail.wordly.android.features.profile.presentation.edit
+package com.nmichail.wordly.android.features.profile.presentation.reminder
 
 import kotlinx.coroutines.launch
 import com.arkivanov.mvikotlin.core.store.Reducer
@@ -14,23 +14,23 @@ import com.nmichail.wordly.android.features.profile.domain.usecase.GetProfileUse
 import com.nmichail.wordly.android.features.profile.domain.usecase.UpdateProfileUseCase
 import javax.inject.Inject
 
-internal class ProfileEditStoreFactory @Inject constructor(
+internal class ReminderTimesStoreFactory @Inject constructor(
 	private val getProfileUseCase: GetProfileUseCase,
 	private val updateProfileUseCase: UpdateProfileUseCase,
 ) {
 
 	private val storeFactory: StoreFactory = LoggingStoreFactory(DefaultStoreFactory())
 
-	fun create(): ProfileEditStore =
+	fun create(): ReminderTimesStore =
 		object :
-			ProfileEditStore,
+			ReminderTimesStore,
 			Store<
-				ProfileEditStore.Intent,
-				ProfileEditStore.State,
-				ProfileEditStore.Label,
+				ReminderTimesStore.Intent,
+				ReminderTimesStore.State,
+				ReminderTimesStore.Label,
 				> by storeFactory.create(
-				name = "ProfileEditStore",
-				initialState = ProfileEditStore.State.Initial,
+				name = "ReminderTimesStore",
+				initialState = ReminderTimesStore.State.Initial,
 				bootstrapper = SimpleBootstrapper(Action.Init),
 				executorFactory = ::ExecutorImpl,
 				reducer = ReducerImpl,
@@ -49,48 +49,54 @@ internal class ProfileEditStoreFactory @Inject constructor(
 
 		data class Loaded(val profile: UserProfile) : Msg
 
-		data class FirstNameChanged(val value: String) : Msg
-
-		data class LastNameChanged(val value: String) : Msg
-
-		data class EnglishLevelChanged(val value: String) : Msg
+		data class TimeToggled(val time: String) : Msg
 
 		data class Saving(val saving: Boolean) : Msg
 
 		data object Saved : Msg
 	}
 
-	private object ReducerImpl : Reducer<ProfileEditStore.State, Msg> {
+	private object ReducerImpl : Reducer<ReminderTimesStore.State, Msg> {
 
-		override fun ProfileEditStore.State.reduce(msg: Msg): ProfileEditStore.State {
-			val content = this as? ProfileEditStore.State.Content
+		override fun ReminderTimesStore.State.reduce(msg: Msg): ReminderTimesStore.State {
+			val content = this as? ReminderTimesStore.State.Content
 			return when (msg) {
-				Msg.Loading -> ProfileEditStore.State.Loading
-				Msg.SetError -> ProfileEditStore.State.Error
-				is Msg.Loaded -> ProfileEditStore.State.Content(
-					email = msg.profile.email,
+				Msg.Loading -> ReminderTimesStore.State.Loading
+				Msg.SetError -> ReminderTimesStore.State.Error
+				is Msg.Loaded -> ReminderTimesStore.State.Content(
 					firstName = msg.profile.firstName,
 					lastName = msg.profile.lastName,
 					englishLevel = msg.profile.englishLevel,
+					selectedTimes = msg.profile.notificationTimes.map { it.time }.toSet(),
 					saving = false,
-					saved = false,
 				)
-				is Msg.FirstNameChanged -> content?.copy(firstName = msg.value, saved = false) ?: this
-				is Msg.LastNameChanged -> content?.copy(lastName = msg.value, saved = false) ?: this
-				is Msg.EnglishLevelChanged -> content?.copy(englishLevel = msg.value, saved = false) ?: this
+				is Msg.TimeToggled -> content?.toggleTime(time = msg.time) ?: this
 				is Msg.Saving -> content?.copy(saving = msg.saving) ?: this
-				Msg.Saved -> content?.copy(saving = false, saved = true) ?: this
+				Msg.Saved -> content?.copy(saving = false) ?: this
 			}
+		}
+
+		private fun ReminderTimesStore.State.Content.toggleTime(
+			time: String,
+		): ReminderTimesStore.State.Content {
+			if (saving) return this
+			val selected = selectedTimes.toMutableSet()
+			if (time in selected) {
+				selected.remove(time)
+			} else {
+				selected.add(time)
+			}
+			return copy(selectedTimes = selected)
 		}
 	}
 
 	private inner class ExecutorImpl :
 		BaseCoroutineExecutor<
-			ProfileEditStore.Intent,
+			ReminderTimesStore.Intent,
 			Action,
-			ProfileEditStore.State,
+			ReminderTimesStore.State,
 			Msg,
-			ProfileEditStore.Label,
+			ReminderTimesStore.Label,
 			>() {
 
 		override fun executeAction(action: Action) {
@@ -99,20 +105,14 @@ internal class ProfileEditStoreFactory @Inject constructor(
 			}
 		}
 
-		override fun executeIntent(intent: ProfileEditStore.Intent) {
+		override fun executeIntent(intent: ReminderTimesStore.Intent) {
 			when (intent) {
-				ProfileEditStore.Intent.Retry -> load()
-				ProfileEditStore.Intent.Back -> publish(ProfileEditStore.Label.Close)
-				is ProfileEditStore.Intent.ChangeFirstName -> {
-					dispatch(Msg.FirstNameChanged(value = intent.value))
+				ReminderTimesStore.Intent.Retry -> load()
+				ReminderTimesStore.Intent.Back -> publish(ReminderTimesStore.Label.Close)
+				is ReminderTimesStore.Intent.ToggleTime -> {
+					dispatch(Msg.TimeToggled(time = intent.time))
 				}
-				is ProfileEditStore.Intent.ChangeLastName -> {
-					dispatch(Msg.LastNameChanged(value = intent.value))
-				}
-				is ProfileEditStore.Intent.ChangeEnglishLevel -> {
-					dispatch(Msg.EnglishLevelChanged(value = intent.value))
-				}
-				ProfileEditStore.Intent.Save -> save()
+				ReminderTimesStore.Intent.Save -> save()
 			}
 		}
 
@@ -128,21 +128,22 @@ internal class ProfileEditStoreFactory @Inject constructor(
 		}
 
 		private fun save() {
-			val content = state() as? ProfileEditStore.State.Content ?: return
+			val content = state() as? ReminderTimesStore.State.Content ?: return
 			if (content.saving) return
 			dispatch(Msg.Saving(saving = true))
 			scope.launch {
 				try {
 					updateProfileUseCase(
 						params = UpdateProfileParams(
-							firstName = content.firstName.trim(),
-							lastName = content.lastName.trim(),
+							firstName = content.firstName,
+							lastName = content.lastName,
 							englishLevel = content.englishLevel,
 							dailyGoalWords = null,
-							notificationTimes = null,
+							notificationTimes = content.selectedTimes.toList().sorted(),
 						),
 					)
 					dispatch(Msg.Saved)
+					publish(ReminderTimesStore.Label.Close)
 				} catch (_: Exception) {
 					dispatch(Msg.Saving(saving = false))
 				}

@@ -8,12 +8,12 @@ import retrofit2.http.Path
 
 interface BooksApi {
 
-	@GET("/api/gateway/books")
-	suspend fun getCatalog(): BooksCatalogResponse
+    @GET("/api/gateway/books")
+    suspend fun getCatalog(): BooksCatalogResponse
 
-	@GET("/api/gateway/books/{id}")
-	suspend fun getBookContent(@Path("id") id: String): BookContentResponse
+    @GET("/api/gateway/books/{id}")
+    suspend fun getBookContent(@Path("id") id: String): BookContentResponse
 
-	@GET("/api/gateway/books/{id}/translation")
-	suspend fun getBookTranslation(@Path("id") id: String): BookTranslationResponse
+    @GET("/api/gateway/books/{id}/translation")
+    suspend fun getBookTranslation(@Path("id") id: String): BookTranslationResponse
 }

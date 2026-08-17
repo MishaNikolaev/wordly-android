@@ -51,269 +51,262 @@ import com.nmichail.wordly.android.shared.catalog.CatalogRemoteImage
 
 @Composable
 fun CardsContent(
-	component: CardsComponent,
-	modifier: Modifier = Modifier,
+    component: CardsComponent,
+    modifier: Modifier = Modifier,
 ) {
-	val state by component.model.subscribeAsState()
+    val state by component.model.subscribeAsState()
 
-	when (val currentState = state) {
-		CardsStore.State.Initial -> {
-			Box(
-				modifier = modifier
+    when (val uiState = state) {
+        CardsStore.State.Initial,
+        CardsStore.State.Loading -> {
+            Box(
+                modifier = modifier
 					.fillMaxSize()
 					.background(MaterialTheme.colorScheme.background),
-				contentAlignment = Alignment.Center,
-			) {
-				CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
-			}
-		}
-		CardsStore.State.Loading -> {
-			Box(
-				modifier = modifier
-					.fillMaxSize()
-					.background(MaterialTheme.colorScheme.background),
-				contentAlignment = Alignment.Center,
-			) {
-				CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
-			}
-		}
-		CardsStore.State.Error -> {
-			CardsError(
-				onRetryClick = component::handleRetry,
-				onBackClick = component::handleBack,
-				modifier = modifier.fillMaxSize(),
-			)
-		}
-		is CardsStore.State.Content -> {
-			CardsLoaded(
-				state = currentState,
-				component = component,
-				modifier = modifier,
-			)
-		}
-	}
+                contentAlignment = Alignment.Center,
+            ) {
+                CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
+            }
+        }
+
+        CardsStore.State.Error -> {
+            CardsError(
+                onRetryClick = component::handleRetry,
+                onBackClick = component::handleBack,
+                modifier = modifier.fillMaxSize(),
+            )
+        }
+
+        is CardsStore.State.Content -> {
+            CardsLoaded(
+                state = uiState,
+                component = component,
+                modifier = modifier,
+            )
+        }
+    }
 }
 
 @Composable
 private fun CardsError(
-	onRetryClick: () -> Unit,
-	onBackClick: () -> Unit,
-	modifier: Modifier = Modifier,
+    onRetryClick: () -> Unit,
+    onBackClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-	Column(
-		modifier = modifier
+    Column(
+        modifier = modifier
 			.background(MaterialTheme.colorScheme.background)
 			.statusBarsPadding()
 			.padding(horizontal = 24.dp),
-		verticalArrangement = Arrangement.Center,
-		horizontalAlignment = Alignment.CenterHorizontally,
-	) {
-		Text(
-			text = stringResource(R.string.cards_error_title),
-			style = MaterialTheme.typography.titleLarge,
-			color = MaterialTheme.colorScheme.onBackground,
-			textAlign = TextAlign.Center,
-		)
-		Text(
-			text = stringResource(R.string.cards_error_subtitle),
-			style = MaterialTheme.typography.bodyMedium,
-			color = MaterialTheme.colorScheme.onSurfaceVariant,
-			textAlign = TextAlign.Center,
-			modifier = Modifier.padding(top = 8.dp),
-		)
-		WuiButton(
-			text = stringResource(R.string.cards_retry),
-			onClick = onRetryClick,
-			modifier = Modifier
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Text(
+            text = stringResource(R.string.cards_error_title),
+            style = MaterialTheme.typography.titleLarge,
+            color = MaterialTheme.colorScheme.onBackground,
+            textAlign = TextAlign.Center,
+        )
+        Text(
+            text = stringResource(R.string.cards_error_subtitle),
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.padding(top = 8.dp),
+        )
+        WuiButton(
+            text = stringResource(R.string.cards_retry),
+            onClick = onRetryClick,
+            modifier = Modifier
 				.fillMaxWidth()
 				.padding(top = 24.dp),
-		)
-		WuiTextLink(
-			text = stringResource(R.string.cards_back),
-			onClick = onBackClick,
-			modifier = Modifier.padding(top = 16.dp),
-		)
-	}
+        )
+        WuiTextLink(
+            text = stringResource(R.string.cards_back),
+            onClick = onBackClick,
+            modifier = Modifier.padding(top = 16.dp),
+        )
+    }
 }
 
 @Composable
 private fun CardsLoaded(
-	state: CardsStore.State.Content,
-	component: CardsComponent,
-	modifier: Modifier = Modifier,
+    state: CardsStore.State.Content,
+    component: CardsComponent,
+    modifier: Modifier = Modifier,
 ) {
-	Column(
-		modifier = modifier
+    Column(
+        modifier = modifier
 			.fillMaxSize()
 			.background(MaterialTheme.colorScheme.background)
 			.statusBarsPadding()
 			.navigationBarsPadding(),
-	) {
-		CardsTopBar(
-			title = state.title,
-			onBackClick = component::handleBack,
-		)
-		LazyColumn(
-			modifier = Modifier.fillMaxSize(),
-			contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
-			verticalArrangement = Arrangement.spacedBy(12.dp),
-		) {
-			state.levelBanner?.let { banner ->
-				item(key = "level_banner") {
-					CardsLevelBannerContent(
-						banner = banner,
-						onLevelChange = component::handleLevelChange,
-					)
-				}
-			}
-			item(key = "search") {
-				WuiSearchField(
-					value = state.searchQuery,
-					onValueChange = component::handleSearchQueryChange,
-					placeholder = state.searchPlaceholder,
-				)
-			}
-			state.sections.forEach { section ->
-				item(key = "section_${section.title}") {
-					WuiSectionLabel(
-						text = section.title,
-						modifier = Modifier.padding(top = 8.dp, bottom = 4.dp),
-					)
-				}
-				items(
-					items = section.items,
-					key = { it.id },
-				) { item ->
-					WuiCatalogCard(
-						title = item.title,
-						subtitle = item.subtitle,
-						badge = item.badge,
-						image = { CatalogRemoteImage(url = item.imageUrl) },
-						onClick = { component.handleCardClick(item.id) },
-					)
-				}
-			}
-		}
-	}
+    ) {
+        CardsTopBar(
+            title = state.title,
+            onBackClick = component::handleBack,
+        )
+        LazyColumn(
+            modifier = Modifier.fillMaxSize(),
+            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+        ) {
+            state.levelBanner?.let { banner ->
+                item(key = "level_banner") {
+                    CardsLevelBannerContent(
+                        banner = banner,
+                        onLevelChange = component::handleLevelChange,
+                    )
+                }
+            }
+            item(key = "search") {
+                WuiSearchField(
+                    value = state.searchQuery,
+                    onValueChange = component::handleSearchQueryChange,
+                    placeholder = state.searchPlaceholder,
+                )
+            }
+            state.sections.forEach { section ->
+                item(key = "section_${section.title}") {
+                    WuiSectionLabel(
+                        text = section.title,
+                        modifier = Modifier.padding(top = 8.dp, bottom = 4.dp),
+                    )
+                }
+                items(
+                    items = section.items,
+                    key = { it.id },
+                ) { item ->
+                    WuiCatalogCard(
+                        title = item.title,
+                        subtitle = item.subtitle,
+                        badge = item.badge,
+                        image = { CatalogRemoteImage(url = item.imageUrl) },
+                        onClick = { component.handleCardClick(item.id) },
+                    )
+                }
+            }
+        }
+    }
 }
 
 @Composable
 private fun CardsTopBar(
-	title: String,
-	onBackClick: () -> Unit,
-	modifier: Modifier = Modifier,
+    title: String,
+    onBackClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-	Row(
-		modifier = modifier
+    Row(
+        modifier = modifier
 			.fillMaxWidth()
 			.padding(horizontal = 4.dp),
-		verticalAlignment = Alignment.CenterVertically,
-	) {
-		IconButton(onClick = onBackClick) {
-			Icon(
-				imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-				contentDescription = stringResource(R.string.cards_back),
-				tint = MaterialTheme.colorScheme.onBackground,
-			)
-		}
-		Text(
-			text = title,
-			style = MaterialTheme.typography.titleLarge,
-			fontWeight = FontWeight.SemiBold,
-			color = MaterialTheme.colorScheme.onBackground,
-			modifier = Modifier.padding(start = 4.dp),
-		)
-	}
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        IconButton(onClick = onBackClick) {
+            Icon(
+                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                contentDescription = stringResource(R.string.cards_back),
+                tint = MaterialTheme.colorScheme.onBackground,
+            )
+        }
+        Text(
+            text = title,
+            style = MaterialTheme.typography.titleLarge,
+            fontWeight = FontWeight.SemiBold,
+            color = MaterialTheme.colorScheme.onBackground,
+            modifier = Modifier.padding(start = 4.dp),
+        )
+    }
 }
 
 @Composable
 private fun CardsLevelBannerContent(
-	banner: CardsLevelBanner,
-	onLevelChange: (String) -> Unit,
-	modifier: Modifier = Modifier,
+    banner: CardsLevelBanner,
+    onLevelChange: (String) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-	val colorScheme = MaterialTheme.colorScheme
+    val colorScheme = MaterialTheme.colorScheme
 
-	Row(
-		modifier = modifier
+    Row(
+        modifier = modifier
 			.fillMaxWidth()
 			.clip(MaterialTheme.shapes.extraLarge)
 			.background(colorScheme.primaryContainer)
 			.padding(horizontal = 16.dp, vertical = 14.dp),
-		verticalAlignment = Alignment.CenterVertically,
-		horizontalArrangement = Arrangement.spacedBy(12.dp),
-	) {
-		Text(
-			text = banner.text,
-			style = MaterialTheme.typography.bodyMedium,
-			color = colorScheme.onPrimaryContainer,
-			modifier = Modifier.weight(1f),
-		)
-		CardsLevelSelector(
-			selectedLevel = banner.levelLabel,
-			levels = banner.levels.ifEmpty { listOf(banner.levelLabel) },
-			onLevelChange = onLevelChange,
-		)
-	}
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
+    ) {
+        Text(
+            text = banner.text,
+            style = MaterialTheme.typography.bodyMedium,
+            color = colorScheme.onPrimaryContainer,
+            modifier = Modifier.weight(1f),
+        )
+        CardsLevelSelector(
+            selectedLevel = banner.levelLabel,
+            levels = banner.levels.ifEmpty { listOf(banner.levelLabel) },
+            onLevelChange = onLevelChange,
+        )
+    }
 }
 
 @Composable
 private fun CardsLevelSelector(
-	selectedLevel: String,
-	levels: List<String>,
-	onLevelChange: (String) -> Unit,
-	modifier: Modifier = Modifier,
+    selectedLevel: String,
+    levels: List<String>,
+    onLevelChange: (String) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-	val colorScheme = MaterialTheme.colorScheme
-	var expanded by remember { mutableStateOf(false) }
+    val colorScheme = MaterialTheme.colorScheme
+    var expanded by remember { mutableStateOf(false) }
 
-	Box(modifier = modifier) {
-		Row(
-			modifier = Modifier
+    Box(modifier = modifier) {
+        Row(
+            modifier = Modifier
 				.clip(MaterialTheme.shapes.extraLarge)
 				.background(colorScheme.primary)
 				.clickable { expanded = true }
 				.padding(horizontal = 12.dp, vertical = 8.dp),
-			verticalAlignment = Alignment.CenterVertically,
-			horizontalArrangement = Arrangement.spacedBy(2.dp),
-		) {
-			Text(
-				text = selectedLevel,
-				style = MaterialTheme.typography.labelLarge,
-				fontWeight = FontWeight.SemiBold,
-				color = colorScheme.onPrimary,
-			)
-			Icon(
-				imageVector = Icons.Filled.KeyboardArrowDown,
-				contentDescription = stringResource(R.string.cards_level_banner_action),
-				tint = colorScheme.onPrimary,
-				modifier = Modifier.size(18.dp),
-			)
-		}
-		DropdownMenu(
-			expanded = expanded,
-			onDismissRequest = { expanded = false },
-		) {
-			levels.forEach { level ->
-				DropdownMenuItem(
-					text = {
-						Text(
-							text = level,
-							fontWeight = if (level == selectedLevel) {
-								FontWeight.SemiBold
-							} else {
-								FontWeight.Normal
-							},
-						)
-					},
-					onClick = {
-						expanded = false
-						if (level != selectedLevel) {
-							onLevelChange(level)
-						}
-					},
-				)
-			}
-		}
-	}
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(2.dp),
+        ) {
+            Text(
+                text = selectedLevel,
+                style = MaterialTheme.typography.labelLarge,
+                fontWeight = FontWeight.SemiBold,
+                color = colorScheme.onPrimary,
+            )
+            Icon(
+                imageVector = Icons.Filled.KeyboardArrowDown,
+                contentDescription = stringResource(R.string.cards_level_banner_action),
+                tint = colorScheme.onPrimary,
+                modifier = Modifier.size(18.dp),
+            )
+        }
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false },
+        ) {
+            levels.forEach { level ->
+                DropdownMenuItem(
+                    text = {
+                        Text(
+                            text = level,
+                            fontWeight = if (level == selectedLevel) {
+                                FontWeight.SemiBold
+                            } else {
+                                FontWeight.Normal
+                            },
+                        )
+                    },
+                    onClick = {
+                        expanded = false
+                        if (level != selectedLevel) {
+                            onLevelChange(level)
+                        }
+                    },
+                )
+            }
+        }
+    }
 }

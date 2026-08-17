@@ -4,10 +4,10 @@ import com.nmichail.wordly.android.features.authorization.signup.data.dto.SignUp
 import com.nmichail.wordly.android.features.authorization.signup.domain.entity.SignUpForm
 
 fun SignUpForm.toRequest(): SignUpRequest =
-	SignUpRequest(
-		email = email,
-		password = password,
-		firstName = firstName,
-		lastName = lastName,
-		englishLevel = englishLevel,
-	)
+    SignUpRequest(
+        email = email,
+        password = password,
+        firstName = firstName,
+        lastName = lastName,
+        englishLevel = englishLevel,
+    )

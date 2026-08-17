@@ -40,198 +40,199 @@ import com.nmichail.wordly.android.features.profile.presentation.ProfileStore
 
 @Composable
 fun ProfileContent(
-	component: ProfileComponent,
-	themeMode: AppThemeMode,
-	modifier: Modifier = Modifier,
+    component: ProfileComponent,
+    themeMode: AppThemeMode,
+    modifier: Modifier = Modifier,
 ) {
-	val state by component.model.subscribeAsState()
+    val state by component.model.subscribeAsState()
 
-	when (val current = state) {
-		ProfileStore.State.Initial -> ProfileLoading(modifier = modifier)
-		ProfileStore.State.Loading -> ProfileLoading(modifier = modifier)
-		is ProfileStore.State.Content -> ProfileLoaded(
-			state = current,
-			themeMode = themeMode,
-			component = component,
-			modifier = modifier,
-		)
-		ProfileStore.State.Error -> ProfileError(
-			onRetryClick = component::handleRetry,
-			modifier = modifier.fillMaxSize(),
-		)
-	}
+    when (val uiState = state) {
+        ProfileStore.State.Initial,
+        ProfileStore.State.Loading -> ProfileLoading(modifier = modifier)
+
+        is ProfileStore.State.Content -> ProfileLoaded(
+            state = uiState,
+            themeMode = themeMode,
+            component = component,
+            modifier = modifier,
+        )
+
+        ProfileStore.State.Error -> ProfileError(
+            onRetryClick = component::handleRetry,
+            modifier = modifier.fillMaxSize(),
+        )
+    }
 }
 
 @Composable
 private fun ProfileLoading(modifier: Modifier = Modifier) {
-	Box(
-		modifier = modifier
+    Box(
+        modifier = modifier
 			.fillMaxSize()
 			.background(MaterialTheme.colorScheme.background),
-		contentAlignment = Alignment.Center,
-	) {
-		CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
-	}
+        contentAlignment = Alignment.Center,
+    ) {
+        CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
+    }
 }
 
 @Composable
 private fun ProfileError(
-	onRetryClick: () -> Unit,
-	modifier: Modifier = Modifier,
+    onRetryClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-	Column(
-		modifier = modifier
+    Column(
+        modifier = modifier
 			.background(MaterialTheme.colorScheme.background)
 			.padding(horizontal = 24.dp),
-		verticalArrangement = Arrangement.Center,
-		horizontalAlignment = Alignment.CenterHorizontally,
-	) {
-		Text(
-			text = stringResource(R.string.profile_error_title),
-			style = MaterialTheme.typography.titleLarge,
-			color = MaterialTheme.colorScheme.onBackground,
-			textAlign = TextAlign.Center,
-		)
-		Text(
-			text = stringResource(R.string.profile_error_subtitle),
-			style = MaterialTheme.typography.bodyMedium,
-			color = MaterialTheme.colorScheme.onSurfaceVariant,
-			textAlign = TextAlign.Center,
-			modifier = Modifier.padding(top = 8.dp),
-		)
-		WuiButton(
-			text = stringResource(R.string.profile_retry),
-			onClick = onRetryClick,
-			modifier = Modifier
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Text(
+            text = stringResource(R.string.profile_error_title),
+            style = MaterialTheme.typography.titleLarge,
+            color = MaterialTheme.colorScheme.onBackground,
+            textAlign = TextAlign.Center,
+        )
+        Text(
+            text = stringResource(R.string.profile_error_subtitle),
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.padding(top = 8.dp),
+        )
+        WuiButton(
+            text = stringResource(R.string.profile_retry),
+            onClick = onRetryClick,
+            modifier = Modifier
 				.fillMaxWidth()
 				.padding(top = 24.dp),
-		)
-	}
+        )
+    }
 }
 
 @Composable
 private fun ProfileLoaded(
-	state: ProfileStore.State.Content,
-	themeMode: AppThemeMode,
-	component: ProfileComponent,
-	modifier: Modifier = Modifier,
+    state: ProfileStore.State.Content,
+    themeMode: AppThemeMode,
+    component: ProfileComponent,
+    modifier: Modifier = Modifier,
 ) {
-	ProfileDialogHost(
-		profile = state.profile,
-		themeMode = themeMode,
-		loggingOut = state.loggingOut,
-		component = component,
-	) { openDialog ->
-		Column(
-			modifier = modifier
+    ProfileDialogHost(
+        state = state,
+        themeMode = themeMode,
+        component = component,
+    ) { openDialog ->
+        Column(
+            modifier = modifier
 				.fillMaxSize()
 				.background(MaterialTheme.colorScheme.background)
 				.padding(horizontal = 20.dp)
 				.padding(top = 12.dp, bottom = 24.dp),
-		) {
-			Column(
-				modifier = Modifier
+        ) {
+            Column(
+                modifier = Modifier
 					.weight(1f)
 					.verticalScroll(rememberScrollState()),
-			) {
-				ProfileHeader(fullName = state.profile.fullName)
-				ProfileLevelRow(
-					level = state.profile.englishLevel,
-					onClick = { openDialog(ProfileDialog.Level) },
-					modifier = Modifier.padding(top = 20.dp),
-				)
-				WuiButton(
-					text = stringResource(R.string.profile_edit),
-					onClick = component::handleOpenEdit,
-					modifier = Modifier.padding(top = 20.dp),
-					containerColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.08f),
-					contentColor = MaterialTheme.colorScheme.onSurface,
-				)
-				ProfileSettingsSection(
-					state = state,
-					themeMode = themeMode,
-					onOpenNotifications = { openDialog(ProfileDialog.Notifications) },
-					onOpenDailyGoal = { openDialog(ProfileDialog.DailyGoal) },
-					onOpenTheme = { openDialog(ProfileDialog.Theme) },
-					onToggleNotificationsEnabled = component::handleToggleNotificationsEnabled,
-					modifier = Modifier.padding(top = 28.dp, bottom = 24.dp),
-				)
-			}
-			ProfileLogoutButton(
-				onClick = { openDialog(ProfileDialog.Logout) },
-				loading = state.loggingOut,
-				modifier = Modifier.padding(top = 8.dp),
-			)
-		}
-	}
+            ) {
+                ProfileHeader(fullName = state.profile.fullName)
+                ProfileLevelRow(
+                    level = state.profile.englishLevel,
+                    onClick = { openDialog(ProfileDialog.Level) },
+                    modifier = Modifier.padding(top = 20.dp),
+                )
+                WuiButton(
+                    text = stringResource(R.string.profile_edit),
+                    onClick = component::handleOpenEdit,
+                    modifier = Modifier.padding(top = 20.dp),
+                    containerColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.08f),
+                    contentColor = MaterialTheme.colorScheme.onSurface,
+                )
+                ProfileSettingsSection(
+                    state = state,
+                    themeMode = themeMode,
+                    onOpenNotifications = component::handleOpenReminderTimes,
+                    onOpenDailyGoal = { openDialog(ProfileDialog.DailyGoal) },
+                    onOpenTheme = { openDialog(ProfileDialog.Theme) },
+                    onToggleNotificationsEnabled = component::handleToggleNotificationsEnabled,
+                    modifier = Modifier.padding(top = 28.dp, bottom = 24.dp),
+                )
+            }
+            ProfileLogoutButton(
+                onClick = { openDialog(ProfileDialog.Logout) },
+                loading = state.loggingOut,
+                modifier = Modifier.padding(top = 8.dp),
+            )
+        }
+    }
 }
 
 @Composable
 private fun ProfileLogoutButton(
-	onClick: () -> Unit,
-	loading: Boolean,
-	modifier: Modifier = Modifier,
+    onClick: () -> Unit,
+    loading: Boolean,
+    modifier: Modifier = Modifier,
 ) {
-	val contentColor = Color.White
-	Button(
-		onClick = onClick,
-		modifier = modifier
+    val contentColor = Color.White
+    Button(
+        onClick = onClick,
+        modifier = modifier
 			.fillMaxWidth()
 			.height(52.dp),
-		enabled = !loading,
-		shape = MaterialTheme.shapes.small,
-		colors = ButtonDefaults.buttonColors(
-			containerColor = MaterialTheme.colorScheme.primary,
-			contentColor = contentColor,
-			disabledContainerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.4f),
-			disabledContentColor = contentColor.copy(alpha = 0.6f),
-		),
-	) {
-		if (loading) {
-			CircularProgressIndicator(
-				modifier = Modifier.size(24.dp),
-				color = contentColor,
-				strokeWidth = 2.dp,
-			)
-		} else {
-			Text(
-				text = stringResource(R.string.profile_logout),
-				style = MaterialTheme.typography.labelLarge,
-				fontWeight = FontWeight.Medium,
-			)
-		}
-	}
+        enabled = !loading,
+        shape = MaterialTheme.shapes.small,
+        colors = ButtonDefaults.buttonColors(
+            containerColor = MaterialTheme.colorScheme.primary,
+            contentColor = contentColor,
+            disabledContainerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.4f),
+            disabledContentColor = contentColor.copy(alpha = 0.6f),
+        ),
+    ) {
+        if (loading) {
+            CircularProgressIndicator(
+                modifier = Modifier.size(24.dp),
+                color = contentColor,
+                strokeWidth = 2.dp,
+            )
+        } else {
+            Text(
+                text = stringResource(R.string.profile_logout),
+                style = MaterialTheme.typography.labelLarge,
+                fontWeight = FontWeight.Medium,
+            )
+        }
+    }
 }
 
 @Composable
 private fun ProfileHeader(
-	fullName: String,
-	modifier: Modifier = Modifier,
+    fullName: String,
+    modifier: Modifier = Modifier,
 ) {
-	Row(
-		modifier = modifier.fillMaxWidth(),
-		verticalAlignment = Alignment.CenterVertically,
-		horizontalArrangement = Arrangement.spacedBy(16.dp),
-	) {
-		Box(
-			modifier = Modifier
+    Row(
+        modifier = modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
+    ) {
+        Box(
+            modifier = Modifier
 				.size(72.dp)
 				.clip(CircleShape)
 				.background(MaterialTheme.colorScheme.primaryContainer),
-			contentAlignment = Alignment.Center,
-		) {
-			Icon(
-				imageVector = Icons.Outlined.Person,
-				contentDescription = null,
-				tint = MaterialTheme.colorScheme.onPrimaryContainer,
-				modifier = Modifier.size(36.dp),
-			)
-		}
-		Text(
-			text = fullName,
-			style = MaterialTheme.typography.titleLarge,
-			fontWeight = FontWeight.SemiBold,
-			color = MaterialTheme.colorScheme.onBackground,
-		)
-	}
+            contentAlignment = Alignment.Center,
+        ) {
+            Icon(
+                imageVector = Icons.Outlined.Person,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                modifier = Modifier.size(36.dp),
+            )
+        }
+        Text(
+            text = fullName,
+            style = MaterialTheme.typography.titleLarge,
+            fontWeight = FontWeight.SemiBold,
+            color = MaterialTheme.colorScheme.onBackground,
+        )
+    }
 }

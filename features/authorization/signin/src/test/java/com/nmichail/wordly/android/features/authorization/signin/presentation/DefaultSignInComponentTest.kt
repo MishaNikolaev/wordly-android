@@ -26,85 +26,85 @@ import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 
 @ExtendWith(
-	MockitoExtension::class,
-	TestCoroutineExtension::class,
-	InstantExecutorExtension::class,
+    MockitoExtension::class,
+    TestCoroutineExtension::class,
+    InstantExecutorExtension::class,
 )
 class DefaultSignInComponentTest {
 
-	private val validateEmailUseCase: ValidateEmailUseCase = mock()
-	private val validatePasswordUseCase: ValidatePasswordUseCase = mock()
-	private val signInUseCase: SignInUseCase = mock()
-	private val saveAuthTokensUseCase: SaveAuthTokensUseCase = mock()
-	private val networkExceptionConverter: NetworkExceptionConverter = mock()
-	private val errorDelegate: ErrorDelegate = mock()
-	private val signInRouter: SignInRouter = mock()
+    private val validateEmailUseCase: ValidateEmailUseCase = mock()
+    private val validatePasswordUseCase: ValidatePasswordUseCase = mock()
+    private val signInUseCase: SignInUseCase = mock()
+    private val saveAuthTokensUseCase: SaveAuthTokensUseCase = mock()
+    private val networkExceptionConverter: NetworkExceptionConverter = mock()
+    private val errorDelegate: ErrorDelegate = mock()
+    private val signInRouter: SignInRouter = mock()
 
-	private val email = "user@gmail.com"
-	private val password = "12345678"
-	private val signInData = SignInData(email = email, password = password)
-	private val emailValidItem = EmailValidationItem(email, DefaultValidationState.Valid)
-	private val passwordValidItem = PasswordValidationItem(password, DefaultValidationState.Valid)
-	private val tokens = AuthTokens(
-		accessToken = "access-token",
-		refreshToken = "refresh-token",
-	)
+    private val email = "user@gmail.com"
+    private val password = "12345678"
+    private val signInData = SignInData(email = email, password = password)
+    private val emailValidItem = EmailValidationItem(email, DefaultValidationState.Valid)
+    private val passwordValidItem = PasswordValidationItem(password, DefaultValidationState.Valid)
+    private val tokens = AuthTokens(
+        accessToken = "access-token",
+        refreshToken = "refresh-token",
+    )
 
-	private lateinit var component: DefaultSignInComponent
-	private val model get() = component.model.value
+    private lateinit var component: DefaultSignInComponent
+    private val model get() = component.model.value
 
-	@BeforeEach
-	fun setUp() {
-		component = DefaultSignInComponent(
-			componentContext = createTestComponentContext(),
-			signInStoreFactory = SignInStoreFactory(
-				validateEmailUseCase = validateEmailUseCase,
-				validatePasswordUseCase = validatePasswordUseCase,
-				signInUseCase = signInUseCase,
-				saveAuthTokensUseCase = saveAuthTokensUseCase,
-				networkExceptionConverter = networkExceptionConverter,
-				errorDelegate = errorDelegate,
-			),
-			signInRouter = signInRouter,
-		)
-	}
+    @BeforeEach
+    fun setUp() {
+        component = DefaultSignInComponent(
+            componentContext = createTestComponentContext(),
+            signInStoreFactory = SignInStoreFactory(
+                validateEmailUseCase = validateEmailUseCase,
+                validatePasswordUseCase = validatePasswordUseCase,
+                signInUseCase = signInUseCase,
+                saveAuthTokensUseCase = saveAuthTokensUseCase,
+                networkExceptionConverter = networkExceptionConverter,
+                errorDelegate = errorDelegate,
+            ),
+            signInRouter = signInRouter,
+        )
+    }
 
-	@Test
-	fun `init EXPECT init state`() {
-		assertEquals(
-			SignInStore.State.Content(
-				email = EmailValidationItem(),
-				password = PasswordValidationItem(),
-				submitting = false,
-			),
-			model,
-		)
-	}
+    @Test
+    fun `init EXPECT init state`() {
+        assertEquals(
+            SignInStore.State.Content(
+                email = EmailValidationItem(),
+                password = PasswordValidationItem(),
+                submitting = false,
+            ),
+            model,
+        )
+    }
 
-	@Test
-	fun `submit success EXPECT open main host`() = runTest {
-		whenever(validateEmailUseCase(email)) doReturn emailValidItem
-		whenever(validatePasswordUseCase(password)) doReturn passwordValidItem
-		whenever(signInUseCase(signInData)) doReturn tokens
-		component.handleChangeEmail(email)
-		component.handleChangePassword(password)
+    @Test
+    fun `submit success EXPECT open main host`() = runTest {
+        whenever(validateEmailUseCase(email)) doReturn emailValidItem
+        whenever(validatePasswordUseCase(password)) doReturn passwordValidItem
+        whenever(signInUseCase(signInData)) doReturn tokens
+        component.handleChangeEmail(email)
+        component.handleChangePassword(password)
 
-		component.handleSubmit()
+        component.handleSubmit()
 
-		verify(signInRouter).navigateToMain()
-	}
+        verify(signInRouter).navigateToMain()
+    }
 
-	@Test
-	fun `navigate to sign up EXPECT open sign up`() {
-		component.handleNavigateToSignUp()
+    @Test
+    fun `navigate to sign up EXPECT open sign up`() {
+        component.handleNavigateToSignUp()
 
-		verify(signInRouter).navigateToSignUp()
-	}
+        verify(signInRouter).navigateToSignUp()
+    }
 
-	@Test
-	fun `navigate to network selection EXPECT open network selection`() {
-		component.handleNavigateToNetworkSelection()
+    @Test
+    fun `navigate to network selection EXPECT open network selection`() {
+        component.handleNavigateToNetworkSelection()
 
-		verify(signInRouter).navigateToNetworkSelection()
-	}
+        verify(signInRouter).navigateToNetworkSelection()
+    }
 }

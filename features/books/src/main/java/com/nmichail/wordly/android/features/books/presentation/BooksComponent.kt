@@ -6,24 +6,24 @@ import com.nmichail.wordly.android.features.books.domain.entity.BooksItem
 
 interface BooksComponent {
 
-	val model: Value<BooksStore.State>
+    val model: Value<BooksStore.State>
 
-	fun handleBack()
+    fun handleBack()
 
-	fun handleRetry()
+    fun handleRetry()
 
-	fun handleSearchQueryChange(query: String)
+    fun handleSearchQueryChange(query: String)
 
-	fun handleLevelChange(level: String)
+    fun handleLevelChange(level: String)
 
-	fun handleBookClick(bookId: String)
+    fun handleBookClick(bookId: String)
 
-	fun interface Factory {
+    fun interface Factory {
 
-		operator fun invoke(
-			componentContext: ComponentContext,
-			booksRouter: BooksRouter,
-			onBookClick: (BooksItem) -> Unit,
-		): BooksComponent
-	}
+        operator fun invoke(
+            componentContext: ComponentContext,
+            booksRouter: BooksRouter,
+            onBookClick: (BooksItem) -> Unit,
+        ): BooksComponent
+    }
 }

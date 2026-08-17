@@ -17,28 +17,28 @@ import javax.inject.Singleton
 @Module
 abstract class BooksModule {
 
-	@Binds
-	abstract fun bindBooksRepository(
-		impl: BooksRepositoryImpl,
-	): BooksRepository
+    @Binds
+    abstract fun bindBooksRepository(
+        impl: BooksRepositoryImpl,
+    ): BooksRepository
 
-	@Binds
-	internal abstract fun bindBooksComponentFactory(
-		impl: DefaultBooksComponentFactory,
-	): BooksComponent.Factory
+    @Binds
+    internal abstract fun bindBooksComponentFactory(
+        impl: DefaultBooksComponentFactory,
+    ): BooksComponent.Factory
 
-	@Binds
-	internal abstract fun bindBookReaderComponentFactory(
-		impl: DefaultBookReaderComponentFactory,
-	): BookReaderComponent.Factory
+    @Binds
+    internal abstract fun bindBookReaderComponentFactory(
+        impl: DefaultBookReaderComponentFactory,
+    ): BookReaderComponent.Factory
 
-	companion object {
+    companion object {
 
-		@Provides
-		@Singleton
-		fun provideBooksApi(
-			@GeneralRetrofit retrofit: Retrofit,
-		): BooksApi =
-			retrofit.create(BooksApi::class.java)
-	}
+        @Provides
+        @Singleton
+        fun provideBooksApi(
+            @GeneralRetrofit retrofit: Retrofit,
+        ): BooksApi =
+            retrofit.create(BooksApi::class.java)
+    }
 }

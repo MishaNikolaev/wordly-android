@@ -35,83 +35,84 @@ import com.nmichail.wordly.android.features.dev.networkselection.presentation.Ne
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NetworkSelectionContent(
-	component: NetworkSelectionComponent,
-	modifier: Modifier = Modifier,
+    component: NetworkSelectionComponent,
+    modifier: Modifier = Modifier,
 ) {
-	val state by component.model.subscribeAsState()
+    val state by component.model.subscribeAsState()
 
-	Scaffold(
-		modifier = modifier,
-		topBar = {
-			TopAppBar(
-				title = {
-					Text(text = stringResource(R.string.network_selection_title))
-				},
-				navigationIcon = {
-					IconButton(onClick = component::handleNavigateBack) {
-						Icon(
-							imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-							contentDescription = null,
-						)
-					}
-				},
-			)
-		},
-	) { innerPadding ->
-		Box(
-			modifier = Modifier
+    Scaffold(
+        modifier = modifier,
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(text = stringResource(R.string.network_selection_title))
+                },
+                navigationIcon = {
+                    IconButton(onClick = component::handleNavigateBack) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = null,
+                        )
+                    }
+                },
+            )
+        },
+    ) { innerPadding ->
+        Box(
+            modifier = Modifier
 				.fillMaxSize()
 				.padding(innerPadding),
-		) {
-			when (val currentState = state) {
-				NetworkSelectionStore.State.Initial -> {
-					Box(
-						modifier = Modifier.fillMaxSize(),
-						contentAlignment = Alignment.Center,
-					) {
-						CircularProgressIndicator()
-					}
-				}
-				is NetworkSelectionStore.State.Content -> NetworkSelectionList(
-					state = currentState,
-					onStandSelected = component::handleSelectStand,
-				)
-			}
-		}
-	}
+        ) {
+            when (val uiState = state) {
+                NetworkSelectionStore.State.Initial -> {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        CircularProgressIndicator()
+                    }
+                }
+
+                is NetworkSelectionStore.State.Content -> NetworkSelectionList(
+                    state = uiState,
+                    onStandSelected = component::handleSelectStand,
+                )
+            }
+        }
+    }
 }
 
 @Composable
 private fun NetworkSelectionList(
-	state: NetworkSelectionStore.State.Content,
-	onStandSelected: (NetworkStand) -> Unit,
+    state: NetworkSelectionStore.State.Content,
+    onStandSelected: (NetworkStand) -> Unit,
 ) {
-	val radioColors = RadioButtonDefaults.colors(
-		selectedColor = MaterialTheme.colorScheme.primary,
-		disabledSelectedColor = MaterialTheme.colorScheme.primary,
-	)
+    val radioColors = RadioButtonDefaults.colors(
+        selectedColor = MaterialTheme.colorScheme.primary,
+        disabledSelectedColor = MaterialTheme.colorScheme.primary,
+    )
 
-	LazyColumn(modifier = Modifier.padding(36.dp)) {
-		items(
-			items = state.stands,
-			key = NetworkStand::name,
-		) { stand ->
-			val selected = stand == state.selectedStand
+    LazyColumn(modifier = Modifier.padding(36.dp)) {
+        items(
+            items = state.stands,
+            key = NetworkStand::name,
+        ) { stand ->
+            val selected = stand == state.selectedStand
 
-			Row(verticalAlignment = Alignment.CenterVertically) {
-				RadioButton(
-					selected = selected,
-					onClick = { onStandSelected(stand) },
-					enabled = !selected,
-					colors = radioColors,
-				)
-				Text(
-					text = stand.name,
-					style = MaterialTheme.typography.titleLarge,
-				)
-			}
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                RadioButton(
+                    selected = selected,
+                    onClick = { onStandSelected(stand) },
+                    enabled = !selected,
+                    colors = radioColors,
+                )
+                Text(
+                    text = stand.name,
+                    style = MaterialTheme.typography.titleLarge,
+                )
+            }
 
-			Spacer(modifier = Modifier.height(16.dp))
-		}
-	}
+            Spacer(modifier = Modifier.height(16.dp))
+        }
+    }
 }

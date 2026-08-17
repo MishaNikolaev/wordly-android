@@ -29,31 +29,31 @@ import androidx.compose.ui.unit.dp
 import com.nmichail.wordly.android.component.wui.theme.WuiTheme
 
 data class LookupTextSegment(
-	val text: String,
-	val lookupId: String?,
+    val text: String,
+    val lookupId: String?,
 )
 
 @Composable
 fun LookupReadingText(
-	segments: List<LookupTextSegment>,
-	onSelectWord: (String) -> Unit,
-	modifier: Modifier = Modifier,
+    segments: List<LookupTextSegment>,
+    onSelectWord: (String) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-	val bodyStyle = WuiTypography.bookReaderBody
-	val textColor = MaterialTheme.colorScheme.onBackground
-	val underlineColor = MaterialTheme.colorScheme.primary
-	val currentOnSelectWord by rememberUpdatedState(onSelectWord)
-	val annotated = remember(segments) { buildLookupAnnotatedString(segments) }
-	var textLayoutResult by remember { mutableStateOf<TextLayoutResult?>(null) }
-	val dashEffect = remember {
-		PathEffect.dashPathEffect(floatArrayOf(6f, 4f))
-	}
+    val bodyStyle = WuiTypography.bookReaderBody
+    val textColor = MaterialTheme.colorScheme.onBackground
+    val underlineColor = MaterialTheme.colorScheme.primary
+    val currentOnSelectWord by rememberUpdatedState(onSelectWord)
+    val annotated = remember(segments) { buildLookupAnnotatedString(segments) }
+    var textLayoutResult by remember { mutableStateOf<TextLayoutResult?>(null) }
+    val dashEffect = remember {
+        PathEffect.dashPathEffect(floatArrayOf(6f, 4f))
+    }
 
-	Text(
-		text = annotated,
-		style = bodyStyle,
-		color = textColor,
-		modifier = modifier
+    Text(
+        text = annotated,
+        style = bodyStyle,
+        color = textColor,
+        modifier = modifier
 			.fillMaxWidth()
 			.drawBehind {
 				val layout = textLayoutResult ?: return@drawBehind
@@ -83,76 +83,76 @@ fun LookupReadingText(
 					).firstOrNull()?.item?.let(currentOnSelectWord)
 				}
 			},
-		onTextLayout = { textLayoutResult = it },
-	)
+        onTextLayout = { textLayoutResult = it },
+    )
 }
 
 private fun buildLookupAnnotatedString(
-	segments: List<LookupTextSegment>,
+    segments: List<LookupTextSegment>,
 ): AnnotatedString =
-	buildAnnotatedString {
-		segments.forEach { segment ->
-			val lookupId = segment.lookupId
-			if (lookupId == null) {
-				append(segment.text)
-			} else {
-				val start = length
-				append(segment.text)
-				addStringAnnotation(
-					tag = "lookup",
-					annotation = lookupId,
-					start = start,
-					end = length,
-				)
-			}
-		}
-	}
+    buildAnnotatedString {
+        segments.forEach { segment ->
+            val lookupId = segment.lookupId
+            if (lookupId == null) {
+                append(segment.text)
+            } else {
+                val start = length
+                append(segment.text)
+                addStringAnnotation(
+                    tag = "lookup",
+                    annotation = lookupId,
+                    start = start,
+                    end = length,
+                )
+            }
+        }
+    }
 
 private fun DrawScope.drawLookupUnderline(
-	layout: TextLayoutResult,
-	start: Int,
-	end: Int,
-	color: Color,
-	dashEffect: PathEffect,
+    layout: TextLayoutResult,
+    start: Int,
+    end: Int,
+    color: Color,
+    dashEffect: PathEffect,
 ) {
-	if (start >= end) return
-	val firstLine = layout.getLineForOffset(start)
-	val lastLine = layout.getLineForOffset(end - 1)
-	for (line in firstLine..lastLine) {
-		val lineStart = max(start, layout.getLineStart(line))
-		val lineEndExclusive = min(end, layout.getLineEnd(line, visibleEnd = true))
-		if (lineStart >= lineEndExclusive) continue
-		val left = layout.getHorizontalPosition(lineStart, usePrimaryDirection = true)
-		val right = layout.getHorizontalPosition(
-			offset = (lineEndExclusive - 1).coerceAtLeast(lineStart),
-			usePrimaryDirection = true,
-		).let { position ->
-			val box = layout.getBoundingBox((lineEndExclusive - 1).coerceAtLeast(lineStart))
-			max(position, box.right)
-		}
-		val y = layout.getLineBottom(line) - 2f
-		drawLine(
-			color = color,
-			start = Offset(left, y),
-			end = Offset(right, y),
-			strokeWidth = 2f,
-			pathEffect = dashEffect,
-		)
-	}
+    if (start >= end) return
+    val firstLine = layout.getLineForOffset(start)
+    val lastLine = layout.getLineForOffset(end - 1)
+    for (line in firstLine..lastLine) {
+        val lineStart = max(start, layout.getLineStart(line))
+        val lineEndExclusive = min(end, layout.getLineEnd(line, visibleEnd = true))
+        if (lineStart >= lineEndExclusive) continue
+        val left = layout.getHorizontalPosition(lineStart, usePrimaryDirection = true)
+        val right = layout.getHorizontalPosition(
+            offset = (lineEndExclusive - 1).coerceAtLeast(lineStart),
+            usePrimaryDirection = true,
+        ).let { position ->
+            val box = layout.getBoundingBox((lineEndExclusive - 1).coerceAtLeast(lineStart))
+            max(position, box.right)
+        }
+        val y = layout.getLineBottom(line) - 2f
+        drawLine(
+            color = color,
+            start = Offset(left, y),
+            end = Offset(right, y),
+            strokeWidth = 2f,
+            pathEffect = dashEffect,
+        )
+    }
 }
 
 @Preview(showBackground = true)
 @Composable
 private fun LookupReadingTextPreview() {
-	WuiTheme {
-		LookupReadingText(
-			segments = listOf(
-				LookupTextSegment(text = "Once ", lookupId = null),
-				LookupTextSegment(text = "upon", lookupId = "upon"),
-				LookupTextSegment(text = " a time", lookupId = null),
-			),
-			onSelectWord = {},
-			modifier = Modifier.padding(16.dp),
-		)
-	}
+    WuiTheme {
+        LookupReadingText(
+            segments = listOf(
+                LookupTextSegment(text = "Once ", lookupId = null),
+                LookupTextSegment(text = "upon", lookupId = "upon"),
+                LookupTextSegment(text = " a time", lookupId = null),
+            ),
+            onSelectWord = {},
+            modifier = Modifier.padding(16.dp),
+        )
+    }
 }
