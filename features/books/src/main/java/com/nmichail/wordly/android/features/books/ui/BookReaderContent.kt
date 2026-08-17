@@ -39,8 +39,8 @@ fun BookReaderContent(
         BookReaderStore.State.Loading -> {
             Box(
                 modifier = modifier
-					.fillMaxSize()
-					.background(MaterialTheme.colorScheme.background),
+                    .fillMaxSize()
+                    .background(MaterialTheme.colorScheme.background),
                 contentAlignment = Alignment.Center,
             ) {
                 CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
@@ -78,9 +78,9 @@ private fun BookReaderError(
 ) {
     Column(
         modifier = modifier
-			.background(MaterialTheme.colorScheme.background)
-			.statusBarsPadding()
-			.padding(horizontal = 24.dp),
+            .background(MaterialTheme.colorScheme.background)
+            .statusBarsPadding()
+            .padding(horizontal = 24.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
@@ -101,8 +101,8 @@ private fun BookReaderError(
             text = stringResource(R.string.book_reader_retry),
             onClick = onRetryClick,
             modifier = Modifier
-				.fillMaxWidth()
-				.padding(top = 24.dp),
+                .fillMaxWidth()
+                .padding(top = 24.dp),
         )
         WuiTextLink(
             text = stringResource(R.string.book_reader_close),

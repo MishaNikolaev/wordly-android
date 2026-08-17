@@ -6,29 +6,29 @@ import com.nmichail.wordly.android.features.books.domain.entity.BookWordDefiniti
 
 interface BookReaderComponent {
 
-	val model: Value<BookReaderStore.State>
+    val model: Value<BookReaderStore.State>
 
-	fun handleClose()
+    fun handleClose()
 
-	fun handleRetry()
+    fun handleRetry()
 
-	fun handleToggleTranslate()
+    fun handleToggleTranslate()
 
-	fun handleSelectWord(wordId: String)
+    fun handleSelectWord(wordId: String)
 
-	fun handleDismissWordDialog()
+    fun handleDismissWordDialog()
 
-	fun handleAddWordToCard()
+    fun handleAddWordToCard()
 
-	fun handleDismissWordAddedDialog()
+    fun handleDismissWordAddedDialog()
 
-	fun interface Factory {
+    fun interface Factory {
 
-		operator fun invoke(
-			componentContext: ComponentContext,
-			bookId: String,
-			bookReaderRouter: BookReaderRouter,
-			onAddWordToCard: (BookWordDefinition) -> Unit,
-		): BookReaderComponent
-	}
+        operator fun invoke(
+            componentContext: ComponentContext,
+            bookId: String,
+            bookReaderRouter: BookReaderRouter,
+            onAddWordToCard: (BookWordDefinition) -> Unit,
+        ): BookReaderComponent
+    }
 }

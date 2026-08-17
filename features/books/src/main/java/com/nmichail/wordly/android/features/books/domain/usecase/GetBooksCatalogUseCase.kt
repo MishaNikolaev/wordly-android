@@ -5,5 +5,5 @@ import com.nmichail.wordly.android.features.books.domain.repository.BooksReposit
 import javax.inject.Inject
 
 class GetBooksCatalogUseCase @Inject constructor(
-	booksRepository: BooksRepository,
+    booksRepository: BooksRepository,
 ) : suspend () -> BooksCatalog by booksRepository::getCatalog

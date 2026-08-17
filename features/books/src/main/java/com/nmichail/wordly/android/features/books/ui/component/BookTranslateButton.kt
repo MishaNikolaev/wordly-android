@@ -24,20 +24,20 @@ import com.nmichail.wordly.android.component.wui.theme.WuiTheme
 
 @Composable
 fun BookTranslateButton(
-	translating: Boolean,
-	translated: Boolean,
-	contentDescription: String,
-	onClick: () -> Unit,
-	modifier: Modifier = Modifier,
+    translating: Boolean,
+    translated: Boolean,
+    contentDescription: String,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-	val colorScheme = MaterialTheme.colorScheme
-	val (background, iconTint) = when {
-		translated -> colorScheme.primary to colorScheme.onPrimary
-		else -> colorScheme.surfaceVariant to colorScheme.onBackground
-	}
+    val colorScheme = MaterialTheme.colorScheme
+    val (background, iconTint) = when {
+        translated -> colorScheme.primary to colorScheme.onPrimary
+        else -> colorScheme.surfaceVariant to colorScheme.onBackground
+    }
 
-	Box(
-		modifier = modifier
+    Box(
+        modifier = modifier
 			.size(40.dp)
 			.clip(RoundedCornerShape(12.dp))
 			.background(background)
@@ -46,51 +46,51 @@ fun BookTranslateButton(
 				role = Role.Button,
 				onClick = onClick,
 			),
-		contentAlignment = Alignment.Center,
-	) {
-		if (translating) {
-			CircularProgressIndicator(
-				modifier = Modifier.size(22.dp),
-				color = colorScheme.primary,
-				strokeWidth = 2.dp,
-			)
-		} else {
-			Icon(
-				painter = painterResource(R.drawable.paragraph),
-				contentDescription = contentDescription,
-				tint = iconTint,
-				modifier = Modifier.size(17.dp),
-			)
-		}
-	}
+        contentAlignment = Alignment.Center,
+    ) {
+        if (translating) {
+            CircularProgressIndicator(
+                modifier = Modifier.size(22.dp),
+                color = colorScheme.primary,
+                strokeWidth = 2.dp,
+            )
+        } else {
+            Icon(
+                painter = painterResource(R.drawable.paragraph),
+                contentDescription = contentDescription,
+                tint = iconTint,
+                modifier = Modifier.size(17.dp),
+            )
+        }
+    }
 }
 
 @Preview(showBackground = true)
 @Composable
 private fun BookTranslateButtonPreview() {
-	WuiTheme {
-		Row(
-			modifier = Modifier.padding(16.dp),
-			horizontalArrangement = Arrangement.spacedBy(12.dp),
-		) {
-			BookTranslateButton(
-				translating = false,
-				translated = false,
-				contentDescription = "Translate",
-				onClick = {},
-			)
-			BookTranslateButton(
-				translating = true,
-				translated = false,
-				contentDescription = "Translating",
-				onClick = {},
-			)
-			BookTranslateButton(
-				translating = false,
-				translated = true,
-				contentDescription = "Hide translation",
-				onClick = {},
-			)
-		}
-	}
+    WuiTheme {
+        Row(
+            modifier = Modifier.padding(16.dp),
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+        ) {
+            BookTranslateButton(
+                translating = false,
+                translated = false,
+                contentDescription = "Translate",
+                onClick = {},
+            )
+            BookTranslateButton(
+                translating = true,
+                translated = false,
+                contentDescription = "Translating",
+                onClick = {},
+            )
+            BookTranslateButton(
+                translating = false,
+                translated = true,
+                contentDescription = "Hide translation",
+                onClick = {},
+            )
+        }
+    }
 }

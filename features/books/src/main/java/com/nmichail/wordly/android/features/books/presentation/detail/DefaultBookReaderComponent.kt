@@ -10,58 +10,58 @@ import com.nmichail.wordly.android.core.navigation.asValue
 import com.nmichail.wordly.android.features.books.domain.entity.BookWordDefinition
 
 internal class DefaultBookReaderComponent(
-	componentContext: ComponentContext,
-	bookId: String,
-	bookReaderStoreFactory: BookReaderStoreFactory,
-	private val bookReaderRouter: BookReaderRouter,
-	private val onAddWordToCard: (BookWordDefinition) -> Unit,
+    componentContext: ComponentContext,
+    bookId: String,
+    bookReaderStoreFactory: BookReaderStoreFactory,
+    private val bookReaderRouter: BookReaderRouter,
+    private val onAddWordToCard: (BookWordDefinition) -> Unit,
 ) : ComponentContext by componentContext,
-	BookReaderComponent {
+    BookReaderComponent {
 
-	private val store: BookReaderStore = instanceKeeper.getStore {
-		bookReaderStoreFactory.create(bookId = bookId)
-	}
+    private val store: BookReaderStore = instanceKeeper.getStore {
+        bookReaderStoreFactory.create(bookId = bookId)
+    }
 
-	override val model: Value<BookReaderStore.State> = store.asValue()
+    override val model: Value<BookReaderStore.State> = store.asValue()
 
-	init {
-		componentScope().launch {
-			for (label in store.labelsChannel(lifecycle)) {
-				when (label) {
-					BookReaderStore.Label.Close -> bookReaderRouter.navigateBack()
-					is BookReaderStore.Label.AddWordToCard -> {
-						onAddWordToCard(label.definition)
-					}
-				}
-			}
-		}
-	}
+    init {
+        componentScope().launch {
+            for (label in store.labelsChannel(lifecycle)) {
+                when (label) {
+                    BookReaderStore.Label.Close -> bookReaderRouter.navigateBack()
+                    is BookReaderStore.Label.AddWordToCard -> {
+                        onAddWordToCard(label.definition)
+                    }
+                }
+            }
+        }
+    }
 
-	override fun handleClose() {
-		store.accept(BookReaderStore.Intent.Close)
-	}
+    override fun handleClose() {
+        store.accept(BookReaderStore.Intent.Close)
+    }
 
-	override fun handleRetry() {
-		store.accept(BookReaderStore.Intent.Retry)
-	}
+    override fun handleRetry() {
+        store.accept(BookReaderStore.Intent.Retry)
+    }
 
-	override fun handleToggleTranslate() {
-		store.accept(BookReaderStore.Intent.ToggleTranslate)
-	}
+    override fun handleToggleTranslate() {
+        store.accept(BookReaderStore.Intent.ToggleTranslate)
+    }
 
-	override fun handleSelectWord(wordId: String) {
-		store.accept(BookReaderStore.Intent.SelectWord(wordId = wordId))
-	}
+    override fun handleSelectWord(wordId: String) {
+        store.accept(BookReaderStore.Intent.SelectWord(wordId = wordId))
+    }
 
-	override fun handleDismissWordDialog() {
-		store.accept(BookReaderStore.Intent.DismissWordDialog)
-	}
+    override fun handleDismissWordDialog() {
+        store.accept(BookReaderStore.Intent.DismissWordDialog)
+    }
 
-	override fun handleAddWordToCard() {
-		store.accept(BookReaderStore.Intent.AddWordToCard)
-	}
+    override fun handleAddWordToCard() {
+        store.accept(BookReaderStore.Intent.AddWordToCard)
+    }
 
-	override fun handleDismissWordAddedDialog() {
-		store.accept(BookReaderStore.Intent.DismissWordAddedDialog)
-	}
+    override fun handleDismissWordAddedDialog() {
+        store.accept(BookReaderStore.Intent.DismissWordAddedDialog)
+    }
 }

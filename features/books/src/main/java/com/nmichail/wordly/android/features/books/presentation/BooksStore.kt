@@ -6,43 +6,43 @@ import com.nmichail.wordly.android.features.books.domain.entity.BooksLevelBanner
 import com.nmichail.wordly.android.features.books.domain.entity.BooksSection
 
 interface BooksStore :
-	Store<BooksStore.Intent, BooksStore.State, BooksStore.Label> {
+    Store<BooksStore.Intent, BooksStore.State, BooksStore.Label> {
 
-	sealed interface State {
+    sealed interface State {
 
-		data object Initial : State
+        data object Initial : State
 
-		data object Loading : State
+        data object Loading : State
 
-		data class Content(
-			val title: String,
-			val searchQuery: String,
-			val searchPlaceholder: String,
-			val levelBanner: BooksLevelBanner?,
-			val allSections: List<BooksSection>,
-			val sections: List<BooksSection>,
-		) : State
+        data class Content(
+            val title: String,
+            val searchQuery: String,
+            val searchPlaceholder: String,
+            val levelBanner: BooksLevelBanner?,
+            val allSections: List<BooksSection>,
+            val sections: List<BooksSection>,
+        ) : State
 
-		data object Error : State
-	}
+        data object Error : State
+    }
 
-	sealed interface Label {
+    sealed interface Label {
 
-		data object Close : Label
+        data object Close : Label
 
-		data class OpenBook(val book: BooksItem) : Label
-	}
+        data class OpenBook(val book: BooksItem) : Label
+    }
 
-	sealed interface Intent {
+    sealed interface Intent {
 
-		data object Back : Intent
+        data object Back : Intent
 
-		data object Retry : Intent
+        data object Retry : Intent
 
-		data class ChangeSearchQuery(val query: String) : Intent
+        data class ChangeSearchQuery(val query: String) : Intent
 
-		data class ChangeLevel(val level: String) : Intent
+        data class ChangeLevel(val level: String) : Intent
 
-		data class SelectBook(val bookId: String) : Intent
-	}
+        data class SelectBook(val bookId: String) : Intent
+    }
 }

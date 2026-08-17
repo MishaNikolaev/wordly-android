@@ -16,53 +16,54 @@ import com.nmichail.wordly.android.features.books.domain.entity.BookTranslation
 
 @Composable
 internal fun BookReaderParagraph(
-	paragraph: BookParagraph,
-	translatedText: String?,
-	showTranslation: Boolean,
-	onSelectWord: (String) -> Unit,
-	modifier: Modifier = Modifier,
+    paragraph: BookParagraph,
+    translatedText: String?,
+    showTranslation: Boolean,
+    onSelectWord: (String) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-	if (showTranslation && !translatedText.isNullOrBlank()) {
-		Text(
-			text = translatedText,
-			style = WuiTypography.bookReaderBody,
-			color = MaterialTheme.colorScheme.onBackground,
-			modifier = modifier.fillMaxWidth(),
-		)
-	} else {
-		val segments = remember(paragraph.segments) {
-			paragraph.segments.toLookupSegments()
-		}
-		LookupReadingText(
-			segments = segments,
-			onSelectWord = onSelectWord,
-			modifier = modifier,
-		)
-	}
+    if (showTranslation && !translatedText.isNullOrBlank()) {
+        Text(
+            text = translatedText,
+            style = WuiTypography.bookReaderBody,
+            color = MaterialTheme.colorScheme.onBackground,
+            modifier = modifier.fillMaxWidth(),
+        )
+    } else {
+        val segments = remember(paragraph.segments) {
+            paragraph.segments.toLookupSegments()
+        }
+        LookupReadingText(
+            segments = segments,
+            onSelectWord = onSelectWord,
+            modifier = modifier,
+        )
+    }
 }
 
 private fun List<BookTextSegment>.toLookupSegments(): List<LookupTextSegment> =
-	mapNotNull { segment ->
-		when (segment.type) {
-			BookTextSegmentType.TEXT -> LookupTextSegment(
-				text = segment.text,
-				lookupId = null,
-			)
-			BookTextSegmentType.LOOKUP_WORD -> {
-				val wordId = segment.id ?: return@mapNotNull null
-				LookupTextSegment(
-					text = segment.text,
-					lookupId = wordId,
-				)
-			}
-		}
-	}
+    mapNotNull { segment ->
+        when (segment.type) {
+            BookTextSegmentType.TEXT -> LookupTextSegment(
+                text = segment.text,
+                lookupId = null,
+            )
+
+            BookTextSegmentType.LOOKUP_WORD -> {
+                val wordId = segment.id ?: return@mapNotNull null
+                LookupTextSegment(
+                    text = segment.text,
+                    lookupId = wordId,
+                )
+            }
+        }
+    }
 
 internal fun translationFor(
-	translation: BookTranslation?,
-	paragraphId: String,
+    translation: BookTranslation?,
+    paragraphId: String,
 ): String? =
-	translation
-		?.paragraphs
-		?.firstOrNull { it.id == paragraphId }
-		?.text
+    translation
+        ?.paragraphs
+        ?.firstOrNull { it.id == paragraphId }
+        ?.text

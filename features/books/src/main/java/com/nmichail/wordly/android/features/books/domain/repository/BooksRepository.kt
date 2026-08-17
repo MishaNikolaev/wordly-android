@@ -6,9 +6,9 @@ import com.nmichail.wordly.android.features.books.domain.entity.BooksCatalog
 
 interface BooksRepository {
 
-	suspend fun getCatalog(): BooksCatalog
+    suspend fun getCatalog(): BooksCatalog
 
-	suspend fun getBookContent(bookId: String): BookContent
+    suspend fun getBookContent(bookId: String): BookContent
 
-	suspend fun getBookTranslation(bookId: String): BookTranslation
+    suspend fun getBookTranslation(bookId: String): BookTranslation
 }

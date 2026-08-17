@@ -5,18 +5,18 @@ import com.nmichail.wordly.android.features.books.domain.entity.BooksItem
 import javax.inject.Inject
 
 internal class DefaultBooksComponentFactory @Inject constructor(
-	private val booksStoreFactory: BooksStoreFactory,
+    private val booksStoreFactory: BooksStoreFactory,
 ) : BooksComponent.Factory {
 
-	override fun invoke(
-		componentContext: ComponentContext,
-		booksRouter: BooksRouter,
-		onBookClick: (BooksItem) -> Unit,
-	): BooksComponent =
-		DefaultBooksComponent(
-			componentContext = componentContext,
-			booksStoreFactory = booksStoreFactory,
-			booksRouter = booksRouter,
-			onBookClick = onBookClick,
-		)
+    override fun invoke(
+        componentContext: ComponentContext,
+        booksRouter: BooksRouter,
+        onBookClick: (BooksItem) -> Unit,
+    ): BooksComponent =
+        DefaultBooksComponent(
+            componentContext = componentContext,
+            booksStoreFactory = booksStoreFactory,
+            booksRouter = booksRouter,
+            onBookClick = onBookClick,
+        )
 }

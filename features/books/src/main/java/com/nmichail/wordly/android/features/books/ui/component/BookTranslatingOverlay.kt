@@ -17,40 +17,40 @@ import com.nmichail.wordly.android.component.wui.theme.WuiTheme
 
 @Composable
 fun BookTranslatingOverlay(
-	message: String,
-	modifier: Modifier = Modifier,
+    message: String,
+    modifier: Modifier = Modifier,
 ) {
-	val colorScheme = MaterialTheme.colorScheme
+    val colorScheme = MaterialTheme.colorScheme
 
-	Box(
-		modifier = modifier.fillMaxSize(),
-		contentAlignment = Alignment.Center,
-	) {
-		Column(
-			horizontalAlignment = Alignment.CenterHorizontally,
-			verticalArrangement = Arrangement.spacedBy(14.dp),
-		) {
-			CircularProgressIndicator(
-				modifier = Modifier.size(34.dp),
-				color = colorScheme.primary,
-				trackColor = colorScheme.surfaceVariant,
-				strokeWidth = 3.dp,
-			)
-			Text(
-				text = message,
-				style = MaterialTheme.typography.labelMedium,
-				color = colorScheme.onSurfaceVariant,
-			)
-		}
-	}
+    Box(
+        modifier = modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center,
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(14.dp),
+        ) {
+            CircularProgressIndicator(
+                modifier = Modifier.size(34.dp),
+                color = colorScheme.primary,
+                trackColor = colorScheme.surfaceVariant,
+                strokeWidth = 3.dp,
+            )
+            Text(
+                text = message,
+                style = MaterialTheme.typography.labelMedium,
+                color = colorScheme.onSurfaceVariant,
+            )
+        }
+    }
 }
 
 @Preview(showBackground = true, heightDp = 240)
 @Composable
 private fun BookTranslatingOverlayPreview() {
-	WuiTheme {
-		Box(modifier = Modifier.fillMaxSize()) {
-			BookTranslatingOverlay(message = "Переводим…")
-		}
-	}
+    WuiTheme {
+        Box(modifier = Modifier.fillMaxSize()) {
+            BookTranslatingOverlay(message = "Переводим…")
+        }
+    }
 }

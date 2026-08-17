@@ -61,8 +61,8 @@ fun BooksContent(
         BooksStore.State.Loading -> {
             Box(
                 modifier = modifier
-					.fillMaxSize()
-					.background(MaterialTheme.colorScheme.background),
+                    .fillMaxSize()
+                    .background(MaterialTheme.colorScheme.background),
                 contentAlignment = Alignment.Center,
             ) {
                 CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
@@ -95,9 +95,9 @@ private fun BooksError(
 ) {
     Column(
         modifier = modifier
-			.background(MaterialTheme.colorScheme.background)
-			.statusBarsPadding()
-			.padding(horizontal = 24.dp),
+            .background(MaterialTheme.colorScheme.background)
+            .statusBarsPadding()
+            .padding(horizontal = 24.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
@@ -118,8 +118,8 @@ private fun BooksError(
             text = stringResource(R.string.books_retry),
             onClick = onRetryClick,
             modifier = Modifier
-				.fillMaxWidth()
-				.padding(top = 24.dp),
+                .fillMaxWidth()
+                .padding(top = 24.dp),
         )
         WuiTextLink(
             text = stringResource(R.string.books_back),
@@ -137,10 +137,10 @@ private fun BooksLoaded(
 ) {
     Column(
         modifier = modifier
-			.fillMaxSize()
-			.background(MaterialTheme.colorScheme.background)
-			.statusBarsPadding()
-			.navigationBarsPadding(),
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
+            .statusBarsPadding()
+            .navigationBarsPadding(),
     ) {
         BooksTopBar(
             title = state.title,
@@ -198,8 +198,8 @@ private fun BooksTopBar(
 ) {
     Row(
         modifier = modifier
-			.fillMaxWidth()
-			.padding(horizontal = 4.dp),
+            .fillMaxWidth()
+            .padding(horizontal = 4.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         IconButton(onClick = onBackClick) {
@@ -229,10 +229,10 @@ private fun BooksLevelBannerContent(
 
     Row(
         modifier = modifier
-			.fillMaxWidth()
-			.clip(MaterialTheme.shapes.extraLarge)
-			.background(colorScheme.primaryContainer)
-			.padding(horizontal = 16.dp, vertical = 14.dp),
+            .fillMaxWidth()
+            .clip(MaterialTheme.shapes.extraLarge)
+            .background(colorScheme.primaryContainer)
+            .padding(horizontal = 16.dp, vertical = 14.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(12.dp),
     ) {
@@ -263,10 +263,10 @@ private fun BooksLevelSelector(
     Box(modifier = modifier) {
         Row(
             modifier = Modifier
-				.clip(MaterialTheme.shapes.extraLarge)
-				.background(colorScheme.primary)
-				.clickable { expanded = true }
-				.padding(horizontal = 12.dp, vertical = 8.dp),
+                .clip(MaterialTheme.shapes.extraLarge)
+                .background(colorScheme.primary)
+                .clickable { expanded = true }
+                .padding(horizontal = 12.dp, vertical = 8.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(2.dp),
         ) {
