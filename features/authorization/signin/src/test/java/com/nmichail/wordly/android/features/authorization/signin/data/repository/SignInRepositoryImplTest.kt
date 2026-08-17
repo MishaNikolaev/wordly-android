@@ -15,40 +15,40 @@ import org.mockito.kotlin.whenever
 
 class SignInRepositoryImplTest {
 
-	private val signInApi: SignInApi = mock()
-	private val repository = SignInRepositoryImpl(signInApi)
+    private val signInApi: SignInApi = mock()
+    private val repository = SignInRepositoryImpl(signInApi)
 
-	private val email = "demo@wordly.app"
-	private val password = "12345678"
-	private val signInData = SignInData(
-		email = email,
-		password = password,
-	)
-	private val signInRequest = SignInRequest(
-		email = email,
-		password = password,
-	)
-	private val authTokensResponse = AuthTokensResponse(
-		accessToken = "mock-access-token",
-		refreshToken = "mock-refresh-token",
-	)
+    private val email = "demo@wordly.app"
+    private val password = "12345678"
+    private val signInData = SignInData(
+        email = email,
+        password = password,
+    )
+    private val signInRequest = SignInRequest(
+        email = email,
+        password = password,
+    )
+    private val authTokensResponse = AuthTokensResponse(
+        accessToken = "mock-access-token",
+        refreshToken = "mock-refresh-token",
+    )
 
-	@Test
-	fun `sign in EXPECT api method invocation`() = runTest {
-		whenever(signInApi.authorize(signInRequest)) doReturn authTokensResponse
+    @Test
+    fun `sign in EXPECT api method invocation`() = runTest {
+        whenever(signInApi.authorize(signInRequest)) doReturn authTokensResponse
 
-		repository.signIn(signInData)
+        repository.signIn(signInData)
 
-		verify(signInApi).authorize(signInRequest)
-	}
+        verify(signInApi).authorize(signInRequest)
+    }
 
-	@Test
-	fun `sign in EXPECT tokens`() = runTest {
-		whenever(signInApi.authorize(signInRequest)) doReturn authTokensResponse
-		val expected = authTokensResponse.toEntity()
+    @Test
+    fun `sign in EXPECT tokens`() = runTest {
+        whenever(signInApi.authorize(signInRequest)) doReturn authTokensResponse
+        val expected = authTokensResponse.toEntity()
 
-		val actual = repository.signIn(signInData)
+        val actual = repository.signIn(signInData)
 
-		assertEquals(expected, actual)
-	}
+        assertEquals(expected, actual)
+    }
 }

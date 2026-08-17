@@ -82,8 +82,8 @@ fun SignInContent(
                             component = component,
                             devEnabled = devEnabled,
                             modifier = Modifier
-								.padding(horizontal = 20.dp)
-								.padding(top = 28.dp, bottom = 32.dp),
+                                .padding(horizontal = 20.dp)
+                                .padding(top = 28.dp, bottom = 32.dp),
                         )
                     },
                 )
@@ -99,8 +99,8 @@ private fun SignInError(
 ) {
     Column(
         modifier = modifier
-			.background(MaterialTheme.colorScheme.background)
-			.padding(horizontal = 24.dp),
+            .background(MaterialTheme.colorScheme.background)
+            .padding(horizontal = 24.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
@@ -179,8 +179,8 @@ private fun SignInForm(
             onClick = component::handleNavigateToSignUp,
             enabled = !state.submitting,
             modifier = Modifier
-				.fillMaxWidth()
-				.padding(top = 12.dp),
+                .fillMaxWidth()
+                .padding(top = 12.dp),
         )
     }
 }

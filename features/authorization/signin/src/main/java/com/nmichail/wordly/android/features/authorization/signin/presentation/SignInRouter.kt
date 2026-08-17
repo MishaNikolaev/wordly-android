@@ -2,9 +2,9 @@ package com.nmichail.wordly.android.features.authorization.signin.presentation
 
 interface SignInRouter {
 
-	fun navigateToSignUp()
+    fun navigateToSignUp()
 
-	fun navigateToMain()
+    fun navigateToMain()
 
-	fun navigateToNetworkSelection()
+    fun navigateToNetworkSelection()
 }

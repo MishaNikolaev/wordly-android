@@ -7,6 +7,6 @@ import retrofit2.http.POST
 
 interface SignInApi {
 
-	@POST("/api/gateway/authorization")
-	suspend fun authorize(@Body body: SignInRequest): AuthTokensResponse
+    @POST("/api/gateway/authorization")
+    suspend fun authorize(@Body body: SignInRequest): AuthTokensResponse
 }

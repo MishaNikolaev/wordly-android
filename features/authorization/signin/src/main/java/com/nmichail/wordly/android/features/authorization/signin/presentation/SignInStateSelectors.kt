@@ -4,4 +4,4 @@ import com.nmichail.wordly.android.core.validation.email.isValid
 import com.nmichail.wordly.android.core.validation.password.isValid
 
 internal fun SignInStore.State.Content.areFieldsValid(): Boolean =
-	email.isValid() && password.isValid()
+    email.isValid() && password.isValid()

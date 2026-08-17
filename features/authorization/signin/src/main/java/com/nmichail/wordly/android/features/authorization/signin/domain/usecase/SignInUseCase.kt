@@ -6,5 +6,5 @@ import com.nmichail.wordly.android.features.authorization.signin.domain.reposito
 import javax.inject.Inject
 
 class SignInUseCase @Inject constructor(
-	signInRepository: SignInRepository,
+    signInRepository: SignInRepository,
 ) : suspend (SignInData) -> AuthTokens by signInRepository::signIn

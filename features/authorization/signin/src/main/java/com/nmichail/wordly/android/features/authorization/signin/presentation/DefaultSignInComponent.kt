@@ -10,55 +10,55 @@ import com.nmichail.wordly.android.core.navigation.asValue
 import kotlinx.coroutines.channels.ReceiveChannel
 
 internal class DefaultSignInComponent(
-	componentContext: ComponentContext,
-	private val signInStoreFactory: SignInStoreFactory,
-	private val signInRouter: SignInRouter,
+    componentContext: ComponentContext,
+    private val signInStoreFactory: SignInStoreFactory,
+    private val signInRouter: SignInRouter,
 ) : ComponentContext by componentContext,
-	SignInComponent {
+    SignInComponent {
 
-	private val store: SignInStore = instanceKeeper.getStore {
-		signInStoreFactory.create()
-	}
+    private val store: SignInStore = instanceKeeper.getStore {
+        signInStoreFactory.create()
+    }
 
-	override val model: Value<SignInStore.State> = store.asValue()
+    override val model: Value<SignInStore.State> = store.asValue()
 
-	override fun labelsChannel(): ReceiveChannel<SignInStore.Label> =
-		store.labelsChannel(lifecycle)
+    override fun labelsChannel(): ReceiveChannel<SignInStore.Label> =
+        store.labelsChannel(lifecycle)
 
-	init {
-		componentScope().launch {
-			for (label in store.labelsChannel(lifecycle)) {
-				when (label) {
-					SignInStore.Label.OpenSignUp -> signInRouter.navigateToSignUp()
-					SignInStore.Label.OpenMainHost -> signInRouter.navigateToMain()
-				}
-			}
-		}
-	}
+    init {
+        componentScope().launch {
+            for (label in store.labelsChannel(lifecycle)) {
+                when (label) {
+                    SignInStore.Label.OpenSignUp -> signInRouter.navigateToSignUp()
+                    SignInStore.Label.OpenMainHost -> signInRouter.navigateToMain()
+                }
+            }
+        }
+    }
 
-	override fun handleChangeEmail(email: String) {
-		store.accept(SignInStore.Intent.ChangeEmail(email = email))
-	}
+    override fun handleChangeEmail(email: String) {
+        store.accept(SignInStore.Intent.ChangeEmail(email = email))
+    }
 
-	override fun handleChangePassword(password: String) {
-		store.accept(SignInStore.Intent.ChangePassword(password = password))
-	}
+    override fun handleChangePassword(password: String) {
+        store.accept(SignInStore.Intent.ChangePassword(password = password))
+    }
 
-	override fun handleSubmit() {
-		store.accept(SignInStore.Intent.Submit)
-	}
+    override fun handleSubmit() {
+        store.accept(SignInStore.Intent.Submit)
+    }
 
-	override fun handleNavigateToSignUp() {
-		store.accept(SignInStore.Intent.NavigateToSignUp)
-	}
+    override fun handleNavigateToSignUp() {
+        store.accept(SignInStore.Intent.NavigateToSignUp)
+    }
 
-	override fun handleNavigateToNetworkSelection() {
-		val content = store.state as? SignInStore.State.Content ?: return
-		if (content.submitting) return
-		signInRouter.navigateToNetworkSelection()
-	}
+    override fun handleNavigateToNetworkSelection() {
+        val content = store.state as? SignInStore.State.Content ?: return
+        if (content.submitting) return
+        signInRouter.navigateToNetworkSelection()
+    }
 
-	override fun handleRetry() {
-		store.accept(SignInStore.Intent.Retry)
-	}
+    override fun handleRetry() {
+        store.accept(SignInStore.Intent.Retry)
+    }
 }

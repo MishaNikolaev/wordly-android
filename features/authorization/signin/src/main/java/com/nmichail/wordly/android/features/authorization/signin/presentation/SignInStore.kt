@@ -5,40 +5,40 @@ import com.nmichail.wordly.android.core.validation.email.EmailValidationItem
 import com.nmichail.wordly.android.core.validation.password.PasswordValidationItem
 
 interface SignInStore :
-	Store<SignInStore.Intent, SignInStore.State, SignInStore.Label> {
+    Store<SignInStore.Intent, SignInStore.State, SignInStore.Label> {
 
-	sealed interface State {
+    sealed interface State {
 
-		data object Initial : State
+        data object Initial : State
 
-		data object Loading : State
+        data object Loading : State
 
-		data class Content(
-			val email: EmailValidationItem,
-			val password: PasswordValidationItem,
-			val submitting: Boolean,
-		) : State
+        data class Content(
+            val email: EmailValidationItem,
+            val password: PasswordValidationItem,
+            val submitting: Boolean,
+        ) : State
 
-		data class Error(val content: Content) : State
-	}
+        data class Error(val content: Content) : State
+    }
 
-	sealed interface Label {
+    sealed interface Label {
 
-		data object OpenSignUp : Label
+        data object OpenSignUp : Label
 
-		data object OpenMainHost : Label
-	}
+        data object OpenMainHost : Label
+    }
 
-	sealed interface Intent {
+    sealed interface Intent {
 
-		data class ChangeEmail(val email: String) : Intent
+        data class ChangeEmail(val email: String) : Intent
 
-		data class ChangePassword(val password: String) : Intent
+        data class ChangePassword(val password: String) : Intent
 
-		data object Submit : Intent
+        data object Submit : Intent
 
-		data object NavigateToSignUp : Intent
+        data object NavigateToSignUp : Intent
 
-		data object Retry : Intent
-	}
+        data object Retry : Intent
+    }
 }
