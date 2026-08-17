@@ -4,7 +4,7 @@ import com.arkivanov.decompose.ComponentContext
 import com.nmichail.wordly.android.features.books.presentation.BooksComponent
 import com.nmichail.wordly.android.features.books.presentation.detail.BookReaderComponent
 import com.nmichail.wordly.android.features.cards.presentation.CardsComponent
-import com.nmichail.wordly.android.features.cards.presentation.detail.CardPracticeComponent
+import com.nmichail.wordly.android.features.cards.training.presentation.CardPracticeComponent
 import com.nmichail.wordly.android.features.constructor.presentation.ConstructorComponent
 import com.nmichail.wordly.android.features.constructor.practice.presentation.ConstructorPracticeComponent
 import com.nmichail.wordly.android.features.home.presentation.HomeComponent

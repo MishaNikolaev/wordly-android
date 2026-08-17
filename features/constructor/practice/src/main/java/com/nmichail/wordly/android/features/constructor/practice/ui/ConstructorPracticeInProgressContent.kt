@@ -73,10 +73,10 @@ internal fun ConstructorPracticeInProgressContent(
 
     Column(
         modifier = modifier
-			.fillMaxSize()
-			.background(MaterialTheme.colorScheme.background)
-			.statusBarsPadding()
-			.navigationBarsPadding(),
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
+            .statusBarsPadding()
+            .navigationBarsPadding(),
     ) {
         ConstructorPracticeTopBar(
             currentIndex = state.currentIndex + 1,
@@ -92,8 +92,8 @@ internal fun ConstructorPracticeInProgressContent(
                 .joinToString(" "),
             component = component,
             modifier = Modifier
-				.weight(1f)
-				.fillMaxWidth(),
+                .weight(1f)
+                .fillMaxWidth(),
         )
         ConstructorPracticeBottomAction(
             answerRevealed = state.checkResult != null,
@@ -115,9 +115,9 @@ private fun ConstructorPracticeScrollBody(
 ) {
     Column(
         modifier = modifier
-			.verticalScroll(rememberScrollState())
-			.padding(horizontal = 18.dp)
-			.padding(top = 18.dp, bottom = 12.dp),
+            .verticalScroll(rememberScrollState())
+            .padding(horizontal = 18.dp)
+            .padding(top = 18.dp, bottom = 12.dp),
     ) {
         ConstructorPracticeQuestion(
             themeTitle = state.session.themeTitle,
@@ -194,18 +194,18 @@ private fun ConstructorPracticeTopBar(
     val colorScheme = MaterialTheme.colorScheme
     Row(
         modifier = Modifier
-			.fillMaxWidth()
-			.background(colorScheme.surface)
-			.padding(horizontal = 16.dp, vertical = 10.dp),
+            .fillMaxWidth()
+            .background(colorScheme.surface)
+            .padding(horizontal = 16.dp, vertical = 10.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(14.dp),
     ) {
         Box(
             modifier = Modifier
-				.size(40.dp)
-				.clip(RoundedCornerShape(12.dp))
-				.background(colorScheme.surfaceVariant)
-				.clickable(onClick = onCloseClick),
+                .size(40.dp)
+                .clip(RoundedCornerShape(12.dp))
+                .background(colorScheme.surfaceVariant)
+                .clickable(onClick = onCloseClick),
             contentAlignment = Alignment.Center,
         ) {
             Icon(
@@ -218,9 +218,9 @@ private fun ConstructorPracticeTopBar(
         LinearProgressIndicator(
             progress = { currentIndex.toFloat() / totalCount.toFloat() },
             modifier = Modifier
-				.weight(1f)
-				.height(8.dp)
-				.clip(RoundedCornerShape(percent = 50)),
+                .weight(1f)
+                .height(8.dp)
+                .clip(RoundedCornerShape(percent = 50)),
             color = colorScheme.onSurfaceVariant.copy(alpha = 0.45f),
             trackColor = colorScheme.surfaceVariant,
             strokeCap = StrokeCap.Round,
@@ -264,8 +264,8 @@ private fun ConstructorAnswerWords(
 
     FlowRow(
         modifier = Modifier
-			.fillMaxWidth()
-			.onSizeChanged { rowWidthPx = it.width.coerceAtLeast(1) },
+            .fillMaxWidth()
+            .onSizeChanged { rowWidthPx = it.width.coerceAtLeast(1) },
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
@@ -335,33 +335,33 @@ private fun ConstructorAnswerWordChip(
             null
         },
         modifier = Modifier
-			.zIndex(if (isDragging) 1f else 0f)
-			.graphicsLayer {
-				if (isDragging) {
-					translationX = dragOffsetX
-					translationY = dragOffsetY
-					scaleX = DRAG_CHIP_SCALE
-					scaleY = DRAG_CHIP_SCALE
-					alpha = DRAG_CHIP_ALPHA
-				}
-			}
-			.then(
-				if (enabled) {
-					Modifier.pointerInput(index) {
-						detectDragGesturesAfterLongPress(
-							onDragStart = { onDragStart() },
-							onDragCancel = onDragCancel,
-							onDragEnd = onDragEnd,
-							onDrag = { change, dragAmount ->
-								change.consume()
-								onDrag(dragAmount.x, dragAmount.y)
-							},
-						)
-					}
-				} else {
-					Modifier
-				},
-			),
+            .zIndex(if (isDragging) 1f else 0f)
+            .graphicsLayer {
+                if (isDragging) {
+                    translationX = dragOffsetX
+                    translationY = dragOffsetY
+                    scaleX = DRAG_CHIP_SCALE
+                    scaleY = DRAG_CHIP_SCALE
+                    alpha = DRAG_CHIP_ALPHA
+                }
+            }
+            .then(
+                if (enabled) {
+                    Modifier.pointerInput(index) {
+                        detectDragGesturesAfterLongPress(
+                            onDragStart = { onDragStart() },
+                            onDragCancel = onDragCancel,
+                            onDragEnd = onDragEnd,
+                            onDrag = { change, dragAmount ->
+                                change.consume()
+                                onDrag(dragAmount.x, dragAmount.y)
+                            },
+                        )
+                    }
+                } else {
+                    Modifier
+                },
+            ),
     )
 }
 
@@ -408,8 +408,8 @@ private fun ConstructorPracticeBottomAction(
         onClick = if (answerRevealed) onContinueClick else onCheckClick,
         enabled = answerRevealed || canCheck,
         modifier = Modifier
-			.fillMaxWidth()
-			.padding(horizontal = 18.dp)
-			.padding(top = 8.dp, bottom = 8.dp),
+            .fillMaxWidth()
+            .padding(horizontal = 18.dp)
+            .padding(top = 8.dp, bottom = 8.dp),
     )
 }

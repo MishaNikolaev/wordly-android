@@ -4,6 +4,7 @@ import com.nmichail.wordly.android.features.authorization.signin.di.SignInModule
 import com.nmichail.wordly.android.features.authorization.signup.di.SignUpModule
 import com.nmichail.wordly.android.features.books.di.BooksModule
 import com.nmichail.wordly.android.features.cards.di.CardsModule
+import com.nmichail.wordly.android.features.cards.training.di.CardPracticeModule
 import com.nmichail.wordly.android.features.constructor.di.ConstructorModule
 import com.nmichail.wordly.android.features.constructor.practice.di.ConstructorPracticeModule
 import com.nmichail.wordly.android.features.dev.networkselection.di.NetworkSelectionModule
@@ -23,6 +24,7 @@ import dagger.Module
 		HomeModule::class,
 		ReviewModule::class,
 		CardsModule::class,
+		CardPracticeModule::class,
 		ConstructorModule::class,
 		ConstructorPracticeModule::class,
 		BooksModule::class,

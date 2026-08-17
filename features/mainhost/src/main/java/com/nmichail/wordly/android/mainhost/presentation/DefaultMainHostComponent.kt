@@ -15,8 +15,8 @@ import com.nmichail.wordly.android.features.books.presentation.detail.BookReader
 import com.nmichail.wordly.android.features.books.presentation.detail.BookReaderRouter
 import com.nmichail.wordly.android.features.cards.presentation.CardsComponent
 import com.nmichail.wordly.android.features.cards.presentation.CardsRouter
-import com.nmichail.wordly.android.features.cards.presentation.detail.CardPracticeComponent
-import com.nmichail.wordly.android.features.cards.presentation.detail.CardPracticeRouter
+import com.nmichail.wordly.android.features.cards.training.presentation.CardPracticeComponent
+import com.nmichail.wordly.android.features.cards.training.presentation.CardPracticeRouter
 import com.nmichail.wordly.android.features.constructor.presentation.ConstructorComponent
 import com.nmichail.wordly.android.features.constructor.presentation.ConstructorRouter
 import com.nmichail.wordly.android.features.constructor.practice.presentation.ConstructorPracticeComponent

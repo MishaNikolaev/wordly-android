@@ -42,19 +42,19 @@ fun ConstructorAnswerBoard(
 
     Box(
         modifier = modifier
-			.fillMaxWidth()
-			.heightIn(min = 96.dp)
-			.clip(shape)
-			.background(background)
-			.drawBehind {
-				drawRoundRect(
-					color = borderColor,
-					style = Stroke(width = 2.dp.toPx(), pathEffect = dash),
-					cornerRadius = CornerRadius(16.dp.toPx()),
-				)
-			}
-			.border(0.dp, Color.Transparent, shape)
-			.padding(14.dp),
+            .fillMaxWidth()
+            .heightIn(min = 96.dp)
+            .clip(shape)
+            .background(background)
+            .drawBehind {
+                drawRoundRect(
+                    color = borderColor,
+                    style = Stroke(width = 2.dp.toPx(), pathEffect = dash),
+                    cornerRadius = CornerRadius(16.dp.toPx()),
+                )
+            }
+            .border(0.dp, Color.Transparent, shape)
+            .padding(14.dp),
     ) {
         content()
     }

@@ -62,11 +62,11 @@ fun ConstructorWordChip(
         ),
         color = contentColor,
         modifier = modifier
-			.clip(shape)
-			.background(background)
-			.border(width = 1.dp, color = borderColor, shape = shape)
-			.then(clickableModifier)
-			.padding(horizontal = 14.dp, vertical = 10.dp),
+            .clip(shape)
+            .background(background)
+            .border(width = 1.dp, color = borderColor, shape = shape)
+            .then(clickableModifier)
+            .padding(horizontal = 14.dp, vertical = 10.dp),
     )
 }
 
