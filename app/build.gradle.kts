@@ -38,6 +38,7 @@ dependencies {
 	implementation(projects.core.preferences)
 	implementation(projects.core.fakenetwork)
 	implementation(projects.core.validation)
+	implementation(projects.shared.englishlevel)
 	implementation(projects.shared.error)
 
 	implementation(libs.decompose)

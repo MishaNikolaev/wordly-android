@@ -23,6 +23,7 @@ include(
 
 	":shared:authorization",
 	":shared:catalog",
+	":shared:englishlevel",
 	":shared:practice",
 	":shared:converters:dateconverter",
 	":shared:error",

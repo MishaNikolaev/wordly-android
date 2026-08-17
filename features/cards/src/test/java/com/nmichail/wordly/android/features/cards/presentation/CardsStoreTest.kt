@@ -2,7 +2,7 @@ package com.nmichail.wordly.android.features.cards.presentation
 
 import com.arkivanov.essenty.lifecycle.destroy
 import com.arkivanov.mvikotlin.extensions.coroutines.labelsChannel
-import com.nmichail.wordly.android.core.network.domain.usecase.UpdateEnglishLevelUseCase
+import com.nmichail.wordly.android.shared.englishlevel.domain.usecase.UpdateEnglishLevelUseCase
 import com.nmichail.wordly.android.core.testutils.InstantExecutorExtension
 import com.nmichail.wordly.android.core.testutils.TestCoroutineExtension
 import com.nmichail.wordly.android.core.testutils.createTestLifecycle

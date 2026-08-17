@@ -8,7 +8,7 @@ import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.logging.store.LoggingStoreFactory
 import com.arkivanov.mvikotlin.main.store.DefaultStoreFactory
 import com.nmichail.wordly.android.component.presentation.BaseCoroutineExecutor
-import com.nmichail.wordly.android.core.network.domain.usecase.UpdateEnglishLevelUseCase
+import com.nmichail.wordly.android.shared.englishlevel.domain.usecase.UpdateEnglishLevelUseCase
 import com.nmichail.wordly.android.features.books.domain.entity.BooksCatalog
 import com.nmichail.wordly.android.features.books.domain.entity.BooksSection
 import com.nmichail.wordly.android.features.books.domain.usecase.GetBooksCatalogUseCase

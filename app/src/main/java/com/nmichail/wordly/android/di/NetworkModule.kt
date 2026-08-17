@@ -3,7 +3,6 @@ package com.nmichail.wordly.android.di
 import android.content.Context
 import com.nmichail.wordly.android.BuildConfig
 import com.nmichail.wordly.android.core.fakenetwork.FakeServerInterceptor
-import com.nmichail.wordly.android.core.network.api.EnglishLevelApi
 import com.nmichail.wordly.android.core.network.config.NetworkConfig
 import com.nmichail.wordly.android.core.network.datasource.EndpointDataSource
 import com.nmichail.wordly.android.core.network.datasource.EndpointDataSourceImpl
@@ -90,11 +89,4 @@ object NetworkModule {
 			baseUrl = baseUrl,
 		)
 	}
-
-	@Provides
-	@Singleton
-	fun provideEnglishLevelApi(
-		@GeneralRetrofit retrofit: Retrofit,
-	): EnglishLevelApi =
-		retrofit.create(EnglishLevelApi::class.java)
 }

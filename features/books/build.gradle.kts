@@ -21,6 +21,7 @@ dependencies {
 
 	implementation(projects.component.wui)
 	implementation(projects.shared.catalog)
+	implementation(projects.shared.englishlevel)
 	implementation(projects.component.presentation)
 	implementation(projects.core.navigation)
 	implementation(projects.core.network)
