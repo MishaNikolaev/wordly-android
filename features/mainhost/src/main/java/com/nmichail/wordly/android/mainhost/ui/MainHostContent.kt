@@ -20,7 +20,7 @@ import com.nmichail.wordly.android.features.profile.ui.ProfileContent
 import com.nmichail.wordly.android.features.profile.ui.ProfileEditContent
 import com.nmichail.wordly.android.features.profile.ui.ReminderTimesContent
 import com.nmichail.wordly.android.features.review.ui.ReviewContent
-import com.nmichail.wordly.android.features.materials.ui.MaterialDetailContent
+import com.nmichail.wordly.android.features.materials.article.ui.MaterialDetailContent
 import com.nmichail.wordly.android.features.materials.ui.MaterialsContent
 import com.nmichail.wordly.android.features.words.ui.list.WordContent
 import com.nmichail.wordly.android.core.preferences.domain.entity.AppThemeMode

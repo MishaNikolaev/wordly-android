@@ -11,6 +11,7 @@ import com.nmichail.wordly.android.features.constructor.practice.di.ConstructorP
 import com.nmichail.wordly.android.features.dev.networkselection.di.NetworkSelectionModule
 import com.nmichail.wordly.android.features.home.di.HomeModule
 import com.nmichail.wordly.android.features.materials.di.MaterialsModule
+import com.nmichail.wordly.android.features.materials.article.di.MaterialArticleModule
 import com.nmichail.wordly.android.features.profile.di.ProfileModule
 import com.nmichail.wordly.android.features.review.di.ReviewModule
 import com.nmichail.wordly.android.features.words.di.WordsModule
@@ -32,6 +33,7 @@ import dagger.Module
 		BookReaderModule::class,
 		WordsModule::class,
 		MaterialsModule::class,
+		MaterialArticleModule::class,
 		ProfileModule::class,
 		MainHostModule::class,
 	],

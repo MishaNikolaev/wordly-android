@@ -11,7 +11,7 @@ import com.nmichail.wordly.android.features.constructor.presentation.Constructor
 import com.nmichail.wordly.android.features.constructor.practice.presentation.ConstructorPracticeComponent
 import com.nmichail.wordly.android.features.home.presentation.HomeComponent
 import com.nmichail.wordly.android.features.materials.presentation.MaterialsComponent
-import com.nmichail.wordly.android.features.materials.presentation.detail.MaterialDetailComponent
+import com.nmichail.wordly.android.features.materials.article.presentation.MaterialDetailComponent
 import com.nmichail.wordly.android.features.profile.presentation.ProfileComponent
 import com.nmichail.wordly.android.features.profile.presentation.edit.ProfileEditComponent
 import com.nmichail.wordly.android.features.profile.presentation.reminder.ReminderTimesComponent
