@@ -27,48 +27,48 @@ import com.nmichail.wordly.android.component.wui.theme.isAppInDarkTheme
 
 @Composable
 fun Logo(
-	modifier: Modifier = Modifier,
-	titleColor: Color = Color.White,
+    modifier: Modifier = Modifier,
+    titleColor: Color = Color.White,
 ) {
-	val markRes = if (isAppInDarkTheme()) {
-		R.drawable.logo_dark
-	} else {
-		R.drawable.logo_light
-	}
+    val logoRes = if (isAppInDarkTheme()) {
+        R.drawable.logo_dark
+    } else {
+        R.drawable.logo_light
+    }
 
-	Row(
-		modifier = modifier,
-		verticalAlignment = Alignment.CenterVertically,
-	) {
-		Image(
-			painter = painterResource(markRes),
-			contentDescription = stringResource(R.string.logo_app_name),
-			modifier = Modifier.size(40.dp),
-		)
-		Text(
-			text = stringResource(R.string.logo_app_name),
-			fontSize = 24.sp,
-			lineHeight = 28.sp,
-			fontWeight = FontWeight.ExtraBold,
-			color = titleColor,
-			modifier = Modifier.padding(start = 10.dp),
-		)
-	}
+    Row(
+        modifier = modifier,
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Image(
+            painter = painterResource(logoRes),
+            contentDescription = stringResource(R.string.logo_app_name),
+            modifier = Modifier.size(40.dp),
+        )
+        Text(
+            text = stringResource(R.string.logo_app_name),
+            fontSize = 24.sp,
+            lineHeight = 28.sp,
+            fontWeight = FontWeight.ExtraBold,
+            color = titleColor,
+            modifier = Modifier.padding(start = 10.dp),
+        )
+    }
 }
 
 @Preview(showBackground = true)
 @Composable
 private fun LogoPreview(
-	@PreviewParameter(PreviewThemeProvider::class) theme: PreviewTheme,
+    @PreviewParameter(PreviewThemeProvider::class) theme: PreviewTheme,
 ) {
-	WuiTheme(darkTheme = theme == PreviewTheme.Dark) {
-		Box(
-			modifier = Modifier
-				.fillMaxWidth()
-				.background(MaterialTheme.colorScheme.primary)
-				.padding(24.dp),
-		) {
-			Logo()
-		}
-	}
+    WuiTheme(darkTheme = theme == PreviewTheme.Dark) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(MaterialTheme.colorScheme.primary)
+                .padding(24.dp),
+        ) {
+            Logo()
+        }
+    }
 }
