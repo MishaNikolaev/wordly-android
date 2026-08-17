@@ -9,7 +9,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import com.arkivanov.decompose.extensions.compose.stack.Children
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
-import com.nmichail.wordly.android.features.books.ui.BookReaderContent
+import com.nmichail.wordly.android.features.books.reader.ui.BookReaderContent
 import com.nmichail.wordly.android.features.books.ui.BooksContent
 import com.nmichail.wordly.android.features.cards.training.ui.CardPracticeContent
 import com.nmichail.wordly.android.features.cards.ui.CardsContent

@@ -2,7 +2,7 @@ package com.nmichail.wordly.android.mainhost.presentation
 
 import com.arkivanov.decompose.ComponentContext
 import com.nmichail.wordly.android.features.books.presentation.BooksComponent
-import com.nmichail.wordly.android.features.books.presentation.detail.BookReaderComponent
+import com.nmichail.wordly.android.features.books.reader.presentation.BookReaderComponent
 import com.nmichail.wordly.android.features.cards.presentation.CardsComponent
 import com.nmichail.wordly.android.features.cards.training.presentation.CardPracticeComponent
 import com.nmichail.wordly.android.features.constructor.presentation.ConstructorComponent

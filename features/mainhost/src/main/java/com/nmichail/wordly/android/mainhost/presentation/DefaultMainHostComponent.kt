@@ -11,8 +11,8 @@ import com.arkivanov.decompose.router.stack.push
 import com.arkivanov.decompose.value.Value
 import com.nmichail.wordly.android.features.books.presentation.BooksComponent
 import com.nmichail.wordly.android.features.books.presentation.BooksRouter
-import com.nmichail.wordly.android.features.books.presentation.detail.BookReaderComponent
-import com.nmichail.wordly.android.features.books.presentation.detail.BookReaderRouter
+import com.nmichail.wordly.android.features.books.reader.presentation.BookReaderComponent
+import com.nmichail.wordly.android.features.books.reader.presentation.BookReaderRouter
 import com.nmichail.wordly.android.features.cards.presentation.CardsComponent
 import com.nmichail.wordly.android.features.cards.presentation.CardsRouter
 import com.nmichail.wordly.android.features.cards.training.presentation.CardPracticeComponent
