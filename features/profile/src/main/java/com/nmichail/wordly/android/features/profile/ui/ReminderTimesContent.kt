@@ -39,150 +39,152 @@ import com.nmichail.wordly.android.features.profile.presentation.reminder.Remind
 
 @Composable
 fun ReminderTimesContent(
-	component: ReminderTimesComponent,
-	modifier: Modifier = Modifier,
+    component: ReminderTimesComponent,
+    modifier: Modifier = Modifier,
 ) {
-	val state by component.model.subscribeAsState()
+    val state by component.model.subscribeAsState()
 
-	when (val current = state) {
-		ReminderTimesStore.State.Initial -> ReminderTimesLoading(modifier = modifier)
-		ReminderTimesStore.State.Loading -> ReminderTimesLoading(modifier = modifier)
-		is ReminderTimesStore.State.Content -> ReminderTimesLoaded(
-			state = current,
-			component = component,
-			modifier = modifier,
-		)
-		ReminderTimesStore.State.Error -> ReminderTimesError(
-			onRetryClick = component::handleRetry,
-			onBackClick = component::handleBack,
-			modifier = modifier.fillMaxSize(),
-		)
-	}
+    when (val uiState = state) {
+        ReminderTimesStore.State.Initial,
+        ReminderTimesStore.State.Loading -> ReminderTimesLoading(modifier = modifier)
+
+        is ReminderTimesStore.State.Content -> ReminderTimesLoaded(
+            state = uiState,
+            component = component,
+            modifier = modifier,
+        )
+
+        ReminderTimesStore.State.Error -> ReminderTimesError(
+            onRetryClick = component::handleRetry,
+            onBackClick = component::handleBack,
+            modifier = modifier.fillMaxSize(),
+        )
+    }
 }
 
 @Composable
 private fun ReminderTimesLoading(modifier: Modifier = Modifier) {
-	Box(
-		modifier = modifier
+    Box(
+        modifier = modifier
 			.fillMaxSize()
 			.background(MaterialTheme.colorScheme.background),
-		contentAlignment = Alignment.Center,
-	) {
-		CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
-	}
+        contentAlignment = Alignment.Center,
+    ) {
+        CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
+    }
 }
 
 @Composable
 private fun ReminderTimesError(
-	onRetryClick: () -> Unit,
-	onBackClick: () -> Unit,
-	modifier: Modifier = Modifier,
+    onRetryClick: () -> Unit,
+    onBackClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-	Column(
-		modifier = modifier
+    Column(
+        modifier = modifier
 			.background(MaterialTheme.colorScheme.background)
 			.padding(horizontal = 24.dp),
-		verticalArrangement = Arrangement.Center,
-		horizontalAlignment = Alignment.CenterHorizontally,
-	) {
-		Text(
-			text = stringResource(R.string.profile_error_title),
-			style = MaterialTheme.typography.titleLarge,
-			color = MaterialTheme.colorScheme.onBackground,
-			textAlign = TextAlign.Center,
-		)
-		WuiButton(
-			text = stringResource(R.string.profile_retry),
-			onClick = onRetryClick,
-			modifier = Modifier
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Text(
+            text = stringResource(R.string.profile_error_title),
+            style = MaterialTheme.typography.titleLarge,
+            color = MaterialTheme.colorScheme.onBackground,
+            textAlign = TextAlign.Center,
+        )
+        WuiButton(
+            text = stringResource(R.string.profile_retry),
+            onClick = onRetryClick,
+            modifier = Modifier
 				.fillMaxWidth()
 				.padding(top = 24.dp),
-		)
-		WuiButton(
-			text = stringResource(R.string.profile_edit_back),
-			onClick = onBackClick,
-			modifier = Modifier
+        )
+        WuiButton(
+            text = stringResource(R.string.profile_edit_back),
+            onClick = onBackClick,
+            modifier = Modifier
 				.fillMaxWidth()
 				.padding(top = 12.dp),
-			containerColor = MaterialTheme.colorScheme.surfaceVariant,
-			contentColor = MaterialTheme.colorScheme.onSurface,
-		)
-	}
+            containerColor = MaterialTheme.colorScheme.surfaceVariant,
+            contentColor = MaterialTheme.colorScheme.onSurface,
+        )
+    }
 }
 
 @Composable
 private fun ReminderTimesLoaded(
-	state: ReminderTimesStore.State.Content,
-	component: ReminderTimesComponent,
-	modifier: Modifier = Modifier,
+    state: ReminderTimesStore.State.Content,
+    component: ReminderTimesComponent,
+    modifier: Modifier = Modifier,
 ) {
-	Column(
-		modifier = modifier
+    Column(
+        modifier = modifier
 			.fillMaxSize()
 			.background(MaterialTheme.colorScheme.background)
 			.padding(horizontal = 20.dp)
 			.padding(top = 12.dp, bottom = 24.dp),
-	) {
-		Row(
-			modifier = Modifier.fillMaxWidth(),
-			verticalAlignment = Alignment.CenterVertically,
-		) {
-			Icon(
-				imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
-				contentDescription = stringResource(R.string.profile_edit_back),
-				tint = MaterialTheme.colorScheme.onBackground,
-				modifier = Modifier
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Icon(
+                imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
+                contentDescription = stringResource(R.string.profile_edit_back),
+                tint = MaterialTheme.colorScheme.onBackground,
+                modifier = Modifier
 					.size(40.dp)
 					.clickable(
 						role = Role.Button,
 						onClick = component::handleBack,
 					)
 					.padding(8.dp),
-			)
-			Text(
-				text = stringResource(R.string.profile_reminder_time),
-				style = MaterialTheme.typography.titleLarge,
-				fontWeight = FontWeight.SemiBold,
-				color = MaterialTheme.colorScheme.onBackground,
-				modifier = Modifier.padding(start = 4.dp),
-			)
-		}
-		Column(
-			modifier = Modifier
+            )
+            Text(
+                text = stringResource(R.string.profile_reminder_time),
+                style = MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight.SemiBold,
+                color = MaterialTheme.colorScheme.onBackground,
+                modifier = Modifier.padding(start = 4.dp),
+            )
+        }
+        Column(
+            modifier = Modifier
 				.weight(1f)
 				.fillMaxWidth()
 				.verticalScroll(rememberScrollState())
 				.padding(top = 24.dp),
-		) {
-			NotificationTimeSlots.options.forEach { slot ->
-				ReminderTimeRow(
-					time = slot.time,
-					checked = slot.time in state.selectedTimes,
-					enabled = !state.saving,
-					onClick = { component.handleToggleTime(time = slot.time) },
-				)
-			}
-		}
-		WuiButton(
-			text = stringResource(R.string.profile_edit_save),
-			onClick = component::handleSave,
-			loading = state.saving,
-			modifier = Modifier
+        ) {
+            NotificationTimeSlots.options.forEach { slot ->
+                ReminderTimeRow(
+                    time = slot.time,
+                    checked = slot.time in state.selectedTimes,
+                    enabled = !state.saving,
+                    onClick = { component.handleToggleTime(time = slot.time) },
+                )
+            }
+        }
+        WuiButton(
+            text = stringResource(R.string.profile_edit_save),
+            onClick = component::handleSave,
+            loading = state.saving,
+            modifier = Modifier
 				.fillMaxWidth()
 				.padding(top = 16.dp),
-		)
-	}
+        )
+    }
 }
 
 @Composable
 private fun ReminderTimeRow(
-	time: String,
-	checked: Boolean,
-	enabled: Boolean,
-	onClick: () -> Unit,
+    time: String,
+    checked: Boolean,
+    enabled: Boolean,
+    onClick: () -> Unit,
 ) {
-	Row(
-		modifier = Modifier
+    Row(
+        modifier = Modifier
 			.fillMaxWidth()
 			.clickable(
 				enabled = enabled,
@@ -191,18 +193,18 @@ private fun ReminderTimeRow(
 				onClick = onClick,
 			)
 			.padding(vertical = 4.dp),
-		verticalAlignment = Alignment.CenterVertically,
-	) {
-		Checkbox(
-			checked = checked,
-			onCheckedChange = { if (enabled) onClick() },
-			enabled = enabled,
-			modifier = Modifier.size(48.dp),
-		)
-		Text(
-			text = time,
-			style = MaterialTheme.typography.bodyLarge,
-			color = MaterialTheme.colorScheme.onSurface,
-		)
-	}
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Checkbox(
+            checked = checked,
+            onCheckedChange = { if (enabled) onClick() },
+            enabled = enabled,
+            modifier = Modifier.size(48.dp),
+        )
+        Text(
+            text = time,
+            style = MaterialTheme.typography.bodyLarge,
+            color = MaterialTheme.colorScheme.onSurface,
+        )
+    }
 }

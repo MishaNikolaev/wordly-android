@@ -47,291 +47,323 @@ import com.nmichail.wordly.android.features.words.ui.dialog.AddWordDialog
 
 @Composable
 fun WordContent(
-	component: WordsComponent,
-	modifier: Modifier = Modifier,
+    component: WordsComponent,
+    modifier: Modifier = Modifier,
 ) {
-	val listState by component.listModel.subscribeAsState()
-	val addWordState by component.addWordModel.subscribeAsState()
-	val wordDetailState by component.wordDetailModel.subscribeAsState()
+    val listState by component.listModel.subscribeAsState()
+    val addWordState by component.addWordModel.subscribeAsState()
+    val wordDetailState by component.wordDetailModel.subscribeAsState()
 
-	when (val current = listState) {
-		WordsListStore.State.Initial -> WordsLoading(modifier = modifier)
-		WordsListStore.State.Loading -> WordsLoading(modifier = modifier)
-		is WordsListStore.State.Content -> WordsLoaded(
-			state = current,
-			addWordState = addWordState,
-			wordDetailState = wordDetailState,
-			component = component,
-			modifier = modifier,
-		)
-		WordsListStore.State.Error -> WordsError(
-			onRetryClick = { component.listStore.accept(WordsListStore.Intent.Retry) },
-			modifier = modifier.fillMaxSize(),
-		)
-	}
+    when (val uiState = listState) {
+        WordsListStore.State.Initial,
+        WordsListStore.State.Loading -> WordsLoading(modifier = modifier)
+
+        is WordsListStore.State.Content -> WordsLoaded(
+            state = uiState,
+            addWordState = addWordState,
+            wordDetailState = wordDetailState,
+            component = component,
+            modifier = modifier,
+        )
+
+        WordsListStore.State.Error -> WordsError(
+            onRetryClick = { component.listStore.accept(WordsListStore.Intent.Retry) },
+            modifier = modifier.fillMaxSize(),
+        )
+    }
 }
 
 @Composable
 private fun WordsLoading(modifier: Modifier = Modifier) {
-	Box(
-		modifier = modifier
+    Box(
+        modifier = modifier
 			.fillMaxSize()
 			.background(MaterialTheme.colorScheme.background),
-		contentAlignment = Alignment.Center,
-	) {
-		CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
-	}
+        contentAlignment = Alignment.Center,
+    ) {
+        CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
+    }
 }
 
 @Composable
 private fun WordsError(
-	onRetryClick: () -> Unit,
-	modifier: Modifier = Modifier,
+    onRetryClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-	Column(
-		modifier = modifier
+    Column(
+        modifier = modifier
 			.background(MaterialTheme.colorScheme.background)
 			.padding(horizontal = 24.dp),
-		verticalArrangement = Arrangement.Center,
-		horizontalAlignment = Alignment.CenterHorizontally,
-	) {
-		Text(
-			text = stringResource(R.string.words_error_title),
-			style = MaterialTheme.typography.titleLarge,
-			color = MaterialTheme.colorScheme.onBackground,
-			textAlign = TextAlign.Center,
-		)
-		Text(
-			text = stringResource(R.string.words_error_subtitle),
-			style = MaterialTheme.typography.bodyMedium,
-			color = MaterialTheme.colorScheme.onSurfaceVariant,
-			textAlign = TextAlign.Center,
-			modifier = Modifier.padding(top = 8.dp),
-		)
-		WuiButton(
-			text = stringResource(R.string.words_retry),
-			onClick = onRetryClick,
-			modifier = Modifier
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Text(
+            text = stringResource(R.string.words_error_title),
+            style = MaterialTheme.typography.titleLarge,
+            color = MaterialTheme.colorScheme.onBackground,
+            textAlign = TextAlign.Center,
+        )
+        Text(
+            text = stringResource(R.string.words_error_subtitle),
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.padding(top = 8.dp),
+        )
+        WuiButton(
+            text = stringResource(R.string.words_retry),
+            onClick = onRetryClick,
+            modifier = Modifier
 				.fillMaxWidth()
 				.padding(top = 24.dp),
-		)
-	}
+        )
+    }
 }
 
 @Composable
 private fun WordsLoaded(
-	state: WordsListStore.State.Content,
-	addWordState: AddWordStore.State,
-	wordDetailState: WordDetailStore.State,
-	component: WordsComponent,
-	modifier: Modifier = Modifier,
+    state: WordsListStore.State.Content,
+    addWordState: AddWordStore.State,
+    wordDetailState: WordDetailStore.State,
+    component: WordsComponent,
+    modifier: Modifier = Modifier,
 ) {
-	val focusManager = LocalFocusManager.current
-	val keyboardController = LocalSoftwareKeyboardController.current
-	val clearSearchFocus = {
-		focusManager.clearFocus(force = true)
-		keyboardController?.hide()
-		Unit
-	}
+    val focusManager = LocalFocusManager.current
+    val keyboardController = LocalSoftwareKeyboardController.current
+    val clearSearchFocus = {
+        focusManager.clearFocus(force = true)
+        keyboardController?.hide()
+        Unit
+    }
 
-	Box(
-		modifier = modifier
+    Box(
+        modifier = modifier
 			.fillMaxSize()
 			.background(MaterialTheme.colorScheme.background),
-	) {
-		val detail = (wordDetailState as? WordDetailStore.State.Open)?.dialog
-		if (detail != null) {
-			WordsDetailOverlay(dialog = detail, component = component)
-		} else {
-			WordsMainContent(
-				state = state,
-				component = component,
-				clearSearchFocus = clearSearchFocus,
-				modifier = Modifier.fillMaxSize(),
-			)
-		}
-	}
+    ) {
+        val detail = (wordDetailState as? WordDetailStore.State.Open)?.dialog
+        if (detail != null) {
+            WordsDetailOverlay(dialog = detail, component = component)
+        } else {
+            WordsMainContent(
+                state = state,
+                component = component,
+                clearSearchFocus = clearSearchFocus,
+                modifier = Modifier.fillMaxSize(),
+            )
+        }
+    }
 
-	val addDialog = (addWordState as? AddWordStore.State.Open)?.dialog
-	if (addDialog != null) {
-		AddWordDialog(
-			state = addDialog,
-			onDismiss = { component.addWordStore.accept(AddWordStore.Intent.Dismiss) },
-			onWordInputChange = { value -> component.addWordStore.accept(AddWordStore.Intent.ChangeWordInput(value)) },
-			onToggleTag = { tagId -> component.addWordStore.accept(AddWordStore.Intent.ToggleTag(tagId)) },
-			onConfirm = { component.addWordStore.accept(AddWordStore.Intent.Confirm) },
-		)
-	}
+    val addDialog = (addWordState as? AddWordStore.State.Open)?.dialog
+    if (addDialog != null) {
+        AddWordDialog(
+            state = addDialog,
+            onDismiss = { component.addWordStore.accept(AddWordStore.Intent.Dismiss) },
+            onWordInputChange = { value ->
+                component.addWordStore.accept(
+                    AddWordStore.Intent.ChangeWordInput(
+                        value
+                    )
+                )
+            },
+            onToggleTag = { tagId ->
+                component.addWordStore.accept(
+                    AddWordStore.Intent.ToggleTag(
+                        tagId
+                    )
+                )
+            },
+            onConfirm = { component.addWordStore.accept(AddWordStore.Intent.Confirm) },
+        )
+    }
 }
 
 @Composable
 private fun WordsDetailOverlay(
-	dialog: WordDetailDialogState,
-	component: WordsComponent,
+    dialog: WordDetailDialogState,
+    component: WordsComponent,
 ) {
-	WordDetailScreen(
-		state = dialog,
-		onDismiss = { component.wordDetailStore.accept(WordDetailStore.Intent.Dismiss) },
-		onStatusChange = { status -> component.wordDetailStore.accept(WordDetailStore.Intent.ChangeStatus(status)) },
-		onOpenCalendar = {
-			component.wordDetailStore.accept(WordDetailStore.Intent.Calendar(WordDetailStore.CalendarAction.Open))
-		},
-		onDismissCalendar = {
-			component.wordDetailStore.accept(WordDetailStore.Intent.Calendar(WordDetailStore.CalendarAction.Dismiss))
-		},
-		onCalendarPreviousMonth = {
-			component.wordDetailStore.accept(WordDetailStore.Intent.Calendar(WordDetailStore.CalendarAction.PreviousMonth))
-		},
-		onCalendarNextMonth = {
-			component.wordDetailStore.accept(WordDetailStore.Intent.Calendar(WordDetailStore.CalendarAction.NextMonth))
-		},
-		onCalendarToday = {
-			component.wordDetailStore.accept(WordDetailStore.Intent.Calendar(WordDetailStore.CalendarAction.Today))
-		},
-		onCalendarDayClick = { day ->
-			component.wordDetailStore.accept(WordDetailStore.Intent.Calendar(WordDetailStore.CalendarAction.DayClick(day)))
-		},
-		onConfirmAddToReview = { component.wordDetailStore.accept(WordDetailStore.Intent.ConfirmAddToReview) },
-		onPlayAudio = { component.wordDetailStore.accept(WordDetailStore.Intent.PlayAudio) },
-		modifier = Modifier
+    WordDetailScreen(
+        state = dialog,
+        onDismiss = { component.wordDetailStore.accept(WordDetailStore.Intent.Dismiss) },
+        onStatusChange = { status ->
+            component.wordDetailStore.accept(
+                WordDetailStore.Intent.ChangeStatus(
+                    status
+                )
+            )
+        },
+        onOpenCalendar = {
+            component.wordDetailStore.accept(WordDetailStore.Intent.Calendar(WordDetailStore.CalendarAction.Open))
+        },
+        onDismissCalendar = {
+            component.wordDetailStore.accept(WordDetailStore.Intent.Calendar(WordDetailStore.CalendarAction.Dismiss))
+        },
+        onCalendarPreviousMonth = {
+            component.wordDetailStore.accept(WordDetailStore.Intent.Calendar(WordDetailStore.CalendarAction.PreviousMonth))
+        },
+        onCalendarNextMonth = {
+            component.wordDetailStore.accept(WordDetailStore.Intent.Calendar(WordDetailStore.CalendarAction.NextMonth))
+        },
+        onCalendarToday = {
+            component.wordDetailStore.accept(WordDetailStore.Intent.Calendar(WordDetailStore.CalendarAction.Today))
+        },
+        onCalendarDayClick = { day ->
+            component.wordDetailStore.accept(
+                WordDetailStore.Intent.Calendar(
+                    WordDetailStore.CalendarAction.DayClick(
+                        day
+                    )
+                )
+            )
+        },
+        onConfirmAddToReview = { component.wordDetailStore.accept(WordDetailStore.Intent.ConfirmAddToReview) },
+        onPlayAudio = { component.wordDetailStore.accept(WordDetailStore.Intent.PlayAudio) },
+        modifier = Modifier
 			.fillMaxSize()
 			.background(MaterialTheme.colorScheme.background),
-	)
+    )
 }
 
 @Composable
 private fun WordsMainContent(
-	state: WordsListStore.State.Content,
-	component: WordsComponent,
-	clearSearchFocus: () -> Unit,
-	modifier: Modifier = Modifier,
+    state: WordsListStore.State.Content,
+    component: WordsComponent,
+    clearSearchFocus: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-	Box(modifier = modifier) {
-		WordsScreenBody(
-			state = state,
-			onSearchQueryChange = { query -> component.listStore.accept(WordsListStore.Intent.ChangeSearchQuery(query)) },
-			onFilterChange = { filter ->
-				clearSearchFocus()
-				component.listStore.accept(WordsListStore.Intent.ChangeFilter(filter))
-			},
-			onWordClick = { wordId ->
-				clearSearchFocus()
-				component.openWordDetail(wordId)
-			},
-			onScroll = clearSearchFocus,
-		)
-		FloatingActionButton(
-			onClick = {
-				clearSearchFocus()
-				component.openAddWord()
-			},
-			modifier = Modifier
+    Box(modifier = modifier) {
+        WordsScreenBody(
+            state = state,
+            onSearchQueryChange = { query ->
+                component.listStore.accept(
+                    WordsListStore.Intent.ChangeSearchQuery(
+                        query
+                    )
+                )
+            },
+            onFilterChange = { filter ->
+                clearSearchFocus()
+                component.listStore.accept(WordsListStore.Intent.ChangeFilter(filter))
+            },
+            onWordClick = { wordId ->
+                clearSearchFocus()
+                component.openWordDetail(wordId)
+            },
+            onScroll = clearSearchFocus,
+        )
+        FloatingActionButton(
+            onClick = {
+                clearSearchFocus()
+                component.openAddWord()
+            },
+            modifier = Modifier
 				.align(Alignment.BottomEnd)
 				.padding(end = 16.dp, bottom = 16.dp),
-			containerColor = MaterialTheme.colorScheme.primary,
-			contentColor = MaterialTheme.colorScheme.onPrimary,
-			shape = CircleShape,
-		) {
-			Icon(
-				imageVector = Icons.Rounded.Add,
-				contentDescription = stringResource(R.string.words_add_fab),
-			)
-		}
-	}
+            containerColor = MaterialTheme.colorScheme.primary,
+            contentColor = MaterialTheme.colorScheme.onPrimary,
+            shape = CircleShape,
+        ) {
+            Icon(
+                imageVector = Icons.Rounded.Add,
+                contentDescription = stringResource(R.string.words_add_fab),
+            )
+        }
+    }
 }
 
 @Composable
 private fun WordsScreenBody(
-	state: WordsListStore.State.Content,
-	onSearchQueryChange: (String) -> Unit,
-	onFilterChange: (WordFilter) -> Unit,
-	onWordClick: (String) -> Unit,
-	onScroll: () -> Unit,
+    state: WordsListStore.State.Content,
+    onSearchQueryChange: (String) -> Unit,
+    onFilterChange: (WordFilter) -> Unit,
+    onWordClick: (String) -> Unit,
+    onScroll: () -> Unit,
 ) {
-	val listState = rememberLazyListState()
-	LaunchedEffect(listState.isScrollInProgress) {
-		if (listState.isScrollInProgress) {
-			onScroll()
-		}
-	}
+    val listState = rememberLazyListState()
+    LaunchedEffect(listState.isScrollInProgress) {
+        if (listState.isScrollInProgress) {
+            onScroll()
+        }
+    }
 
-	LazyColumn(
-		state = listState,
-		modifier = Modifier.fillMaxSize(),
-		contentPadding = PaddingValues(bottom = 88.dp),
-		verticalArrangement = Arrangement.spacedBy(10.dp),
-	) {
-		wordsHeader(
-			state = state,
-			onSearchQueryChange = onSearchQueryChange,
-			onFilterChange = onFilterChange,
-		)
-		wordsBody(
-			words = state.words,
-			onWordClick = onWordClick,
-		)
-	}
+    LazyColumn(
+        state = listState,
+        modifier = Modifier.fillMaxSize(),
+        contentPadding = PaddingValues(bottom = 88.dp),
+        verticalArrangement = Arrangement.spacedBy(10.dp),
+    ) {
+        wordsHeader(
+            state = state,
+            onSearchQueryChange = onSearchQueryChange,
+            onFilterChange = onFilterChange,
+        )
+        wordsBody(
+            words = state.words,
+            onWordClick = onWordClick,
+        )
+    }
 }
 
 private fun LazyListScope.wordsHeader(
-	state: WordsListStore.State.Content,
-	onSearchQueryChange: (String) -> Unit,
-	onFilterChange: (WordFilter) -> Unit,
+    state: WordsListStore.State.Content,
+    onSearchQueryChange: (String) -> Unit,
+    onFilterChange: (WordFilter) -> Unit,
 ) {
-	item(key = "title") {
-		Text(
-			text = state.title,
-			style = MaterialTheme.typography.titleLarge,
-			fontWeight = FontWeight.SemiBold,
-			color = MaterialTheme.colorScheme.onBackground,
-			modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp),
-		)
-	}
-	item(key = "search") {
-		WuiSearchField(
-			value = state.searchQuery,
-			onValueChange = onSearchQueryChange,
-			placeholder = state.searchPlaceholder.ifBlank {
-				stringResource(R.string.words_search_placeholder)
-			},
-			modifier = Modifier.padding(horizontal = 16.dp),
-		)
-	}
-	item(key = "filters") {
-		WordsFilterChips(
-			selected = state.selectedFilter,
-			onSelect = onFilterChange,
-			modifier = Modifier.padding(top = 2.dp, bottom = 2.dp),
-		)
-	}
+    item(key = "title") {
+        Text(
+            text = state.title,
+            style = MaterialTheme.typography.titleLarge,
+            fontWeight = FontWeight.SemiBold,
+            color = MaterialTheme.colorScheme.onBackground,
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp),
+        )
+    }
+    item(key = "search") {
+        WuiSearchField(
+            value = state.searchQuery,
+            onValueChange = onSearchQueryChange,
+            placeholder = state.searchPlaceholder.ifBlank {
+                stringResource(R.string.words_search_placeholder)
+            },
+            modifier = Modifier.padding(horizontal = 16.dp),
+        )
+    }
+    item(key = "filters") {
+        WordsFilterChips(
+            selected = state.selectedFilter,
+            onSelect = onFilterChange,
+            modifier = Modifier.padding(top = 2.dp, bottom = 2.dp),
+        )
+    }
 }
 
 private fun LazyListScope.wordsBody(
-	words: List<WordItem>,
-	onWordClick: (String) -> Unit,
+    words: List<WordItem>,
+    onWordClick: (String) -> Unit,
 ) {
-	if (words.isEmpty()) {
-		item(key = "empty") {
-			Text(
-				text = stringResource(R.string.words_empty),
-				style = MaterialTheme.typography.bodyLarge,
-				color = MaterialTheme.colorScheme.onSurfaceVariant,
-				textAlign = TextAlign.Center,
-				modifier = Modifier
+    if (words.isEmpty()) {
+        item(key = "empty") {
+            Text(
+                text = stringResource(R.string.words_empty),
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                textAlign = TextAlign.Center,
+                modifier = Modifier
 					.fillMaxWidth()
 					.padding(horizontal = 24.dp, vertical = 48.dp),
-			)
-		}
-		return
-	}
-	items(
-		items = words,
-		key = { it.id },
-	) { item ->
-		WordListItem(
-			item = item,
-			onClick = { onWordClick(item.id) },
-			modifier = Modifier.padding(horizontal = 16.dp),
-		)
-	}
+            )
+        }
+        return
+    }
+    items(
+        items = words,
+        key = { it.id },
+    ) { item ->
+        WordListItem(
+            item = item,
+            onClick = { onWordClick(item.id) },
+            modifier = Modifier.padding(horizontal = 16.dp),
+        )
+    }
 }

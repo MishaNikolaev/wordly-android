@@ -46,216 +46,212 @@ import com.nmichail.wordly.android.shared.authorization.AuthBackground
 
 @Composable
 fun SignUpContent(
-	component: SignUpComponent,
-	modifier: Modifier = Modifier,
+    component: SignUpComponent,
+    modifier: Modifier = Modifier,
 ) {
-	val state by component.model.subscribeAsState()
+    val state by component.model.subscribeAsState()
 
-	when (val currentState = state) {
-		SignUpStore.State.Initial -> {
-			Box(
-				modifier = modifier.fillMaxSize(),
-				contentAlignment = Alignment.Center,
-			) {
-				CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
-			}
-		}
-		SignUpStore.State.Loading -> {
-			Box(
-				modifier = modifier.fillMaxSize(),
-				contentAlignment = Alignment.Center,
-			) {
-				CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
-			}
-		}
-		is SignUpStore.State.Error -> {
-			SignUpError(
-				onRetryClick = component::handleRetry,
-				modifier = modifier.fillMaxSize(),
-			)
-		}
-		is SignUpStore.State.Content -> {
-			Scaffold(
-				modifier = modifier.fillMaxSize(),
-				containerColor = Color.Transparent,
-				contentWindowInsets = WindowInsets(0, 0, 0, 0),
-			) {
-				AuthBackground(
-					modifier = Modifier.fillMaxSize(),
-					header = { SignUpAuthHeader() },
-					content = {
-						SignUpForm(
-							state = currentState,
-							component = component,
-							modifier = Modifier
-								.padding(horizontal = 20.dp)
-								.padding(top = 28.dp, bottom = 32.dp),
-						)
-					},
-				)
-			}
-		}
-	}
+    when (val uiState = state) {
+        SignUpStore.State.Initial,
+        SignUpStore.State.Loading -> {
+            Box(
+                modifier = modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center,
+            ) {
+                CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
+            }
+        }
+
+        is SignUpStore.State.Error -> {
+            SignUpError(
+                onRetryClick = component::handleRetry,
+                modifier = modifier.fillMaxSize(),
+            )
+        }
+
+        is SignUpStore.State.Content -> {
+            Scaffold(
+                modifier = modifier.fillMaxSize(),
+                containerColor = Color.Transparent,
+                contentWindowInsets = WindowInsets(0, 0, 0, 0),
+            ) {
+                AuthBackground(
+                    modifier = Modifier.fillMaxSize(),
+                    header = { SignUpAuthHeader() },
+                    content = {
+                        SignUpForm(
+                            state = uiState,
+                            component = component,
+                            modifier = Modifier
+                                .padding(horizontal = 20.dp)
+                                .padding(top = 28.dp, bottom = 32.dp),
+                        )
+                    },
+                )
+            }
+        }
+    }
 }
 
 @Composable
 private fun SignUpError(
-	onRetryClick: () -> Unit,
-	modifier: Modifier = Modifier,
+    onRetryClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-	Column(
-		modifier = modifier
-			.background(MaterialTheme.colorScheme.background)
-			.padding(horizontal = 24.dp),
-		verticalArrangement = Arrangement.Center,
-		horizontalAlignment = Alignment.CenterHorizontally,
-	) {
-		Text(
-			text = stringResource(R.string.sign_up_error_title),
-			style = MaterialTheme.typography.titleMedium,
-			color = MaterialTheme.colorScheme.onSurface,
-			textAlign = TextAlign.Center,
-		)
-		Text(
-			text = stringResource(R.string.sign_up_error_description),
-			style = MaterialTheme.typography.bodyMedium,
-			color = MaterialTheme.colorScheme.onSurfaceVariant,
-			textAlign = TextAlign.Center,
-			modifier = Modifier.padding(top = 8.dp),
-		)
-		WuiButton(
-			text = stringResource(R.string.sign_up_retry),
-			onClick = onRetryClick,
-			modifier = Modifier.padding(top = 24.dp),
-		)
-	}
+    Column(
+        modifier = modifier
+            .background(MaterialTheme.colorScheme.background)
+            .padding(horizontal = 24.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Text(
+            text = stringResource(R.string.sign_up_error_title),
+            style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.onSurface,
+            textAlign = TextAlign.Center,
+        )
+        Text(
+            text = stringResource(R.string.sign_up_error_description),
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.padding(top = 8.dp),
+        )
+        WuiButton(
+            text = stringResource(R.string.sign_up_retry),
+            onClick = onRetryClick,
+            modifier = Modifier.padding(top = 24.dp),
+        )
+    }
 }
 
 @Composable
 private fun SignUpForm(
-	state: SignUpStore.State.Content,
-	component: SignUpComponent,
-	modifier: Modifier = Modifier,
+    state: SignUpStore.State.Content,
+    component: SignUpComponent,
+    modifier: Modifier = Modifier,
 ) {
-	Column(modifier = modifier.fillMaxWidth()) {
-		WuiScreenTitle(
-			title = stringResource(R.string.sign_up_title),
-			subtitle = stringResource(R.string.sign_up_subtitle),
-			textAlign = TextAlign.Start,
-		)
+    Column(modifier = modifier.fillMaxWidth()) {
+        WuiScreenTitle(
+            title = stringResource(R.string.sign_up_title),
+            subtitle = stringResource(R.string.sign_up_subtitle),
+            textAlign = TextAlign.Start,
+        )
 
-		WuiTextField(
-			label = stringResource(R.string.sign_up_label_email),
-			value = state.email.data,
-			onValueChange = component::handleChangeEmail,
-			keyboardType = KeyboardType.Email,
-			errorVisible = state.email.validationState is DefaultValidationState.Invalid,
-			errorMessage = stringResource(id = emailErrorMessage(state = state.email.validationState)),
-			modifier = Modifier.padding(top = 24.dp),
-		)
-		WuiTextField(
-			label = stringResource(R.string.sign_up_label_password),
-			value = state.password.data,
-			onValueChange = component::handleChangePassword,
-			isPassword = true,
-			errorVisible = state.password.validationState is DefaultValidationState.Invalid,
-			errorMessage = stringResource(id = passwordErrorMessage(state = state.password.validationState)),
-			modifier = Modifier.padding(top = 16.dp),
-		)
+        WuiTextField(
+            label = stringResource(R.string.sign_up_label_email),
+            value = state.email.data,
+            onValueChange = component::handleChangeEmail,
+            keyboardType = KeyboardType.Email,
+            errorVisible = state.email.validationState is DefaultValidationState.Invalid,
+            errorMessage = stringResource(id = emailErrorMessage(state = state.email.validationState)),
+            modifier = Modifier.padding(top = 24.dp),
+        )
+        WuiTextField(
+            label = stringResource(R.string.sign_up_label_password),
+            value = state.password.data,
+            onValueChange = component::handleChangePassword,
+            isPassword = true,
+            errorVisible = state.password.validationState is DefaultValidationState.Invalid,
+            errorMessage = stringResource(id = passwordErrorMessage(state = state.password.validationState)),
+            modifier = Modifier.padding(top = 16.dp),
+        )
 
-		SignUpNameFields(state = state, component = component)
-		SignUpEnglishLevelField(state = state, component = component)
+        SignUpNameFields(state = state, component = component)
+        SignUpEnglishLevelField(state = state, component = component)
 
-		WuiButton(
-			text = stringResource(R.string.sign_up_submit),
-			onClick = component::handleSubmit,
-			enabled = state.areFieldsValid(),
-			loading = state.submitting,
-			modifier = Modifier.padding(top = 24.dp),
-		)
-		WuiLinkedText(
-			text = stringResource(R.string.sign_up_terms),
-			linkText = stringResource(R.string.sign_up_terms_link),
-			onLinkClick = { component.handleOpenTermsOfUse() },
-			modifier = Modifier
-				.fillMaxWidth()
-				.padding(top = 20.dp),
-		)
-		WuiTextLink(
-			text = stringResource(R.string.sign_up_has_account),
-			onClick = component::handleNavigateToSignIn,
-			enabled = !state.submitting,
-			modifier = Modifier
-				.fillMaxWidth()
-				.padding(top = 4.dp),
-		)
-	}
+        WuiButton(
+            text = stringResource(R.string.sign_up_submit),
+            onClick = component::handleSubmit,
+            enabled = state.areFieldsValid(),
+            loading = state.submitting,
+            modifier = Modifier.padding(top = 24.dp),
+        )
+        WuiLinkedText(
+            text = stringResource(R.string.sign_up_terms),
+            linkText = stringResource(R.string.sign_up_terms_link),
+            onLinkClick = { component.handleOpenTermsOfUse() },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 20.dp),
+        )
+        WuiTextLink(
+            text = stringResource(R.string.sign_up_has_account),
+            onClick = component::handleNavigateToSignIn,
+            enabled = !state.submitting,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 4.dp),
+        )
+    }
 }
 
 @Composable
 private fun SignUpNameFields(
-	state: SignUpStore.State.Content,
-	component: SignUpComponent,
+    state: SignUpStore.State.Content,
+    component: SignUpComponent,
 ) {
-	Row(
-		modifier = Modifier
-			.fillMaxWidth()
-			.padding(top = 16.dp),
-	) {
-		WuiTextField(
-			label = stringResource(R.string.sign_up_first_name_label),
-			value = state.firstName.data,
-			onValueChange = component::handleChangeFirstName,
-			errorVisible = state.firstName.validationState is DefaultValidationState.Invalid,
-			errorMessage = stringResource(
-				id = nameErrorMessage(
-					state = state.firstName.validationState,
-					namePart = NamePart.NAME,
-				),
-			),
-			modifier = Modifier
-				.weight(1f)
-				.padding(end = 8.dp),
-		)
-		WuiTextField(
-			label = stringResource(R.string.sign_up_last_name_label),
-			value = state.lastName.data,
-			onValueChange = component::handleChangeLastName,
-			errorVisible = state.lastName.validationState is DefaultValidationState.Invalid,
-			errorMessage = stringResource(
-				id = nameErrorMessage(
-					state = state.lastName.validationState,
-					namePart = NamePart.SURNAME,
-				),
-			),
-			modifier = Modifier
-				.weight(1f)
-				.padding(start = 8.dp),
-		)
-	}
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 16.dp),
+    ) {
+        WuiTextField(
+            label = stringResource(R.string.sign_up_first_name_label),
+            value = state.firstName.data,
+            onValueChange = component::handleChangeFirstName,
+            errorVisible = state.firstName.validationState is DefaultValidationState.Invalid,
+            errorMessage = stringResource(
+                id = nameErrorMessage(
+                    state = state.firstName.validationState,
+                    namePart = NamePart.NAME,
+                ),
+            ),
+            modifier = Modifier
+                .weight(1f)
+                .padding(end = 8.dp),
+        )
+        WuiTextField(
+            label = stringResource(R.string.sign_up_last_name_label),
+            value = state.lastName.data,
+            onValueChange = component::handleChangeLastName,
+            errorVisible = state.lastName.validationState is DefaultValidationState.Invalid,
+            errorMessage = stringResource(
+                id = nameErrorMessage(
+                    state = state.lastName.validationState,
+                    namePart = NamePart.SURNAME,
+                ),
+            ),
+            modifier = Modifier
+                .weight(1f)
+                .padding(start = 8.dp),
+        )
+    }
 }
 
 @Composable
 private fun SignUpEnglishLevelField(
-	state: SignUpStore.State.Content,
-	component: SignUpComponent,
+    state: SignUpStore.State.Content,
+    component: SignUpComponent,
 ) {
-	val englishLevelCodes = stringArrayResource(R.array.sign_up_english_level_codes).toList()
-	val englishLevelLabels = stringArrayResource(R.array.sign_up_english_levels).toList()
-	val selectedLabel = englishLevelLabels.getOrElse(englishLevelCodes.indexOf(state.englishLevel.data)) { "" }
+    val englishLevelCodes = stringArrayResource(R.array.sign_up_english_level_codes).toList()
+    val englishLevelLabels = stringArrayResource(R.array.sign_up_english_levels).toList()
+    val selectedLabel =
+        englishLevelLabels.getOrElse(englishLevelCodes.indexOf(state.englishLevel.data)) { "" }
 
-	WuiSelectionField(
-		label = stringResource(R.string.sign_up_english_level_label),
-		value = selectedLabel,
-		options = englishLevelLabels,
-		onValueChange = { label ->
-			val index = englishLevelLabels.indexOf(label)
-			if (index >= 0) {
-				component.handleChangeEnglishLevel(englishLevelCodes[index])
-			}
-		},
-		errorVisible = state.englishLevel.validationState is NotEmptyValidationState.Invalid,
-		errorMessage = stringResource(id = notEmptyErrorMessage(state = state.englishLevel.validationState)),
-		modifier = Modifier.padding(top = 16.dp),
-	)
+    WuiSelectionField(
+        label = stringResource(R.string.sign_up_english_level_label),
+        value = selectedLabel,
+        options = englishLevelLabels,
+        onValueChange = { label ->
+            val index = englishLevelLabels.indexOf(label)
+            if (index >= 0) {
+                component.handleChangeEnglishLevel(englishLevelCodes[index])
+            }
+        },
+        errorVisible = state.englishLevel.validationState is NotEmptyValidationState.Invalid,
+        errorMessage = stringResource(id = notEmptyErrorMessage(state = state.englishLevel.validationState)),
+        modifier = Modifier.padding(top = 16.dp),
+    )
 }

@@ -29,100 +29,94 @@ import com.nmichail.wordly.android.shared.practice.PracticeFinishedContent
 
 @Composable
 fun ReviewContent(
-	component: ReviewComponent,
-	modifier: Modifier = Modifier,
+    component: ReviewComponent,
+    modifier: Modifier = Modifier,
 ) {
-	val state by component.model.subscribeAsState()
+    val state by component.model.subscribeAsState()
 
-	when (val currentState = state) {
-		ReviewStore.State.Initial -> {
-			Box(
-				modifier = modifier
+    when (val uiState = state) {
+        ReviewStore.State.Initial,
+        ReviewStore.State.Loading -> {
+            Box(
+                modifier = modifier
 					.fillMaxSize()
 					.background(MaterialTheme.colorScheme.background),
-				contentAlignment = Alignment.Center,
-			) {
-				CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
-			}
-		}
-		ReviewStore.State.Loading -> {
-			Box(
-				modifier = modifier
-					.fillMaxSize()
-					.background(MaterialTheme.colorScheme.background),
-				contentAlignment = Alignment.Center,
-			) {
-				CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
-			}
-		}
-		is ReviewStore.State.Content.InProgress -> {
-			ReviewInProgressContent(
-				state = currentState,
-				component = component,
-				modifier = modifier,
-			)
-		}
-		is ReviewStore.State.Content.Finished -> {
-			PracticeFinishedContent(
-				correctCount = currentState.correctCount,
-				totalCount = currentState.totalCount,
-				subtitle = stringResource(
-					R.string.review_finished_subtitle,
-					currentState.correctCount,
-					currentState.totalCount,
-				),
-				primaryActionText = stringResource(R.string.review_finished_home),
-				onPrimaryClick = component::handleFinish,
-				modifier = modifier,
-			)
-		}
-		ReviewStore.State.Error -> {
-			ReviewError(
-				onRetryClick = component::handleRetry,
-				onCloseClick = component::handleClose,
-				modifier = modifier.fillMaxSize(),
-			)
-		}
-	}
+                contentAlignment = Alignment.Center,
+            ) {
+                CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
+            }
+        }
+
+        is ReviewStore.State.Content.InProgress -> {
+            ReviewInProgressContent(
+                state = uiState,
+                component = component,
+                modifier = modifier,
+            )
+        }
+
+        is ReviewStore.State.Content.Finished -> {
+            PracticeFinishedContent(
+                correctCount = uiState.correctCount,
+                totalCount = uiState.totalCount,
+                subtitle = stringResource(
+                    R.string.review_finished_subtitle,
+                    uiState.correctCount,
+                    uiState.totalCount,
+                ),
+                primaryActionText = stringResource(R.string.review_finished_home),
+                onPrimaryClick = component::handleFinish,
+                modifier = modifier,
+            )
+        }
+
+        ReviewStore.State.Error -> {
+            ReviewError(
+                onRetryClick = component::handleRetry,
+                onCloseClick = component::handleClose,
+                modifier = modifier.fillMaxSize(),
+            )
+        }
+    }
 }
 
 @Composable
 private fun ReviewError(
-	onRetryClick: () -> Unit,
-	onCloseClick: () -> Unit,
-	modifier: Modifier = Modifier,
+    onRetryClick: () -> Unit,
+    onCloseClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-	Column(
-		modifier = modifier
+    Column(
+        modifier = modifier
 			.background(MaterialTheme.colorScheme.background)
 			.statusBarsPadding()
 			.navigationBarsPadding()
 			.padding(horizontal = 24.dp),
-		verticalArrangement = Arrangement.Center,
-		horizontalAlignment = Alignment.CenterHorizontally,
-	) {
-		Text(
-			text = stringResource(R.string.review_error_title),
-			style = MaterialTheme.typography.titleMedium,
-			color = MaterialTheme.colorScheme.onSurface,
-			textAlign = TextAlign.Center,
-		)
-		Text(
-			text = stringResource(R.string.review_error_description),
-			style = MaterialTheme.typography.bodyMedium,
-			color = MaterialTheme.colorScheme.onSurfaceVariant,
-			textAlign = TextAlign.Center,
-			modifier = Modifier.padding(top = 8.dp),
-		)
-		WuiButton(
-			text = stringResource(R.string.review_retry),
-			onClick = onRetryClick,
-			modifier = Modifier.padding(top = 24.dp),
-		)
-		WuiTextLink(
-			text = stringResource(R.string.review_close_content_description),
-			onClick = onCloseClick,
-			modifier = Modifier.padding(top = 12.dp),
-		)
-	}
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Text(
+            text = stringResource(R.string.review_error_title),
+            style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.onSurface,
+            textAlign = TextAlign.Center,
+        )
+        Text(
+            text = stringResource(R.string.review_error_description),
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.padding(top = 8.dp),
+        )
+        WuiButton(
+            text = stringResource(R.string.review_retry),
+            onClick = onRetryClick,
+            modifier = Modifier.padding(top = 24.dp),
+        )
+        WuiTextLink(
+            text = stringResource(R.string.review_close_content_description),
+            onClick = onCloseClick,
+            modifier = Modifier.padding(top = 12.dp),
+        )
+    }
 }

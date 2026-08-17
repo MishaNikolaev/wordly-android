@@ -51,269 +51,262 @@ import com.nmichail.wordly.android.shared.catalog.CatalogRemoteImage
 
 @Composable
 fun ConstructorContent(
-	component: ConstructorComponent,
-	modifier: Modifier = Modifier,
+    component: ConstructorComponent,
+    modifier: Modifier = Modifier,
 ) {
-	val state by component.model.subscribeAsState()
+    val state by component.model.subscribeAsState()
 
-	when (val currentState = state) {
-		ConstructorStore.State.Initial -> {
-			Box(
-				modifier = modifier
+    when (val uiState = state) {
+        ConstructorStore.State.Initial,
+        ConstructorStore.State.Loading -> {
+            Box(
+                modifier = modifier
 					.fillMaxSize()
 					.background(MaterialTheme.colorScheme.background),
-				contentAlignment = Alignment.Center,
-			) {
-				CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
-			}
-		}
-		ConstructorStore.State.Loading -> {
-			Box(
-				modifier = modifier
-					.fillMaxSize()
-					.background(MaterialTheme.colorScheme.background),
-				contentAlignment = Alignment.Center,
-			) {
-				CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
-			}
-		}
-		ConstructorStore.State.Error -> {
-			ConstructorError(
-				onRetryClick = component::handleRetry,
-				onBackClick = component::handleBack,
-				modifier = modifier.fillMaxSize(),
-			)
-		}
-		is ConstructorStore.State.Content -> {
-			ConstructorLoaded(
-				state = currentState,
-				component = component,
-				modifier = modifier,
-			)
-		}
-	}
+                contentAlignment = Alignment.Center,
+            ) {
+                CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
+            }
+        }
+
+        ConstructorStore.State.Error -> {
+            ConstructorError(
+                onRetryClick = component::handleRetry,
+                onBackClick = component::handleBack,
+                modifier = modifier.fillMaxSize(),
+            )
+        }
+
+        is ConstructorStore.State.Content -> {
+            ConstructorLoaded(
+                state = uiState,
+                component = component,
+                modifier = modifier,
+            )
+        }
+    }
 }
 
 @Composable
 private fun ConstructorError(
-	onRetryClick: () -> Unit,
-	onBackClick: () -> Unit,
-	modifier: Modifier = Modifier,
+    onRetryClick: () -> Unit,
+    onBackClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-	Column(
-		modifier = modifier
+    Column(
+        modifier = modifier
 			.background(MaterialTheme.colorScheme.background)
 			.statusBarsPadding()
 			.padding(horizontal = 24.dp),
-		verticalArrangement = Arrangement.Center,
-		horizontalAlignment = Alignment.CenterHorizontally,
-	) {
-		Text(
-			text = stringResource(R.string.constructor_error_title),
-			style = MaterialTheme.typography.titleLarge,
-			color = MaterialTheme.colorScheme.onBackground,
-			textAlign = TextAlign.Center,
-		)
-		Text(
-			text = stringResource(R.string.constructor_error_subtitle),
-			style = MaterialTheme.typography.bodyMedium,
-			color = MaterialTheme.colorScheme.onSurfaceVariant,
-			textAlign = TextAlign.Center,
-			modifier = Modifier.padding(top = 8.dp),
-		)
-		WuiButton(
-			text = stringResource(R.string.constructor_retry),
-			onClick = onRetryClick,
-			modifier = Modifier
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Text(
+            text = stringResource(R.string.constructor_error_title),
+            style = MaterialTheme.typography.titleLarge,
+            color = MaterialTheme.colorScheme.onBackground,
+            textAlign = TextAlign.Center,
+        )
+        Text(
+            text = stringResource(R.string.constructor_error_subtitle),
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.padding(top = 8.dp),
+        )
+        WuiButton(
+            text = stringResource(R.string.constructor_retry),
+            onClick = onRetryClick,
+            modifier = Modifier
 				.fillMaxWidth()
 				.padding(top = 24.dp),
-		)
-		WuiTextLink(
-			text = stringResource(R.string.constructor_back),
-			onClick = onBackClick,
-			modifier = Modifier.padding(top = 16.dp),
-		)
-	}
+        )
+        WuiTextLink(
+            text = stringResource(R.string.constructor_back),
+            onClick = onBackClick,
+            modifier = Modifier.padding(top = 16.dp),
+        )
+    }
 }
 
 @Composable
 private fun ConstructorLoaded(
-	state: ConstructorStore.State.Content,
-	component: ConstructorComponent,
-	modifier: Modifier = Modifier,
+    state: ConstructorStore.State.Content,
+    component: ConstructorComponent,
+    modifier: Modifier = Modifier,
 ) {
-	Column(
-		modifier = modifier
+    Column(
+        modifier = modifier
 			.fillMaxSize()
 			.background(MaterialTheme.colorScheme.background)
 			.statusBarsPadding()
 			.navigationBarsPadding(),
-	) {
-		ConstructorTopBar(
-			title = state.title,
-			onBackClick = component::handleBack,
-		)
-		LazyColumn(
-			modifier = Modifier.fillMaxSize(),
-			contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
-			verticalArrangement = Arrangement.spacedBy(12.dp),
-		) {
-			state.levelBanner?.let { banner ->
-				item(key = "level_banner") {
-					ConstructorLevelBannerContent(
-						banner = banner,
-						onLevelChange = component::handleLevelChange,
-					)
-				}
-			}
-			item(key = "search") {
-				WuiSearchField(
-					value = state.searchQuery,
-					onValueChange = component::handleSearchQueryChange,
-					placeholder = state.searchPlaceholder,
-				)
-			}
-			state.sections.forEach { section ->
-				item(key = "section_${section.title}") {
-					WuiSectionLabel(
-						text = section.title,
-						modifier = Modifier.padding(top = 8.dp, bottom = 4.dp),
-					)
-				}
-				items(
-					items = section.items,
-					key = { it.id },
-				) { item ->
-					WuiCatalogCard(
-						title = item.title,
-						subtitle = item.subtitle,
-						badge = item.badge,
-						image = { CatalogRemoteImage(url = item.imageUrl) },
-						onClick = { component.handleThemeClick(item.id) },
-					)
-				}
-			}
-		}
-	}
+    ) {
+        ConstructorTopBar(
+            title = state.title,
+            onBackClick = component::handleBack,
+        )
+        LazyColumn(
+            modifier = Modifier.fillMaxSize(),
+            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+        ) {
+            state.levelBanner?.let { banner ->
+                item(key = "level_banner") {
+                    ConstructorLevelBannerContent(
+                        banner = banner,
+                        onLevelChange = component::handleLevelChange,
+                    )
+                }
+            }
+            item(key = "search") {
+                WuiSearchField(
+                    value = state.searchQuery,
+                    onValueChange = component::handleSearchQueryChange,
+                    placeholder = state.searchPlaceholder,
+                )
+            }
+            state.sections.forEach { section ->
+                item(key = "section_${section.title}") {
+                    WuiSectionLabel(
+                        text = section.title,
+                        modifier = Modifier.padding(top = 8.dp, bottom = 4.dp),
+                    )
+                }
+                items(
+                    items = section.items,
+                    key = { it.id },
+                ) { item ->
+                    WuiCatalogCard(
+                        title = item.title,
+                        subtitle = item.subtitle,
+                        badge = item.badge,
+                        image = { CatalogRemoteImage(url = item.imageUrl) },
+                        onClick = { component.handleThemeClick(item.id) },
+                    )
+                }
+            }
+        }
+    }
 }
 
 @Composable
 private fun ConstructorTopBar(
-	title: String,
-	onBackClick: () -> Unit,
-	modifier: Modifier = Modifier,
+    title: String,
+    onBackClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-	Row(
-		modifier = modifier
+    Row(
+        modifier = modifier
 			.fillMaxWidth()
 			.padding(horizontal = 4.dp),
-		verticalAlignment = Alignment.CenterVertically,
-	) {
-		IconButton(onClick = onBackClick) {
-			Icon(
-				imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-				contentDescription = stringResource(R.string.constructor_back),
-				tint = MaterialTheme.colorScheme.onBackground,
-			)
-		}
-		Text(
-			text = title,
-			style = MaterialTheme.typography.titleLarge,
-			fontWeight = FontWeight.SemiBold,
-			color = MaterialTheme.colorScheme.onBackground,
-			modifier = Modifier.padding(start = 4.dp),
-		)
-	}
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        IconButton(onClick = onBackClick) {
+            Icon(
+                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                contentDescription = stringResource(R.string.constructor_back),
+                tint = MaterialTheme.colorScheme.onBackground,
+            )
+        }
+        Text(
+            text = title,
+            style = MaterialTheme.typography.titleLarge,
+            fontWeight = FontWeight.SemiBold,
+            color = MaterialTheme.colorScheme.onBackground,
+            modifier = Modifier.padding(start = 4.dp),
+        )
+    }
 }
 
 @Composable
 private fun ConstructorLevelBannerContent(
-	banner: ConstructorLevelBanner,
-	onLevelChange: (String) -> Unit,
-	modifier: Modifier = Modifier,
+    banner: ConstructorLevelBanner,
+    onLevelChange: (String) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-	val colorScheme = MaterialTheme.colorScheme
+    val colorScheme = MaterialTheme.colorScheme
 
-	Row(
-		modifier = modifier
+    Row(
+        modifier = modifier
 			.fillMaxWidth()
 			.clip(MaterialTheme.shapes.extraLarge)
 			.background(colorScheme.primaryContainer)
 			.padding(horizontal = 16.dp, vertical = 14.dp),
-		verticalAlignment = Alignment.CenterVertically,
-		horizontalArrangement = Arrangement.spacedBy(12.dp),
-	) {
-		Text(
-			text = banner.text,
-			style = MaterialTheme.typography.bodyMedium,
-			color = colorScheme.onPrimaryContainer,
-			modifier = Modifier.weight(1f),
-		)
-		ConstructorLevelSelector(
-			selectedLevel = banner.levelLabel,
-			levels = banner.levels.ifEmpty { listOf(banner.levelLabel) },
-			onLevelChange = onLevelChange,
-		)
-	}
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
+    ) {
+        Text(
+            text = banner.text,
+            style = MaterialTheme.typography.bodyMedium,
+            color = colorScheme.onPrimaryContainer,
+            modifier = Modifier.weight(1f),
+        )
+        ConstructorLevelSelector(
+            selectedLevel = banner.levelLabel,
+            levels = banner.levels.ifEmpty { listOf(banner.levelLabel) },
+            onLevelChange = onLevelChange,
+        )
+    }
 }
 
 @Composable
 private fun ConstructorLevelSelector(
-	selectedLevel: String,
-	levels: List<String>,
-	onLevelChange: (String) -> Unit,
-	modifier: Modifier = Modifier,
+    selectedLevel: String,
+    levels: List<String>,
+    onLevelChange: (String) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-	val colorScheme = MaterialTheme.colorScheme
-	var expanded by remember { mutableStateOf(false) }
+    val colorScheme = MaterialTheme.colorScheme
+    var expanded by remember { mutableStateOf(false) }
 
-	Box(modifier = modifier) {
-		Row(
-			modifier = Modifier
+    Box(modifier = modifier) {
+        Row(
+            modifier = Modifier
 				.clip(MaterialTheme.shapes.extraLarge)
 				.background(colorScheme.primary)
 				.clickable { expanded = true }
 				.padding(horizontal = 12.dp, vertical = 8.dp),
-			verticalAlignment = Alignment.CenterVertically,
-			horizontalArrangement = Arrangement.spacedBy(2.dp),
-		) {
-			Text(
-				text = selectedLevel,
-				style = MaterialTheme.typography.labelLarge,
-				fontWeight = FontWeight.SemiBold,
-				color = colorScheme.onPrimary,
-			)
-			Icon(
-				imageVector = Icons.Filled.KeyboardArrowDown,
-				contentDescription = stringResource(R.string.constructor_level_banner_action),
-				tint = colorScheme.onPrimary,
-				modifier = Modifier.size(18.dp),
-			)
-		}
-		DropdownMenu(
-			expanded = expanded,
-			onDismissRequest = { expanded = false },
-		) {
-			levels.forEach { level ->
-				DropdownMenuItem(
-					text = {
-						Text(
-							text = level,
-							fontWeight = if (level == selectedLevel) {
-								FontWeight.SemiBold
-							} else {
-								FontWeight.Normal
-							},
-						)
-					},
-					onClick = {
-						expanded = false
-						if (level != selectedLevel) {
-							onLevelChange(level)
-						}
-					},
-				)
-			}
-		}
-	}
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(2.dp),
+        ) {
+            Text(
+                text = selectedLevel,
+                style = MaterialTheme.typography.labelLarge,
+                fontWeight = FontWeight.SemiBold,
+                color = colorScheme.onPrimary,
+            )
+            Icon(
+                imageVector = Icons.Filled.KeyboardArrowDown,
+                contentDescription = stringResource(R.string.constructor_level_banner_action),
+                tint = colorScheme.onPrimary,
+                modifier = Modifier.size(18.dp),
+            )
+        }
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false },
+        ) {
+            levels.forEach { level ->
+                DropdownMenuItem(
+                    text = {
+                        Text(
+                            text = level,
+                            fontWeight = if (level == selectedLevel) {
+                                FontWeight.SemiBold
+                            } else {
+                                FontWeight.Normal
+                            },
+                        )
+                    },
+                    onClick = {
+                        expanded = false
+                        if (level != selectedLevel) {
+                            onLevelChange(level)
+                        }
+                    },
+                )
+            }
+        }
+    }
 }

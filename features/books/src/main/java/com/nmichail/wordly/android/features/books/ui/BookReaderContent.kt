@@ -29,111 +29,104 @@ import com.nmichail.wordly.android.features.books.presentation.detail.BookReader
 
 @Composable
 fun BookReaderContent(
-	component: BookReaderComponent,
-	modifier: Modifier = Modifier,
+    component: BookReaderComponent,
+    modifier: Modifier = Modifier,
 ) {
-	val state by component.model.subscribeAsState()
+    val state by component.model.subscribeAsState()
 
-	when (val currentState = state) {
-		BookReaderStore.State.Initial -> {
-			Box(
-				modifier = modifier
+    when (val uiState = state) {
+        BookReaderStore.State.Initial,
+        BookReaderStore.State.Loading -> {
+            Box(
+                modifier = modifier
 					.fillMaxSize()
 					.background(MaterialTheme.colorScheme.background),
-				contentAlignment = Alignment.Center,
-			) {
-				CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
-			}
-		}
-		BookReaderStore.State.Loading -> {
-			Box(
-				modifier = modifier
-					.fillMaxSize()
-					.background(MaterialTheme.colorScheme.background),
-				contentAlignment = Alignment.Center,
-			) {
-				CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
-			}
-		}
-		BookReaderStore.State.Error -> {
-			BookReaderError(
-				onRetryClick = component::handleRetry,
-				onCloseClick = component::handleClose,
-				modifier = modifier.fillMaxSize(),
-			)
-		}
-		is BookReaderStore.State.Content -> {
-			BookReaderLoaded(
-				state = currentState,
-				onCloseClick = component::handleClose,
-				onToggleTranslate = component::handleToggleTranslate,
-				onSelectWord = component::handleSelectWord,
-				onDismissWordDialog = component::handleDismissWordDialog,
-				onAddWordToCard = component::handleAddWordToCard,
-				onDismissWordAddedDialog = component::handleDismissWordAddedDialog,
-				modifier = modifier,
-			)
-		}
-	}
+                contentAlignment = Alignment.Center,
+            ) {
+                CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
+            }
+        }
+
+        BookReaderStore.State.Error -> {
+            BookReaderError(
+                onRetryClick = component::handleRetry,
+                onCloseClick = component::handleClose,
+                modifier = modifier.fillMaxSize(),
+            )
+        }
+
+        is BookReaderStore.State.Content -> {
+            BookReaderLoaded(
+                state = uiState,
+                onCloseClick = component::handleClose,
+                onToggleTranslate = component::handleToggleTranslate,
+                onSelectWord = component::handleSelectWord,
+                onDismissWordDialog = component::handleDismissWordDialog,
+                onAddWordToCard = component::handleAddWordToCard,
+                onDismissWordAddedDialog = component::handleDismissWordAddedDialog,
+                modifier = modifier,
+            )
+        }
+    }
 }
 
 @Composable
 private fun BookReaderError(
-	onRetryClick: () -> Unit,
-	onCloseClick: () -> Unit,
-	modifier: Modifier = Modifier,
+    onRetryClick: () -> Unit,
+    onCloseClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-	Column(
-		modifier = modifier
+    Column(
+        modifier = modifier
 			.background(MaterialTheme.colorScheme.background)
 			.statusBarsPadding()
 			.padding(horizontal = 24.dp),
-		verticalArrangement = Arrangement.Center,
-		horizontalAlignment = Alignment.CenterHorizontally,
-	) {
-		Text(
-			text = stringResource(R.string.book_reader_error_title),
-			style = MaterialTheme.typography.titleLarge,
-			color = MaterialTheme.colorScheme.onBackground,
-			textAlign = TextAlign.Center,
-		)
-		Text(
-			text = stringResource(R.string.book_reader_error_subtitle),
-			style = MaterialTheme.typography.bodyMedium,
-			color = MaterialTheme.colorScheme.onSurfaceVariant,
-			textAlign = TextAlign.Center,
-			modifier = Modifier.padding(top = 8.dp),
-		)
-		WuiButton(
-			text = stringResource(R.string.book_reader_retry),
-			onClick = onRetryClick,
-			modifier = Modifier
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Text(
+            text = stringResource(R.string.book_reader_error_title),
+            style = MaterialTheme.typography.titleLarge,
+            color = MaterialTheme.colorScheme.onBackground,
+            textAlign = TextAlign.Center,
+        )
+        Text(
+            text = stringResource(R.string.book_reader_error_subtitle),
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.padding(top = 8.dp),
+        )
+        WuiButton(
+            text = stringResource(R.string.book_reader_retry),
+            onClick = onRetryClick,
+            modifier = Modifier
 				.fillMaxWidth()
 				.padding(top = 24.dp),
-		)
-		WuiTextLink(
-			text = stringResource(R.string.book_reader_close),
-			onClick = onCloseClick,
-			modifier = Modifier.padding(top = 16.dp),
-		)
-	}
+        )
+        WuiTextLink(
+            text = stringResource(R.string.book_reader_close),
+            onClick = onCloseClick,
+            modifier = Modifier.padding(top = 16.dp),
+        )
+    }
 }
 
 @Composable
 internal fun BookReaderWordLookupDialog(
-	definition: BookWordDefinition,
-	added: Boolean,
-	onAddClick: () -> Unit,
-	onDismiss: () -> Unit,
+    definition: BookWordDefinition,
+    added: Boolean,
+    onAddClick: () -> Unit,
+    onDismiss: () -> Unit,
 ) {
-	BookWordLookupDialog(
-		word = definition.word,
-		phonetic = definition.phonetic,
-		translation = definition.translation,
-		addButtonText = stringResource(R.string.book_reader_add_word),
-		addedStatusText = stringResource(R.string.book_reader_word_added_status),
-		added = added,
-		onAddClick = onAddClick,
-		onDismiss = onDismiss,
-	)
+    BookWordLookupDialog(
+        word = definition.word,
+        phonetic = definition.phonetic,
+        translation = definition.translation,
+        addButtonText = stringResource(R.string.book_reader_add_word),
+        addedStatusText = stringResource(R.string.book_reader_word_added_status),
+        added = added,
+        onAddClick = onAddClick,
+        onDismiss = onDismiss,
+    )
 }
