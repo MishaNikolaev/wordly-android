@@ -26,6 +26,8 @@ interface ProfileStore :
 	sealed interface Label {
 
 		data object OpenEdit : Label
+
+		data object OpenReminderTimes : Label
 	}
 
 	sealed interface Intent {
@@ -36,13 +38,13 @@ interface ProfileStore :
 
 		data object OpenEdit : Intent
 
+		data object OpenReminderTimes : Intent
+
 		data class UpdateLevel(val level: String) : Intent
 
 		data object ToggleNotificationsEnabled : Intent
 
 		data class UpdateDailyGoal(val goal: DailyGoal) : Intent
-
-		data class UpdateNotificationTimes(val times: List<String>) : Intent
 
 		data class SetThemeMode(val mode: AppThemeMode) : Intent
 

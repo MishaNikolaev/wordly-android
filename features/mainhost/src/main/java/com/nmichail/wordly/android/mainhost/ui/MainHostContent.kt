@@ -18,6 +18,7 @@ import com.nmichail.wordly.android.features.constructor.ui.ConstructorPracticeCo
 import com.nmichail.wordly.android.features.home.ui.HomeContent
 import com.nmichail.wordly.android.features.profile.ui.ProfileContent
 import com.nmichail.wordly.android.features.profile.ui.ProfileEditContent
+import com.nmichail.wordly.android.features.profile.ui.ReminderTimesContent
 import com.nmichail.wordly.android.features.review.ui.ReviewContent
 import com.nmichail.wordly.android.features.materials.ui.MaterialDetailContent
 import com.nmichail.wordly.android.features.materials.ui.MaterialsContent
@@ -86,6 +87,10 @@ private fun MainHostChildContent(
 			modifier = Modifier.padding(innerPadding),
 		)
 		is MainHostComponent.Child.ProfileEdit -> ProfileEditContent(
+			component = child.component,
+			modifier = Modifier.padding(innerPadding),
+		)
+		is MainHostComponent.Child.ReminderTimes -> ReminderTimesContent(
 			component = child.component,
 			modifier = Modifier.padding(innerPadding),
 		)

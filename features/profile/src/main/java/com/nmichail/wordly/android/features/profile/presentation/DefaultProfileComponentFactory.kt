@@ -10,10 +10,12 @@ internal class DefaultProfileComponentFactory @Inject constructor(
 	override fun invoke(
 		componentContext: ComponentContext,
 		onOpenEdit: () -> Unit,
+		onOpenReminderTimes: () -> Unit,
 	): ProfileComponent =
 		DefaultProfileComponent(
 			componentContext = componentContext,
 			profileStoreFactory = profileStoreFactory,
 			onOpenEdit = onOpenEdit,
+			onOpenReminderTimes = onOpenReminderTimes,
 		)
 }

@@ -117,9 +117,8 @@ private fun ProfileLoaded(
 	modifier: Modifier = Modifier,
 ) {
 	ProfileDialogHost(
-		profile = state.profile,
+		state = state,
 		themeMode = themeMode,
-		loggingOut = state.loggingOut,
 		component = component,
 	) { openDialog ->
 		Column(
@@ -150,7 +149,7 @@ private fun ProfileLoaded(
 				ProfileSettingsSection(
 					state = state,
 					themeMode = themeMode,
-					onOpenNotifications = { openDialog(ProfileDialog.Notifications) },
+					onOpenNotifications = component::handleOpenReminderTimes,
 					onOpenDailyGoal = { openDialog(ProfileDialog.DailyGoal) },
 					onOpenTheme = { openDialog(ProfileDialog.Theme) },
 					onToggleNotificationsEnabled = component::handleToggleNotificationsEnabled,

@@ -12,6 +12,7 @@ import com.nmichail.wordly.android.features.materials.presentation.MaterialsComp
 import com.nmichail.wordly.android.features.materials.presentation.detail.MaterialDetailComponent
 import com.nmichail.wordly.android.features.profile.presentation.ProfileComponent
 import com.nmichail.wordly.android.features.profile.presentation.edit.ProfileEditComponent
+import com.nmichail.wordly.android.features.profile.presentation.reminder.ReminderTimesComponent
 import com.nmichail.wordly.android.features.review.presentation.ReviewComponent
 import com.nmichail.wordly.android.features.words.presentation.WordsComponent
 import javax.inject.Inject
@@ -23,6 +24,7 @@ internal class DefaultMainHostComponentFactory @Inject constructor(
 	private val materialDetailComponentFactory: MaterialDetailComponent.Factory,
 	private val profileComponentFactory: ProfileComponent.Factory,
 	private val profileEditComponentFactory: ProfileEditComponent.Factory,
+	private val reminderTimesComponentFactory: ReminderTimesComponent.Factory,
 	private val reviewComponentFactory: ReviewComponent.Factory,
 	private val cardsComponentFactory: CardsComponent.Factory,
 	private val cardPracticeComponentFactory: CardPracticeComponent.Factory,
@@ -41,6 +43,7 @@ internal class DefaultMainHostComponentFactory @Inject constructor(
 			materialDetailComponentFactory = materialDetailComponentFactory,
 			profileComponentFactory = profileComponentFactory,
 			profileEditComponentFactory = profileEditComponentFactory,
+			reminderTimesComponentFactory = reminderTimesComponentFactory,
 			reviewComponentFactory = reviewComponentFactory,
 			cardsComponentFactory = cardsComponentFactory,
 			cardPracticeComponentFactory = cardPracticeComponentFactory,

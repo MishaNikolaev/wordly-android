@@ -13,13 +13,13 @@ interface ProfileComponent {
 
 	fun handleOpenEdit()
 
+	fun handleOpenReminderTimes()
+
 	fun handleUpdateLevel(level: String)
 
 	fun handleToggleNotificationsEnabled()
 
 	fun handleUpdateDailyGoal(goal: DailyGoal)
-
-	fun handleUpdateNotificationTimes(times: List<String>)
 
 	fun handleSetThemeMode(mode: AppThemeMode)
 
@@ -32,6 +32,7 @@ interface ProfileComponent {
 		operator fun invoke(
 			componentContext: ComponentContext,
 			onOpenEdit: () -> Unit,
+			onOpenReminderTimes: () -> Unit,
 		): ProfileComponent
 	}
 }

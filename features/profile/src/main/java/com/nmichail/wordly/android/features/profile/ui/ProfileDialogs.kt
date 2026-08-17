@@ -29,37 +29,31 @@ import com.nmichail.wordly.android.features.profile.R
 import com.nmichail.wordly.android.features.profile.domain.entity.DailyGoal
 import com.nmichail.wordly.android.features.profile.domain.entity.DailyGoals
 import com.nmichail.wordly.android.features.profile.domain.entity.EnglishLevels
-import com.nmichail.wordly.android.features.profile.domain.entity.NotificationTimeSlots
 import com.nmichail.wordly.android.features.profile.domain.entity.UserProfile
 import com.nmichail.wordly.android.features.profile.presentation.ProfileComponent
+import com.nmichail.wordly.android.features.profile.presentation.ProfileStore
 
 private val LogoutDialogMaxWidth = 320.dp
 
 internal enum class ProfileDialog {
 	Level,
 	DailyGoal,
-	Notifications,
 	Theme,
 	Logout,
 }
 
 @Composable
 internal fun ProfileDialogHost(
-	profile: UserProfile,
+	state: ProfileStore.State.Content,
 	themeMode: AppThemeMode,
-	loggingOut: Boolean,
 	component: ProfileComponent,
 	content: @Composable (openDialog: (ProfileDialog) -> Unit) -> Unit,
 ) {
 	var openDialog by remember { mutableStateOf<ProfileDialog?>(null) }
-	var notificationDraft by remember { mutableStateOf<Set<String>>(emptySet()) }
 	var themeInitial by remember { mutableStateOf<AppThemeMode?>(null) }
 
 	content { dialog ->
 		when (dialog) {
-			ProfileDialog.Notifications -> {
-				notificationDraft = profile.notificationTimes.map { it.time }.toSet()
-			}
 			ProfileDialog.Theme -> {
 				themeInitial = themeMode
 			}
@@ -69,15 +63,13 @@ internal fun ProfileDialogHost(
 	}
 
 	ProfileDialogs(
-		profile = profile,
+		profile = state.profile,
 		themeMode = themeMode,
-		loggingOut = loggingOut,
+		loggingOut = state.loggingOut,
 		openDialog = openDialog,
-		notificationDraft = notificationDraft,
 		themeInitial = themeInitial,
 		component = component,
 		onOpenDialogChange = { openDialog = it },
-		onNotificationDraftChange = { notificationDraft = it },
 	)
 }
 
@@ -87,11 +79,9 @@ private fun ProfileDialogs(
 	themeMode: AppThemeMode,
 	loggingOut: Boolean,
 	openDialog: ProfileDialog?,
-	notificationDraft: Set<String>,
 	themeInitial: AppThemeMode?,
 	component: ProfileComponent,
 	onOpenDialogChange: (ProfileDialog?) -> Unit,
-	onNotificationDraftChange: (Set<String>) -> Unit,
 ) {
 	when (openDialog) {
 		ProfileDialog.Level -> LevelDialog(
@@ -106,24 +96,6 @@ private fun ProfileDialogs(
 			selected = profile.dailyGoal,
 			onConfirm = { goal ->
 				component.handleUpdateDailyGoal(goal = goal)
-				onOpenDialogChange(null)
-			},
-			onDismiss = { onOpenDialogChange(null) },
-		)
-		ProfileDialog.Notifications -> NotificationsDialog(
-			options = NotificationTimeSlots.options,
-			selected = notificationDraft,
-			onToggle = { slot ->
-				val next = notificationDraft.toMutableSet()
-				if (slot.time in next) {
-					next.remove(slot.time)
-				} else {
-					next.add(slot.time)
-				}
-				onNotificationDraftChange(next)
-			},
-			onConfirm = {
-				component.handleUpdateNotificationTimes(times = notificationDraft.toList())
 				onOpenDialogChange(null)
 			},
 			onDismiss = { onOpenDialogChange(null) },
