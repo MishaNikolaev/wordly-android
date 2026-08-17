@@ -56,7 +56,7 @@ class NetworkSelectionStoreTest {
 
 	@Test
 	fun `init EXPECT init state with data`() {
-		val expected = NetworkSelectionStore.State(
+		val expected = NetworkSelectionStore.State.Content(
 			stands = stands,
 			selectedStand = NetworkStand.DEV,
 		)
@@ -80,7 +80,7 @@ class NetworkSelectionStoreTest {
 
 	@Test
 	fun `select new stand EXPECT state with new stand`() {
-		val expected = NetworkSelectionStore.State(
+		val expected = NetworkSelectionStore.State.Content(
 			stands = stands,
 			selectedStand = NetworkStand.MOCK,
 		)

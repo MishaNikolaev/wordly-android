@@ -57,6 +57,16 @@ fun ConstructorContent(
 	val state by component.model.subscribeAsState()
 
 	when (val currentState = state) {
+		ConstructorStore.State.Initial -> {
+			Box(
+				modifier = modifier
+					.fillMaxSize()
+					.background(MaterialTheme.colorScheme.background),
+				contentAlignment = Alignment.Center,
+			) {
+				CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
+			}
+		}
 		ConstructorStore.State.Loading -> {
 			Box(
 				modifier = modifier

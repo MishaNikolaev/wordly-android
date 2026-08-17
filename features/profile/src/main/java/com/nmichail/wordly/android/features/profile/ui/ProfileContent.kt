@@ -47,6 +47,7 @@ fun ProfileContent(
 	val state by component.model.subscribeAsState()
 
 	when (val current = state) {
+		ProfileStore.State.Initial -> ProfileLoading(modifier = modifier)
 		ProfileStore.State.Loading -> ProfileLoading(modifier = modifier)
 		is ProfileStore.State.Content -> ProfileLoaded(
 			state = current,

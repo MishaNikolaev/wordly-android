@@ -33,7 +33,7 @@ internal class HomeStoreFactory @Inject constructor(
 			HomeStore,
 			Store<HomeStore.Intent, HomeStore.State, HomeStore.Label> by storeFactory.create(
 				name = "HomeStore",
-				initialState = HomeStore.State.Loading,
+				initialState = HomeStore.State.Initial,
 				bootstrapper = SimpleBootstrapper(Action.Load),
 				executorFactory = ::ExecutorImpl,
 				reducer = ReducerImpl,

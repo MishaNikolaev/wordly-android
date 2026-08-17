@@ -2,6 +2,7 @@ package com.nmichail.wordly.android.features.words.presentation.dialog
 
 import kotlinx.coroutines.launch
 import com.arkivanov.mvikotlin.core.store.Reducer
+import com.arkivanov.mvikotlin.core.store.SimpleBootstrapper
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.logging.store.LoggingStoreFactory
@@ -27,10 +28,16 @@ internal class AddWordStoreFactory @Inject constructor(
 			AddWordStore,
 			Store<AddWordStore.Intent, AddWordStore.State, AddWordStore.Label> by storeFactory.create(
 				name = "AddWordStore",
-				initialState = AddWordStore.State.Closed,
+				initialState = AddWordStore.State.Initial,
+				bootstrapper = SimpleBootstrapper(Action.Initialize),
 				executorFactory = ::ExecutorImpl,
 				reducer = ReducerImpl,
 			) {}
+
+	private sealed interface Action {
+
+		data object Initialize : Action
+	}
 
 	private sealed interface Msg {
 
@@ -57,13 +64,19 @@ internal class AddWordStoreFactory @Inject constructor(
 	private inner class ExecutorImpl :
 		BaseCoroutineExecutor<
 			AddWordStore.Intent,
-			Nothing,
+			Action,
 			AddWordStore.State,
 			Msg,
 			AddWordStore.Label,
 			>() {
 
 		private var lookupJob: Job? = null
+
+		override fun executeAction(action: Action) {
+			when (action) {
+				Action.Initialize -> dispatch(Msg.Closed)
+			}
+		}
 
 		override fun executeIntent(intent: AddWordStore.Intent) {
 			when (intent) {

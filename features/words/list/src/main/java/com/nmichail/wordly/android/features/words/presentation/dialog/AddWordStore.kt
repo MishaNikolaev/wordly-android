@@ -8,6 +8,8 @@ interface AddWordStore :
 
 	sealed interface State {
 
+		data object Initial : State
+
 		data object Closed : State
 
 		data class Open(val dialog: AddWordDialogState) : State

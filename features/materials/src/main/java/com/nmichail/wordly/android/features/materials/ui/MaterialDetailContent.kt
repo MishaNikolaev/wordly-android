@@ -65,6 +65,12 @@ fun MaterialDetailContent(
 			.background(MaterialTheme.colorScheme.background),
 	) {
 		when (val current = state) {
+			MaterialDetailStore.State.Initial -> {
+				CircularProgressIndicator(
+					modifier = Modifier.align(Alignment.Center),
+					color = MaterialTheme.colorScheme.primary,
+				)
+			}
 			MaterialDetailStore.State.Loading -> {
 				CircularProgressIndicator(
 					modifier = Modifier.align(Alignment.Center),

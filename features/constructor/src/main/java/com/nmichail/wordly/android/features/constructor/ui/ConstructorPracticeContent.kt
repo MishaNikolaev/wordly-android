@@ -35,6 +35,16 @@ fun ConstructorPracticeContent(
 	val state by component.model.subscribeAsState()
 
 	when (val currentState = state) {
+		ConstructorPracticeStore.State.Initial -> {
+			Box(
+				modifier = modifier
+					.fillMaxSize()
+					.background(MaterialTheme.colorScheme.background),
+				contentAlignment = Alignment.Center,
+			) {
+				CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
+			}
+		}
 		ConstructorPracticeStore.State.Loading -> {
 			Box(
 				modifier = modifier
@@ -52,27 +62,26 @@ fun ConstructorPracticeContent(
 				modifier = modifier.fillMaxSize(),
 			)
 		}
-		is ConstructorPracticeStore.State.Content -> {
-			if (currentState.finished) {
-				PracticeFinishedContent(
-					correctCount = currentState.correctCount,
-					totalCount = currentState.totalCount,
-					subtitle = stringResource(
-						R.string.constructor_practice_finished_subtitle,
-						currentState.correctCount,
-						currentState.totalCount,
-					),
-					primaryActionText = stringResource(R.string.constructor_practice_finished_back),
-					onPrimaryClick = component::handleFinish,
-					modifier = modifier,
-				)
-			} else {
-				ConstructorPracticeInProgressContent(
-					state = currentState,
-					component = component,
-					modifier = modifier,
-				)
-			}
+		is ConstructorPracticeStore.State.Content.InProgress -> {
+			ConstructorPracticeInProgressContent(
+				state = currentState,
+				component = component,
+				modifier = modifier,
+			)
+		}
+		is ConstructorPracticeStore.State.Content.Finished -> {
+			PracticeFinishedContent(
+				correctCount = currentState.correctCount,
+				totalCount = currentState.totalCount,
+				subtitle = stringResource(
+					R.string.constructor_practice_finished_subtitle,
+					currentState.correctCount,
+					currentState.totalCount,
+				),
+				primaryActionText = stringResource(R.string.constructor_practice_finished_back),
+				onPrimaryClick = component::handleFinish,
+				modifier = modifier,
+			)
 		}
 	}
 }

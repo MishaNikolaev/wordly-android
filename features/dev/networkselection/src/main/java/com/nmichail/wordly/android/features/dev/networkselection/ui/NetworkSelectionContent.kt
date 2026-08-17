@@ -11,6 +11,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -62,17 +63,27 @@ fun NetworkSelectionContent(
 				.fillMaxSize()
 				.padding(innerPadding),
 		) {
-			NetworkSelectionList(
-				state = state,
-				onStandSelected = component::handleSelectStand,
-			)
+			when (val currentState = state) {
+				NetworkSelectionStore.State.Initial -> {
+					Box(
+						modifier = Modifier.fillMaxSize(),
+						contentAlignment = Alignment.Center,
+					) {
+						CircularProgressIndicator()
+					}
+				}
+				is NetworkSelectionStore.State.Content -> NetworkSelectionList(
+					state = currentState,
+					onStandSelected = component::handleSelectStand,
+				)
+			}
 		}
 	}
 }
 
 @Composable
 private fun NetworkSelectionList(
-	state: NetworkSelectionStore.State,
+	state: NetworkSelectionStore.State.Content,
 	onStandSelected: (NetworkStand) -> Unit,
 ) {
 	val radioColors = RadioButtonDefaults.colors(

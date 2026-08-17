@@ -35,6 +35,16 @@ fun ReviewContent(
 	val state by component.model.subscribeAsState()
 
 	when (val currentState = state) {
+		ReviewStore.State.Initial -> {
+			Box(
+				modifier = modifier
+					.fillMaxSize()
+					.background(MaterialTheme.colorScheme.background),
+				contentAlignment = Alignment.Center,
+			) {
+				CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
+			}
+		}
 		ReviewStore.State.Loading -> {
 			Box(
 				modifier = modifier
@@ -45,27 +55,26 @@ fun ReviewContent(
 				CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
 			}
 		}
-		is ReviewStore.State.Content -> {
-			if (currentState.finished) {
-				PracticeFinishedContent(
-					correctCount = currentState.correctCount,
-					totalCount = currentState.totalCount,
-					subtitle = stringResource(
-						R.string.review_finished_subtitle,
-						currentState.correctCount,
-						currentState.totalCount,
-					),
-					primaryActionText = stringResource(R.string.review_finished_home),
-					onPrimaryClick = component::handleFinish,
-					modifier = modifier,
-				)
-			} else {
-				ReviewInProgressContent(
-					state = currentState,
-					component = component,
-					modifier = modifier,
-				)
-			}
+		is ReviewStore.State.Content.InProgress -> {
+			ReviewInProgressContent(
+				state = currentState,
+				component = component,
+				modifier = modifier,
+			)
+		}
+		is ReviewStore.State.Content.Finished -> {
+			PracticeFinishedContent(
+				correctCount = currentState.correctCount,
+				totalCount = currentState.totalCount,
+				subtitle = stringResource(
+					R.string.review_finished_subtitle,
+					currentState.correctCount,
+					currentState.totalCount,
+				),
+				primaryActionText = stringResource(R.string.review_finished_home),
+				onPrimaryClick = component::handleFinish,
+				modifier = modifier,
+			)
 		}
 		ReviewStore.State.Error -> {
 			ReviewError(

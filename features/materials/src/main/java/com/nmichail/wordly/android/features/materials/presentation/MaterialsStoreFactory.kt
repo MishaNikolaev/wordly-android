@@ -27,7 +27,7 @@ internal class MaterialsStoreFactory @Inject constructor(
 			MaterialsStore,
 			Store<MaterialsStore.Intent, MaterialsStore.State, MaterialsStore.Label> by storeFactory.create(
 				name = "MaterialsStore",
-				initialState = MaterialsStore.State.Loading,
+				initialState = MaterialsStore.State.Initial,
 				bootstrapper = SimpleBootstrapper(Action.Load),
 				executorFactory = ::ExecutorImpl,
 				reducer = ReducerImpl,
@@ -178,6 +178,7 @@ internal class MaterialsStoreFactory @Inject constructor(
 			when (val current = state()) {
 				is MaterialsStore.State.Content -> current.locallyReadIds
 				is MaterialsStore.State.Error -> current.locallyReadIds
+				MaterialsStore.State.Initial -> emptySet()
 				MaterialsStore.State.Loading -> emptySet()
 			}
 	}

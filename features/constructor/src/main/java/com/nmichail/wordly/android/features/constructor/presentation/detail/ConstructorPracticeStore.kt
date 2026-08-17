@@ -9,18 +9,31 @@ interface ConstructorPracticeStore :
 
 	sealed interface State {
 
+		data object Initial : State
+
 		data object Loading : State
 
-		data class Content(
-			val session: ConstructorSession,
-			val currentIndex: Int,
-			val bank: List<ConstructorWord>,
-			val answer: List<ConstructorWord>,
-			val checkResult: Boolean?,
-			val correctCount: Int,
-			val totalCount: Int,
-			val finished: Boolean,
-		) : State
+		sealed interface Content : State {
+
+			val correctCount: Int
+
+			val totalCount: Int
+
+			data class InProgress(
+				val session: ConstructorSession,
+				val currentIndex: Int,
+				val bank: List<ConstructorWord>,
+				val answer: List<ConstructorWord>,
+				val checkResult: Boolean?,
+				override val correctCount: Int,
+				override val totalCount: Int,
+			) : Content
+
+			data class Finished(
+				override val correctCount: Int,
+				override val totalCount: Int,
+			) : Content
+		}
 
 		data object Error : State
 	}

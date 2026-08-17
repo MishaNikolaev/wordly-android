@@ -4,6 +4,7 @@ package com.nmichail.wordly.android.features.words.presentation.detail
 
 import kotlinx.coroutines.launch
 import com.arkivanov.mvikotlin.core.store.Reducer
+import com.arkivanov.mvikotlin.core.store.SimpleBootstrapper
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.logging.store.LoggingStoreFactory
@@ -34,10 +35,16 @@ internal class WordDetailStoreFactory @Inject constructor(
 			Store<WordDetailStore.Intent, WordDetailStore.State, WordDetailStore.Label>
 			by storeFactory.create(
 				name = "WordDetailStore",
-				initialState = WordDetailStore.State.Closed,
+				initialState = WordDetailStore.State.Initial,
+				bootstrapper = SimpleBootstrapper(Action.Initialize),
 				executorFactory = ::ExecutorImpl,
 				reducer = ReducerImpl,
 			) {}
+
+	private sealed interface Action {
+
+		data object Initialize : Action
+	}
 
 	private sealed interface Msg {
 
@@ -64,11 +71,17 @@ internal class WordDetailStoreFactory @Inject constructor(
 	private inner class ExecutorImpl :
 		BaseCoroutineExecutor<
 			WordDetailStore.Intent,
-			Nothing,
+			Action,
 			WordDetailStore.State,
 			Msg,
 			WordDetailStore.Label,
 			>() {
+
+		override fun executeAction(action: Action) {
+			when (action) {
+				Action.Initialize -> dispatch(Msg.Closed)
+			}
+		}
 
 		override fun executeIntent(intent: WordDetailStore.Intent) {
 			when (intent) {

@@ -52,7 +52,7 @@ import com.nmichail.wordly.android.shared.practice.PracticeOptions
 
 @Composable
 internal fun CardPracticeInProgressContent(
-	state: CardPracticeStore.State.Content,
+	state: CardPracticeStore.State.Content.InProgress,
 	component: CardPracticeComponent,
 	modifier: Modifier = Modifier,
 ) {

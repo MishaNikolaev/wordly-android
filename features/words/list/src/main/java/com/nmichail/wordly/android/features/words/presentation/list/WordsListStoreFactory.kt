@@ -27,7 +27,7 @@ internal class WordsListStoreFactory @Inject constructor(
 			WordsListStore,
 			Store<WordsListStore.Intent, WordsListStore.State, Nothing> by storeFactory.create(
 				name = "WordsListStore",
-				initialState = WordsListStore.State.Loading,
+				initialState = WordsListStore.State.Initial,
 				bootstrapper = SimpleBootstrapper(Action.Load),
 				executorFactory = ::ExecutorImpl,
 				reducer = ReducerImpl,

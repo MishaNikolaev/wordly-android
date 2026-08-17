@@ -52,6 +52,14 @@ fun SignUpContent(
 	val state by component.model.subscribeAsState()
 
 	when (val currentState = state) {
+		SignUpStore.State.Initial -> {
+			Box(
+				modifier = modifier.fillMaxSize(),
+				contentAlignment = Alignment.Center,
+			) {
+				CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
+			}
+		}
 		SignUpStore.State.Loading -> {
 			Box(
 				modifier = modifier.fillMaxSize(),

@@ -6,10 +6,15 @@ import com.nmichail.wordly.android.features.dev.networkselection.domain.entity.N
 interface NetworkSelectionStore :
 	Store<NetworkSelectionStore.Intent, NetworkSelectionStore.State, NetworkSelectionStore.Label> {
 
-	data class State(
-		val stands: List<NetworkStand> = emptyList(),
-		val selectedStand: NetworkStand = NetworkStand.DEV,
-	)
+	sealed interface State {
+
+		data object Initial : State
+
+		data class Content(
+			val stands: List<NetworkStand>,
+			val selectedStand: NetworkStand,
+		) : State
+	}
 
 	sealed interface Label {
 

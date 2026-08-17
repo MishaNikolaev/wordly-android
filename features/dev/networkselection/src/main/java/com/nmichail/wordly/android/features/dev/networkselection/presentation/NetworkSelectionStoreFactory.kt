@@ -1,6 +1,7 @@
 package com.nmichail.wordly.android.features.dev.networkselection.presentation
 
 import com.arkivanov.mvikotlin.core.store.Reducer
+import com.arkivanov.mvikotlin.core.store.SimpleBootstrapper
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.nmichail.wordly.android.component.presentation.BaseCoroutineExecutor
@@ -27,15 +28,23 @@ internal class NetworkSelectionStoreFactory @Inject constructor(
 			NetworkSelectionStore,
 			Store<NetworkSelectionStore.Intent, NetworkSelectionStore.State, NetworkSelectionStore.Label> by storeFactory.create(
 				name = "NetworkSelectionStore",
-				initialState = NetworkSelectionStore.State(
-					stands = getNetworkStandsUseCase(),
-					selectedStand = getSelectedNetworkStandUseCase(),
-				),
+				initialState = NetworkSelectionStore.State.Initial,
+				bootstrapper = SimpleBootstrapper(Action.Initialize),
 				executorFactory = ::ExecutorImpl,
 				reducer = ReducerImpl,
 			) {}
 
+	private sealed interface Action {
+
+		data object Initialize : Action
+	}
+
 	private sealed interface Msg {
+
+		data class Initialized(
+			val stands: List<NetworkStand>,
+			val selectedStand: NetworkStand,
+		) : Msg
 
 		data class StandSelected(val stand: NetworkStand) : Msg
 	}
@@ -44,18 +53,35 @@ internal class NetworkSelectionStoreFactory @Inject constructor(
 
 		override fun NetworkSelectionStore.State.reduce(msg: Msg): NetworkSelectionStore.State =
 			when (msg) {
-				is Msg.StandSelected -> copy(selectedStand = msg.stand)
+				is Msg.Initialized -> NetworkSelectionStore.State.Content(
+					stands = msg.stands,
+					selectedStand = msg.selectedStand,
+				)
+				is Msg.StandSelected -> (this as? NetworkSelectionStore.State.Content)
+					?.copy(selectedStand = msg.stand)
+					?: this
 			}
 	}
 
 	private inner class ExecutorImpl :
 		BaseCoroutineExecutor<
 			NetworkSelectionStore.Intent,
-			Nothing,
+			Action,
 			NetworkSelectionStore.State,
 			Msg,
 			NetworkSelectionStore.Label,
 		>() {
+
+		override fun executeAction(action: Action) {
+			when (action) {
+				Action.Initialize -> dispatch(
+					Msg.Initialized(
+						stands = getNetworkStandsUseCase(),
+						selectedStand = getSelectedNetworkStandUseCase(),
+					),
+				)
+			}
+		}
 
 		override fun executeIntent(intent: NetworkSelectionStore.Intent) {
 			when (intent) {
@@ -65,7 +91,8 @@ internal class NetworkSelectionStoreFactory @Inject constructor(
 		}
 
 		private fun handleSelectStand(stand: NetworkStand) {
-			if (stand == state().selectedStand) return
+			val content = state() as? NetworkSelectionStore.State.Content ?: return
+			if (stand == content.selectedStand) return
 
 			setNetworkStandUseCase(stand)
 			clearAuthTokensUseCase()

@@ -10,6 +10,8 @@ interface WordDetailStore :
 
 	sealed interface State {
 
+		data object Initial : State
+
 		data object Closed : State
 
 		data class Open(val dialog: WordDetailDialogState) : State

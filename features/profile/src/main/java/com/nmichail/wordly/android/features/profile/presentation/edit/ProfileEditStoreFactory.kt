@@ -30,7 +30,7 @@ internal class ProfileEditStoreFactory @Inject constructor(
 				ProfileEditStore.Label,
 				> by storeFactory.create(
 				name = "ProfileEditStore",
-				initialState = ProfileEditStore.State.Loading,
+				initialState = ProfileEditStore.State.Initial,
 				bootstrapper = SimpleBootstrapper(Action.Load),
 				executorFactory = ::ExecutorImpl,
 				reducer = ReducerImpl,

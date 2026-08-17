@@ -55,6 +55,7 @@ fun WordContent(
 	val wordDetailState by component.wordDetailModel.subscribeAsState()
 
 	when (val current = listState) {
+		WordsListStore.State.Initial -> WordsLoading(modifier = modifier)
 		WordsListStore.State.Loading -> WordsLoading(modifier = modifier)
 		is WordsListStore.State.Content -> WordsLoaded(
 			state = current,

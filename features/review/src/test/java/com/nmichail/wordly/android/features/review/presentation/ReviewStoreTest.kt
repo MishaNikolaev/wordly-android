@@ -200,14 +200,7 @@ class ReviewStoreTest {
 		store.accept(ReviewStore.Intent.Continue)
 
 		assertEquals(
-			content(
-				currentIndex = 1,
-				selectedOptionId = "resilience-2",
-				answerRevealed = true,
-				correct = false,
-				correctCount = 1,
-				finished = true,
-			),
+			finished(correctCount = 1),
 			store.state,
 		)
 	}
@@ -263,9 +256,8 @@ class ReviewStoreTest {
 		correct: Boolean = false,
 		correctCount: Int = 0,
 		submitting: Boolean = false,
-		finished: Boolean = false,
-	): ReviewStore.State.Content =
-		ReviewStore.State.Content(
+	): ReviewStore.State.Content.InProgress =
+		ReviewStore.State.Content.InProgress(
 			words = words,
 			currentIndex = currentIndex,
 			currentWord = words[currentIndex],
@@ -276,7 +268,14 @@ class ReviewStoreTest {
 			correct = correct,
 			correctCount = correctCount,
 			submitting = submitting,
-			finished = finished,
+		)
+
+	private fun finished(
+		correctCount: Int,
+	): ReviewStore.State.Content.Finished =
+		ReviewStore.State.Content.Finished(
+			correctCount = correctCount,
+			totalCount = words.size,
 		)
 
 	private fun createStore(): ReviewStore =

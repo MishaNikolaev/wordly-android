@@ -23,20 +23,33 @@ interface CardPracticeStore :
 
 	sealed interface State {
 
+		data object Initial : State
+
 		data object Loading : State
 
-		data class Content(
-			val words: List<CardPracticeWord>,
-			val currentIndex: Int,
-			val currentWord: CardPracticeWord,
-			val totalCount: Int,
-			val progressIndex: Int,
-			val selectedOptionId: String?,
-			val answerRevealed: Boolean,
-			val correct: Boolean,
-			val correctCount: Int,
-			val finished: Boolean,
-		) : State
+		sealed interface Content : State {
+
+			val correctCount: Int
+
+			val totalCount: Int
+
+			data class InProgress(
+				val words: List<CardPracticeWord>,
+				val currentIndex: Int,
+				val currentWord: CardPracticeWord,
+				override val totalCount: Int,
+				val progressIndex: Int,
+				val selectedOptionId: String?,
+				val answerRevealed: Boolean,
+				val correct: Boolean,
+				override val correctCount: Int,
+			) : Content
+
+			data class Finished(
+				override val correctCount: Int,
+				override val totalCount: Int,
+			) : Content
+		}
 
 		data object Error : State
 	}
