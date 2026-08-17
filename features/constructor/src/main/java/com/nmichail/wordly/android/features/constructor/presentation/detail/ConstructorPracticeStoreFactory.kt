@@ -28,14 +28,14 @@ internal class ConstructorPracticeStoreFactory @Inject constructor(
 				> by storeFactory.create(
 				name = "ConstructorPracticeStore",
 				initialState = ConstructorPracticeStore.State.Initial,
-				bootstrapper = SimpleBootstrapper(Action.Load(themeId = themeId)),
+				bootstrapper = SimpleBootstrapper(Action.Init(themeId = themeId)),
 				executorFactory = { ExecutorImpl(themeId = themeId) },
 				reducer = ReducerImpl,
 			) {}
 
 	private sealed interface Action {
 
-		data class Load(val themeId: String) : Action
+		data class Init(val themeId: String) : Action
 	}
 
 	private sealed interface Msg {
@@ -185,7 +185,7 @@ internal class ConstructorPracticeStoreFactory @Inject constructor(
 
 		override fun executeAction(action: Action) {
 			when (action) {
-				is Action.Load -> loadSession(themeId = action.themeId)
+				is Action.Init -> loadSession(themeId = action.themeId)
 			}
 		}
 

@@ -36,14 +36,14 @@ internal class ProfileStoreFactory @Inject constructor(
 			Store<ProfileStore.Intent, ProfileStore.State, ProfileStore.Label> by storeFactory.create(
 				name = "ProfileStore",
 				initialState = ProfileStore.State.Initial,
-				bootstrapper = SimpleBootstrapper(Action.Load),
+				bootstrapper = SimpleBootstrapper(Action.Init),
 				executorFactory = ::ExecutorImpl,
 				reducer = ReducerImpl,
 			) {}
 
 	private sealed interface Action {
 
-		data object Load : Action
+		data object Init : Action
 	}
 
 	private sealed interface Msg {
@@ -93,7 +93,7 @@ internal class ProfileStoreFactory @Inject constructor(
 
 		override fun executeAction(action: Action) {
 			when (action) {
-				Action.Load -> load(showLoading = true)
+				Action.Init -> load(showLoading = true)
 			}
 		}
 

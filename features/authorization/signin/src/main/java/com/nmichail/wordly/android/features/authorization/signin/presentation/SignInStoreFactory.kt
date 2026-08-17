@@ -37,14 +37,14 @@ internal class SignInStoreFactory @Inject constructor(
 		Store<SignInStore.Intent, SignInStore.State, SignInStore.Label> by storeFactory.create(
 			name = "SignInStore",
 			initialState = SignInStore.State.Initial,
-			bootstrapper = SimpleBootstrapper(Action.Initialize),
+			bootstrapper = SimpleBootstrapper(Action.Init),
 			reducer = ReducerImpl,
 			executorFactory = ::ExecutorImpl,
 		) {}
 
 	private sealed interface Action {
 
-		data object Initialize : Action
+		data object Init : Action
 	}
 
 	private sealed interface Msg {
@@ -67,7 +67,7 @@ internal class SignInStoreFactory @Inject constructor(
 
 		override fun executeAction(action: Action) {
 			when (action) {
-				Action.Initialize -> dispatch(Msg.Initialized)
+				Action.Init -> dispatch(Msg.Initialized)
 			}
 		}
 

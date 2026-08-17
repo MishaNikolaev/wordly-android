@@ -25,14 +25,14 @@ internal class CardPracticeStoreFactory @Inject constructor(
 			by storeFactory.create(
 				name = "CardPracticeStore",
 				initialState = CardPracticeStore.State.Initial,
-				bootstrapper = SimpleBootstrapper(Action.Load(cardId = cardId)),
+				bootstrapper = SimpleBootstrapper(Action.Init(cardId = cardId)),
 				executorFactory = { ExecutorImpl(cardId = cardId) },
 				reducer = ReducerImpl,
 			) {}
 
 	private sealed interface Action {
 
-		data class Load(val cardId: String) : Action
+		data class Init(val cardId: String) : Action
 	}
 
 	private sealed interface Msg {
@@ -129,7 +129,7 @@ internal class CardPracticeStoreFactory @Inject constructor(
 
 		override fun executeAction(action: Action) {
 			when (action) {
-				is Action.Load -> loadSession(cardId = action.cardId)
+				is Action.Init -> loadSession(cardId = action.cardId)
 			}
 		}
 

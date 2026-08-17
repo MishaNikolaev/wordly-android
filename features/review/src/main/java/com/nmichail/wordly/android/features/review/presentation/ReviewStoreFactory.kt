@@ -26,14 +26,14 @@ internal class ReviewStoreFactory @Inject constructor(
 			Store<ReviewStore.Intent, ReviewStore.State, ReviewStore.Label> by storeFactory.create(
 				name = "ReviewStore",
 				initialState = ReviewStore.State.Initial,
-				bootstrapper = SimpleBootstrapper(Action.Load),
+				bootstrapper = SimpleBootstrapper(Action.Init),
 				executorFactory = ::ExecutorImpl,
 				reducer = ReducerImpl,
 			) {}
 
 	private sealed interface Action {
 
-		data object Load : Action
+		data object Init : Action
 	}
 
 	private sealed interface Msg {
@@ -133,7 +133,7 @@ internal class ReviewStoreFactory @Inject constructor(
 
 		override fun executeAction(action: Action) {
 			when (action) {
-				Action.Load -> loadSession()
+				Action.Init -> loadSession()
 			}
 		}
 

@@ -42,14 +42,14 @@ internal class SignUpStoreFactory @Inject constructor(
         Store<SignUpStore.Intent, SignUpStore.State, SignUpStore.Label> by storeFactory.create(
             name = "SignUpStore",
             initialState = SignUpStore.State.Initial,
-            bootstrapper = SimpleBootstrapper(Action.Initialize),
+            bootstrapper = SimpleBootstrapper(Action.Init),
             reducer = ReducerImpl,
             executorFactory = ::ExecutorImpl,
         ) {}
 
     private sealed interface Action {
 
-        data object Initialize : Action
+        data object Init : Action
     }
 
     private sealed interface Msg {
@@ -78,7 +78,7 @@ internal class SignUpStoreFactory @Inject constructor(
 
         override fun executeAction(action: Action) {
             when (action) {
-                Action.Initialize -> dispatch(Msg.Initialized)
+                Action.Init -> dispatch(Msg.Initialized)
             }
         }
 
@@ -152,22 +152,22 @@ internal class SignUpStoreFactory @Inject constructor(
 
             dispatch(Msg.SetSubmitting(submitting = true))
             scope.launch {
-            	try {
-            		val tokens = signUpUseCase(
-            		    SignUpForm(
-            		        email = email.data,
-            		        password = password.data,
-            		        firstName = firstName.data,
-            		        lastName = lastName.data,
-            		        englishLevel = englishLevel.data,
-            		    ),
-            		)
-            		saveAuthTokensUseCase(tokens)
-            		dispatch(Msg.SetSubmitting(submitting = false))
-            		publish(SignUpStore.Label.OpenMainHost)
-            	} catch (error: Exception) {
-            		handleError(error)
-            	}
+                try {
+                    val tokens = signUpUseCase(
+                        SignUpForm(
+                            email = email.data,
+                            password = password.data,
+                            firstName = firstName.data,
+                            lastName = lastName.data,
+                            englishLevel = englishLevel.data,
+                        ),
+                    )
+                    saveAuthTokensUseCase(tokens)
+                    dispatch(Msg.SetSubmitting(submitting = false))
+                    publish(SignUpStore.Label.OpenMainHost)
+                } catch (error: Exception) {
+                    handleError(error)
+                }
             }
         }
 
@@ -177,8 +177,8 @@ internal class SignUpStoreFactory @Inject constructor(
                 dispatch(Msg.SetSubmitting(submitting = false))
                 return
             }
-            val content =
-                (state() as? SignUpStore.State.Content)?.copy(submitting = false) ?: return
+            val content = (state() as? SignUpStore.State.Content)
+                ?.copy(submitting = false) ?: return
             dispatch(Msg.SetError(content = content))
         }
     }
@@ -198,6 +198,7 @@ internal class SignUpStoreFactory @Inject constructor(
                     englishLevel = NotEmptyValidationItem(),
                     submitting = false,
                 )
+
                 is Msg.ChangeEmail -> content?.copy(email = msg.email) ?: this
                 is Msg.ChangePassword -> content?.copy(password = msg.password) ?: this
                 is Msg.ChangeFirstName -> content?.copy(firstName = msg.firstName) ?: this

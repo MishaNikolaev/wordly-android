@@ -29,14 +29,14 @@ internal class NetworkSelectionStoreFactory @Inject constructor(
 			Store<NetworkSelectionStore.Intent, NetworkSelectionStore.State, NetworkSelectionStore.Label> by storeFactory.create(
 				name = "NetworkSelectionStore",
 				initialState = NetworkSelectionStore.State.Initial,
-				bootstrapper = SimpleBootstrapper(Action.Initialize),
+				bootstrapper = SimpleBootstrapper(Action.Init),
 				executorFactory = ::ExecutorImpl,
 				reducer = ReducerImpl,
 			) {}
 
 	private sealed interface Action {
 
-		data object Initialize : Action
+		data object Init : Action
 	}
 
 	private sealed interface Msg {
@@ -74,7 +74,7 @@ internal class NetworkSelectionStoreFactory @Inject constructor(
 
 		override fun executeAction(action: Action) {
 			when (action) {
-				Action.Initialize -> dispatch(
+				Action.Init -> dispatch(
 					Msg.Initialized(
 						stands = getNetworkStandsUseCase(),
 						selectedStand = getSelectedNetworkStandUseCase(),

@@ -29,14 +29,14 @@ internal class AddWordStoreFactory @Inject constructor(
 			Store<AddWordStore.Intent, AddWordStore.State, AddWordStore.Label> by storeFactory.create(
 				name = "AddWordStore",
 				initialState = AddWordStore.State.Initial,
-				bootstrapper = SimpleBootstrapper(Action.Initialize),
+				bootstrapper = SimpleBootstrapper(Action.Init),
 				executorFactory = ::ExecutorImpl,
 				reducer = ReducerImpl,
 			) {}
 
 	private sealed interface Action {
 
-		data object Initialize : Action
+		data object Init : Action
 	}
 
 	private sealed interface Msg {
@@ -74,7 +74,7 @@ internal class AddWordStoreFactory @Inject constructor(
 
 		override fun executeAction(action: Action) {
 			when (action) {
-				Action.Initialize -> dispatch(Msg.Closed)
+				Action.Init -> dispatch(Msg.Closed)
 			}
 		}
 

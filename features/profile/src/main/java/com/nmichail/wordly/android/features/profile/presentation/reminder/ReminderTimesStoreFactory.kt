@@ -31,14 +31,14 @@ internal class ReminderTimesStoreFactory @Inject constructor(
 				> by storeFactory.create(
 				name = "ReminderTimesStore",
 				initialState = ReminderTimesStore.State.Initial,
-				bootstrapper = SimpleBootstrapper(Action.Load),
+				bootstrapper = SimpleBootstrapper(Action.Init),
 				executorFactory = ::ExecutorImpl,
 				reducer = ReducerImpl,
 			) {}
 
 	private sealed interface Action {
 
-		data object Load : Action
+		data object Init : Action
 	}
 
 	private sealed interface Msg {
@@ -101,7 +101,7 @@ internal class ReminderTimesStoreFactory @Inject constructor(
 
 		override fun executeAction(action: Action) {
 			when (action) {
-				Action.Load -> load()
+				Action.Init -> load()
 			}
 		}
 

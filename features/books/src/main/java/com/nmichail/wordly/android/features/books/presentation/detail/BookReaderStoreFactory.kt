@@ -29,14 +29,14 @@ internal class BookReaderStoreFactory @Inject constructor(
 			Store<BookReaderStore.Intent, BookReaderStore.State, BookReaderStore.Label> by storeFactory.create(
 				name = "BookReaderStore",
 				initialState = BookReaderStore.State.Initial,
-				bootstrapper = SimpleBootstrapper(Action.Load),
+				bootstrapper = SimpleBootstrapper(Action.Init),
 				executorFactory = { ExecutorImpl(bookId = bookId) },
 				reducer = ReducerImpl,
 			) {}
 
 	private sealed interface Action {
 
-		data object Load : Action
+		data object Init : Action
 	}
 
 	private sealed interface Msg {
@@ -117,7 +117,7 @@ internal class BookReaderStoreFactory @Inject constructor(
 
 		override fun executeAction(action: Action) {
 			when (action) {
-				Action.Load -> loadBook()
+				Action.Init -> loadBook()
 			}
 		}
 
