@@ -48,12 +48,7 @@ internal class ReviewStoreFactory @Inject constructor(
 
 		data object Submitting : Msg
 
-		data class MoveNext(
-			val nextIndex: Int,
-			val correctCount: Int,
-		) : Msg
-
-		data class Finished(val correctCount: Int) : Msg
+		data object AnswerSubmitted : Msg
 	}
 
 	private object ReducerImpl : Reducer<ReviewStore.State, Msg> {
@@ -61,61 +56,67 @@ internal class ReviewStoreFactory @Inject constructor(
 		override fun ReviewStore.State.reduce(msg: Msg): ReviewStore.State =
 			when (msg) {
 				Msg.Loading -> ReviewStore.State.Loading
-				is Msg.SessionLoaded -> ReviewStore.State.Content(
-					words = msg.words,
-					currentIndex = 0,
-					currentWord = msg.words[0],
-					totalCount = msg.words.size,
-					progressIndex = 1,
-					selectedOptionId = null,
-					answerRevealed = false,
-					correct = false,
-					correctCount = 0,
-					submitting = false,
-					finished = false,
-				)
+				is Msg.SessionLoaded -> sessionLoaded(words = msg.words)
 				Msg.SetError -> ReviewStore.State.Error
-				is Msg.OptionSelected -> selectOption(state = this, optionId = msg.optionId)
-				Msg.Submitting -> setSubmitting(state = this)
-				is Msg.MoveNext -> moveToNext(state = this, msg = msg)
-				is Msg.Finished -> (this as? ReviewStore.State.Content)?.copy(
-					correctCount = msg.correctCount,
-					submitting = false,
-					finished = true,
-				) ?: this
+				is Msg.OptionSelected -> selectOption(optionId = msg.optionId)
+				Msg.Submitting -> setSubmitting()
+				Msg.AnswerSubmitted -> advanceAfterSubmit()
 			}
 
-		private fun selectOption(
-			state: ReviewStore.State,
-			optionId: String,
-		): ReviewStore.State {
-			if (state !is ReviewStore.State.Content || state.finished) return state
-			if (state.answerRevealed || state.submitting) return state
-			return state.copy(
-				selectedOptionId = optionId,
-				answerRevealed = true,
-				correct = optionId == state.currentWord.correctOptionId,
-			)
-		}
-
-		private fun setSubmitting(state: ReviewStore.State): ReviewStore.State {
-			if (state !is ReviewStore.State.Content || state.finished) return state
-			return state.copy(submitting = true)
-		}
-
-		private fun moveToNext(
-			state: ReviewStore.State,
-			msg: Msg.MoveNext,
-		): ReviewStore.State {
-			if (state !is ReviewStore.State.Content || state.finished) return state
-			return state.copy(
-				currentIndex = msg.nextIndex,
-				currentWord = state.words[msg.nextIndex],
-				progressIndex = msg.nextIndex + 1,
+		private fun sessionLoaded(words: List<ReviewWord>): ReviewStore.State.Content.InProgress =
+			ReviewStore.State.Content.InProgress(
+				words = words,
+				currentIndex = 0,
+				currentWord = words[0],
+				totalCount = words.size,
+				progressIndex = 1,
 				selectedOptionId = null,
 				answerRevealed = false,
 				correct = false,
-				correctCount = msg.correctCount,
+				correctCount = 0,
+				submitting = false,
+			)
+
+		private fun ReviewStore.State.inProgress(): ReviewStore.State.Content.InProgress? =
+			this as? ReviewStore.State.Content.InProgress
+
+		private fun ReviewStore.State.selectOption(optionId: String): ReviewStore.State {
+			val content = inProgress() ?: return this
+			if (content.answerRevealed || content.submitting) return this
+			return content.copy(
+				selectedOptionId = optionId,
+				answerRevealed = true,
+				correct = optionId == content.currentWord.correctOptionId,
+			)
+		}
+
+		private fun ReviewStore.State.setSubmitting(): ReviewStore.State {
+			val content = inProgress() ?: return this
+			return content.copy(submitting = true)
+		}
+
+		private fun ReviewStore.State.advanceAfterSubmit(): ReviewStore.State {
+			val content = inProgress() ?: return this
+			val nextCorrectCount = if (content.correct) {
+				content.correctCount + 1
+			} else {
+				content.correctCount
+			}
+			val nextIndex = content.currentIndex + 1
+			if (nextIndex >= content.totalCount) {
+				return ReviewStore.State.Content.Finished(
+					correctCount = nextCorrectCount,
+					totalCount = content.totalCount,
+				)
+			}
+			return content.copy(
+				currentIndex = nextIndex,
+				currentWord = content.words[nextIndex],
+				progressIndex = nextIndex + 1,
+				selectedOptionId = null,
+				answerRevealed = false,
+				correct = false,
+				correctCount = nextCorrectCount,
 				submitting = false,
 			)
 		}
@@ -167,8 +168,8 @@ internal class ReviewStoreFactory @Inject constructor(
 		}
 
 		private fun submitAndAdvance() {
-			val content = state() as? ReviewStore.State.Content ?: return
-			if (content.finished || !content.answerRevealed || content.submitting) return
+			val content = state() as? ReviewStore.State.Content.InProgress ?: return
+			if (!content.answerRevealed || content.submitting) return
 			val selectedOptionId = content.selectedOptionId ?: return
 
 			dispatch(Msg.Submitting)
@@ -179,22 +180,7 @@ internal class ReviewStoreFactory @Inject constructor(
 						selectedOptionId,
 						content.correct,
 					)
-					val nextCorrectCount = if (content.correct) {
-						content.correctCount + 1
-					} else {
-						content.correctCount
-					}
-					val nextIndex = content.currentIndex + 1
-					if (nextIndex >= content.totalCount) {
-						dispatch(Msg.Finished(correctCount = nextCorrectCount))
-					} else {
-						dispatch(
-							Msg.MoveNext(
-								nextIndex = nextIndex,
-								correctCount = nextCorrectCount,
-							),
-						)
-					}
+					dispatch(Msg.AnswerSubmitted)
 				} catch (_: Exception) {
 					dispatch(Msg.SetError)
 				}

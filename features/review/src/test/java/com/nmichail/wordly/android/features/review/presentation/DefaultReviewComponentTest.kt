@@ -96,8 +96,8 @@ class DefaultReviewComponentTest {
 		selectedOptionId: String? = null,
 		answerRevealed: Boolean = false,
 		correct: Boolean = false,
-	): ReviewStore.State.Content =
-		ReviewStore.State.Content(
+	): ReviewStore.State.Content.InProgress =
+		ReviewStore.State.Content.InProgress(
 			words = words,
 			currentIndex = 0,
 			currentWord = firstWord,
@@ -108,6 +108,5 @@ class DefaultReviewComponentTest {
 			correct = correct,
 			correctCount = 0,
 			submitting = false,
-			finished = false,
 		)
 }

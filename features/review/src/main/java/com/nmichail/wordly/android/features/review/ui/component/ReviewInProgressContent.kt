@@ -51,7 +51,7 @@ import com.nmichail.wordly.android.shared.practice.PracticeOptions
 
 @Composable
 internal fun ReviewInProgressContent(
-	state: ReviewStore.State.Content,
+	state: ReviewStore.State.Content.InProgress,
 	component: ReviewComponent,
 	modifier: Modifier = Modifier,
 ) {
