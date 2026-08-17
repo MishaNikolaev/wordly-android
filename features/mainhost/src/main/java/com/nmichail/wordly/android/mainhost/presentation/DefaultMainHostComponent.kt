@@ -11,21 +11,21 @@ import com.arkivanov.decompose.router.stack.push
 import com.arkivanov.decompose.value.Value
 import com.nmichail.wordly.android.features.books.presentation.BooksComponent
 import com.nmichail.wordly.android.features.books.presentation.BooksRouter
-import com.nmichail.wordly.android.features.books.presentation.detail.BookReaderComponent
-import com.nmichail.wordly.android.features.books.presentation.detail.BookReaderRouter
+import com.nmichail.wordly.android.features.books.reader.presentation.BookReaderComponent
+import com.nmichail.wordly.android.features.books.reader.presentation.BookReaderRouter
 import com.nmichail.wordly.android.features.cards.presentation.CardsComponent
 import com.nmichail.wordly.android.features.cards.presentation.CardsRouter
-import com.nmichail.wordly.android.features.cards.presentation.detail.CardPracticeComponent
-import com.nmichail.wordly.android.features.cards.presentation.detail.CardPracticeRouter
+import com.nmichail.wordly.android.features.cards.training.presentation.CardPracticeComponent
+import com.nmichail.wordly.android.features.cards.training.presentation.CardPracticeRouter
 import com.nmichail.wordly.android.features.constructor.presentation.ConstructorComponent
 import com.nmichail.wordly.android.features.constructor.presentation.ConstructorRouter
-import com.nmichail.wordly.android.features.constructor.presentation.detail.ConstructorPracticeComponent
-import com.nmichail.wordly.android.features.constructor.presentation.detail.ConstructorPracticeRouter
+import com.nmichail.wordly.android.features.constructor.practice.presentation.ConstructorPracticeComponent
+import com.nmichail.wordly.android.features.constructor.practice.presentation.ConstructorPracticeRouter
 import com.nmichail.wordly.android.features.home.presentation.HomeComponent
 import com.nmichail.wordly.android.features.home.presentation.HomeRouter
 import com.nmichail.wordly.android.features.materials.presentation.MaterialsComponent
-import com.nmichail.wordly.android.features.materials.presentation.detail.MaterialDetailComponent
-import com.nmichail.wordly.android.features.materials.presentation.detail.MaterialDetailRouter
+import com.nmichail.wordly.android.features.materials.article.presentation.MaterialDetailComponent
+import com.nmichail.wordly.android.features.materials.article.presentation.MaterialDetailRouter
 import com.nmichail.wordly.android.features.profile.presentation.ProfileComponent
 import com.nmichail.wordly.android.features.profile.presentation.edit.ProfileEditComponent
 import com.nmichail.wordly.android.features.profile.presentation.edit.ProfileEditRouter
@@ -71,6 +71,7 @@ internal class DefaultMainHostComponent(
 	}
 
 	@OptIn(DelicateDecomposeApi::class)
+	@Suppress("CyclomaticComplexMethod")
 	private fun child(
 		config: MainHostConfig,
 		componentContext: ComponentContext,
@@ -377,6 +378,7 @@ private fun MainHostTab.toConfig(): MainHostConfig =
 		MainHostTab.Profile -> MainHostConfig.Profile
 	}
 
+@Suppress("CyclomaticComplexMethod")
 fun MainHostComponent.Child.toTab(): MainHostTab? =
 	when (this) {
 		is MainHostComponent.Child.Home -> MainHostTab.Home

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="materials_detail_retry">Повторить</string>
+	<string name="materials_category_grammar">Грамматика</string>
+	<string name="materials_category_idioms">Идиомы</string>
+	<string name="materials_category_conversational">Разговорный</string>
+	<string name="materials_category_listening">Аудирование</string>
+	<string name="materials_detail_title">Материал</string>
+	<string name="materials_detail_back">Назад</string>
+	<string name="materials_detail_description">Описание</string>
+	<string name="materials_detail_rate_title">Оцени материал</string>
+	<string name="materials_detail_rate_subtitle">Ваша реакция помогает подбирать более интересные статьи</string>
+	<string name="materials_detail_like">Нравится</string>
+	<string name="materials_detail_dislike">Не нравится</string>
+	<string name="materials_detail_reading_minutes">%1$d мин чтения</string>
+	<string name="materials_detail_error_title">Не удалось открыть материал</string>
+	<string name="materials_detail_error_subtitle">Проверьте соединение и попробуйте ещё раз</string>
+</resources>

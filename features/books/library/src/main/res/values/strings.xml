@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="books_back">Назад</string>
+	<string name="books_retry">Повторить</string>
+	<string name="books_error_title">Не удалось загрузить книги</string>
+	<string name="books_error_subtitle">Проверьте соединение и попробуйте снова</string>
+	<string name="books_level_banner_action">Выбрать уровень</string>
+</resources>

@@ -9,18 +9,18 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import com.arkivanov.decompose.extensions.compose.stack.Children
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
-import com.nmichail.wordly.android.features.books.ui.BookReaderContent
+import com.nmichail.wordly.android.features.books.reader.ui.BookReaderContent
 import com.nmichail.wordly.android.features.books.ui.BooksContent
-import com.nmichail.wordly.android.features.cards.ui.CardPracticeContent
+import com.nmichail.wordly.android.features.cards.training.ui.CardPracticeContent
 import com.nmichail.wordly.android.features.cards.ui.CardsContent
 import com.nmichail.wordly.android.features.constructor.ui.ConstructorContent
-import com.nmichail.wordly.android.features.constructor.ui.ConstructorPracticeContent
+import com.nmichail.wordly.android.features.constructor.practice.ui.ConstructorPracticeContent
 import com.nmichail.wordly.android.features.home.ui.HomeContent
 import com.nmichail.wordly.android.features.profile.ui.ProfileContent
 import com.nmichail.wordly.android.features.profile.ui.ProfileEditContent
 import com.nmichail.wordly.android.features.profile.ui.ReminderTimesContent
 import com.nmichail.wordly.android.features.review.ui.ReviewContent
-import com.nmichail.wordly.android.features.materials.ui.MaterialDetailContent
+import com.nmichail.wordly.android.features.materials.article.ui.MaterialDetailContent
 import com.nmichail.wordly.android.features.materials.ui.MaterialsContent
 import com.nmichail.wordly.android.features.words.ui.list.WordContent
 import com.nmichail.wordly.android.core.preferences.domain.entity.AppThemeMode
@@ -59,6 +59,7 @@ fun MainHostContent(
 	}
 }
 
+@Suppress("CyclomaticComplexMethod")
 @Composable
 private fun MainHostChildContent(
 	child: MainHostComponent.Child,

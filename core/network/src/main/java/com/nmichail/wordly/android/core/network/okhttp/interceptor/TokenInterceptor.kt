@@ -5,27 +5,27 @@ import okhttp3.Response
 
 fun interface AuthTokenProvider {
 
-	fun getAccessToken(): String?
+    fun getAccessToken(): String?
 }
 
 class TokenInterceptor(
-	private val authTokenProvider: AuthTokenProvider,
+    private val authTokenProvider: AuthTokenProvider,
 ) : Interceptor {
 
-	override fun intercept(chain: Interceptor.Chain): Response {
-		val token = authTokenProvider.getAccessToken()
-		if (token.isNullOrBlank()) {
-			return chain.proceed(chain.request())
-		}
+    override fun intercept(chain: Interceptor.Chain): Response {
+        val token = authTokenProvider.getAccessToken()
+        if (token.isNullOrBlank()) {
+            return chain.proceed(chain.request())
+        }
 
-		val request = chain.request()
-			.newBuilder()
-			.header(TOKEN_HEADER, token)
-			.build()
-		return chain.proceed(request)
-	}
+        val request = chain.request()
+            .newBuilder()
+            .header(TOKEN_HEADER, token)
+            .build()
+        return chain.proceed(request)
+    }
 
-	companion object {
-		const val TOKEN_HEADER = "Authorization"
-	}
+    companion object {
+        const val TOKEN_HEADER = "Authorization"
+    }
 }
