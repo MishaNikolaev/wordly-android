@@ -9,9 +9,9 @@ import com.nmichail.wordly.android.features.authorization.signup.domain.reposito
 import javax.inject.Inject
 
 class SignUpRepositoryImpl @Inject constructor(
-	private val signUpApi: SignUpApi,
+    private val signUpApi: SignUpApi,
 ) : SignUpRepository {
 
-	override suspend fun signUp(form: SignUpForm): AuthTokens =
-		signUpApi.register(form.toRequest()).toEntity()
+    override suspend fun signUp(form: SignUpForm): AuthTokens =
+        signUpApi.register(form.toRequest()).toEntity()
 }

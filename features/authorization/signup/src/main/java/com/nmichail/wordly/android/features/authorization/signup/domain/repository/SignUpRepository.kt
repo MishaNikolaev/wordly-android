@@ -5,5 +5,5 @@ import com.nmichail.wordly.android.features.authorization.signup.domain.entity.S
 
 interface SignUpRepository {
 
-	suspend fun signUp(form: SignUpForm): AuthTokens
+    suspend fun signUp(form: SignUpForm): AuthTokens
 }

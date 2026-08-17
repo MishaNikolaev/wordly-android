@@ -7,49 +7,49 @@ import com.nmichail.wordly.android.core.validation.notEmpty.NotEmptyValidationIt
 import com.nmichail.wordly.android.core.validation.password.PasswordValidationItem
 
 interface SignUpStore :
-	Store<SignUpStore.Intent, SignUpStore.State, SignUpStore.Label> {
+    Store<SignUpStore.Intent, SignUpStore.State, SignUpStore.Label> {
 
-	sealed interface State {
+    sealed interface State {
 
-		data object Initial : State
+        data object Initial : State
 
-		data object Loading : State
+        data object Loading : State
 
-		data class Content(
-			val email: EmailValidationItem,
-			val password: PasswordValidationItem,
-			val firstName: NameValidationItem,
-			val lastName: NameValidationItem,
-			val englishLevel: NotEmptyValidationItem,
-			val submitting: Boolean,
-		) : State
+        data class Content(
+            val email: EmailValidationItem,
+            val password: PasswordValidationItem,
+            val firstName: NameValidationItem,
+            val lastName: NameValidationItem,
+            val englishLevel: NotEmptyValidationItem,
+            val submitting: Boolean,
+        ) : State
 
-		data class Error(val content: Content) : State
-	}
+        data class Error(val content: Content) : State
+    }
 
-	sealed interface Label {
+    sealed interface Label {
 
-		data object OpenSignIn : Label
+        data object OpenSignIn : Label
 
-		data object OpenMainHost : Label
-	}
+        data object OpenMainHost : Label
+    }
 
-	sealed interface Intent {
+    sealed interface Intent {
 
-		data class ChangeEmail(val email: String) : Intent
+        data class ChangeEmail(val email: String) : Intent
 
-		data class ChangePassword(val password: String) : Intent
+        data class ChangePassword(val password: String) : Intent
 
-		data class ChangeFirstName(val firstName: String) : Intent
+        data class ChangeFirstName(val firstName: String) : Intent
 
-		data class ChangeLastName(val lastName: String) : Intent
+        data class ChangeLastName(val lastName: String) : Intent
 
-		data class ChangeEnglishLevel(val englishLevel: String) : Intent
+        data class ChangeEnglishLevel(val englishLevel: String) : Intent
 
-		data object Submit : Intent
+        data object Submit : Intent
 
-		data object NavigateToSignIn : Intent
+        data object NavigateToSignIn : Intent
 
-		data object Retry : Intent
-	}
+        data object Retry : Intent
+    }
 }
