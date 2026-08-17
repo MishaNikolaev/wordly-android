@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="constructor_back">Назад</string>
+	<string name="constructor_retry">Повторить</string>
+	<string name="constructor_error_title">Не удалось загрузить конструктор</string>
+	<string name="constructor_error_subtitle">Проверьте соединение и попробуйте снова</string>
+	<string name="constructor_level_banner_action">Выбрать уровень</string>
+</resources>

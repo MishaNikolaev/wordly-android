@@ -19,8 +19,8 @@ import com.nmichail.wordly.android.features.cards.presentation.detail.CardPracti
 import com.nmichail.wordly.android.features.cards.presentation.detail.CardPracticeRouter
 import com.nmichail.wordly.android.features.constructor.presentation.ConstructorComponent
 import com.nmichail.wordly.android.features.constructor.presentation.ConstructorRouter
-import com.nmichail.wordly.android.features.constructor.presentation.detail.ConstructorPracticeComponent
-import com.nmichail.wordly.android.features.constructor.presentation.detail.ConstructorPracticeRouter
+import com.nmichail.wordly.android.features.constructor.practice.presentation.ConstructorPracticeComponent
+import com.nmichail.wordly.android.features.constructor.practice.presentation.ConstructorPracticeRouter
 import com.nmichail.wordly.android.features.home.presentation.HomeComponent
 import com.nmichail.wordly.android.features.home.presentation.HomeRouter
 import com.nmichail.wordly.android.features.materials.presentation.MaterialsComponent
@@ -71,6 +71,7 @@ internal class DefaultMainHostComponent(
 	}
 
 	@OptIn(DelicateDecomposeApi::class)
+	@Suppress("CyclomaticComplexMethod")
 	private fun child(
 		config: MainHostConfig,
 		componentContext: ComponentContext,
@@ -377,6 +378,7 @@ private fun MainHostTab.toConfig(): MainHostConfig =
 		MainHostTab.Profile -> MainHostConfig.Profile
 	}
 
+@Suppress("CyclomaticComplexMethod")
 fun MainHostComponent.Child.toTab(): MainHostTab? =
 	when (this) {
 		is MainHostComponent.Child.Home -> MainHostTab.Home

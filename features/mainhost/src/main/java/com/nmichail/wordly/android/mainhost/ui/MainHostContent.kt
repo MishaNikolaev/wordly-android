@@ -14,7 +14,7 @@ import com.nmichail.wordly.android.features.books.ui.BooksContent
 import com.nmichail.wordly.android.features.cards.ui.CardPracticeContent
 import com.nmichail.wordly.android.features.cards.ui.CardsContent
 import com.nmichail.wordly.android.features.constructor.ui.ConstructorContent
-import com.nmichail.wordly.android.features.constructor.ui.ConstructorPracticeContent
+import com.nmichail.wordly.android.features.constructor.practice.ui.ConstructorPracticeContent
 import com.nmichail.wordly.android.features.home.ui.HomeContent
 import com.nmichail.wordly.android.features.profile.ui.ProfileContent
 import com.nmichail.wordly.android.features.profile.ui.ProfileEditContent
@@ -59,6 +59,7 @@ fun MainHostContent(
 	}
 }
 
+@Suppress("CyclomaticComplexMethod")
 @Composable
 private fun MainHostChildContent(
 	child: MainHostComponent.Child,

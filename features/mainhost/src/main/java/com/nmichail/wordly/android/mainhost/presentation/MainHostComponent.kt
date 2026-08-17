@@ -8,7 +8,7 @@ import com.nmichail.wordly.android.features.books.presentation.detail.BookReader
 import com.nmichail.wordly.android.features.cards.presentation.CardsComponent
 import com.nmichail.wordly.android.features.cards.presentation.detail.CardPracticeComponent
 import com.nmichail.wordly.android.features.constructor.presentation.ConstructorComponent
-import com.nmichail.wordly.android.features.constructor.presentation.detail.ConstructorPracticeComponent
+import com.nmichail.wordly.android.features.constructor.practice.presentation.ConstructorPracticeComponent
 import com.nmichail.wordly.android.features.home.presentation.HomeComponent
 import com.nmichail.wordly.android.features.materials.presentation.MaterialsComponent
 import com.nmichail.wordly.android.features.materials.presentation.detail.MaterialDetailComponent
