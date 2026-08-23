@@ -6,7 +6,7 @@ import retrofit2.http.Query
 
 interface MaterialsApi {
 
-	@GET("api/materials")
+	@GET("/api/materials")
 	suspend fun getMaterials(
 		@Query("category") category: String? = null,
 	): MaterialsCatalogDto

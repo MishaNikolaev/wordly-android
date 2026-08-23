@@ -1,0 +1,56 @@
+package com.nmichail.wordly.android.features.profile.editor.presentation
+
+import com.nmichail.wordly.android.core.navigation.componentScope
+import kotlinx.coroutines.launch
+import com.arkivanov.decompose.ComponentContext
+import com.arkivanov.mvikotlin.core.instancekeeper.getStore
+import com.arkivanov.mvikotlin.extensions.coroutines.labelsChannel
+import com.nmichail.wordly.android.core.navigation.asValue
+
+internal class DefaultProfileEditComponent(
+	componentContext: ComponentContext,
+	profileEditStoreFactory: ProfileEditStoreFactory,
+	private val profileEditRouter: ProfileEditRouter,
+) : ComponentContext by componentContext,
+	ProfileEditComponent {
+
+	private val store: ProfileEditStore = instanceKeeper.getStore {
+		profileEditStoreFactory.create()
+	}
+
+	override val model = store.asValue()
+
+	init {
+		componentScope().launch {
+			for (label in store.labelsChannel(lifecycle)) {
+				when (label) {
+					ProfileEditStore.Label.Close -> profileEditRouter.navigateBack()
+				}
+			}
+		}
+	}
+
+	override fun handleBack() {
+		store.accept(ProfileEditStore.Intent.Back)
+	}
+
+	override fun handleRetry() {
+		store.accept(ProfileEditStore.Intent.Retry)
+	}
+
+	override fun handleChangeFirstName(value: String) {
+		store.accept(ProfileEditStore.Intent.ChangeFirstName(value = value))
+	}
+
+	override fun handleChangeLastName(value: String) {
+		store.accept(ProfileEditStore.Intent.ChangeLastName(value = value))
+	}
+
+	override fun handleChangeEnglishLevel(value: String) {
+		store.accept(ProfileEditStore.Intent.ChangeEnglishLevel(value = value))
+	}
+
+	override fun handleSave() {
+		store.accept(ProfileEditStore.Intent.Save)
+	}
+}

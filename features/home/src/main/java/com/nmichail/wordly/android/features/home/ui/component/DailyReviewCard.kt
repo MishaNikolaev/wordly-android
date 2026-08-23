@@ -131,7 +131,7 @@ private fun ReviewWordsTitle(wordsToReview: Int) {
 				color = colorScheme.onSurface,
 			)
 			Text(
-				text = stringResource(R.string.home_words_to_review_suffix),
+				text = pluralStringResource(R.plurals.home_words_to_review_suffix, wordsToReview),
 				style = WuiTypography.dailyReviewCountLabel,
 				color = colorScheme.onSurface,
 			)

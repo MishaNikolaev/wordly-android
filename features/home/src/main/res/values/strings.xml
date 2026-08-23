@@ -33,12 +33,17 @@
 	<string name="home_daily_review_start">Начать</string>
 
 	<plurals name="home_words_to_review_prefix">
-		<item quantity="one">слово к</item>
-		<item quantity="few">слова к</item>
-		<item quantity="many">слов к</item>
-		<item quantity="other">слов к</item>
+		<item quantity="one">новое</item>
+		<item quantity="few">новых</item>
+		<item quantity="many">новых</item>
+		<item quantity="other">новых</item>
 	</plurals>
-	<string name="home_words_to_review_suffix">повторению</string>
+	<plurals name="home_words_to_review_suffix">
+		<item quantity="one">слово</item>
+		<item quantity="few">слова</item>
+		<item quantity="many">слов</item>
+		<item quantity="other">слов</item>
+	</plurals>
 
 	<plurals name="home_daily_review_streak">
 		<item quantity="one">серия %d день</item>

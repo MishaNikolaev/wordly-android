@@ -173,7 +173,7 @@ private val postHandlers: Map<Regex, PostHandler> = mapOf(
 			body = requestBody.orEmpty().ifBlank { "{}" },
 		)
 	},
-	Regex("^/api/gateway/english-level$") to { _, _, response, requestBody ->
+	Regex("^/api/gateway/level$") to { _, _, response, requestBody ->
 		updateEnglishLevel(response = response, requestBody = requestBody)
 	},
 	Regex("""^/api/words/([^/]+)/review$""") to { _, uri, response, requestBody ->

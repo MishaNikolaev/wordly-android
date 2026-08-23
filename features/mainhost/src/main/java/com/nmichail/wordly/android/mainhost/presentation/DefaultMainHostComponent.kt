@@ -27,10 +27,10 @@ import com.nmichail.wordly.android.features.materials.presentation.MaterialsComp
 import com.nmichail.wordly.android.features.materials.article.presentation.MaterialDetailComponent
 import com.nmichail.wordly.android.features.materials.article.presentation.MaterialDetailRouter
 import com.nmichail.wordly.android.features.profile.presentation.ProfileComponent
-import com.nmichail.wordly.android.features.profile.presentation.edit.ProfileEditComponent
-import com.nmichail.wordly.android.features.profile.presentation.edit.ProfileEditRouter
-import com.nmichail.wordly.android.features.profile.presentation.reminder.ReminderTimesComponent
-import com.nmichail.wordly.android.features.profile.presentation.reminder.ReminderTimesRouter
+import com.nmichail.wordly.android.features.profile.editor.presentation.ProfileEditComponent
+import com.nmichail.wordly.android.features.profile.editor.presentation.ProfileEditRouter
+import com.nmichail.wordly.android.features.profile.reminders.presentation.ReminderTimesComponent
+import com.nmichail.wordly.android.features.profile.reminders.presentation.ReminderTimesRouter
 import com.nmichail.wordly.android.features.review.presentation.ReviewComponent
 import com.nmichail.wordly.android.features.review.presentation.ReviewRouter
 import com.nmichail.wordly.android.features.words.presentation.WordsComponent
@@ -53,6 +53,7 @@ internal class DefaultMainHostComponent(
 	private val constructorPracticeComponentFactory: ConstructorPracticeComponent.Factory,
 	private val booksComponentFactory: BooksComponent.Factory,
 	private val bookReaderComponentFactory: BookReaderComponent.Factory,
+	private val onOpenNetworkSelection: () -> Unit,
 ) : MainHostComponent, ComponentContext by componentContext {
 
 	private val navigation = StackNavigation<MainHostConfig>()
@@ -138,6 +139,7 @@ internal class DefaultMainHostComponent(
 			onOpenReminderTimes = {
 				navigation.push(MainHostConfig.ReminderTimes)
 			},
+			onOpenNetworkSelection = onOpenNetworkSelection,
 		)
 		profileComponent = component
 		return MainHostComponent.Child.Profile(component = component)

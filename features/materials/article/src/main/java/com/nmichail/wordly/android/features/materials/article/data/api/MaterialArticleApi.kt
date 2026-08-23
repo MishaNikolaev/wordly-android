@@ -6,7 +6,7 @@ import retrofit2.http.Path
 
 interface MaterialArticleApi {
 
-	@GET("api/materials/{id}")
+	@GET("/api/materials/{id}")
 	suspend fun getMaterial(
 		@Path("id") id: String,
 	): MaterialDetailDto

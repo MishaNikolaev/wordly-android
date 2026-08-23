@@ -15,7 +15,7 @@ import com.nmichail.wordly.android.features.constructor.domain.usecase.GetConstr
 import com.nmichail.wordly.android.shared.catalog.filterCatalogSections
 import com.nmichail.wordly.android.shared.catalog.findCatalogItem
 import com.nmichail.wordly.android.shared.catalog.matchesCatalogSearch
-import com.nmichail.wordly.android.shared.catalog.updateCatalogLevelSectionTitles
+import com.nmichail.wordly.android.shared.catalog.regroupCatalogSectionsByLevel
 import javax.inject.Inject
 
 internal class ConstructorStoreFactory @Inject constructor(
@@ -66,14 +66,24 @@ internal class ConstructorStoreFactory @Inject constructor(
         override fun ConstructorStore.State.reduce(msg: Msg): ConstructorStore.State =
             when (msg) {
                 Msg.Loading -> ConstructorStore.State.Loading
-                is Msg.CatalogLoaded -> ConstructorStore.State.Content(
-                    title = msg.catalog.title,
-                    searchQuery = "",
-                    searchPlaceholder = msg.catalog.searchPlaceholder,
-                    levelBanner = msg.catalog.levelBanner,
-                    allSections = msg.catalog.sections,
-                    sections = msg.catalog.sections,
-                )
+                is Msg.CatalogLoaded -> {
+                    val level = msg.catalog.levelBanner?.levelLabel.orEmpty().ifBlank { "B1" }
+                    val sections = regroupCatalogSectionsByLevel(
+                        sections = msg.catalog.sections,
+                        level = level,
+                        getItems = { it.items },
+                        getBadge = { it.badge },
+                        createSection = { title, items -> ConstructorSection(title = title, items = items) },
+                    )
+                    ConstructorStore.State.Content(
+                        title = msg.catalog.title,
+                        searchQuery = "",
+                        searchPlaceholder = msg.catalog.searchPlaceholder,
+                        levelBanner = msg.catalog.levelBanner,
+                        allSections = sections,
+                        sections = sections,
+                    )
+                }
 
                 Msg.SetError -> ConstructorStore.State.Error
                 is Msg.SearchUpdated -> {
@@ -156,11 +166,12 @@ internal class ConstructorStoreFactory @Inject constructor(
             val content = state() as? ConstructorStore.State.Content ?: return
             scope.launch {
                 updateEnglishLevelUseCase(level)
-                val allSections = updateCatalogLevelSectionTitles(
+                val allSections = regroupCatalogSectionsByLevel(
                     sections = content.allSections,
                     level = level,
-                    getTitle = { it.title },
-                    copyWithTitle = { section, title -> section.copy(title = title) },
+                    getItems = { it.items },
+                    getBadge = { it.badge },
+                    createSection = { title, items -> ConstructorSection(title = title, items = items) },
                 )
                 val sections = filterCatalogSections(
                     sections = allSections,

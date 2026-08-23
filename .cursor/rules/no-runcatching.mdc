@@ -1,0 +1,22 @@
+---
+description: Never use Kotlin runCatching
+alwaysApply: true
+---
+
+# No `runCatching`
+
+Never use `runCatching`, `getOrNull()`, `getOrDefault()`, `getOrElse()`, or `onFailure`/`onSuccess` from `Result` produced by `runCatching`.
+
+Use explicit `try` / `catch` instead:
+
+```kotlin
+// BAD
+runCatching { parse(json) }.getOrNull()
+
+// GOOD
+try {
+	parse(json)
+} catch (_: Exception) {
+	null
+}
+```

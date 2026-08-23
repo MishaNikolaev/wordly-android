@@ -8,6 +8,7 @@ buildscript {
 		classpath(libs.gradle.kotlin)
 		classpath(libs.gradle.compose)
 		classpath(libs.gradle.detekt)
+		classpath(libs.gradle.google.services)
 	}
 }
 

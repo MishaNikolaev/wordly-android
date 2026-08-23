@@ -11,8 +11,8 @@ import com.nmichail.wordly.android.features.home.presentation.HomeComponent
 import com.nmichail.wordly.android.features.materials.presentation.MaterialsComponent
 import com.nmichail.wordly.android.features.materials.article.presentation.MaterialDetailComponent
 import com.nmichail.wordly.android.features.profile.presentation.ProfileComponent
-import com.nmichail.wordly.android.features.profile.presentation.edit.ProfileEditComponent
-import com.nmichail.wordly.android.features.profile.presentation.reminder.ReminderTimesComponent
+import com.nmichail.wordly.android.features.profile.editor.presentation.ProfileEditComponent
+import com.nmichail.wordly.android.features.profile.reminders.presentation.ReminderTimesComponent
 import com.nmichail.wordly.android.features.review.presentation.ReviewComponent
 import com.nmichail.wordly.android.features.words.presentation.WordsComponent
 import javax.inject.Inject
@@ -34,7 +34,10 @@ internal class DefaultMainHostComponentFactory @Inject constructor(
 	private val bookReaderComponentFactory: BookReaderComponent.Factory,
 ) : MainHostComponent.Factory {
 
-	override fun invoke(componentContext: ComponentContext): MainHostComponent =
+	override fun invoke(
+		componentContext: ComponentContext,
+		onOpenNetworkSelection: () -> Unit,
+	): MainHostComponent =
 		DefaultMainHostComponent(
 			componentContext = componentContext,
 			homeComponentFactory = homeComponentFactory,
@@ -51,5 +54,6 @@ internal class DefaultMainHostComponentFactory @Inject constructor(
 			constructorPracticeComponentFactory = constructorPracticeComponentFactory,
 			booksComponentFactory = booksComponentFactory,
 			bookReaderComponentFactory = bookReaderComponentFactory,
+			onOpenNetworkSelection = onOpenNetworkSelection,
 		)
 }

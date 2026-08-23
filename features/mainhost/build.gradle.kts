@@ -29,8 +29,12 @@ dependencies {
 	implementation(projects.features.words.list)
 	implementation(projects.features.materials.feed)
 	implementation(projects.features.materials.article)
-	implementation(projects.features.profile)
+	implementation(projects.features.profile.account)
+	implementation(projects.features.profile.editor)
+	implementation(projects.features.profile.reminders)
 	implementation(projects.core.network)
 	implementation(projects.core.preferences)
 	implementation(projects.shared.error)
+	implementation(libs.essenty.lifecycle.coroutines)
+	implementation(libs.kotlinx.coroutines.core)
 }

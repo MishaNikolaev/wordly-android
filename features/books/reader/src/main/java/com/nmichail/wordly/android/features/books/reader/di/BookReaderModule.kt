@@ -2,6 +2,8 @@ package com.nmichail.wordly.android.features.books.reader.di
 
 import com.nmichail.wordly.android.core.network.di.GeneralRetrofit
 import com.nmichail.wordly.android.features.books.reader.data.api.BookReaderApi
+import com.nmichail.wordly.android.features.books.reader.data.datasource.BookReaderDataSource
+import com.nmichail.wordly.android.features.books.reader.data.datasource.BookReaderDataSourceImpl
 import com.nmichail.wordly.android.features.books.reader.data.repository.BookReaderRepositoryImpl
 import com.nmichail.wordly.android.features.books.reader.domain.repository.BookReaderRepository
 import com.nmichail.wordly.android.features.books.reader.presentation.BookReaderComponent
@@ -14,6 +16,11 @@ import javax.inject.Singleton
 
 @Module
 abstract class BookReaderModule {
+
+    @Binds
+    abstract fun bindBookReaderDataSource(
+        impl: BookReaderDataSourceImpl,
+    ): BookReaderDataSource
 
     @Binds
     abstract fun bindBookReaderRepository(

@@ -2,6 +2,8 @@ package com.nmichail.wordly.android.features.materials.di
 
 import com.nmichail.wordly.android.core.network.di.GeneralRetrofit
 import com.nmichail.wordly.android.features.materials.data.api.MaterialsApi
+import com.nmichail.wordly.android.features.materials.data.datasource.MaterialsDataSource
+import com.nmichail.wordly.android.features.materials.data.datasource.MaterialsDataSourceImpl
 import com.nmichail.wordly.android.features.materials.data.repository.MaterialsRepositoryImpl
 import com.nmichail.wordly.android.features.materials.domain.repository.MaterialsRepository
 import com.nmichail.wordly.android.features.materials.presentation.DefaultMaterialsComponentFactory
@@ -14,6 +16,11 @@ import javax.inject.Singleton
 
 @Module
 abstract class MaterialsModule {
+
+	@Binds
+	abstract fun bindMaterialsDataSource(
+		impl: MaterialsDataSourceImpl,
+	): MaterialsDataSource
 
 	@Binds
 	abstract fun bindMaterialsRepository(

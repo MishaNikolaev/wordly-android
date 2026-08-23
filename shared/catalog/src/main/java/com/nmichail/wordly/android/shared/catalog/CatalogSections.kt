@@ -1,6 +1,7 @@
 package com.nmichail.wordly.android.shared.catalog
 
 const val CATALOG_LEVEL_SECTION_PREFIX = "Под ваш уровень · "
+const val CATALOG_OTHER_LEVELS_TITLE = "Другие уровни"
 
 fun matchesCatalogSearch(
 	title: String,
@@ -46,6 +47,35 @@ fun <Section> updateCatalogLevelSectionTitles(
 			section
 		}
 	}
+
+/** Rebuilds sections so items with matching CEFR badge go under "for your level". */
+fun <Section, Item> regroupCatalogSectionsByLevel(
+	sections: List<Section>,
+	level: String,
+	getItems: (Section) -> List<Item>,
+	getBadge: (Item) -> String?,
+	createSection: (title: String, items: List<Item>) -> Section,
+): List<Section> {
+	val allItems = sections.flatMap(getItems)
+	if (allItems.isEmpty()) return emptyList()
+
+	val normalizedLevel = level.trim()
+	val forLevel = allItems.filter { item ->
+		getBadge(item)?.equals(normalizedLevel, ignoreCase = true) == true
+	}
+	val others = allItems.filter { item ->
+		getBadge(item)?.equals(normalizedLevel, ignoreCase = true) != true
+	}
+
+	return buildList {
+		if (forLevel.isNotEmpty()) {
+			add(createSection("$CATALOG_LEVEL_SECTION_PREFIX$normalizedLevel", forLevel))
+		}
+		if (others.isNotEmpty()) {
+			add(createSection(CATALOG_OTHER_LEVELS_TITLE, others))
+		}
+	}
+}
 
 fun <Section, Item> findCatalogItem(
 	sections: List<Section>,

@@ -122,6 +122,7 @@ internal class SignInStoreFactory @Inject constructor(
         }
 
         private fun handleError(error: Exception) {
+            android.util.Log.e("SignIn", "authorization failed", error)
             val networkError = networkExceptionConverter.convert(error)
             if (errorDelegate.handleError(networkError) == HandleErrorResult.HANDLED) {
                 dispatch(Msg.SetSubmitting(submitting = false))

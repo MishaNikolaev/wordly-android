@@ -17,8 +17,8 @@ import com.nmichail.wordly.android.features.constructor.ui.ConstructorContent
 import com.nmichail.wordly.android.features.constructor.practice.ui.ConstructorPracticeContent
 import com.nmichail.wordly.android.features.home.ui.HomeContent
 import com.nmichail.wordly.android.features.profile.ui.ProfileContent
-import com.nmichail.wordly.android.features.profile.ui.ProfileEditContent
-import com.nmichail.wordly.android.features.profile.ui.ReminderTimesContent
+import com.nmichail.wordly.android.features.profile.editor.ui.ProfileEditContent
+import com.nmichail.wordly.android.features.profile.reminders.ui.ReminderTimesContent
 import com.nmichail.wordly.android.features.review.ui.ReviewContent
 import com.nmichail.wordly.android.features.materials.article.ui.MaterialDetailContent
 import com.nmichail.wordly.android.features.materials.ui.MaterialsContent
@@ -31,6 +31,7 @@ import com.nmichail.wordly.android.mainhost.presentation.toTab
 fun MainHostContent(
 	component: MainHostComponent,
 	themeMode: AppThemeMode,
+	devEnabled: Boolean,
 	modifier: Modifier = Modifier,
 ) {
 	val stack by component.stack.subscribeAsState()
@@ -53,6 +54,7 @@ fun MainHostContent(
 			MainHostChildContent(
 				child = child.instance,
 				themeMode = themeMode,
+				devEnabled = devEnabled,
 				innerPadding = innerPadding,
 			)
 		}
@@ -64,6 +66,7 @@ fun MainHostContent(
 private fun MainHostChildContent(
 	child: MainHostComponent.Child,
 	themeMode: AppThemeMode,
+	devEnabled: Boolean,
 	innerPadding: PaddingValues,
 ) {
 	when (child) {
@@ -85,6 +88,7 @@ private fun MainHostChildContent(
 		is MainHostComponent.Child.Profile -> ProfileContent(
 			component = child.component,
 			themeMode = themeMode,
+			devEnabled = devEnabled,
 			modifier = Modifier.padding(innerPadding),
 		)
 		is MainHostComponent.Child.ProfileEdit -> ProfileEditContent(

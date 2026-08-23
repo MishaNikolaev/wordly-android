@@ -9,16 +9,19 @@ import com.arkivanov.decompose.router.stack.navigate
 import com.arkivanov.decompose.router.stack.pop
 import com.arkivanov.decompose.router.stack.push
 import com.arkivanov.decompose.value.Value
+import com.arkivanov.essenty.lifecycle.coroutines.coroutineScope
 import com.arkivanov.essenty.lifecycle.doOnDestroy
+import com.nmichail.wordly.android.core.preferences.domain.usecase.ClearAuthTokensUseCase
 import com.nmichail.wordly.android.core.preferences.domain.usecase.IsAuthTokensExistUseCase
 import com.nmichail.wordly.android.features.authorization.signin.presentation.SignInComponent
 import com.nmichail.wordly.android.features.authorization.signin.presentation.SignInRouter
 import com.nmichail.wordly.android.features.authorization.signup.presentation.SignUpComponent
 import com.nmichail.wordly.android.features.authorization.signup.presentation.SignUpRouter
 import com.nmichail.wordly.android.features.dev.networkselection.presentation.NetworkSelectionComponent
+import com.nmichail.wordly.android.features.profile.domain.usecase.GetSessionUseCase
 import com.nmichail.wordly.android.shared.error.presentation.ErrorLogoutRouter
+import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.builtins.serializer
 import javax.inject.Inject
 
 internal class DefaultRootComponent(
@@ -28,10 +31,13 @@ internal class DefaultRootComponent(
 	private val mainHostComponentFactory: MainHostComponent.Factory,
 	private val networkSelectionComponentFactory: NetworkSelectionComponent.Factory,
 	private val isAuthTokensExistUseCase: IsAuthTokensExistUseCase,
+	private val getSessionUseCase: GetSessionUseCase,
+	private val clearAuthTokensUseCase: ClearAuthTokensUseCase,
 	private val errorLogoutRouter: ErrorLogoutRouter,
 ) : RootComponent, ComponentContext by componentContext {
 
 	private val navigation = StackNavigation<Config>()
+	private val scope = coroutineScope()
 
 	override val stack: Value<ChildStack<*, RootComponent.Child>> = childStack(
 		source = navigation,
@@ -50,11 +56,25 @@ internal class DefaultRootComponent(
 	)
 
 	init {
+		validateSessionIfNeeded()
 		errorLogoutRouter.attach {
 			navigation.navigate { listOf(Config.SignIn) }
 		}
 		lifecycle.doOnDestroy {
 			errorLogoutRouter.detach()
+		}
+	}
+
+	/** Like cft_shift splash: local tokens are not enough — confirm session with backend. */
+	private fun validateSessionIfNeeded() {
+		if (!isAuthTokensExistUseCase()) return
+		scope.launch {
+			try {
+				getSessionUseCase()
+			} catch (_: Exception) {
+				clearAuthTokensUseCase()
+				navigation.navigate { listOf(Config.SignIn) }
+			}
 		}
 	}
 
@@ -107,7 +127,12 @@ internal class DefaultRootComponent(
 			}
 
 			Config.MainHost -> {
-				val component = mainHostComponentFactory(componentContext = componentContext)
+				val component = mainHostComponentFactory(
+					componentContext = componentContext,
+					onOpenNetworkSelection = {
+						navigation.push(Config.NetworkSelection)
+					},
+				)
 				RootComponent.Child.MainHost(component)
 			}
 
@@ -144,6 +169,8 @@ internal class DefaultRootComponentFactory @Inject constructor(
 	private val mainHostComponentFactory: MainHostComponent.Factory,
 	private val networkSelectionComponentFactory: NetworkSelectionComponent.Factory,
 	private val isAuthTokensExistUseCase: IsAuthTokensExistUseCase,
+	private val getSessionUseCase: GetSessionUseCase,
+	private val clearAuthTokensUseCase: ClearAuthTokensUseCase,
 	private val errorLogoutRouter: ErrorLogoutRouter,
 ) : RootComponent.Factory {
 
@@ -155,6 +182,8 @@ internal class DefaultRootComponentFactory @Inject constructor(
 			mainHostComponentFactory = mainHostComponentFactory,
 			networkSelectionComponentFactory = networkSelectionComponentFactory,
 			isAuthTokensExistUseCase = isAuthTokensExistUseCase,
+			getSessionUseCase = getSessionUseCase,
+			clearAuthTokensUseCase = clearAuthTokensUseCase,
 			errorLogoutRouter = errorLogoutRouter,
 		)
 }

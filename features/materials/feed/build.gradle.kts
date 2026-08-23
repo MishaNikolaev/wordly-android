@@ -23,4 +23,5 @@ dependencies {
 	implementation(projects.component.presentation)
 	implementation(projects.core.navigation)
 	implementation(projects.core.network)
+	implementation(projects.core.preferences)
 }

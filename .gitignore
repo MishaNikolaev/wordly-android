@@ -12,3 +12,11 @@ build
 .externalNativeBuild
 .cxx
 local.properties
+
+# Firebase / local configs (не коммитить)
+config/firebase/**
+!config/firebase/README.md
+**/google-services.json
+google-services.json
+firebase-debug.log
+*-debug.log

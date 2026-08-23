@@ -14,11 +14,11 @@ class EndpointDataSourceImpl(
         context.getSharedPreferences(ENDPOINT_PREFERENCES, Context.MODE_PRIVATE)
 
     override fun getEndpoint(): Endpoint {
-        val name = preferences.getString(ENDPOINT_NAME, Endpoint.DEV.name) ?: Endpoint.DEV.name
+        val name = preferences.getString(ENDPOINT_NAME, Endpoint.LOCAL.name) ?: Endpoint.LOCAL.name
         return try {
             Endpoint.valueOf(name)
         } catch (_: Exception) {
-            Endpoint.DEV
+            Endpoint.LOCAL
         }
     }
 
@@ -26,5 +26,5 @@ class EndpointDataSourceImpl(
         preferences.edit().putString(ENDPOINT_NAME, endpoint.name).apply()
     }
 
-    override fun getEndpoints(): List<Endpoint> = listOf(Endpoint.DEV)
+    override fun getEndpoints(): List<Endpoint> = listOf(Endpoint.LOCAL, Endpoint.DEV)
 }

@@ -6,6 +6,6 @@ import retrofit2.http.POST
 
 interface EnglishLevelApi {
 
-    @POST("/api/gateway/english-level")
+    @POST("/api/gateway/level")
     suspend fun updateEnglishLevel(@Body request: EnglishLevelRequest)
 }

@@ -6,6 +6,8 @@ import com.nmichail.wordly.android.core.network.factory.OkHttpClientFactory
 import com.nmichail.wordly.android.core.network.factory.RetrofitFactory
 import com.nmichail.wordly.android.features.words.data.api.FreeDictionaryApi
 import com.nmichail.wordly.android.features.words.data.api.WordsApi
+import com.nmichail.wordly.android.features.words.data.datasource.WordsDataSource
+import com.nmichail.wordly.android.features.words.data.datasource.WordsDataSourceImpl
 import com.nmichail.wordly.android.features.words.data.repository.WordsRepositoryImpl
 import com.nmichail.wordly.android.features.words.domain.repository.WordsRepository
 import com.nmichail.wordly.android.features.words.presentation.DefaultWordsComponentFactory
@@ -18,6 +20,11 @@ import javax.inject.Singleton
 
 @Module
 abstract class WordsModule {
+
+	@Binds
+	abstract fun bindWordsDataSource(
+		impl: WordsDataSourceImpl,
+	): WordsDataSource
 
 	@Binds
 	@Singleton

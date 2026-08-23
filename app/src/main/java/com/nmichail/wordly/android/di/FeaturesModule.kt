@@ -13,6 +13,8 @@ import com.nmichail.wordly.android.features.home.di.HomeModule
 import com.nmichail.wordly.android.features.materials.di.MaterialsModule
 import com.nmichail.wordly.android.features.materials.article.di.MaterialArticleModule
 import com.nmichail.wordly.android.features.profile.di.ProfileModule
+import com.nmichail.wordly.android.features.profile.editor.di.ProfileEditModule
+import com.nmichail.wordly.android.features.profile.reminders.di.ReminderTimesModule
 import com.nmichail.wordly.android.features.review.di.ReviewModule
 import com.nmichail.wordly.android.features.words.di.WordsModule
 import com.nmichail.wordly.android.mainhost.di.MainHostModule
@@ -35,6 +37,8 @@ import dagger.Module
 		MaterialsModule::class,
 		MaterialArticleModule::class,
 		ProfileModule::class,
+		ProfileEditModule::class,
+		ReminderTimesModule::class,
 		MainHostModule::class,
 	],
 )
