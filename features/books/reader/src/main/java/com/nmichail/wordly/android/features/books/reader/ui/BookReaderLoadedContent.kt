@@ -87,7 +87,12 @@ internal fun BookReaderLoaded(
             )
         }
         val selectedWord = state.selectedWord
-        if (selectedWord != null) {
+        if (state.wordLookupLoading) {
+            BookWordLookupLoadingDialog(
+                title = stringResource(R.string.book_reader_word_lookup_loading),
+                onDismiss = onDismissWordDialog,
+            )
+        } else if (selectedWord != null) {
             BookReaderWordLookupDialog(
                 definition = selectedWord,
                 added = state.showWordAddedDialog,

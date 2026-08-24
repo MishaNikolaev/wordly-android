@@ -31,6 +31,7 @@ import com.nmichail.wordly.android.component.wui.theme.WuiTheme
 data class LookupTextSegment(
     val text: String,
     val lookupId: String?,
+    val underlined: Boolean = lookupId != null,
 )
 
 @Composable
@@ -62,6 +63,7 @@ fun LookupReadingText(
 					start = 0,
 					end = annotated.length,
 				).forEach { annotation ->
+					if (!annotation.item.startsWith("underline:")) return@forEach
 					drawLookupUnderline(
 						layout = layout,
 						start = annotation.start,
@@ -80,7 +82,10 @@ fun LookupReadingText(
 						tag = "lookup",
 						start = position,
 						end = position,
-					).firstOrNull()?.item?.let(currentOnSelectWord)
+					).firstOrNull()
+						?.item
+						?.removePrefix("underline:")
+						?.let(currentOnSelectWord)
 				}
 			},
         onTextLayout = { textLayoutResult = it },
@@ -98,9 +103,14 @@ private fun buildLookupAnnotatedString(
             } else {
                 val start = length
                 append(segment.text)
+                val annotation = if (segment.underlined) {
+                    "underline:$lookupId"
+                } else {
+                    lookupId
+                }
                 addStringAnnotation(
                     tag = "lookup",
-                    annotation = lookupId,
+                    annotation = annotation,
                     start = start,
                     end = length,
                 )

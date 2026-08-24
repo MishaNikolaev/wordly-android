@@ -7,11 +7,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import com.nmichail.wordly.android.features.books.reader.ui.component.LookupReadingText
-import com.nmichail.wordly.android.features.books.reader.ui.component.LookupTextSegment
 import com.nmichail.wordly.android.component.wui.theme.WuiTypography
 import com.nmichail.wordly.android.features.books.reader.domain.entity.BookParagraph
-import com.nmichail.wordly.android.features.books.reader.domain.entity.BookTextSegment
-import com.nmichail.wordly.android.features.books.reader.domain.entity.BookTextSegmentType
 import com.nmichail.wordly.android.features.books.reader.domain.entity.BookTranslation
 
 @Composable
@@ -40,24 +37,6 @@ internal fun BookReaderParagraph(
         )
     }
 }
-
-private fun List<BookTextSegment>.toLookupSegments(): List<LookupTextSegment> =
-    mapNotNull { segment ->
-        when (segment.type) {
-            BookTextSegmentType.TEXT -> LookupTextSegment(
-                text = segment.text,
-                lookupId = null,
-            )
-
-            BookTextSegmentType.LOOKUP_WORD -> {
-                val wordId = segment.id ?: return@mapNotNull null
-                LookupTextSegment(
-                    text = segment.text,
-                    lookupId = wordId,
-                )
-            }
-        }
-    }
 
 internal fun translationFor(
     translation: BookTranslation?,

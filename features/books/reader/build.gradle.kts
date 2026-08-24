@@ -24,6 +24,7 @@ dependencies {
 	implementation(projects.core.navigation)
 	implementation(projects.core.network)
 	implementation(projects.core.preferences)
+	implementation(projects.shared.words.domain)
 
 	testImplementation(projects.testutils)
 	testImplementation(libs.kotlinx.coroutines.test)

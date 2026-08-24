@@ -14,6 +14,11 @@ import com.nmichail.wordly.android.features.books.reader.domain.entity.BookTrans
 import com.nmichail.wordly.android.features.books.reader.domain.entity.BookWordDefinition
 import com.nmichail.wordly.android.features.books.reader.domain.usecase.GetBookContentUseCase
 import com.nmichail.wordly.android.features.books.reader.domain.usecase.GetBookTranslationUseCase
+import com.nmichail.wordly.android.features.words.domain.entity.NewWord
+import com.nmichail.wordly.android.features.words.domain.entity.WordExample
+import com.nmichail.wordly.android.features.words.domain.entity.WordLookup
+import com.nmichail.wordly.android.features.words.domain.usecase.AddWordUseCase
+import com.nmichail.wordly.android.features.words.domain.usecase.LookupWordUseCase
 import java.io.IOException
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
@@ -21,8 +26,10 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.junit.jupiter.MockitoExtension
+import org.mockito.kotlin.any
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 
 @ExtendWith(
@@ -34,6 +41,8 @@ class BookReaderStoreTest {
 
 	private val getBookContentUseCase: GetBookContentUseCase = mock()
 	private val getBookTranslationUseCase: GetBookTranslationUseCase = mock()
+	private val lookupWordUseCase: LookupWordUseCase = mock()
+	private val addWordUseCase: AddWordUseCase = mock()
 	private val lifecycle = createTestLifecycle()
 	private val exception = IOException("network")
 
@@ -116,13 +125,33 @@ class BookReaderStoreTest {
 	}
 
 	@Test
-	fun `select unknown word EXPECT state unchanged`() = runTest {
+	fun `select free word EXPECT lookup definition`() = runTest {
 		whenever(getBookContentUseCase("little-prince")) doReturn book
+		whenever(lookupWordUseCase("planet")) doReturn WordLookup(
+			word = "planet",
+			phonetic = "/ˈplænɪt/",
+			translation = null,
+			definition = "a celestial body",
+			examples = listOf(WordExample(text = "Earth is a planet.", translation = null)),
+			difficulty = 2,
+		)
 		val store = createStore()
 
-		store.accept(BookReaderStore.Intent.SelectWord(wordId = "unknown"))
+		store.accept(BookReaderStore.Intent.SelectWord(wordId = "w:planet"))
 
-		assertEquals(content(), store.state)
+		assertEquals(
+			content(
+				selectedWord = BookWordDefinition(
+					word = "planet",
+					phonetic = "/ˈplænɪt/",
+					translation = null,
+					partOfSpeech = null,
+					example = "Earth is a planet.",
+					definition = "a celestial body",
+				),
+			),
+			store.state,
+		)
 	}
 
 	@Test
@@ -139,6 +168,7 @@ class BookReaderStoreTest {
 	@Test
 	fun `add word to card EXPECT dialog and label`() = runTest {
 		whenever(getBookContentUseCase("little-prince")) doReturn book
+		whenever(addWordUseCase(any())).thenReturn(Unit)
 		val store = createStore()
 		val labelsChannel = store.labelsChannel(lifecycle)
 		store.accept(BookReaderStore.Intent.SelectWord(wordId = "prince"))
@@ -156,11 +186,28 @@ class BookReaderStoreTest {
 			BookReaderStore.Label.AddWordToCard(definition = wordDefinition),
 			labelsChannel.receive(),
 		)
+		verify(addWordUseCase).invoke(
+			NewWord(
+				word = "prince",
+				phonetic = "/prɪns/",
+				translation = "принц",
+				definition = "noun",
+				examples = listOf(
+					WordExample(
+						text = "The little prince lived on a tiny planet.",
+						translation = null,
+					),
+				),
+				tagIds = emptyList(),
+				difficulty = 2,
+			),
+		)
 	}
 
 	@Test
 	fun `dismiss word added dialog EXPECT selection cleared`() = runTest {
 		whenever(getBookContentUseCase("little-prince")) doReturn book
+		whenever(addWordUseCase(any())).thenReturn(Unit)
 		val store = createStore()
 		store.accept(BookReaderStore.Intent.SelectWord(wordId = "prince"))
 		store.accept(BookReaderStore.Intent.AddWordToCard)
@@ -186,6 +233,7 @@ class BookReaderStoreTest {
 		translationVisible: Boolean = false,
 		translating: Boolean = false,
 		selectedWord: BookWordDefinition? = null,
+		wordLookupLoading: Boolean = false,
 		showWordAddedDialog: Boolean = false,
 	): BookReaderStore.State.Content =
 		BookReaderStore.State.Content(
@@ -194,6 +242,7 @@ class BookReaderStoreTest {
 			translationVisible = translationVisible,
 			translating = translating,
 			selectedWord = selectedWord,
+			wordLookupLoading = wordLookupLoading,
 			showWordAddedDialog = showWordAddedDialog,
 		)
 
@@ -201,5 +250,7 @@ class BookReaderStoreTest {
 		BookReaderStoreFactory(
 			getBookContentUseCase = getBookContentUseCase,
 			getBookTranslationUseCase = getBookTranslationUseCase,
+			lookupWordUseCase = lookupWordUseCase,
+			addWordUseCase = addWordUseCase,
 		).create(bookId = "little-prince")
 }

@@ -19,6 +19,7 @@ private fun MaterialItemDto.toDomain(): MaterialItem =
 		category = category.toCategory(),
 		title = title,
 		description = description,
+		photoUrl = photoUrl,
 		status = status.toReadStatus(),
 	)
 

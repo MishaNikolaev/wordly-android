@@ -92,7 +92,7 @@ private val getHandlers: Map<Regex, Handler> = mapOf(
 	},
 	Regex("^/api/gateway/cards/([^/]+)/session$") to { context, uri, response ->
 		val cardId = uri.path?.removePrefix("/api/gateway/cards/")?.removeSuffix("/session").orEmpty()
-		if (cardId !in setOf("science", "journalism", "medicine", "engineering")) {
+		if (cardId.isBlank()) {
 			response.error404(context)
 		} else {
 			response.create(description = "Card practice session", body = context.getJson(R.raw.get_cards_session))
@@ -100,10 +100,13 @@ private val getHandlers: Map<Regex, Handler> = mapOf(
 	},
 	Regex("^/api/gateway/constructor/([^/]+)/session$") to { context, uri, response ->
 		val themeId = uri.path?.removePrefix("/api/gateway/constructor/")?.removeSuffix("/session").orEmpty()
-		if (themeId !in setOf("philosophy", "movies", "books")) {
+		if (themeId.isBlank()) {
 			response.error404(context)
 		} else {
-			response.create(description = "Constructor session", body = context.getJson(R.raw.get_constructor_session))
+			val body = JSONObject(context.getJson(R.raw.get_constructor_session)).apply {
+				put("themeId", themeId)
+			}.toString()
+			response.create(description = "Constructor session", body = body)
 		}
 	},
 	Regex("^/api/gateway/books/([^/]+)$") to { context, uri, response ->
@@ -121,6 +124,30 @@ private val getHandlers: Map<Regex, Handler> = mapOf(
 		} else {
 			response.create(description = "Book translation", body = context.getJson(R.raw.get_book_translation_little_prince))
 		}
+	},
+	Regex("^/api/gateway/vocabulary/lookup$") to { _, uri, response ->
+		val query = uri.getQueryParameter("q")?.trim().orEmpty().ifBlank { "resilience" }
+		response.create(
+			description = "Vocabulary lookup",
+			body = JSONObject()
+				.put("word", query)
+				.put("phonetic", "/ˈwɜːd/")
+				.put("translation", "слово, термин")
+				.put("definition", "a single distinct meaningful element of speech or writing")
+				.put("audioUrl", JSONObject.NULL)
+				.put(
+					"examples",
+					JSONArray().put(
+						JSONObject()
+							.put("text", "This word is useful.")
+							.put("translation", "Это слово полезно."),
+					),
+				)
+				.put("level", "A1")
+				.put("difficulty", 1)
+				.put("pos", "noun")
+				.toString(),
+		)
 	},
 )
 

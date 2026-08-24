@@ -28,7 +28,6 @@ fun List<DictionaryEntryDto>.toWordLookup(query: String): WordLookup {
 	return WordLookup(
 		word = entry?.word?.takeIf(String::isNotBlank) ?: query.trim(),
 		phonetic = phonetic,
-		// TODO: Free Dictionary API не отправляет перевод на русский, нужно решить эту проблему
 		translation = null,
 		definition = definitionTexts.joinToString(separator = "; ").ifBlank { null },
 		examples = examples,

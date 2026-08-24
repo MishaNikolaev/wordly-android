@@ -105,7 +105,7 @@ class ConstructorPracticeStoreTest {
 
 		assertEquals(
 			inProgress(
-				bank = firstWords.filterNot { it.id == "w1" },
+				bank = phraseBank().filterNot { it.id == "w1" },
 				answer = listOf(firstWords.first { it.id == "w1" }),
 			),
 			store.state,
@@ -122,7 +122,7 @@ class ConstructorPracticeStoreTest {
 
 		assertEquals(
 			inProgress(
-				bank = firstWords.filterNot { it.id == "w1" } + firstWords.first { it.id == "w1" },
+				bank = phraseBank(),
 			),
 			store.state,
 		)
@@ -139,7 +139,7 @@ class ConstructorPracticeStoreTest {
 
 		assertEquals(
 			inProgress(
-				bank = firstWords.filterNot { it.id == "w1" || it.id == "w2" },
+				bank = phraseBank().filterNot { it.id == "w1" || it.id == "w2" },
 				answer = listOf(
 					firstWords.first { it.id == "w2" },
 					firstWords.first { it.id == "w1" },
@@ -161,7 +161,7 @@ class ConstructorPracticeStoreTest {
 
 		assertEquals(
 			inProgress(
-				bank = listOf(firstWords.first { it.id == "w4" }),
+				bank = phraseBank().filterNot { it.id == "w1" || it.id == "w2" || it.id == "w3" },
 				answer = listOf(
 					firstWords.first { it.id == "w1" },
 					firstWords.first { it.id == "w2" },
@@ -184,7 +184,7 @@ class ConstructorPracticeStoreTest {
 
 		assertEquals(
 			inProgress(
-				bank = firstWords.filterNot { it.id == "w3" || it.id == "w1" },
+				bank = phraseBank().filterNot { it.id == "w3" || it.id == "w1" },
 				answer = listOf(
 					firstWords.first { it.id == "w3" },
 					firstWords.first { it.id == "w1" },
@@ -280,9 +280,14 @@ class ConstructorPracticeStoreTest {
 		assertEquals(ConstructorPracticeStore.Label.Close, labelsChannel.receive())
 	}
 
+	private fun phraseBank(index: Int = 0): List<ConstructorWord> {
+		val phrase = session.phrases[index]
+		return phrase.words.shuffledBank("${session.themeId}:${phrase.id}")
+	}
+
 	private fun inProgress(
 		currentIndex: Int = 0,
-		bank: List<ConstructorWord> = session.phrases[currentIndex].words,
+		bank: List<ConstructorWord> = phraseBank(currentIndex),
 		answer: List<ConstructorWord> = emptyList(),
 		checkResult: Boolean? = null,
 		correctCount: Int = 0,

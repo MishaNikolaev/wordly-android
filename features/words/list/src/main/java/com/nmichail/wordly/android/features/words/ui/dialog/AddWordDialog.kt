@@ -36,6 +36,8 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import com.nmichail.wordly.android.component.wui.theme.WuiTypography
 import com.nmichail.wordly.android.features.words.domain.entity.WordExample
+import com.nmichail.wordly.android.features.words.domain.previewDefinition
+import com.nmichail.wordly.android.features.words.domain.previewItems
 import com.nmichail.wordly.android.features.words.list.R
 import com.nmichail.wordly.android.features.words.presentation.dialog.AddWordDialogState
 
@@ -106,6 +108,8 @@ private fun AddWordDialogBody(
 			state.wordInput.isNotBlank() && hasLookupContent(state) -> {
 				AddWordAutofillCard(
 					phonetic = state.phonetic,
+					translation = state.translation,
+					definition = state.definition,
 					examples = state.examples,
 				)
 				AddWordTags(
@@ -132,6 +136,8 @@ private fun hasLookupContent(state: AddWordDialogState): Boolean =
 @Composable
 private fun AddWordAutofillCard(
 	phonetic: String?,
+	translation: String?,
+	definition: String?,
 	examples: List<WordExample>,
 ) {
 	val colorScheme = MaterialTheme.colorScheme
@@ -151,6 +157,21 @@ private fun AddWordAutofillCard(
 			Text(
 				text = phonetic,
 				style = WuiTypography.addWordPhonetic,
+				color = colorScheme.onSurfaceVariant,
+			)
+		}
+		if (!translation.isNullOrBlank()) {
+			Text(
+				text = translation,
+				style = WuiTypography.addWordExample,
+				color = colorScheme.onSurface,
+			)
+		}
+		val previewDef = previewDefinition(definition)
+		if (!previewDef.isNullOrBlank()) {
+			Text(
+				text = previewDef,
+				style = WuiTypography.addWordExample,
 				color = colorScheme.onSurfaceVariant,
 			)
 		}
@@ -197,11 +218,19 @@ private fun AddWordAutofillExamples(examples: List<WordExample>) {
 		return
 	}
 	Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-		examples.forEach { example ->
+		val (visibleExamples, hasMore) = examples.previewItems()
+		visibleExamples.forEach { example ->
 			Text(
 				text = example.text,
 				style = WuiTypography.addWordExample,
 				color = colorScheme.onSurface,
+			)
+		}
+		if (hasMore) {
+			Text(
+				text = stringResource(R.string.words_add_examples_more),
+				style = WuiTypography.addWordExample,
+				color = colorScheme.onSurfaceVariant,
 			)
 		}
 	}

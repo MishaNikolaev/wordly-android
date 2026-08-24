@@ -12,4 +12,8 @@ class HomeRepositoryImpl @Inject constructor(
 
 	override suspend fun getHome(): Home =
 		dataSource.getHome().toEntity()
+
+	override suspend fun invalidateCache() {
+		dataSource.invalidateCache()
+	}
 }

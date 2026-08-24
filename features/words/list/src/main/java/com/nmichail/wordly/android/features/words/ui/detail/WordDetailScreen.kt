@@ -49,6 +49,7 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.activity.compose.BackHandler
 import com.nmichail.wordly.android.component.wui.components.button.WuiButton
 import com.nmichail.wordly.android.component.wui.components.calendar.WuiCalendarDialog
 import com.nmichail.wordly.android.component.wui.theme.Wui
@@ -74,6 +75,14 @@ fun WordDetailScreen(
 	onPlayAudio: () -> Unit,
 	modifier: Modifier = Modifier,
 ) {
+	BackHandler {
+		if (state.calendar != null) {
+			onDismissCalendar()
+		} else {
+			onDismiss()
+		}
+	}
+
 	WordDetailBody(
 		state = state,
 		onDismiss = onDismiss,
@@ -107,91 +116,85 @@ private fun WordDetailBody(
 	modifier: Modifier = Modifier,
 ) {
 	val colorScheme = MaterialTheme.colorScheme
+	val scrollState = rememberScrollState()
 	Column(
 		modifier = modifier
 			.fillMaxSize()
 			.navigationBarsPadding()
 			.padding(horizontal = 16.dp)
-			.padding(top = 20.dp),
+			.padding(top = 20.dp)
+			.verticalScroll(scrollState),
 		verticalArrangement = Arrangement.spacedBy(12.dp),
 	) {
-		Column(
-			modifier = Modifier
-				.weight(1f)
-				.fillMaxWidth()
-				.verticalScroll(rememberScrollState()),
-			verticalArrangement = Arrangement.spacedBy(12.dp),
-		) {
-			Box(modifier = Modifier.fillMaxWidth()) {
-				Column(
-					modifier = Modifier
-						.fillMaxWidth()
-						.padding(top = 64.dp),
-					verticalArrangement = Arrangement.spacedBy(4.dp),
-				) {
-					Text(
-						text = state.word,
-						style = WuiTypography.wordDetailWord,
-						color = colorScheme.onSurface,
-					)
-					WordDetailPhonetic(
-						phonetic = state.phonetic,
-						onPlayAudio = onPlayAudio,
-					)
-				}
-				WordDetailCloseButton(
-					onDismiss = onDismiss,
-					modifier = Modifier
-						.align(Alignment.TopStart)
-						.padding(top = 10.dp),
-				)
-			}
-			WordDetailStatusRow(
-				status = state.status,
-				onStatusChange = onStatusChange,
-			)
-			if (!state.translation.isNullOrBlank()) {
-				Text(
-					text = state.translation,
-					style = WuiTypography.wordDetailTranslation,
-					color = colorScheme.onSurface,
-				)
-			}
-			if (!state.definition.isNullOrBlank()) {
-				Text(
-					text = stringResource(R.string.words_detail_definition_label),
-					style = MaterialTheme.typography.labelLarge,
-					fontWeight = FontWeight.SemiBold,
-					color = colorScheme.onSurface,
-				)
-				Text(
-					text = state.definition,
-					style = MaterialTheme.typography.bodyMedium,
-					color = colorScheme.onSurfaceVariant,
-				)
-			}
-			WordDetailExamples(examples = state.examples)
-			Row(
+		Box(modifier = Modifier.fillMaxWidth()) {
+			Column(
 				modifier = Modifier
 					.fillMaxWidth()
-					.height(IntrinsicSize.Max),
-				horizontalArrangement = Arrangement.spacedBy(8.dp),
+					.padding(top = 64.dp),
+				verticalArrangement = Arrangement.spacedBy(4.dp),
 			) {
-				DifficultyBox(
-					difficulty = state.difficulty,
-					maxDifficulty = state.maxDifficulty,
-					modifier = Modifier
-						.weight(1f)
-						.fillMaxHeight(),
+				Text(
+					text = state.word,
+					style = WuiTypography.wordDetailWord,
+					color = colorScheme.onSurface,
 				)
-				RepeatDateBox(
-					label = state.repeatDateLabel,
-					onClick = onOpenCalendar,
-					modifier = Modifier
-						.weight(1f)
-						.fillMaxHeight(),
+				WordDetailPhonetic(
+					phonetic = state.phonetic,
+					onPlayAudio = onPlayAudio,
 				)
 			}
+			WordDetailCloseButton(
+				onDismiss = onDismiss,
+				modifier = Modifier
+					.align(Alignment.TopStart)
+					.padding(top = 10.dp),
+			)
+		}
+		WordDetailStatusRow(
+			status = state.status,
+			onStatusChange = onStatusChange,
+		)
+		if (!state.translation.isNullOrBlank()) {
+			Text(
+				text = state.translation,
+				style = WuiTypography.wordDetailTranslation,
+				color = colorScheme.onSurface,
+			)
+		}
+		if (!state.definition.isNullOrBlank()) {
+			Text(
+				text = stringResource(R.string.words_detail_definition_label),
+				style = MaterialTheme.typography.labelLarge,
+				fontWeight = FontWeight.SemiBold,
+				color = colorScheme.onSurface,
+			)
+			Text(
+				text = state.definition,
+				style = MaterialTheme.typography.bodyMedium,
+				color = colorScheme.onSurfaceVariant,
+			)
+		}
+		WordDetailExamples(examples = state.examples)
+		Row(
+			modifier = Modifier
+				.fillMaxWidth()
+				.height(IntrinsicSize.Max),
+			horizontalArrangement = Arrangement.spacedBy(8.dp),
+		) {
+			DifficultyBox(
+				difficulty = state.difficulty,
+				maxDifficulty = state.maxDifficulty,
+				modifier = Modifier
+					.weight(1f)
+					.fillMaxHeight(),
+			)
+			RepeatDateBox(
+				label = state.repeatDateLabel,
+				onClick = onOpenCalendar,
+				modifier = Modifier
+					.weight(1f)
+					.fillMaxHeight(),
+			)
 		}
 		if (state.tags.isNotEmpty()) {
 			WordDetailTags(

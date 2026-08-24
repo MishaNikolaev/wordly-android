@@ -90,15 +90,21 @@ class DefaultCardPracticeComponentTest {
 		verify(cardPracticeRouter).navigateBack()
 	}
 
+	private val cardId = "science"
+
+	private fun shuffledWords(): List<CardPracticeWord> =
+		words.map { it.withShuffledOptions(seed = "$cardId:${it.id}") }
+
 	private fun inProgress(
 		selectedOptionId: String? = null,
 		answerRevealed: Boolean = false,
 		correct: Boolean = false,
-	): CardPracticeStore.State.Content.InProgress =
-		CardPracticeStore.State.Content.InProgress(
-			words = words,
+	): CardPracticeStore.State.Content.InProgress {
+		val sessionWords = shuffledWords()
+		return CardPracticeStore.State.Content.InProgress(
+			words = sessionWords,
 			currentIndex = 0,
-			currentWord = firstWord,
+			currentWord = sessionWords.first(),
 			totalCount = 1,
 			progressIndex = 1,
 			selectedOptionId = selectedOptionId,
@@ -106,4 +112,5 @@ class DefaultCardPracticeComponentTest {
 			correct = correct,
 			correctCount = 0,
 		)
+	}
 }

@@ -12,15 +12,15 @@
       "items": [
         {
           "id": "little-prince",
-          "title": "The Little Prince",
-          "subtitle": "Antoine de Saint-Exupéry",
+          "title": "Маленький принц",
+          "subtitle": "Антуан де Сент-Экзюпери",
           "badge": "B1",
           "imageUrl": null
         },
         {
           "id": "animal-farm",
-          "title": "Animal Farm",
-          "subtitle": "George Orwell",
+          "title": "Скотный двор",
+          "subtitle": "Джордж Оруэлл",
           "badge": "B1",
           "imageUrl": null
         }
@@ -32,7 +32,7 @@
         {
           "id": "1984",
           "title": "1984",
-          "subtitle": "George Orwell",
+          "subtitle": "Джордж Оруэлл",
           "badge": "B2",
           "imageUrl": null
         }

@@ -87,7 +87,9 @@ internal class ConstructorPracticeStoreFactory @Inject constructor(
             return ConstructorPracticeStore.State.Content.InProgress(
                 session = session,
                 currentIndex = 0,
-                bank = phrase.words,
+                bank = phrase.words.shuffledBank(
+                    seed = "${session.themeId}:${phrase.id}",
+                ),
                 answer = emptyList(),
                 checkResult = null,
                 correctCount = 0,
@@ -166,7 +168,9 @@ internal class ConstructorPracticeStoreFactory @Inject constructor(
             val nextPhrase = content.session.phrases[nextIndex]
             return content.copy(
                 currentIndex = nextIndex,
-                bank = nextPhrase.words,
+                bank = nextPhrase.words.shuffledBank(
+                    seed = "${content.session.themeId}:${nextPhrase.id}",
+                ),
                 answer = emptyList(),
                 checkResult = null,
                 correctCount = nextCorrectCount,

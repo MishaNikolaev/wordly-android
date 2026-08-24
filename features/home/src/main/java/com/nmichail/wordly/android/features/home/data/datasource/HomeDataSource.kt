@@ -9,6 +9,8 @@ import javax.inject.Inject
 interface HomeDataSource {
 
 	suspend fun getHome(): HomeResponse
+
+	suspend fun invalidateCache()
 }
 
 class HomeDataSourceImpl @Inject constructor(
@@ -23,6 +25,10 @@ class HomeDataSourceImpl @Inject constructor(
 		) {
 			api.getHome()
 		}
+
+	override suspend fun invalidateCache() {
+		cache.clear(key = KEY)
+	}
 
 	private companion object {
 		const val KEY = "page_home"

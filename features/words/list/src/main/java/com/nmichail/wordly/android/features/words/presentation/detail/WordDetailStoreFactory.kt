@@ -137,8 +137,8 @@ internal class WordDetailStoreFactory @Inject constructor(
 			when (action) {
 				WordDetailStore.CalendarAction.Open -> openRepeatCalendar()
 				WordDetailStore.CalendarAction.Dismiss -> dismissRepeatCalendar()
-				WordDetailStore.CalendarAction.PreviousMonth -> shiftCalendarMonth(-1)
-				WordDetailStore.CalendarAction.NextMonth -> shiftCalendarMonth(1)
+				WordDetailStore.CalendarAction.PreviousMonth -> changeDisplayedMonth(months = -1)
+				WordDetailStore.CalendarAction.NextMonth -> changeDisplayedMonth(months = 1)
 				WordDetailStore.CalendarAction.Today -> selectToday()
 				is WordDetailStore.CalendarAction.DayClick -> selectCalendarDay(action.dayOfMonth)
 			}
@@ -169,10 +169,10 @@ internal class WordDetailStoreFactory @Inject constructor(
 			dispatch(Msg.DialogUpdated(dialog = dialog.copy(calendar = null)))
 		}
 
-		private fun shiftCalendarMonth(delta: Long) {
+		private fun changeDisplayedMonth(months: Long) {
 			val dialog = currentDialog() ?: return
 			val calendar = dialog.calendar ?: return
-			val next = YearMonth.of(calendar.year, calendar.month).plusMonths(delta)
+			val next = YearMonth.of(calendar.year, calendar.month).plusMonths(months)
 			dispatch(
 				Msg.DialogUpdated(
 					dialog = dialog.copy(
