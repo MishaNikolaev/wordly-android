@@ -29,6 +29,7 @@ include(
 	":core:preferences",
 
 	":shared:authorization",
+	":shared:calendar",
 	":shared:catalog",
 	":shared:englishlevel",
 	":shared:practice",

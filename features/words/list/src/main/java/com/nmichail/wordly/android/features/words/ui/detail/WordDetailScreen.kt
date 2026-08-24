@@ -51,12 +51,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.activity.compose.BackHandler
 import com.nmichail.wordly.android.component.wui.components.button.WuiButton
+import com.nmichail.wordly.android.component.wui.components.calendar.WuiCalendarDay
+import com.nmichail.wordly.android.component.wui.components.calendar.WuiCalendarDayStatusId
 import com.nmichail.wordly.android.component.wui.components.calendar.WuiCalendarDialog
 import com.nmichail.wordly.android.component.wui.theme.Wui
 import com.nmichail.wordly.android.component.wui.theme.WuiTypography
 import com.nmichail.wordly.android.component.wui.theme.isAppInDarkTheme
 import com.nmichail.wordly.android.features.words.list.R
 import com.nmichail.wordly.android.features.words.presentation.WordDetailDialogState
+import com.nmichail.wordly.android.shared.calendar.CalendarDay
+import com.nmichail.wordly.android.shared.calendar.CalendarDayStatus
 import com.nmichail.wordly.android.features.words.domain.entity.WordExample
 import com.nmichail.wordly.android.features.words.domain.entity.WordStatus
 
@@ -95,7 +99,7 @@ fun WordDetailScreen(
 	state.calendar?.let { calendar ->
 		WuiCalendarDialog(
 			monthTitle = calendar.monthTitle,
-			days = calendar.days,
+			days = calendar.days.map { day -> day?.toWuiDay() },
 			onDismiss = onDismissCalendar,
 			onTodayClick = onCalendarToday,
 			onPreviousMonthClick = onCalendarPreviousMonth,
@@ -571,3 +575,19 @@ private fun detailTagPalette(index: Int): Color {
 	)
 	return colors[index % colors.size]
 }
+
+private fun CalendarDay.toWuiDay(): WuiCalendarDay =
+	WuiCalendarDay(
+		dayOfMonth = dayOfMonth,
+		statusId = status.toUiId(),
+	)
+
+private fun CalendarDayStatus.toUiId(): String =
+	when (this) {
+		CalendarDayStatus.Completed -> WuiCalendarDayStatusId.Completed
+		CalendarDayStatus.Missed -> WuiCalendarDayStatusId.Missed
+		CalendarDayStatus.Today -> WuiCalendarDayStatusId.Today
+		CalendarDayStatus.Inactive -> WuiCalendarDayStatusId.Inactive
+		CalendarDayStatus.Selected -> WuiCalendarDayStatusId.Selected
+		CalendarDayStatus.Plain -> WuiCalendarDayStatusId.Plain
+	}

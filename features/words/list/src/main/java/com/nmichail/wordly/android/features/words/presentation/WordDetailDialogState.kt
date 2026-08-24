@@ -1,8 +1,8 @@
 package com.nmichail.wordly.android.features.words.presentation
 
-import com.nmichail.wordly.android.component.wui.components.calendar.WuiCalendarDay
 import com.nmichail.wordly.android.features.words.domain.entity.WordExample
 import com.nmichail.wordly.android.features.words.domain.entity.WordStatus
+import com.nmichail.wordly.android.shared.calendar.CalendarMonth
 
 data class WordDetailDialogState(
 	val wordId: String,
@@ -17,15 +17,7 @@ data class WordDetailDialogState(
 	val maxDifficulty: Int,
 	val repeatEpochDay: Long?,
 	val repeatDateLabel: String,
-	val calendar: CalendarState?,
+	val calendar: CalendarMonth?,
 	val submittingReview: Boolean,
 	val addedToReview: Boolean,
-)
-
-data class CalendarState(
-	val monthTitle: String,
-	val year: Int,
-	val month: Int,
-	val days: List<WuiCalendarDay?>,
-	val selectedEpochDay: Long,
 )

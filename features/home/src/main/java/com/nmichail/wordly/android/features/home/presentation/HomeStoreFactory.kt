@@ -11,10 +11,10 @@ import com.nmichail.wordly.android.component.presentation.BaseCoroutineExecutor
 import com.nmichail.wordly.android.features.home.domain.entity.Home
 import com.nmichail.wordly.android.features.home.domain.usecase.GetHomeUseCase
 import com.nmichail.wordly.android.features.home.domain.entity.TrainingType
-import com.nmichail.wordly.android.features.home.presentation.calendar.Month
-import com.nmichail.wordly.android.features.home.presentation.calendar.MonthFactory
-import com.nmichail.wordly.android.features.home.presentation.calendar.WeekDay
-import com.nmichail.wordly.android.features.home.presentation.calendar.WeekDaysFactory
+import com.nmichail.wordly.android.shared.calendar.Month
+import com.nmichail.wordly.android.shared.calendar.MonthFactory
+import com.nmichail.wordly.android.shared.calendar.WeekDay
+import com.nmichail.wordly.android.shared.calendar.WeekDaysFactory
 import java.time.Clock
 import java.time.YearMonth
 import javax.inject.Inject

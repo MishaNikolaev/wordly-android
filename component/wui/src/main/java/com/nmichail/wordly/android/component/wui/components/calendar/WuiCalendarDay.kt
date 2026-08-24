@@ -11,4 +11,5 @@ object WuiCalendarDayStatusId {
 	const val Today = "today"
 	const val Inactive = "inactive"
 	const val Selected = "selected"
+	const val Plain = "plain"
 }

@@ -49,8 +49,8 @@ import com.nmichail.wordly.android.features.home.domain.entity.Training
 import com.nmichail.wordly.android.features.home.domain.entity.TrainingType
 import com.nmichail.wordly.android.features.home.presentation.HomeComponent
 import com.nmichail.wordly.android.features.home.presentation.HomeStore
-import com.nmichail.wordly.android.features.home.presentation.calendar.MonthDayStatus
-import com.nmichail.wordly.android.features.home.presentation.calendar.WeekDayStatus
+import com.nmichail.wordly.android.shared.calendar.CalendarDayStatus
+import com.nmichail.wordly.android.shared.calendar.WeekDayStatus
 import java.time.DayOfWeek
 
 @Composable
@@ -264,12 +264,14 @@ private fun WeekDayStatus.toUiId(): String =
         WeekDayStatus.Upcoming -> WeekDayStatusId.Upcoming
     }
 
-private fun MonthDayStatus.toUiId(): String =
+private fun CalendarDayStatus.toUiId(): String =
     when (this) {
-        MonthDayStatus.Completed -> WuiCalendarDayStatusId.Completed
-        MonthDayStatus.Missed -> WuiCalendarDayStatusId.Missed
-        MonthDayStatus.Today -> WuiCalendarDayStatusId.Today
-        MonthDayStatus.Inactive -> WuiCalendarDayStatusId.Inactive
+        CalendarDayStatus.Completed -> WuiCalendarDayStatusId.Completed
+        CalendarDayStatus.Missed -> WuiCalendarDayStatusId.Missed
+        CalendarDayStatus.Today -> WuiCalendarDayStatusId.Today
+        CalendarDayStatus.Inactive -> WuiCalendarDayStatusId.Inactive
+        CalendarDayStatus.Selected -> WuiCalendarDayStatusId.Selected
+        CalendarDayStatus.Plain -> WuiCalendarDayStatusId.Plain
     }
 
 private fun Training.icon(): ImageVector =

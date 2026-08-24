@@ -1,20 +1,15 @@
-package com.nmichail.wordly.android.features.home.presentation.calendar
+package com.nmichail.wordly.android.shared.calendar
 
 import java.time.Clock
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.YearMonth
-import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
-import java.util.Locale
 import javax.inject.Inject
 
 class MonthFactory @Inject constructor(
 	private val clock: Clock,
 ) {
-
-	private val monthTitleFormatter: DateTimeFormatter =
-		DateTimeFormatter.ofPattern("LLLL yyyy", Locale.forLanguageTag("ru"))
 
 	operator fun invoke(
 		yearMonth: YearMonth,
@@ -26,14 +21,13 @@ class MonthFactory @Inject constructor(
 			today = today,
 			completedOffsets = completedOffsets,
 		)
-		val activeDays = days.count { it?.status == MonthDayStatus.Completed }
+		val activeDays = days.count { it?.status == CalendarDayStatus.Completed }
 		val elapsedDays = days.count { day ->
-			day != null && day.status != MonthDayStatus.Inactive
+			day != null && day.status != CalendarDayStatus.Inactive
 		}
 
 		return Month(
-			title = yearMonth.format(monthTitleFormatter)
-				.replaceFirstChar { it.titlecase(Locale.forLanguageTag("ru")) },
+			title = MonthTitleFormatter.format(yearMonth),
 			days = days,
 			activeDays = activeDays,
 			completionPercent = if (elapsedDays == 0) {
@@ -48,10 +42,10 @@ class MonthFactory @Inject constructor(
 		yearMonth: YearMonth,
 		today: LocalDate,
 		completedOffsets: Set<Int>,
-	): List<MonthDay?> {
+	): List<CalendarDay?> {
 		val firstDay = yearMonth.atDay(1)
 		val leadingEmpty = firstDay.dayOfWeek.value - DayOfWeek.MONDAY.value
-		val days = ArrayList<MonthDay?>(leadingEmpty + yearMonth.lengthOfMonth())
+		val days = ArrayList<CalendarDay?>(leadingEmpty + yearMonth.lengthOfMonth())
 
 		repeat(leadingEmpty) {
 			days.add(null)
@@ -61,7 +55,7 @@ class MonthFactory @Inject constructor(
 			val date = yearMonth.atDay(dayOfMonth)
 			val offsetFromToday = ChronoUnit.DAYS.between(today, date).toInt()
 			days.add(
-				MonthDay(
+				CalendarDay(
 					dayOfMonth = dayOfMonth,
 					status = resolveMonthStatus(
 						date = date,
@@ -81,11 +75,11 @@ class MonthFactory @Inject constructor(
 		today: LocalDate,
 		offsetFromToday: Int,
 		completedOffsets: Set<Int>,
-	): MonthDayStatus =
+	): CalendarDayStatus =
 		when {
-			date == today -> MonthDayStatus.Today
-			date.isAfter(today) -> MonthDayStatus.Inactive
-			offsetFromToday in completedOffsets -> MonthDayStatus.Completed
-			else -> MonthDayStatus.Missed
+			date == today -> CalendarDayStatus.Today
+			date.isAfter(today) -> CalendarDayStatus.Inactive
+			offsetFromToday in completedOffsets -> CalendarDayStatus.Completed
+			else -> CalendarDayStatus.Missed
 		}
 }

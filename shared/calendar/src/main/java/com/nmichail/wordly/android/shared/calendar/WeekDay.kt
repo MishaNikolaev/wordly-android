@@ -1,4 +1,4 @@
-package com.nmichail.wordly.android.features.home.presentation.calendar
+package com.nmichail.wordly.android.shared.calendar
 
 import java.time.DayOfWeek
 
