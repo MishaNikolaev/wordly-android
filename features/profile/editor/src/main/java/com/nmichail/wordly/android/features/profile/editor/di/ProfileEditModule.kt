@@ -6,7 +6,7 @@ import com.nmichail.wordly.android.features.profile.editor.data.datasource.Profi
 import com.nmichail.wordly.android.features.profile.editor.data.datasource.ProfileEditDataSourceImpl
 import com.nmichail.wordly.android.features.profile.editor.data.repository.ProfileEditRepositoryImpl
 import com.nmichail.wordly.android.features.profile.editor.domain.repository.ProfileEditRepository
-import com.nmichail.wordly.android.features.profile.editor.presentation.DefaultProfileEditComponentFactory
+import com.nmichail.wordly.android.features.profile.editor.presentation.DefaultProfileEditComponent
 import com.nmichail.wordly.android.features.profile.editor.presentation.ProfileEditComponent
 import dagger.Binds
 import dagger.Module
@@ -29,7 +29,7 @@ abstract class ProfileEditModule {
 
 	@Binds
 	internal abstract fun bindProfileEditComponentFactory(
-		impl: DefaultProfileEditComponentFactory,
+		impl: DefaultProfileEditComponent.Factory,
 	): ProfileEditComponent.Factory
 
 	companion object {

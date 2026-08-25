@@ -5,7 +5,7 @@ import com.nmichail.wordly.android.features.materials.article.data.api.MaterialA
 import com.nmichail.wordly.android.features.materials.article.data.repository.MaterialArticleRepositoryImpl
 import com.nmichail.wordly.android.features.materials.article.domain.repository.MaterialArticleRepository
 import com.nmichail.wordly.android.features.materials.article.presentation.MaterialDetailComponent
-import com.nmichail.wordly.android.features.materials.article.presentation.DefaultMaterialDetailComponentFactory
+import com.nmichail.wordly.android.features.materials.article.presentation.DefaultMaterialDetailComponent
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -22,7 +22,7 @@ abstract class MaterialArticleModule {
 
     @Binds
     internal abstract fun bindMaterialDetailComponentFactory(
-        impl: DefaultMaterialDetailComponentFactory,
+        impl: DefaultMaterialDetailComponent.Factory,
     ): MaterialDetailComponent.Factory
 
     companion object {

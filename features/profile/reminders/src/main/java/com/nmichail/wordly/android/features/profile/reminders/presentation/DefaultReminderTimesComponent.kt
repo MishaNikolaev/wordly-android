@@ -6,11 +6,14 @@ import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.mvikotlin.core.instancekeeper.getStore
 import com.arkivanov.mvikotlin.extensions.coroutines.labelsChannel
 import com.nmichail.wordly.android.core.navigation.asValue
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 
-internal class DefaultReminderTimesComponent(
-	componentContext: ComponentContext,
-	reminderTimesStoreFactory: ReminderTimesStoreFactory,
-	private val reminderTimesRouter: ReminderTimesRouter,
+internal class DefaultReminderTimesComponent @AssistedInject constructor(
+	private val reminderTimesStoreFactory: ReminderTimesStoreFactory,
+	@Assisted("componentContext") componentContext: ComponentContext,
+	@Assisted("reminderTimesRouter") private val reminderTimesRouter: ReminderTimesRouter,
 ) : ComponentContext by componentContext,
 	ReminderTimesComponent {
 
@@ -44,5 +47,13 @@ internal class DefaultReminderTimesComponent(
 
 	override fun handleSave() {
 		store.accept(ReminderTimesStore.Intent.Save)
+	}
+
+	@AssistedFactory
+	fun interface Factory : ReminderTimesComponent.Factory {
+		override fun invoke(
+			@Assisted("componentContext") componentContext: ComponentContext,
+			@Assisted("reminderTimesRouter") reminderTimesRouter: ReminderTimesRouter,
+		): DefaultReminderTimesComponent
 	}
 }

@@ -8,13 +8,16 @@ import com.arkivanov.mvikotlin.extensions.coroutines.labelsChannel
 import com.nmichail.wordly.android.core.navigation.asValue
 import com.nmichail.wordly.android.core.preferences.domain.entity.AppThemeMode
 import com.nmichail.wordly.android.features.profile.domain.entity.DailyGoal
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 
-internal class DefaultProfileComponent(
-	componentContext: ComponentContext,
-	profileStoreFactory: ProfileStoreFactory,
-	val onOpenEdit: () -> Unit,
-	val onOpenReminderTimes: () -> Unit,
-	val onOpenNetworkSelection: () -> Unit,
+internal class DefaultProfileComponent @AssistedInject constructor(
+	private val profileStoreFactory: ProfileStoreFactory,
+	@Assisted("componentContext") componentContext: ComponentContext,
+	@Assisted("onOpenEdit") val onOpenEdit: () -> Unit,
+	@Assisted("onOpenReminderTimes") val onOpenReminderTimes: () -> Unit,
+	@Assisted("onOpenNetworkSelection") val onOpenNetworkSelection: () -> Unit,
 ) : ComponentContext by componentContext,
 	ProfileComponent {
 
@@ -74,5 +77,15 @@ internal class DefaultProfileComponent(
 
 	override fun handleRefresh() {
 		store.accept(ProfileStore.Intent.Refresh)
+	}
+
+	@AssistedFactory
+	fun interface Factory : ProfileComponent.Factory {
+		override fun invoke(
+			@Assisted("componentContext") componentContext: ComponentContext,
+			@Assisted("onOpenEdit") onOpenEdit: () -> Unit,
+			@Assisted("onOpenReminderTimes") onOpenReminderTimes: () -> Unit,
+			@Assisted("onOpenNetworkSelection") onOpenNetworkSelection: () -> Unit,
+		): DefaultProfileComponent
 	}
 }

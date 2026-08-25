@@ -7,12 +7,15 @@ import com.arkivanov.decompose.value.Value
 import com.arkivanov.mvikotlin.core.instancekeeper.getStore
 import com.arkivanov.mvikotlin.extensions.coroutines.labelsChannel
 import com.nmichail.wordly.android.core.navigation.asValue
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 
-internal class DefaultCardPracticeComponent(
-	componentContext: ComponentContext,
-	cardId: String,
-	cardPracticeStoreFactory: CardPracticeStoreFactory,
-	private val cardPracticeRouter: CardPracticeRouter,
+internal class DefaultCardPracticeComponent @AssistedInject constructor(
+	private val cardPracticeStoreFactory: CardPracticeStoreFactory,
+	@Assisted("componentContext") componentContext: ComponentContext,
+	@Assisted("cardId") cardId: String,
+	@Assisted("cardPracticeRouter") private val cardPracticeRouter: CardPracticeRouter,
 ) : ComponentContext by componentContext,
 	CardPracticeComponent {
 
@@ -54,5 +57,14 @@ internal class DefaultCardPracticeComponent(
 
 	override fun handleFinish() {
 		store.accept(CardPracticeStore.Intent.Finish)
+	}
+
+	@AssistedFactory
+	fun interface Factory : CardPracticeComponent.Factory {
+		override fun invoke(
+			@Assisted("componentContext") componentContext: ComponentContext,
+			@Assisted("cardId") cardId: String,
+			@Assisted("cardPracticeRouter") cardPracticeRouter: CardPracticeRouter,
+		): DefaultCardPracticeComponent
 	}
 }

@@ -2,7 +2,7 @@ package com.nmichail.wordly.android.features.dev.networkselection.di
 
 import com.nmichail.wordly.android.features.dev.networkselection.data.repository.NetworkStandRepositoryImpl
 import com.nmichail.wordly.android.features.dev.networkselection.domain.repository.NetworkStandRepository
-import com.nmichail.wordly.android.features.dev.networkselection.presentation.DefaultNetworkSelectionComponentFactory
+import com.nmichail.wordly.android.features.dev.networkselection.presentation.DefaultNetworkSelectionComponent
 import com.nmichail.wordly.android.features.dev.networkselection.presentation.NetworkSelectionComponent
 import dagger.Binds
 import dagger.Module
@@ -17,6 +17,6 @@ abstract class NetworkSelectionModule {
 
 	@Binds
 	internal abstract fun bindNetworkSelectionComponentFactory(
-		impl: DefaultNetworkSelectionComponentFactory,
+		impl: DefaultNetworkSelectionComponent.Factory,
 	): NetworkSelectionComponent.Factory
 }

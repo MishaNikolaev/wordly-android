@@ -8,12 +8,15 @@ import com.arkivanov.mvikotlin.core.instancekeeper.getStore
 import com.arkivanov.mvikotlin.extensions.coroutines.labelsChannel
 import com.nmichail.wordly.android.core.navigation.asValue
 import com.nmichail.wordly.android.features.cards.domain.entity.CardsItem
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 
-internal class DefaultCardsComponent(
-	componentContext: ComponentContext,
-	cardsStoreFactory: CardsStoreFactory,
-	private val cardsRouter: CardsRouter,
-	private val onCardClick: (CardsItem) -> Unit,
+internal class DefaultCardsComponent @AssistedInject constructor(
+	private val cardsStoreFactory: CardsStoreFactory,
+	@Assisted("componentContext") componentContext: ComponentContext,
+	@Assisted("cardsRouter") private val cardsRouter: CardsRouter,
+	@Assisted("onCardClick") private val onCardClick: (CardsItem) -> Unit,
 ) : ComponentContext by componentContext,
 	CardsComponent {
 
@@ -52,5 +55,14 @@ internal class DefaultCardsComponent(
 
 	override fun handleCardClick(cardId: String) {
 		store.accept(CardsStore.Intent.SelectCard(cardId = cardId))
+	}
+
+	@AssistedFactory
+	fun interface Factory : CardsComponent.Factory {
+		override fun invoke(
+			@Assisted("componentContext") componentContext: ComponentContext,
+			@Assisted("cardsRouter") cardsRouter: CardsRouter,
+			@Assisted("onCardClick") onCardClick: (CardsItem) -> Unit,
+		): DefaultCardsComponent
 	}
 }

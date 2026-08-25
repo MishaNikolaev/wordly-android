@@ -8,12 +8,15 @@ import com.arkivanov.mvikotlin.core.instancekeeper.getStore
 import com.arkivanov.mvikotlin.extensions.coroutines.labelsChannel
 import com.nmichail.wordly.android.core.navigation.asValue
 import com.nmichail.wordly.android.features.constructor.domain.entity.ConstructorTheme
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 
-internal class DefaultConstructorComponent(
-    componentContext: ComponentContext,
-    constructorStoreFactory: ConstructorStoreFactory,
-    private val constructorRouter: ConstructorRouter,
-    private val onThemeClick: (ConstructorTheme) -> Unit,
+internal class DefaultConstructorComponent @AssistedInject constructor(
+	private val constructorStoreFactory: ConstructorStoreFactory,
+	@Assisted("componentContext") componentContext: ComponentContext,
+	@Assisted("constructorRouter") private val constructorRouter: ConstructorRouter,
+	@Assisted("onThemeClick") private val onThemeClick: (ConstructorTheme) -> Unit,
 ) : ComponentContext by componentContext,
     ConstructorComponent {
 
@@ -53,4 +56,13 @@ internal class DefaultConstructorComponent(
     override fun handleThemeClick(themeId: String) {
         store.accept(ConstructorStore.Intent.SelectTheme(themeId = themeId))
     }
+
+	@AssistedFactory
+	fun interface Factory : ConstructorComponent.Factory {
+		override fun invoke(
+			@Assisted("componentContext") componentContext: ComponentContext,
+			@Assisted("constructorRouter") constructorRouter: ConstructorRouter,
+			@Assisted("onThemeClick") onThemeClick: (ConstructorTheme) -> Unit,
+		): DefaultConstructorComponent
+	}
 }

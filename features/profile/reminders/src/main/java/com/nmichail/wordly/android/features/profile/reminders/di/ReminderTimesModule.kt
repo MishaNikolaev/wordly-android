@@ -6,7 +6,7 @@ import com.nmichail.wordly.android.features.profile.reminders.data.datasource.Re
 import com.nmichail.wordly.android.features.profile.reminders.data.datasource.ReminderTimesDataSourceImpl
 import com.nmichail.wordly.android.features.profile.reminders.data.repository.ReminderTimesRepositoryImpl
 import com.nmichail.wordly.android.features.profile.reminders.domain.repository.ReminderTimesRepository
-import com.nmichail.wordly.android.features.profile.reminders.presentation.DefaultReminderTimesComponentFactory
+import com.nmichail.wordly.android.features.profile.reminders.presentation.DefaultReminderTimesComponent
 import com.nmichail.wordly.android.features.profile.reminders.presentation.ReminderTimesComponent
 import dagger.Binds
 import dagger.Module
@@ -29,7 +29,7 @@ abstract class ReminderTimesModule {
 
 	@Binds
 	internal abstract fun bindReminderTimesComponentFactory(
-		impl: DefaultReminderTimesComponentFactory,
+		impl: DefaultReminderTimesComponent.Factory,
 	): ReminderTimesComponent.Factory
 
 	companion object {

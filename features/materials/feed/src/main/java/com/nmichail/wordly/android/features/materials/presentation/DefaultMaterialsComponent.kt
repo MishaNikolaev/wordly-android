@@ -9,11 +9,14 @@ import com.arkivanov.mvikotlin.extensions.coroutines.labelsChannel
 import com.nmichail.wordly.android.core.navigation.asValue
 import com.nmichail.wordly.android.features.materials.domain.entity.MaterialFilter
 import com.nmichail.wordly.android.features.materials.domain.entity.MaterialItem
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 
-internal class DefaultMaterialsComponent(
-    componentContext: ComponentContext,
-    materialsStoreFactory: MaterialsStoreFactory,
-    private val onMaterialClick: (MaterialItem) -> Unit,
+internal class DefaultMaterialsComponent @AssistedInject constructor(
+	private val materialsStoreFactory: MaterialsStoreFactory,
+	@Assisted("componentContext") componentContext: ComponentContext,
+	@Assisted("onMaterialClick") private val onMaterialClick: (MaterialItem) -> Unit,
 ) : ComponentContext by componentContext,
     MaterialsComponent {
 
@@ -44,4 +47,12 @@ internal class DefaultMaterialsComponent(
     override fun handleOpenMaterial(materialId: String) {
         store.accept(MaterialsStore.Intent.OpenMaterial(materialId = materialId))
     }
+
+	@AssistedFactory
+	fun interface Factory : MaterialsComponent.Factory {
+		override fun invoke(
+			@Assisted("componentContext") componentContext: ComponentContext,
+			@Assisted("onMaterialClick") onMaterialClick: (MaterialItem) -> Unit,
+		): DefaultMaterialsComponent
+	}
 }

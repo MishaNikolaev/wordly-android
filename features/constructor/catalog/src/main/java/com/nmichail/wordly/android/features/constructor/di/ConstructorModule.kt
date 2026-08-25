@@ -7,7 +7,7 @@ import com.nmichail.wordly.android.features.constructor.data.datasource.Construc
 import com.nmichail.wordly.android.features.constructor.data.repository.ConstructorRepositoryImpl
 import com.nmichail.wordly.android.features.constructor.domain.repository.ConstructorRepository
 import com.nmichail.wordly.android.features.constructor.presentation.ConstructorComponent
-import com.nmichail.wordly.android.features.constructor.presentation.DefaultConstructorComponentFactory
+import com.nmichail.wordly.android.features.constructor.presentation.DefaultConstructorComponent
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -29,7 +29,7 @@ abstract class ConstructorModule {
 
     @Binds
     internal abstract fun bindConstructorComponentFactory(
-        impl: DefaultConstructorComponentFactory,
+        impl: DefaultConstructorComponent.Factory,
     ): ConstructorComponent.Factory
 
     companion object {

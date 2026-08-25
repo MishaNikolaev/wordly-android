@@ -5,7 +5,7 @@ import com.nmichail.wordly.android.features.cards.training.data.api.CardPractice
 import com.nmichail.wordly.android.features.cards.training.data.repository.CardPracticeRepositoryImpl
 import com.nmichail.wordly.android.features.cards.training.domain.repository.CardPracticeRepository
 import com.nmichail.wordly.android.features.cards.training.presentation.CardPracticeComponent
-import com.nmichail.wordly.android.features.cards.training.presentation.DefaultCardPracticeComponentFactory
+import com.nmichail.wordly.android.features.cards.training.presentation.DefaultCardPracticeComponent
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -22,7 +22,7 @@ abstract class CardPracticeModule {
 
 	@Binds
 	internal abstract fun bindCardPracticeComponentFactory(
-		impl: DefaultCardPracticeComponentFactory,
+		impl: DefaultCardPracticeComponent.Factory,
 	): CardPracticeComponent.Factory
 
 	companion object {

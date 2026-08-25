@@ -7,7 +7,7 @@ import com.nmichail.wordly.android.features.cards.data.datasource.CardsDataSourc
 import com.nmichail.wordly.android.features.cards.data.repository.CardsRepositoryImpl
 import com.nmichail.wordly.android.features.cards.domain.repository.CardsRepository
 import com.nmichail.wordly.android.features.cards.presentation.CardsComponent
-import com.nmichail.wordly.android.features.cards.presentation.DefaultCardsComponentFactory
+import com.nmichail.wordly.android.features.cards.presentation.DefaultCardsComponent
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -29,7 +29,7 @@ abstract class CardsModule {
 
 	@Binds
 	internal abstract fun bindCardsComponentFactory(
-		impl: DefaultCardsComponentFactory,
+		impl: DefaultCardsComponent.Factory,
 	): CardsComponent.Factory
 
 	companion object {
