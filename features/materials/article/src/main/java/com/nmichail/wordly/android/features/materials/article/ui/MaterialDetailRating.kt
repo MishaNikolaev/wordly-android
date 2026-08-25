@@ -8,14 +8,12 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ThumbDown
 import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.material.icons.outlined.ThumbDown
 import androidx.compose.material.icons.outlined.ThumbUp
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -27,6 +25,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.nmichail.wordly.android.component.wui.components.icon.WuiAnimatedToggleIcon
 import com.nmichail.wordly.android.features.materials.article.R
 import com.nmichail.wordly.android.features.materials.article.domain.entity.MaterialReaction
 
@@ -110,11 +109,14 @@ private fun ReactionButton(
 		verticalAlignment = Alignment.CenterVertically,
 		horizontalArrangement = Arrangement.Center,
 	) {
-		Icon(
-			imageVector = if (selected) selectedIcon else unselectedIcon,
+		WuiAnimatedToggleIcon(
+			checked = selected,
+			checkedIcon = selectedIcon,
+			uncheckedIcon = unselectedIcon,
+			checkedTint = contentColor,
+			uncheckedTint = contentColor,
 			contentDescription = contentDescription,
-			tint = contentColor,
-			modifier = Modifier.size(20.dp),
+			iconSize = 20.dp,
 		)
 		Text(
 			text = count.toString(),

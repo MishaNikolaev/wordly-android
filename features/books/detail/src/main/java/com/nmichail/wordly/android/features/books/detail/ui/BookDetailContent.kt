@@ -1,7 +1,6 @@
 package com.nmichail.wordly.android.features.books.detail.ui
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -25,6 +24,7 @@ import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.outlined.BookmarkBorder
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -40,14 +40,13 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import com.nmichail.wordly.android.component.wui.components.button.WuiButton
 import com.nmichail.wordly.android.component.wui.components.button.WuiTextLink
+import com.nmichail.wordly.android.component.wui.components.icon.WuiAnimatedToggleIcon
 import com.nmichail.wordly.android.features.books.detail.R
 import com.nmichail.wordly.android.features.books.detail.domain.entity.BookDetail
 import com.nmichail.wordly.android.features.books.detail.presentation.BookDetailComponent
@@ -360,7 +359,7 @@ private fun BookDetailTopBar(
 		modifier = modifier.padding(vertical = 4.dp),
 		verticalAlignment = Alignment.CenterVertically,
 	) {
-		BookDetailTopBarIconButton(onClick = onBackClick) {
+		IconButton(onClick = onBackClick) {
 			Icon(
 				imageVector = Icons.AutoMirrored.Filled.ArrowBack,
 				contentDescription = stringResource(R.string.book_detail_close),
@@ -369,49 +368,19 @@ private fun BookDetailTopBar(
 			)
 		}
 		Spacer(modifier = Modifier.weight(1f))
-		BookDetailTopBarIconButton(
+		IconButton(
 			onClick = {
 				isImportant = !isImportant
 				// TODO: сохранить книгу в коллекцию «Важное»
 			},
-			size = 44.dp,
 		) {
-			Icon(
-				imageVector = if (isImportant) {
-					Icons.Filled.Bookmark
-				} else {
-					Icons.Outlined.BookmarkBorder
-				},
+			WuiAnimatedToggleIcon(
+				checked = isImportant,
+				checkedIcon = Icons.Filled.Bookmark,
+				uncheckedIcon = Icons.Outlined.BookmarkBorder,
 				contentDescription = stringResource(R.string.book_detail_add_to_important),
-				tint = if (isImportant) {
-					colorScheme.primary
-				} else {
-					colorScheme.onBackground
-				},
-				modifier = Modifier.size(28.dp),
 			)
 		}
-	}
-}
-
-@Composable
-private fun BookDetailTopBarIconButton(
-	onClick: () -> Unit,
-	modifier: Modifier = Modifier,
-	size: Dp = 40.dp,
-	content: @Composable () -> Unit,
-) {
-	Box(
-		modifier = modifier
-			.size(size)
-			.clip(RoundedCornerShape(12.dp))
-			.clickable(
-				role = Role.Button,
-				onClick = onClick,
-			),
-		contentAlignment = Alignment.Center,
-	) {
-		content()
 	}
 }
 
