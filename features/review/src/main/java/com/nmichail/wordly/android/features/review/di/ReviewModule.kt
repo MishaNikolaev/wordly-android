@@ -4,7 +4,7 @@ import com.nmichail.wordly.android.core.network.di.GeneralRetrofit
 import com.nmichail.wordly.android.features.review.data.api.ReviewApi
 import com.nmichail.wordly.android.features.review.data.repository.ReviewRepositoryImpl
 import com.nmichail.wordly.android.features.review.domain.repository.ReviewRepository
-import com.nmichail.wordly.android.features.review.presentation.DefaultReviewComponentFactory
+import com.nmichail.wordly.android.features.review.presentation.DefaultReviewComponent
 import com.nmichail.wordly.android.features.review.presentation.ReviewComponent
 import dagger.Binds
 import dagger.Module
@@ -22,7 +22,7 @@ abstract class ReviewModule {
 
 	@Binds
 	internal abstract fun bindReviewComponentFactory(
-		impl: DefaultReviewComponentFactory,
+		impl: DefaultReviewComponent.Factory,
 	): ReviewComponent.Factory
 
 	companion object {

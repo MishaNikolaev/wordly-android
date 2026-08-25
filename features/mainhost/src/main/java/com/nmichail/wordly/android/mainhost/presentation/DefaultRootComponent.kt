@@ -20,12 +20,13 @@ import com.nmichail.wordly.android.features.authorization.signup.presentation.Si
 import com.nmichail.wordly.android.features.dev.networkselection.presentation.NetworkSelectionComponent
 import com.nmichail.wordly.android.features.profile.domain.usecase.GetSessionUseCase
 import com.nmichail.wordly.android.shared.error.presentation.ErrorLogoutRouter
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
-import javax.inject.Inject
 
-internal class DefaultRootComponent(
-	componentContext: ComponentContext,
+internal class DefaultRootComponent @AssistedInject constructor(
 	private val signInComponentFactory: SignInComponent.Factory,
 	private val signUpComponentFactory: SignUpComponent.Factory,
 	private val mainHostComponentFactory: MainHostComponent.Factory,
@@ -34,6 +35,7 @@ internal class DefaultRootComponent(
 	private val getSessionUseCase: GetSessionUseCase,
 	private val clearAuthTokensUseCase: ClearAuthTokensUseCase,
 	private val errorLogoutRouter: ErrorLogoutRouter,
+	@Assisted("componentContext") componentContext: ComponentContext,
 ) : RootComponent, ComponentContext by componentContext {
 
 	private val navigation = StackNavigation<Config>()
@@ -161,29 +163,11 @@ internal class DefaultRootComponent(
 		@Serializable
 		data object NetworkSelection : Config
 	}
-}
 
-internal class DefaultRootComponentFactory @Inject constructor(
-	private val signInComponentFactory: SignInComponent.Factory,
-	private val signUpComponentFactory: SignUpComponent.Factory,
-	private val mainHostComponentFactory: MainHostComponent.Factory,
-	private val networkSelectionComponentFactory: NetworkSelectionComponent.Factory,
-	private val isAuthTokensExistUseCase: IsAuthTokensExistUseCase,
-	private val getSessionUseCase: GetSessionUseCase,
-	private val clearAuthTokensUseCase: ClearAuthTokensUseCase,
-	private val errorLogoutRouter: ErrorLogoutRouter,
-) : RootComponent.Factory {
-
-	override fun invoke(componentContext: ComponentContext): RootComponent =
-		DefaultRootComponent(
-			componentContext = componentContext,
-			signInComponentFactory = signInComponentFactory,
-			signUpComponentFactory = signUpComponentFactory,
-			mainHostComponentFactory = mainHostComponentFactory,
-			networkSelectionComponentFactory = networkSelectionComponentFactory,
-			isAuthTokensExistUseCase = isAuthTokensExistUseCase,
-			getSessionUseCase = getSessionUseCase,
-			clearAuthTokensUseCase = clearAuthTokensUseCase,
-			errorLogoutRouter = errorLogoutRouter,
-		)
+	@AssistedFactory
+	fun interface Factory : RootComponent.Factory {
+		override fun invoke(
+			@Assisted("componentContext") componentContext: ComponentContext,
+		): DefaultRootComponent
+	}
 }

@@ -8,11 +8,14 @@ import com.arkivanov.mvikotlin.core.instancekeeper.getStore
 import com.arkivanov.mvikotlin.extensions.coroutines.labelsChannel
 import com.nmichail.wordly.android.core.navigation.asValue
 import com.nmichail.wordly.android.features.home.domain.entity.Training
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 
-internal class DefaultHomeComponent(
-	componentContext: ComponentContext,
-	homeStoreFactory: HomeStoreFactory,
-	private val homeRouter: HomeRouter,
+internal class DefaultHomeComponent @AssistedInject constructor(
+	private val homeStoreFactory: HomeStoreFactory,
+	@Assisted("componentContext") componentContext: ComponentContext,
+	@Assisted("homeRouter") private val homeRouter: HomeRouter,
 ) : ComponentContext by componentContext,
 	HomeComponent {
 
@@ -65,5 +68,13 @@ internal class DefaultHomeComponent(
 
 	override fun handleOpenTraining(training: Training) {
 		store.accept(HomeStore.Intent.OpenTraining(training = training))
+	}
+
+	@AssistedFactory
+	fun interface Factory : HomeComponent.Factory {
+		override fun invoke(
+			@Assisted("componentContext") componentContext: ComponentContext,
+			@Assisted("homeRouter") homeRouter: HomeRouter,
+		): DefaultHomeComponent
 	}
 }

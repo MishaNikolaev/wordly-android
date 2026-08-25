@@ -8,12 +8,15 @@ import com.arkivanov.mvikotlin.core.instancekeeper.getStore
 import com.arkivanov.mvikotlin.extensions.coroutines.labelsChannel
 import com.nmichail.wordly.android.core.navigation.asValue
 import com.nmichail.wordly.android.features.dev.networkselection.domain.entity.NetworkStand
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 
-internal class DefaultNetworkSelectionComponent(
-	componentContext: ComponentContext,
+internal class DefaultNetworkSelectionComponent @AssistedInject constructor(
 	private val networkSelectionStoreFactory: NetworkSelectionStoreFactory,
-	private val onFinished: () -> Unit,
 	private val networkSelectionRouter: NetworkSelectionRouter,
+	@Assisted("componentContext") componentContext: ComponentContext,
+	@Assisted("onFinished") private val onFinished: () -> Unit,
 ) : ComponentContext by componentContext,
 	NetworkSelectionComponent {
 
@@ -40,5 +43,13 @@ internal class DefaultNetworkSelectionComponent(
 
 	override fun handleNavigateBack() {
 		store.accept(NetworkSelectionStore.Intent.NavigateBack)
+	}
+
+	@AssistedFactory
+	fun interface Factory : NetworkSelectionComponent.Factory {
+		override fun invoke(
+			@Assisted("componentContext") componentContext: ComponentContext,
+			@Assisted("onFinished") onFinished: () -> Unit,
+		): DefaultNetworkSelectionComponent
 	}
 }

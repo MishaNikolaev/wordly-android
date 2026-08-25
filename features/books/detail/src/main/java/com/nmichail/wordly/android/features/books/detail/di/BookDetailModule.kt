@@ -5,7 +5,7 @@ import com.nmichail.wordly.android.features.books.detail.data.api.BookDetailApi
 import com.nmichail.wordly.android.features.books.detail.data.repository.BookDetailRepositoryImpl
 import com.nmichail.wordly.android.features.books.detail.domain.repository.BookDetailRepository
 import com.nmichail.wordly.android.features.books.detail.presentation.BookDetailComponent
-import com.nmichail.wordly.android.features.books.detail.presentation.DefaultBookDetailComponentFactory
+import com.nmichail.wordly.android.features.books.detail.presentation.DefaultBookDetailComponent
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -22,7 +22,7 @@ abstract class BookDetailModule {
 
 	@Binds
 	internal abstract fun bindBookDetailComponentFactory(
-		impl: DefaultBookDetailComponentFactory,
+		impl: DefaultBookDetailComponent.Factory,
 	): BookDetailComponent.Factory
 
 	companion object {

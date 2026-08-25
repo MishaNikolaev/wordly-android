@@ -1,5 +1,6 @@
 plugins {
 	alias(libs.plugins.wordlyAndroidLibrary)
+	alias(libs.plugins.ksp)
 }
 
 dependencies {
@@ -14,6 +15,7 @@ dependencies {
 	implementation(libs.androidx.material3)
 	implementation(libs.androidx.material.icons.extended)
 	implementation(libs.dagger)
+	ksp(libs.dagger.compiler)
 
 	implementation(projects.component.wui)
 	implementation(projects.component.presentation)

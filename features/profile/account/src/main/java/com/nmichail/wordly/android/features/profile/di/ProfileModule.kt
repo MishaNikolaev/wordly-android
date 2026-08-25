@@ -6,7 +6,7 @@ import com.nmichail.wordly.android.features.profile.data.datasource.ProfileDataS
 import com.nmichail.wordly.android.features.profile.data.datasource.ProfileDataSourceImpl
 import com.nmichail.wordly.android.features.profile.data.repository.ProfileRepositoryImpl
 import com.nmichail.wordly.android.features.profile.domain.repository.ProfileRepository
-import com.nmichail.wordly.android.features.profile.presentation.DefaultProfileComponentFactory
+import com.nmichail.wordly.android.features.profile.presentation.DefaultProfileComponent
 import com.nmichail.wordly.android.features.profile.presentation.ProfileComponent
 import dagger.Binds
 import dagger.Module
@@ -29,7 +29,7 @@ abstract class ProfileModule {
 
 	@Binds
 	internal abstract fun bindProfileComponentFactory(
-		impl: DefaultProfileComponentFactory,
+		impl: DefaultProfileComponent.Factory,
 	): ProfileComponent.Factory
 
 	companion object {

@@ -5,7 +5,7 @@ import com.nmichail.wordly.android.features.constructor.practice.data.api.Constr
 import com.nmichail.wordly.android.features.constructor.practice.data.repository.ConstructorPracticeRepositoryImpl
 import com.nmichail.wordly.android.features.constructor.practice.domain.repository.ConstructorPracticeRepository
 import com.nmichail.wordly.android.features.constructor.practice.presentation.ConstructorPracticeComponent
-import com.nmichail.wordly.android.features.constructor.practice.presentation.DefaultConstructorPracticeComponentFactory
+import com.nmichail.wordly.android.features.constructor.practice.presentation.DefaultConstructorPracticeComponent
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -22,7 +22,7 @@ abstract class ConstructorPracticeModule {
 
     @Binds
     internal abstract fun bindConstructorPracticeComponentFactory(
-        impl: DefaultConstructorPracticeComponentFactory,
+        impl: DefaultConstructorPracticeComponent.Factory,
     ): ConstructorPracticeComponent.Factory
 
     companion object {

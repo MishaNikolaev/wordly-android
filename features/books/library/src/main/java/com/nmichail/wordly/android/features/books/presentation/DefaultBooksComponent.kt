@@ -8,12 +8,15 @@ import com.arkivanov.mvikotlin.core.instancekeeper.getStore
 import com.arkivanov.mvikotlin.extensions.coroutines.labelsChannel
 import com.nmichail.wordly.android.core.navigation.asValue
 import com.nmichail.wordly.android.features.books.domain.entity.BooksItem
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 
-internal class DefaultBooksComponent(
-	componentContext: ComponentContext,
-	booksStoreFactory: BooksStoreFactory,
-	private val booksRouter: BooksRouter,
-	private val onBookClick: (BooksItem) -> Unit,
+internal class DefaultBooksComponent @AssistedInject constructor(
+	private val booksStoreFactory: BooksStoreFactory,
+	@Assisted("componentContext") componentContext: ComponentContext,
+	@Assisted("booksRouter") private val booksRouter: BooksRouter,
+	@Assisted("onBookClick") private val onBookClick: (BooksItem) -> Unit,
 ) : ComponentContext by componentContext,
 	BooksComponent {
 
@@ -52,5 +55,14 @@ internal class DefaultBooksComponent(
 
 	override fun handleBookClick(bookId: String) {
 		store.accept(BooksStore.Intent.SelectBook(bookId = bookId))
+	}
+
+	@AssistedFactory
+	fun interface Factory : BooksComponent.Factory {
+		override fun invoke(
+			@Assisted("componentContext") componentContext: ComponentContext,
+			@Assisted("booksRouter") booksRouter: BooksRouter,
+			@Assisted("onBookClick") onBookClick: (BooksItem) -> Unit,
+		): DefaultBooksComponent
 	}
 }

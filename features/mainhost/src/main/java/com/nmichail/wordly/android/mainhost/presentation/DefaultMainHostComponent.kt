@@ -38,11 +38,13 @@ import com.nmichail.wordly.android.features.profile.reminders.presentation.Remin
 import com.nmichail.wordly.android.features.review.presentation.ReviewComponent
 import com.nmichail.wordly.android.features.review.presentation.ReviewRouter
 import com.nmichail.wordly.android.features.words.presentation.WordsComponent
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import kotlinx.serialization.Serializable
 
 @Suppress("TooManyFunctions")
-internal class DefaultMainHostComponent(
-	componentContext: ComponentContext,
+internal class DefaultMainHostComponent @AssistedInject constructor(
 	private val homeComponentFactory: HomeComponent.Factory,
 	private val wordsComponentFactory: WordsComponent.Factory,
 	private val materialsComponentFactory: MaterialsComponent.Factory,
@@ -58,7 +60,8 @@ internal class DefaultMainHostComponent(
 	private val booksComponentFactory: BooksComponent.Factory,
 	private val bookDetailComponentFactory: BookDetailComponent.Factory,
 	private val bookReaderComponentFactory: BookReaderComponent.Factory,
-	private val onOpenNetworkSelection: () -> Unit,
+	@Assisted("componentContext") componentContext: ComponentContext,
+	@Assisted("onOpenNetworkSelection") private val onOpenNetworkSelection: () -> Unit,
 ) : MainHostComponent, ComponentContext by componentContext {
 
 	private val navigation = StackNavigation<MainHostConfig>()
@@ -357,6 +360,14 @@ internal class DefaultMainHostComponent(
 				constructorPracticeRouter = constructorPracticeRouter,
 			),
 		)
+	}
+
+	@AssistedFactory
+	fun interface Factory : MainHostComponent.Factory {
+		override fun invoke(
+			@Assisted("componentContext") componentContext: ComponentContext,
+			@Assisted("onOpenNetworkSelection") onOpenNetworkSelection: () -> Unit,
+		): DefaultMainHostComponent
 	}
 }
 

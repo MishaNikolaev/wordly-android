@@ -7,12 +7,15 @@ import com.arkivanov.decompose.value.Value
 import com.arkivanov.mvikotlin.core.instancekeeper.getStore
 import com.arkivanov.mvikotlin.extensions.coroutines.labelsChannel
 import com.nmichail.wordly.android.core.navigation.asValue
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 
-internal class DefaultConstructorPracticeComponent(
-    componentContext: ComponentContext,
-    themeId: String,
-    constructorPracticeStoreFactory: ConstructorPracticeStoreFactory,
-    private val constructorPracticeRouter: ConstructorPracticeRouter,
+internal class DefaultConstructorPracticeComponent @AssistedInject constructor(
+	private val constructorPracticeStoreFactory: ConstructorPracticeStoreFactory,
+	@Assisted("componentContext") componentContext: ComponentContext,
+	@Assisted("themeId") themeId: String,
+	@Assisted("constructorPracticeRouter") private val constructorPracticeRouter: ConstructorPracticeRouter,
 ) : ComponentContext by componentContext,
     ConstructorPracticeComponent {
 
@@ -68,4 +71,13 @@ internal class DefaultConstructorPracticeComponent(
     override fun handleFinish() {
         store.accept(ConstructorPracticeStore.Intent.Finish)
     }
+
+	@AssistedFactory
+	fun interface Factory : ConstructorPracticeComponent.Factory {
+		override fun invoke(
+			@Assisted("componentContext") componentContext: ComponentContext,
+			@Assisted("themeId") themeId: String,
+			@Assisted("constructorPracticeRouter") constructorPracticeRouter: ConstructorPracticeRouter,
+		): DefaultConstructorPracticeComponent
+	}
 }

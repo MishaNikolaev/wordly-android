@@ -4,7 +4,7 @@ import com.nmichail.wordly.android.core.network.di.GeneralRetrofit
 import com.nmichail.wordly.android.features.authorization.signin.data.api.SignInApi
 import com.nmichail.wordly.android.features.authorization.signin.data.repository.SignInRepositoryImpl
 import com.nmichail.wordly.android.features.authorization.signin.domain.repository.SignInRepository
-import com.nmichail.wordly.android.features.authorization.signin.presentation.DefaultSignInComponentFactory
+import com.nmichail.wordly.android.features.authorization.signin.presentation.DefaultSignInComponent
 import com.nmichail.wordly.android.features.authorization.signin.presentation.SignInComponent
 import dagger.Binds
 import dagger.Module
@@ -15,23 +15,23 @@ import javax.inject.Singleton
 @Module
 abstract class SignInModule {
 
-    @Binds
-    abstract fun bindSignInRepository(
-        impl: SignInRepositoryImpl,
-    ): SignInRepository
+	@Binds
+	abstract fun bindSignInRepository(
+		impl: SignInRepositoryImpl,
+	): SignInRepository
 
-    @Binds
-    internal abstract fun bindSignInComponentFactory(
-        impl: DefaultSignInComponentFactory,
-    ): SignInComponent.Factory
+	@Binds
+	internal abstract fun bindSignInComponentFactory(
+		impl: DefaultSignInComponent.Factory,
+	): SignInComponent.Factory
 
-    companion object {
+	companion object {
 
-        @Provides
-        @Singleton
-        fun provideSignInApi(
-            @GeneralRetrofit retrofit: Retrofit,
-        ): SignInApi =
-            retrofit.create(SignInApi::class.java)
-    }
+		@Provides
+		@Singleton
+		fun provideSignInApi(
+			@GeneralRetrofit retrofit: Retrofit,
+		): SignInApi =
+			retrofit.create(SignInApi::class.java)
+	}
 }

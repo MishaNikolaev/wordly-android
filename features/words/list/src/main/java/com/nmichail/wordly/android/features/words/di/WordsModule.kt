@@ -11,7 +11,7 @@ import com.nmichail.wordly.android.features.words.data.datasource.WordsDataSourc
 import com.nmichail.wordly.android.features.words.data.datasource.WordsDataSourceImpl
 import com.nmichail.wordly.android.features.words.data.repository.WordsRepositoryImpl
 import com.nmichail.wordly.android.features.words.domain.repository.WordsRepository
-import com.nmichail.wordly.android.features.words.presentation.DefaultWordsComponentFactory
+import com.nmichail.wordly.android.features.words.presentation.DefaultWordsComponent
 import com.nmichail.wordly.android.features.words.presentation.WordsComponent
 import dagger.Binds
 import dagger.Module
@@ -40,7 +40,7 @@ abstract class WordsModule {
 
 	@Binds
 	internal abstract fun bindWordsComponentFactory(
-		impl: DefaultWordsComponentFactory,
+		impl: DefaultWordsComponent.Factory,
 	): WordsComponent.Factory
 
 	companion object {

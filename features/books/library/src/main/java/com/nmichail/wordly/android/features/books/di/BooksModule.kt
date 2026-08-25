@@ -7,7 +7,7 @@ import com.nmichail.wordly.android.features.books.data.datasource.BooksDataSourc
 import com.nmichail.wordly.android.features.books.data.repository.BooksRepositoryImpl
 import com.nmichail.wordly.android.features.books.domain.repository.BooksRepository
 import com.nmichail.wordly.android.features.books.presentation.BooksComponent
-import com.nmichail.wordly.android.features.books.presentation.DefaultBooksComponentFactory
+import com.nmichail.wordly.android.features.books.presentation.DefaultBooksComponent
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -29,7 +29,7 @@ abstract class BooksModule {
 
     @Binds
     internal abstract fun bindBooksComponentFactory(
-        impl: DefaultBooksComponentFactory,
+        impl: DefaultBooksComponent.Factory,
     ): BooksComponent.Factory
 
     companion object {

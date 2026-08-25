@@ -7,11 +7,14 @@ import com.arkivanov.decompose.value.Value
 import com.arkivanov.mvikotlin.core.instancekeeper.getStore
 import com.arkivanov.mvikotlin.extensions.coroutines.labelsChannel
 import com.nmichail.wordly.android.core.navigation.asValue
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 
-internal class DefaultReviewComponent(
-	componentContext: ComponentContext,
-	reviewStoreFactory: ReviewStoreFactory,
-	private val reviewRouter: ReviewRouter,
+internal class DefaultReviewComponent @AssistedInject constructor(
+	private val reviewStoreFactory: ReviewStoreFactory,
+	@Assisted("componentContext") componentContext: ComponentContext,
+	@Assisted("reviewRouter") private val reviewRouter: ReviewRouter,
 ) : ComponentContext by componentContext,
 	ReviewComponent {
 
@@ -53,5 +56,13 @@ internal class DefaultReviewComponent(
 
 	override fun handleFinish() {
 		store.accept(ReviewStore.Intent.Finish)
+	}
+
+	@AssistedFactory
+	fun interface Factory : ReviewComponent.Factory {
+		override fun invoke(
+			@Assisted("componentContext") componentContext: ComponentContext,
+			@Assisted("reviewRouter") reviewRouter: ReviewRouter,
+		): DefaultReviewComponent
 	}
 }

@@ -8,13 +8,16 @@ import com.arkivanov.mvikotlin.core.instancekeeper.getStore
 import com.arkivanov.mvikotlin.extensions.coroutines.labelsChannel
 import com.nmichail.wordly.android.core.navigation.asValue
 import com.nmichail.wordly.android.features.books.reader.domain.entity.BookWordDefinition
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 
-internal class DefaultBookReaderComponent(
-    componentContext: ComponentContext,
-    bookId: String,
-    bookReaderStoreFactory: BookReaderStoreFactory,
-    private val bookReaderRouter: BookReaderRouter,
-    private val onAddWordToCard: (BookWordDefinition) -> Unit,
+internal class DefaultBookReaderComponent @AssistedInject constructor(
+	private val bookReaderStoreFactory: BookReaderStoreFactory,
+	@Assisted("componentContext") componentContext: ComponentContext,
+	@Assisted("bookId") bookId: String,
+	@Assisted("bookReaderRouter") private val bookReaderRouter: BookReaderRouter,
+	@Assisted("onAddWordToCard") private val onAddWordToCard: (BookWordDefinition) -> Unit,
 ) : ComponentContext by componentContext,
     BookReaderComponent {
 
@@ -64,4 +67,14 @@ internal class DefaultBookReaderComponent(
     override fun handleDismissWordAddedDialog() {
         store.accept(BookReaderStore.Intent.DismissWordAddedDialog)
     }
+
+	@AssistedFactory
+	fun interface Factory : BookReaderComponent.Factory {
+		override fun invoke(
+			@Assisted("componentContext") componentContext: ComponentContext,
+			@Assisted("bookId") bookId: String,
+			@Assisted("bookReaderRouter") bookReaderRouter: BookReaderRouter,
+			@Assisted("onAddWordToCard") onAddWordToCard: (BookWordDefinition) -> Unit,
+		): DefaultBookReaderComponent
+	}
 }

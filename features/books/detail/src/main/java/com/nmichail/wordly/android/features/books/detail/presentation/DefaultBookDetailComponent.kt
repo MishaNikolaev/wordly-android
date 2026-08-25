@@ -9,15 +9,18 @@ import com.nmichail.wordly.android.core.navigation.componentScope
 import com.nmichail.wordly.android.features.books.detail.domain.entity.BookDetail
 import com.nmichail.wordly.android.features.books.domain.entity.BooksItem
 import kotlinx.coroutines.launch
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 
-internal class DefaultBookDetailComponent(
-	componentContext: ComponentContext,
-	bookId: String,
-	initialBook: BookDetail?,
-	bookDetailStoreFactory: BookDetailStoreFactory,
-	private val bookDetailRouter: BookDetailRouter,
-	private val onReadClick: (bookId: String) -> Unit,
-	private val onSimilarBookClick: (BooksItem) -> Unit,
+internal class DefaultBookDetailComponent @AssistedInject constructor(
+	private val bookDetailStoreFactory: BookDetailStoreFactory,
+	@Assisted("componentContext") componentContext: ComponentContext,
+	@Assisted("bookId") bookId: String,
+	@Assisted("initialBook") initialBook: BookDetail?,
+	@Assisted("bookDetailRouter") private val bookDetailRouter: BookDetailRouter,
+	@Assisted("onReadClick") private val onReadClick: (bookId: String) -> Unit,
+	@Assisted("onSimilarBookClick") private val onSimilarBookClick: (BooksItem) -> Unit,
 ) : ComponentContext by componentContext,
 	BookDetailComponent {
 
@@ -56,5 +59,17 @@ internal class DefaultBookDetailComponent(
 
 	override fun handleSimilarBookClick(bookId: String) {
 		store.accept(BookDetailStore.Intent.SelectSimilarBook(bookId = bookId))
+	}
+
+	@AssistedFactory
+	fun interface Factory : BookDetailComponent.Factory {
+		override fun invoke(
+			@Assisted("componentContext") componentContext: ComponentContext,
+			@Assisted("bookId") bookId: String,
+			@Assisted("initialBook") initialBook: BookDetail?,
+			@Assisted("bookDetailRouter") bookDetailRouter: BookDetailRouter,
+			@Assisted("onReadClick") onReadClick: (bookId: String) -> Unit,
+			@Assisted("onSimilarBookClick") onSimilarBookClick: (BooksItem) -> Unit,
+		): DefaultBookDetailComponent
 	}
 }

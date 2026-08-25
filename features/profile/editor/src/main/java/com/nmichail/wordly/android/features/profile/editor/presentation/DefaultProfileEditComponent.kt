@@ -6,11 +6,14 @@ import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.mvikotlin.core.instancekeeper.getStore
 import com.arkivanov.mvikotlin.extensions.coroutines.labelsChannel
 import com.nmichail.wordly.android.core.navigation.asValue
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 
-internal class DefaultProfileEditComponent(
-	componentContext: ComponentContext,
-	profileEditStoreFactory: ProfileEditStoreFactory,
-	private val profileEditRouter: ProfileEditRouter,
+internal class DefaultProfileEditComponent @AssistedInject constructor(
+	private val profileEditStoreFactory: ProfileEditStoreFactory,
+	@Assisted("componentContext") componentContext: ComponentContext,
+	@Assisted("profileEditRouter") private val profileEditRouter: ProfileEditRouter,
 ) : ComponentContext by componentContext,
 	ProfileEditComponent {
 
@@ -52,5 +55,13 @@ internal class DefaultProfileEditComponent(
 
 	override fun handleSave() {
 		store.accept(ProfileEditStore.Intent.Save)
+	}
+
+	@AssistedFactory
+	fun interface Factory : ProfileEditComponent.Factory {
+		override fun invoke(
+			@Assisted("componentContext") componentContext: ComponentContext,
+			@Assisted("profileEditRouter") profileEditRouter: ProfileEditRouter,
+		): DefaultProfileEditComponent
 	}
 }

@@ -6,7 +6,7 @@ import com.nmichail.wordly.android.features.home.data.datasource.HomeDataSource
 import com.nmichail.wordly.android.features.home.data.datasource.HomeDataSourceImpl
 import com.nmichail.wordly.android.features.home.data.repository.HomeRepositoryImpl
 import com.nmichail.wordly.android.features.home.domain.repository.HomeRepository
-import com.nmichail.wordly.android.features.home.presentation.DefaultHomeComponentFactory
+import com.nmichail.wordly.android.features.home.presentation.DefaultHomeComponent
 import com.nmichail.wordly.android.features.home.presentation.HomeComponent
 import dagger.Binds
 import dagger.Module
@@ -30,7 +30,7 @@ abstract class HomeModule {
 
 	@Binds
 	internal abstract fun bindHomeComponentFactory(
-		impl: DefaultHomeComponentFactory,
+		impl: DefaultHomeComponent.Factory,
 	): HomeComponent.Factory
 
 	companion object {

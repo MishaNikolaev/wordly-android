@@ -13,13 +13,16 @@ import com.nmichail.wordly.android.features.words.presentation.dialog.AddWordSto
 import com.nmichail.wordly.android.features.words.presentation.dialog.AddWordStoreFactory
 import com.nmichail.wordly.android.features.words.presentation.list.WordsListStore
 import com.nmichail.wordly.android.features.words.presentation.list.WordsListStoreFactory
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 
 @Suppress("TooManyFunctions")
-internal class DefaultWordsComponent(
-    componentContext: ComponentContext,
-    wordsListStoreFactory: WordsListStoreFactory,
-    addWordStoreFactory: AddWordStoreFactory,
-    wordDetailStoreFactory: WordDetailStoreFactory,
+internal class DefaultWordsComponent @AssistedInject constructor(
+	private val wordsListStoreFactory: WordsListStoreFactory,
+	private val addWordStoreFactory: AddWordStoreFactory,
+	private val wordDetailStoreFactory: WordDetailStoreFactory,
+	@Assisted("componentContext") componentContext: ComponentContext,
 ) : ComponentContext by componentContext,
 	WordsComponent {
 
@@ -73,5 +76,12 @@ internal class DefaultWordsComponent(
 		val content = listStore.state as? WordsListStore.State.Content ?: return
 		val word = content.words.find { it.id == wordId } ?: return
 		wordDetailStore.accept(WordDetailStore.Intent.Open(word = word))
+	}
+
+	@AssistedFactory
+	fun interface Factory : WordsComponent.Factory {
+		override fun invoke(
+			@Assisted("componentContext") componentContext: ComponentContext,
+		): DefaultWordsComponent
 	}
 }
