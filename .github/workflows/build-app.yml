@@ -35,6 +35,7 @@ jobs:
 
       - name: Provide google-services.json for CI
         run: |
+          mkdir -p app/src/dev app/src/mock
           cp app/ci/google-services.json app/src/dev/google-services.json
           cp app/ci/google-services.json app/src/mock/google-services.json
 
