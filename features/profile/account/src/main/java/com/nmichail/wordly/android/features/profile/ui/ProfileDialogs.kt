@@ -10,7 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -49,8 +49,8 @@ internal fun ProfileDialogHost(
 	component: ProfileComponent,
 	content: @Composable (openDialog: (ProfileDialog) -> Unit) -> Unit,
 ) {
-	var openDialog by remember { mutableStateOf<ProfileDialog?>(null) }
-	var themeInitial by remember { mutableStateOf<AppThemeMode?>(null) }
+	var openDialog by rememberSaveable { mutableStateOf<ProfileDialog?>(null) }
+	var themeInitial by rememberSaveable { mutableStateOf<AppThemeMode?>(null) }
 
 	content { dialog ->
 		when (dialog) {

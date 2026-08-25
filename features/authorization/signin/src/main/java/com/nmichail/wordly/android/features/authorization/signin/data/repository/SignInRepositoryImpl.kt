@@ -17,7 +17,7 @@ class SignInRepositoryImpl @Inject constructor(
 	override suspend fun signIn(signInData: SignInData): AuthTokens {
 		val tokens = signInApi.authorize(signInData.toRequest()).toEntity()
 		saveAuthTokensUseCase(tokens)
-		// TODO(fcm): зарегистрировать FCM device token после успешного входа
+		// TODO(fcm): зарегистрировать FCM-токен устройства после успешного входа
 		return tokens
 	}
 }

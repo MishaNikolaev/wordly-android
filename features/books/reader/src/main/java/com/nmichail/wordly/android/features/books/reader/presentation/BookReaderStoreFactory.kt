@@ -58,7 +58,10 @@ internal class BookReaderStoreFactory @Inject constructor(
 
         data object Translating : Msg
 
-        data class TranslationLoaded(val translation: BookTranslation) : Msg
+        data class TranslationLoaded(
+            val translation: BookTranslation,
+            val show: Boolean,
+        ) : Msg
 
         data object TranslationHidden : Msg
 
@@ -100,7 +103,7 @@ internal class BookReaderStoreFactory @Inject constructor(
                 Msg.Translating -> content?.copy(translating = true) ?: this
                 is Msg.TranslationLoaded -> content?.copy(
                     translation = msg.translation,
-                    translationVisible = true,
+                    translationVisible = if (msg.show) true else content.translationVisible,
                     translating = false,
                 ) ?: this
 
@@ -172,8 +175,21 @@ internal class BookReaderStoreFactory @Inject constructor(
                 try {
                     val book = getBookContentUseCase(bookId)
                     dispatch(Msg.BookLoaded(book = book))
+                    prefetchTranslation()
                 } catch (_: Exception) {
                     dispatch(Msg.SetError)
+                }
+            }
+        }
+
+        private fun prefetchTranslation() {
+            scope.launch {
+                try {
+                    val translation = getBookTranslationUseCase(bookId)
+                    if (translation.paragraphs.none { it.text.isNotBlank() }) return@launch
+                    dispatch(Msg.TranslationLoaded(translation = translation, show = false))
+                } catch (_: Exception) {
+                    // Keep English-only reading if translation is unavailable.
                 }
             }
         }
@@ -189,7 +205,11 @@ internal class BookReaderStoreFactory @Inject constructor(
                     scope.launch {
                         try {
                             val translation = getBookTranslationUseCase(bookId)
-                            dispatch(Msg.TranslationLoaded(translation = translation))
+                            if (translation.paragraphs.none { it.text.isNotBlank() }) {
+                                dispatch(Msg.TranslationFailed)
+                                return@launch
+                            }
+                            dispatch(Msg.TranslationLoaded(translation = translation, show = true))
                         } catch (_: Exception) {
                             dispatch(Msg.TranslationFailed)
                         }

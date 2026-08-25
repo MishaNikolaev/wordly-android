@@ -19,8 +19,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -38,11 +36,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
+import com.nmichail.wordly.android.component.wui.R as ComponentR
 import com.nmichail.wordly.android.component.wui.components.button.WuiButton
+import com.nmichail.wordly.android.component.wui.components.button.WuiTextLink
 import com.nmichail.wordly.android.component.wui.components.card.WuiCatalogCard
+import com.nmichail.wordly.android.component.wui.components.dialog.WuiSelectionDialog
 import com.nmichail.wordly.android.component.wui.components.field.WuiSearchField
 import com.nmichail.wordly.android.component.wui.components.text.WuiSectionLabel
-import com.nmichail.wordly.android.component.wui.components.button.WuiTextLink
 import com.nmichail.wordly.android.features.cards.collection.R
 import com.nmichail.wordly.android.features.cards.domain.entity.CardsLevelBanner
 import com.nmichail.wordly.android.features.cards.presentation.CardsComponent
@@ -258,55 +258,44 @@ private fun CardsLevelSelector(
     modifier: Modifier = Modifier,
 ) {
     val colorScheme = MaterialTheme.colorScheme
-    var expanded by remember { mutableStateOf(false) }
+    var showDialog by remember { mutableStateOf(false) }
 
-    Box(modifier = modifier) {
-        Row(
-            modifier = Modifier
-				.clip(MaterialTheme.shapes.extraLarge)
-				.background(colorScheme.primary)
-				.clickable { expanded = true }
-				.padding(horizontal = 12.dp, vertical = 8.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(2.dp),
-        ) {
-            Text(
-                text = selectedLevel,
-                style = MaterialTheme.typography.labelLarge,
-                fontWeight = FontWeight.SemiBold,
-                color = colorScheme.onPrimary,
-            )
-            Icon(
-                imageVector = Icons.Filled.KeyboardArrowDown,
-                contentDescription = stringResource(R.string.cards_level_banner_action),
-                tint = colorScheme.onPrimary,
-                modifier = Modifier.size(18.dp),
-            )
-        }
-        DropdownMenu(
-            expanded = expanded,
-            onDismissRequest = { expanded = false },
-        ) {
-            levels.forEach { level ->
-                DropdownMenuItem(
-                    text = {
-                        Text(
-                            text = level,
-                            fontWeight = if (level == selectedLevel) {
-                                FontWeight.SemiBold
-                            } else {
-                                FontWeight.Normal
-                            },
-                        )
-                    },
-                    onClick = {
-                        expanded = false
-                        if (level != selectedLevel) {
-                            onLevelChange(level)
-                        }
-                    },
-                )
-            }
-        }
+    Row(
+        modifier = modifier
+            .clip(MaterialTheme.shapes.extraLarge)
+            .background(colorScheme.primary)
+            .clickable { showDialog = true }
+            .padding(horizontal = 12.dp, vertical = 8.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(2.dp),
+    ) {
+        Text(
+            text = selectedLevel,
+            style = MaterialTheme.typography.labelLarge,
+            color = colorScheme.onPrimary,
+        )
+        Icon(
+            imageVector = Icons.Filled.KeyboardArrowDown,
+            contentDescription = stringResource(R.string.cards_level_banner_action),
+            tint = colorScheme.onPrimary,
+            modifier = Modifier.size(18.dp),
+        )
+    }
+
+    if (showDialog) {
+        WuiSelectionDialog(
+            title = stringResource(R.string.cards_level_dialog_title),
+            options = levels,
+            selectedOption = selectedLevel,
+            saveButtonText = stringResource(ComponentR.string.common_ok),
+            cancelButtonText = stringResource(ComponentR.string.common_cancel),
+            onDismiss = { showDialog = false },
+            onSave = { level ->
+                showDialog = false
+                if (level != selectedLevel) {
+                    onLevelChange(level)
+                }
+            },
+        )
     }
 }

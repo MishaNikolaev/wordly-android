@@ -122,9 +122,9 @@ internal class ProfileStoreFactory @Inject constructor(
 				try {
 					dispatch(Msg.ProfileLoaded(profile = getProfileUseCase()))
 				} catch (_: Exception) {
-					if (showLoading || state() !is ProfileStore.State.Content) {
-						dispatch(Msg.SetError)
-					}
+					val keepContent = !showLoading && state() is ProfileStore.State.Content
+					if (keepContent) return@launch
+					dispatch(Msg.SetError)
 				}
 			}
 		}

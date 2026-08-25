@@ -10,6 +10,7 @@ include(
 	":features:constructor:catalog",
 	":features:constructor:practice",
 	":features:books:library",
+	":features:books:detail",
 	":features:books:reader",
 	":features:words:list",
 	":features:materials:feed",

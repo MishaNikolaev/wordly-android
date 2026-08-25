@@ -7,6 +7,7 @@ import com.nmichail.wordly.android.features.books.reader.domain.entity.BookConte
 import com.nmichail.wordly.android.features.books.reader.domain.entity.BookParagraph
 import com.nmichail.wordly.android.features.books.reader.domain.entity.BookTextSegment
 import com.nmichail.wordly.android.features.books.reader.domain.entity.BookTextSegmentType
+import com.nmichail.wordly.android.features.books.reader.domain.entity.BookTranslation
 import com.nmichail.wordly.android.features.books.reader.domain.entity.BookWordDefinition
 import com.nmichail.wordly.android.features.books.reader.domain.usecase.GetBookContentUseCase
 import com.nmichail.wordly.android.features.books.reader.domain.usecase.GetBookTranslationUseCase
@@ -70,6 +71,7 @@ class DefaultBookReaderComponentTest {
 	@BeforeEach
 	fun setUp() = runTest {
 		whenever(getBookContentUseCase("little-prince")) doReturn book
+		whenever(getBookTranslationUseCase("little-prince")) doReturn BookTranslation(paragraphs = emptyList())
 		whenever(addWordUseCase(any())).thenReturn(Unit)
 		component = DefaultBookReaderComponent(
 			componentContext = createTestComponentContext(),

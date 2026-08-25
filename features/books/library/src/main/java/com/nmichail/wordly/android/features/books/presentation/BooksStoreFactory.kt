@@ -137,7 +137,7 @@ internal class BooksStoreFactory @Inject constructor(
                                 itemMatches = { item, query ->
                                     matchesCatalogSearch(
                                         title = item.title,
-                                        subtitle = item.subtitle,
+                                        subtitle = item.author,
                                         badge = item.badge,
                                         query = query,
                                     )
@@ -180,7 +180,7 @@ internal class BooksStoreFactory @Inject constructor(
                     itemMatches = { item, query ->
                         matchesCatalogSearch(
                             title = item.title,
-                            subtitle = item.subtitle,
+                            subtitle = item.author,
                             badge = item.badge,
                             query = query,
                         )

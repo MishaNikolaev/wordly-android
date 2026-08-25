@@ -1,15 +1,15 @@
 {
   "id": "little-prince",
-  "title": "The Little Prince",
-  "author": "Antoine de Saint-Exupéry",
-  "coverUrl": null,
+  "title": "Маленький принц",
+  "author": "Антуан де Сент-Экзюпери",
+  "coverUrl": "https://i1.storeland.net/3/1629/216281990/075a3e/cover1w600-7-jpg.jpg",
   "paragraphs": [
     {
       "id": "p1",
       "segments": [
         {
           "type": "text",
-          "text": "Once when I was six years old I saw a magnificent picture in a book about the jungle. It was a picture of a boa constrictor swallowing an animal. Then I drew my first drawing — and showed it to the grown-ups."
+          "text": "Once when I was six years old I saw a magnificent picture in a book about the jungle. It was a picture of a boa constrictor swallowing an animal. Then I drew my first drawing and showed it to the grown-ups, hoping they would understand the mystery I had discovered."
         }
       ]
     },
@@ -68,7 +68,7 @@
         },
         {
           "type": "text",
-          "text": "."
+          "text": ", as if that were the most natural request in the world."
         }
       ]
     },
@@ -109,7 +109,7 @@
         },
         {
           "type": "text",
-          "text": ". If you do not watch out, they grow so large that they split the planet into pieces."
+          "text": ". If you do not watch out, they grow so large that they split the planet into pieces. Every morning he cleaned his volcanoes and pulled the seedlings from the ground."
         }
       ]
     },
@@ -118,7 +118,7 @@
       "segments": [
         {
           "type": "text",
-          "text": "\"It is only with the heart that one can see rightly; what is essential is invisible to the eye,\" he told me later. And I understood that the sheep I had drawn for him was more than a sketch — it was a promise to protect what he loved."
+          "text": "\"It is only with the heart that one can see rightly; what is essential is invisible to the eye,\" he told me later. And I understood that the sheep I had drawn for him was more than a sketch — it was a promise to protect what he loved, even when love felt fragile."
         }
       ]
     },
@@ -127,7 +127,7 @@
       "segments": [
         {
           "type": "text",
-          "text": "I have serious reason to believe that the planet from which the little prince came is the asteroid known as B-612. This asteroid has only once been seen through the telescope, by a Turkish astronomer, in 1909. On making his discovery, the astronomer had presented it to the International Astronomical Congress, in a great demonstration."
+          "text": "I have serious reason to believe that the planet from which the little prince came is the asteroid known as B-612. This asteroid has only once been seen through the telescope, by a Turkish astronomer, in 1909. On making his discovery, the astronomer presented it to the International Astronomical Congress."
         }
       ]
     },
@@ -136,7 +136,7 @@
       "segments": [
         {
           "type": "text",
-          "text": "But he was in Turkish costume, and so nobody would believe what he said. Grown-ups are like that… Fortunately, however, for the reputation of Asteroid B-612, a Turkish dictator made a law that his subjects, under pain of death, should change to European costume. So in 1920 the astronomer gave his demonstration all over again, dressed with impressive style and elegance. And this time everybody accepted his report."
+          "text": "But he was in Turkish costume, and so nobody would believe what he said. Grown-ups are like that… Fortunately, for the reputation of Asteroid B-612, a Turkish dictator made a law that his subjects should change to European costume. So in 1920 the astronomer gave his demonstration again, and this time everybody accepted his report."
         }
       ]
     },
@@ -145,7 +145,7 @@
       "segments": [
         {
           "type": "text",
-          "text": "If I have told you these details about the asteroid, and made a note of its number for you, it is on account of the grown-ups and their ways. When you tell them that you have made a new friend, they never ask you any questions about essential matters. They never say to you, \"What does his voice sound like? What games does he love best? Does he collect butterflies?\""
+          "text": "If I have told you these details about the asteroid, and made a note of its number for you, it is on account of the grown-ups and their ways. When you tell them that you have made a new friend, they never ask you any questions about essential matters. They never say, \"What does his voice sound like? What games does he love best?\""
         }
       ]
     },
@@ -154,7 +154,7 @@
       "segments": [
         {
           "type": "text",
-          "text": "Instead, they demand: \"How old is he? How many brothers has he? How much does he weigh? How much money does his father make?\" Only from these figures do they think they have learned anything about him. If you were to say to the grown-ups: \"I saw a beautiful house made of rosy brick, with geraniums in the windows and doves on the roof,\" they would not be able to get any idea of that house at all."
+          "text": "Instead, they demand: \"How old is he? How many brothers has he? How much does he weigh? How much money does his father make?\" Only from these figures do they think they have learned anything about him. If you were to say, \"I saw a beautiful house made of rosy brick,\" they would not be able to imagine that house at all."
         }
       ]
     },
@@ -163,12 +163,354 @@
       "segments": [
         {
           "type": "text",
-          "text": "You would have to say to them: \"I saw a house that cost twenty thousand dollars.\" Then they would exclaim: \"Oh, what a pretty house that is!\" Just so, you might say to them: \"The proof that the little prince existed is that he was charming, that he laughed, and that he was looking for a sheep.\" If anybody wants a sheep, that is a proof that he exists."
+          "text": "You would have to say to them: \"I saw a house that cost twenty thousand dollars.\" Then they would exclaim: \"Oh, what a pretty house that is!\" Just so, you might say: \"The proof that the little prince existed is that he was charming, that he laughed, and that he was looking for a sheep.\""
         }
       ]
     },
     {
       "id": "p12",
+      "segments": [
+        {
+          "type": "text",
+          "text": "After many failed drawings, I finally drew a box and said the sheep was inside. The little prince was delighted. He looked at the drawing for a long time, then smiled as if the invisible sheep were already breathing quietly beside him on the sand."
+        }
+      ]
+    },
+    {
+      "id": "p13",
+      "segments": [
+        {
+          "type": "text",
+          "text": "He told me about his home with careful seriousness. His planet was hardly bigger than a house. He had three volcanoes and one flower, and every hour on that tiny world mattered more than hours do on Earth."
+        }
+      ]
+    },
+    {
+      "id": "p14",
+      "segments": [
+        {
+          "type": "text",
+          "text": "Two volcanoes were active and useful for warming breakfast. The third was extinct, but he kept it anyway, because a volcano that sleeps may still wake someday. He swept their craters every morning with the patience of someone who loves his work."
+        }
+      ]
+    },
+    {
+      "id": "p15",
+      "segments": [
+        {
+          "type": "text",
+          "text": "Every morning he pulled up baobab seedlings before they could grow large enough to split his tiny world. He said that discipline on a small planet is the same as discipline in the heart: you must begin early, and you must never pretend the danger is small."
+        }
+      ]
+    },
+    {
+      "id": "p16",
+      "segments": [
+        {
+          "type": "text",
+          "text": "One day a mysterious seed appeared among the ordinary plants. It grew into a beautiful rose with four thorns and a complicated heart. She spoke in riddles, asked for shelter, and filled the quiet planet with fragrance and confusion."
+        }
+      ]
+    },
+    {
+      "id": "p17",
+      "segments": [
+        {
+          "type": "text",
+          "text": "The rose was proud and dramatic. She coughed, asked for a screen, and wanted a glass globe on cold nights. The little prince did everything she asked, because he believed that caring for someone means answering every request."
+        }
+      ]
+    },
+    {
+      "id": "p18",
+      "segments": [
+        {
+          "type": "text",
+          "text": "The little prince loved her, but her words confused him. He did not yet know how to trust love, or how to forgive pride that hides fear. So he decided that travel might teach him what flowers never explained."
+        }
+      ]
+    },
+    {
+      "id": "p19",
+      "segments": [
+        {
+          "type": "text",
+          "text": "He decided to leave. Before he went, he cleaned the volcanoes and watered the rose one last time. He did not understand that leaving can also be a kind of care, and that silence can say more than farewell."
+        }
+      ]
+    },
+    {
+      "id": "p20",
+      "segments": [
+        {
+          "type": "text",
+          "text": "The rose tried to hide her tears. She did not want him to see that she was sad, yet she wanted him to stay. He walked away with a heavy star inside his chest, and the planet suddenly felt larger without him."
+        }
+      ]
+    },
+    {
+      "id": "p21",
+      "segments": [
+        {
+          "type": "text",
+          "text": "He visited several tiny planets. On the first lived a king who believed he ruled the whole universe, though there was no one to command except himself and the slow turning of his lonely world."
+        }
+      ]
+    },
+    {
+      "id": "p22",
+      "segments": [
+        {
+          "type": "text",
+          "text": "The king gave orders only when they could be obeyed. He ordered the sun to set when the prince wanted rest, and felt proud of his reasonable authority. The prince left politely, still searching for someone wiser."
+        }
+      ]
+    },
+    {
+      "id": "p23",
+      "segments": [
+        {
+          "type": "text",
+          "text": "On another planet lived a vain man who wanted applause. He raised his hat again and again, and asked the prince to clap forever. The prince learned that praise can become a lonely habit when nobody listens for meaning."
+        }
+      ]
+    },
+    {
+      "id": "p24",
+      "segments": [
+        {
+          "type": "text",
+          "text": "On another lived a drunkard who drank to forget that he was ashamed of drinking. The prince asked why people repeat what hurts them, but received no answer — only another empty bottle and a tired silence."
+        }
+      ]
+    },
+    {
+      "id": "p25",
+      "segments": [
+        {
+          "type": "text",
+          "text": "On another lived a businessman counting stars. He said he owned them because he thought of their numbers first, and never looked up at the sky. The prince thought ownership without love is the emptiest kind of wealth."
+        }
+      ]
+    },
+    {
+      "id": "p26",
+      "segments": [
+        {
+          "type": "text",
+          "text": "On another lived a lamplighter who lit and put out his lamp every minute. His planet turned too fast, yet he still obeyed his duty without complaint. The prince respected him more than kings or businessmen."
+        }
+      ]
+    },
+    {
+      "id": "p27",
+      "segments": [
+        {
+          "type": "text",
+          "text": "The lamplighter was the only grown-up the prince truly respected, because he cared about something other than himself. Service, the prince thought, is a small form of love — quiet, repeated, and faithful."
+        }
+      ]
+    },
+    {
+      "id": "p28",
+      "segments": [
+        {
+          "type": "text",
+          "text": "On another planet lived a geographer who never explored. He only recorded what travelers told him, and called that knowledge. He would not write about flowers, because flowers are ephemeral and books prefer permanence."
+        }
+      ]
+    },
+    {
+      "id": "p29",
+      "segments": [
+        {
+          "type": "text",
+          "text": "The geographer said flowers on planets are brief. That made the prince think of his rose with new sadness, and of how quickly beauty can disappear if no one stays to water it. He suddenly wanted to go home."
+        }
+      ]
+    },
+    {
+      "id": "p30",
+      "segments": [
+        {
+          "type": "text",
+          "text": "When the prince arrived on Earth, he was surprised. There were no people at first, only a vast desert, silence, and the sound of his own footsteps. The Earth seemed too large for one small traveler with one small regret."
+        }
+      ]
+    },
+    {
+      "id": "p31",
+      "segments": [
+        {
+          "type": "text",
+          "text": "He met a snake in the sand. The snake spoke gently and said he could send him back to the sky if the prince wished, because all beginnings end somewhere, and some endings are quieter than journeys."
+        }
+      ]
+    },
+    {
+      "id": "p32",
+      "segments": [
+        {
+          "type": "text",
+          "text": "He crossed the desert and found a garden full of roses. He suddenly felt his rose had lied to him. If there were thousands of roses, what made his flower special? He sat down, overwhelmed by ordinary beauty."
+        }
+      ]
+    },
+    {
+      "id": "p33",
+      "segments": [
+        {
+          "type": "text",
+          "text": "He lay down in the grass and cried. His flower had told him she was unique in all the universe, and now the universe seemed too large for one promise. Tears taught him that uniqueness is made by care, not by rarity alone."
+        }
+      ]
+    },
+    {
+      "id": "p34",
+      "segments": [
+        {
+          "type": "text",
+          "text": "Then a fox appeared. The fox asked the prince to tame him. To tame means to create ties, he explained, and ties make one person matter to another until parting becomes both necessary and painful."
+        }
+      ]
+    },
+    {
+      "id": "p35",
+      "segments": [
+        {
+          "type": "text",
+          "text": "Every day the prince came at the same hour and sat a little closer. The fox watched him with careful eyes, waiting for trust to become habit. Ritual, the fox said, turns ordinary minutes into treasure."
+        }
+      ]
+    },
+    {
+      "id": "p36",
+      "segments": [
+        {
+          "type": "text",
+          "text": "When the hour came, the fox said they were ready. The prince had tamed him, and now they needed each other, though parting was already written between them. Friendship had made the wheat fields the color of the fox's fur."
+        }
+      ]
+    },
+    {
+      "id": "p37",
+      "segments": [
+        {
+          "type": "text",
+          "text": "The fox shared his secret: only with the heart can one see rightly. The important things are invisible to the eye, but clear to those who love. The prince repeated the words as if they were a map back to his rose."
+        }
+      ]
+    },
+    {
+      "id": "p38",
+      "segments": [
+        {
+          "type": "text",
+          "text": "The prince understood that his rose was unique not because she was the only rose, but because he had watered her, sheltered her, and listened to her. Time spent on someone is what makes them irreplaceable."
+        }
+      ]
+    },
+    {
+      "id": "p39",
+      "segments": [
+        {
+          "type": "text",
+          "text": "He returned to me in the desert. It had been eight days since my plane broke down in the sand, and water had become more precious than words. Together we walked under a sky that felt suddenly full of meaning."
+        }
+      ]
+    },
+    {
+      "id": "p40",
+      "segments": [
+        {
+          "type": "text",
+          "text": "We searched together for water. At sunrise we found a well, and the water tasted like a present, like music, like the laughter of stars. The prince said people forget that wells and friendship both require digging."
+        }
+      ]
+    },
+    {
+      "id": "p41",
+      "segments": [
+        {
+          "type": "text",
+          "text": "The prince told me he would return to his planet that night. His body was too heavy to carry a soul so far, he said, but souls travel lightly when they are called home by a flower waiting alone."
+        }
+      ]
+    },
+    {
+      "id": "p42",
+      "segments": [
+        {
+          "type": "text",
+          "text": "He said I would always hear his laugh in the stars, like little bells. I must listen, he said, and remember, and never forget what the fox taught us about invisible things that matter more than gold."
+        }
+      ]
+    },
+    {
+      "id": "p43",
+      "segments": [
+        {
+          "type": "text",
+          "text": "That night I watched him walk away, pale in the moonlight. He did not cry, but I did, because grown-ups cry when they finally understand what children already know: that love is responsibility wearing soft shoes."
+        }
+      ]
+    },
+    {
+      "id": "p44",
+      "segments": [
+        {
+          "type": "text",
+          "text": "A flash like yellow lightning crossed the sand. The prince did not return, and the desert became ordinary again, which was the cruelest change. Silence after friendship is louder than engines or storms."
+        }
+      ]
+    },
+    {
+      "id": "p45",
+      "segments": [
+        {
+          "type": "text",
+          "text": "In the morning I did not find his body. That did not surprise me. I knew he had gone back to his star, to his flower, to his volcanoes, and to the sheep I had drawn so carefully inside a box."
+        }
+      ]
+    },
+    {
+      "id": "p46",
+      "segments": [
+        {
+          "type": "text",
+          "text": "I repaired my plane and left the desert. My friends were glad to see me safe again, and they spoke of engines, maps, and practical things. I answered them politely, while my thoughts stayed with a tiny planet."
+        }
+      ]
+    },
+    {
+      "id": "p47",
+      "segments": [
+        {
+          "type": "text",
+          "text": "They were happy, but I kept the little prince in my heart. No one else could hear his laugh in the sky, and that secret made the stars brighter. Some treasures cannot be counted, only protected."
+        }
+      ]
+    },
+    {
+      "id": "p48",
+      "segments": [
+        {
+          "type": "text",
+          "text": "At night I look at the stars and wonder: is he watering his rose, or has the sheep eaten her? Then I draw the muzzle again, very carefully, because a drawing can be a promise when words are not enough."
+        }
+      ]
+    },
+    {
+      "id": "p49",
+      "segments": [
+        {
+          "type": "text",
+          "text": "I remember the fox: you become responsible forever for what you tame. Responsibility is slow, invisible, and stronger than distance. It follows you across deserts, oceans, and years of ordinary life."
+        }
+      ]
+    },
+    {
+      "id": "p50",
       "segments": [
         {
           "type": "text",

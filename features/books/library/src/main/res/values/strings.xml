@@ -5,4 +5,5 @@
 	<string name="books_error_title">Не удалось загрузить книги</string>
 	<string name="books_error_subtitle">Проверьте соединение и попробуйте снова</string>
 	<string name="books_level_banner_action">Выбрать уровень</string>
+	<string name="books_level_dialog_title">Уровень</string>
 </resources>

@@ -170,9 +170,8 @@ internal class MaterialsStoreFactory @Inject constructor(
                         )
                     }
                 } catch (_: Exception) {
-                    if (showLoading) {
-                        dispatch(Msg.SetError(locallyReadIds = locallyReadIds))
-                    }
+                    if (!showLoading) return@launch
+                    dispatch(Msg.SetError(locallyReadIds = locallyReadIds))
                 }
             }
         }

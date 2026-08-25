@@ -48,7 +48,6 @@ fun <Section> updateCatalogLevelSectionTitles(
 		}
 	}
 
-/** Rebuilds sections so items with matching CEFR badge go under "for your level". */
 fun <Section, Item> regroupCatalogSectionsByLevel(
 	sections: List<Section>,
 	level: String,
@@ -76,6 +75,26 @@ fun <Section, Item> regroupCatalogSectionsByLevel(
 		}
 	}
 }
+
+fun <Item> filterSimilarCatalogItems(
+	items: List<Item>,
+	excludeItemId: String,
+	genre: String?,
+	getId: (Item) -> String,
+	getGenre: (Item) -> String?,
+	limit: Int = DEFAULT_SIMILAR_CATALOG_LIMIT,
+): List<Item> {
+	val normalizedGenre = genre?.trim().orEmpty()
+	if (normalizedGenre.isEmpty()) return emptyList()
+	return items
+		.asSequence()
+		.filter { getId(it) != excludeItemId }
+		.filter { getGenre(it)?.equals(normalizedGenre, ignoreCase = true) == true }
+		.take(limit)
+		.toList()
+}
+
+const val DEFAULT_SIMILAR_CATALOG_LIMIT = 6
 
 fun <Section, Item> findCatalogItem(
 	sections: List<Section>,

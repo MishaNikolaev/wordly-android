@@ -25,6 +25,7 @@ dependencies {
 	implementation(projects.features.constructor.catalog)
 	implementation(projects.features.constructor.practice)
 	implementation(projects.features.books.library)
+	implementation(projects.features.books.detail)
 	implementation(projects.features.books.reader)
 	implementation(projects.features.words.list)
 	implementation(projects.features.materials.feed)

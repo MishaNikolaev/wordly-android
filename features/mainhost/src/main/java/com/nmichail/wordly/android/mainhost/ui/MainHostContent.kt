@@ -1,14 +1,21 @@
 package com.nmichail.wordly.android.mainhost.ui
 
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import com.arkivanov.decompose.extensions.compose.stack.Children
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
+import com.nmichail.wordly.android.features.books.detail.ui.BookDetailContent
 import com.nmichail.wordly.android.features.books.reader.ui.BookReaderContent
 import com.nmichail.wordly.android.features.books.ui.BooksContent
 import com.nmichail.wordly.android.features.cards.training.ui.CardPracticeContent
@@ -22,6 +29,8 @@ import com.nmichail.wordly.android.features.profile.reminders.ui.ReminderTimesCo
 import com.nmichail.wordly.android.features.review.ui.ReviewContent
 import com.nmichail.wordly.android.features.materials.article.ui.MaterialDetailContent
 import com.nmichail.wordly.android.features.materials.ui.MaterialsContent
+import com.nmichail.wordly.android.features.words.presentation.WordsComponent
+import com.nmichail.wordly.android.features.words.presentation.detail.WordDetailStore
 import com.nmichail.wordly.android.features.words.ui.list.WordContent
 import com.nmichail.wordly.android.core.preferences.domain.entity.AppThemeMode
 import com.nmichail.wordly.android.mainhost.presentation.MainHostComponent
@@ -36,10 +45,11 @@ fun MainHostContent(
 ) {
 	val stack by component.stack.subscribeAsState()
 	val selectedTab = stack.active.instance.toTab()
-	val showBottomBar = selectedTab != null
+	var wordDetailOpen by remember { mutableStateOf(false) }
+	val showBottomBar = selectedTab != null && !wordDetailOpen
 
 	Scaffold(
-		modifier = modifier,
+		modifier = modifier.fillMaxSize(),
 		containerColor = MaterialTheme.colorScheme.background,
 		bottomBar = {
 			if (showBottomBar && selectedTab != null) {
@@ -50,34 +60,60 @@ fun MainHostContent(
 			}
 		},
 	) { innerPadding ->
-		Children(stack = component.stack) { child ->
+		Children(
+			stack = component.stack,
+			modifier = Modifier.fillMaxSize(),
+		) { child ->
 			MainHostChildContent(
 				child = child.instance,
 				themeMode = themeMode,
 				devEnabled = devEnabled,
 				innerPadding = innerPadding,
+				onWordDetailOpenChange = { wordDetailOpen = it },
 			)
 		}
 	}
 }
 
-@Suppress("CyclomaticComplexMethod")
+@Composable
+private fun WordsDetailBottomBarSync(
+	component: WordsComponent,
+	onWordDetailOpenChange: (Boolean) -> Unit,
+) {
+	val detail by component.wordDetailModel.subscribeAsState()
+	val isOpen = detail is WordDetailStore.State.Open
+	LaunchedEffect(isOpen) {
+		onWordDetailOpenChange(isOpen)
+	}
+	DisposableEffect(Unit) {
+		onDispose { onWordDetailOpenChange(false) }
+	}
+}
+
+@Suppress("CyclomaticComplexMethod", "LongMethod")
 @Composable
 private fun MainHostChildContent(
 	child: MainHostComponent.Child,
 	themeMode: AppThemeMode,
 	devEnabled: Boolean,
 	innerPadding: PaddingValues,
+	onWordDetailOpenChange: (Boolean) -> Unit,
 ) {
 	when (child) {
 		is MainHostComponent.Child.Home -> HomeContent(
 			component = child.component,
 			modifier = Modifier.padding(innerPadding),
 		)
-		is MainHostComponent.Child.Words -> WordContent(
-			component = child.component,
-			modifier = Modifier.padding(innerPadding),
-		)
+		is MainHostComponent.Child.Words -> {
+			WordsDetailBottomBarSync(
+				component = child.component,
+				onWordDetailOpenChange = onWordDetailOpenChange,
+			)
+			WordContent(
+				component = child.component,
+				modifier = Modifier.padding(innerPadding),
+			)
+		}
 		is MainHostComponent.Child.Materials -> MaterialsContent(
 			component = child.component,
 			modifier = Modifier.padding(innerPadding),
@@ -117,6 +153,10 @@ private fun MainHostChildContent(
 		)
 		is MainHostComponent.Child.Books -> BooksContent(
 			component = child.component,
+		)
+		is MainHostComponent.Child.BookDetail -> BookDetailContent(
+			component = child.component,
+			modifier = Modifier.fillMaxSize(),
 		)
 		is MainHostComponent.Child.BookReader -> BookReaderContent(
 			component = child.component,

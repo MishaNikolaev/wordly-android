@@ -17,7 +17,7 @@ class SignUpRepositoryImpl @Inject constructor(
 	override suspend fun signUp(form: SignUpForm): AuthTokens {
 		val tokens = signUpApi.register(form.toRequest()).toEntity()
 		saveAuthTokensUseCase(tokens)
-		// TODO(fcm): зарегистрировать FCM device token после успешной регистрации
+		// TODO(fcm): зарегистрировать FCM-токен устройства после успешной регистрации
 		return tokens
 	}
 }

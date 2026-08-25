@@ -1,5 +1,7 @@
 package com.nmichail.wordly.android.features.books.reader.ui
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -17,6 +19,7 @@ internal fun BookReaderParagraph(
     translatedText: String?,
     showTranslation: Boolean,
     onSelectWord: (String) -> Unit,
+    onContentTap: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     if (showTranslation && !translatedText.isNullOrBlank()) {
@@ -24,7 +27,13 @@ internal fun BookReaderParagraph(
             text = translatedText,
             style = WuiTypography.bookReaderBody,
             color = MaterialTheme.colorScheme.onBackground,
-            modifier = modifier.fillMaxWidth(),
+            modifier = modifier
+				.fillMaxWidth()
+				.clickable(
+					interactionSource = remember { MutableInteractionSource() },
+					indication = null,
+					onClick = onContentTap,
+				),
         )
     } else {
         val segments = remember(paragraph.segments) {
@@ -33,6 +42,7 @@ internal fun BookReaderParagraph(
         LookupReadingText(
             segments = segments,
             onSelectWord = onSelectWord,
+            onContentTap = onContentTap,
             modifier = modifier,
         )
     }

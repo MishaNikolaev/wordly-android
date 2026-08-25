@@ -28,6 +28,7 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.junit.jupiter.MockitoExtension
 import org.mockito.kotlin.any
 import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.lenient
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
@@ -246,11 +247,14 @@ class BookReaderStoreTest {
 			showWordAddedDialog = showWordAddedDialog,
 		)
 
-	private fun createStore(): BookReaderStore =
-		BookReaderStoreFactory(
+	private fun createStore(): BookReaderStore {
+		lenient().whenever(getBookTranslationUseCase(any())) doReturn
+			BookTranslation(paragraphs = emptyList())
+		return BookReaderStoreFactory(
 			getBookContentUseCase = getBookContentUseCase,
 			getBookTranslationUseCase = getBookTranslationUseCase,
 			lookupWordUseCase = lookupWordUseCase,
 			addWordUseCase = addWordUseCase,
 		).create(bookId = "little-prince")
+	}
 }

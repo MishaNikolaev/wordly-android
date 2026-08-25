@@ -8,6 +8,7 @@ dependencies {
 	implementation(libs.decompose.compose)
 	implementation(platform(libs.androidx.compose.bom))
 	implementation(libs.androidx.ui)
+	implementation(libs.androidx.foundation)
 	implementation(libs.androidx.material3)
 	implementation(libs.androidx.material.icons.extended)
 	implementation(libs.androidx.ui.tooling.preview)

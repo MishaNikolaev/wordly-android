@@ -36,8 +36,10 @@ class BookReaderDataSourceImpl @Inject constructor(
 		}
 
 	private companion object {
-		fun contentKey(bookId: String): String = "page_book_content_$bookId"
+		const val CACHE_VERSION = 9
 
-		fun translationKey(bookId: String): String = "page_book_translation_$bookId"
+		fun contentKey(bookId: String): String = "page_book_content_v${CACHE_VERSION}_$bookId"
+
+		fun translationKey(bookId: String): String = "page_book_translation_v${CACHE_VERSION}_$bookId"
 	}
 }

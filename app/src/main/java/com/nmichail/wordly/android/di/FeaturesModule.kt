@@ -3,6 +3,7 @@ package com.nmichail.wordly.android.di
 import com.nmichail.wordly.android.features.authorization.signin.di.SignInModule
 import com.nmichail.wordly.android.features.authorization.signup.di.SignUpModule
 import com.nmichail.wordly.android.features.books.di.BooksModule
+import com.nmichail.wordly.android.features.books.detail.di.BookDetailModule
 import com.nmichail.wordly.android.features.books.reader.di.BookReaderModule
 import com.nmichail.wordly.android.features.cards.di.CardsModule
 import com.nmichail.wordly.android.features.cards.training.di.CardPracticeModule
@@ -32,6 +33,7 @@ import dagger.Module
 		ConstructorModule::class,
 		ConstructorPracticeModule::class,
 		BooksModule::class,
+		BookDetailModule::class,
 		BookReaderModule::class,
 		WordsModule::class,
 		MaterialsModule::class,

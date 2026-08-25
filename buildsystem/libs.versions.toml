@@ -29,6 +29,7 @@ room = "2.7.1"
 glide = "5.0.5"
 glideCompose = "1.0.0-beta01"
 activityCompose = "1.9.3"
+appcompat = "1.7.1"
 composeBom = "2024.12.01"
 junit = "4.13.2"
 junit5 = "5.11.0"
@@ -89,6 +90,7 @@ room-compiler = { group = "androidx.room", name = "room-compiler", version.ref =
 glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide" }
 glide-compose = { group = "com.github.bumptech.glide", name = "compose", version.ref = "glideCompose" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
 androidx-ui = { group = "androidx.compose.ui", name = "ui" }
 androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }

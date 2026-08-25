@@ -19,3 +19,7 @@ val OnestFontFamily = FontFamily(
 	Font(R.font.onest, FontWeight.SemiBold),
 	Font(R.font.onest, FontWeight.Bold),
 )
+
+val KazimirTextFontFamily = FontFamily(
+	Font(R.font.kazimirtext, FontWeight.Normal),
+)

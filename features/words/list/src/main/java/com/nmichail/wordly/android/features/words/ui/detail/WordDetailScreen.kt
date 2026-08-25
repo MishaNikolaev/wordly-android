@@ -18,7 +18,6 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
@@ -124,34 +123,24 @@ private fun WordDetailBody(
 	Column(
 		modifier = modifier
 			.fillMaxSize()
-			.navigationBarsPadding()
 			.padding(horizontal = 16.dp)
-			.padding(top = 20.dp)
+			.padding(top = 8.dp, bottom = 16.dp)
 			.verticalScroll(scrollState),
 		verticalArrangement = Arrangement.spacedBy(12.dp),
 	) {
-		Box(modifier = Modifier.fillMaxWidth()) {
-			Column(
-				modifier = Modifier
-					.fillMaxWidth()
-					.padding(top = 64.dp),
-				verticalArrangement = Arrangement.spacedBy(4.dp),
-			) {
-				Text(
-					text = state.word,
-					style = WuiTypography.wordDetailWord,
-					color = colorScheme.onSurface,
-				)
-				WordDetailPhonetic(
-					phonetic = state.phonetic,
-					onPlayAudio = onPlayAudio,
-				)
-			}
-			WordDetailCloseButton(
-				onDismiss = onDismiss,
-				modifier = Modifier
-					.align(Alignment.TopStart)
-					.padding(top = 10.dp),
+		WordDetailCloseButton(onDismiss = onDismiss)
+		Column(
+			modifier = Modifier.fillMaxWidth(),
+			verticalArrangement = Arrangement.spacedBy(4.dp),
+		) {
+			Text(
+				text = state.word,
+				style = WuiTypography.wordDetailWord,
+				color = colorScheme.onSurface,
+			)
+			WordDetailPhonetic(
+				phonetic = state.phonetic,
+				onPlayAudio = onPlayAudio,
 			)
 		}
 		WordDetailStatusRow(
@@ -226,7 +215,6 @@ private fun WordDetailBody(
 			} else {
 				MaterialTheme.colorScheme.onPrimary
 			},
-			modifier = Modifier.padding(bottom = 10.dp),
 		)
 	}
 }

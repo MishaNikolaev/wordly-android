@@ -39,11 +39,13 @@ fun LookupReadingText(
     segments: List<LookupTextSegment>,
     onSelectWord: (String) -> Unit,
     modifier: Modifier = Modifier,
+    onContentTap: (() -> Unit)? = null,
 ) {
     val bodyStyle = WuiTypography.bookReaderBody
     val textColor = MaterialTheme.colorScheme.onBackground
     val underlineColor = MaterialTheme.colorScheme.primary
     val currentOnSelectWord by rememberUpdatedState(onSelectWord)
+    val currentOnContentTap by rememberUpdatedState(onContentTap)
     val annotated = remember(segments) { buildLookupAnnotatedString(segments) }
     var textLayoutResult by remember { mutableStateOf<TextLayoutResult?>(null) }
     val dashEffect = remember {
@@ -77,15 +79,22 @@ fun LookupReadingText(
 				detectTapGestures { offset ->
 					val layout = textLayoutResult ?: return@detectTapGestures
 					val position = layout.getOffsetForPosition(offset)
-					if (position !in 0 until annotated.length) return@detectTapGestures
-					annotated.getStringAnnotations(
+					if (position !in 0 until annotated.length) {
+						currentOnContentTap?.invoke()
+						return@detectTapGestures
+					}
+					val lookupId = annotated.getStringAnnotations(
 						tag = "lookup",
 						start = position,
 						end = position,
 					).firstOrNull()
 						?.item
 						?.removePrefix("underline:")
-						?.let(currentOnSelectWord)
+					if (lookupId != null) {
+						currentOnSelectWord(lookupId)
+					} else {
+						currentOnContentTap?.invoke()
+					}
 				}
 			},
         onTextLayout = { textLayoutResult = it },

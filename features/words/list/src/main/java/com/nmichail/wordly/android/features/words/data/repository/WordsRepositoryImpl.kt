@@ -59,14 +59,18 @@ class WordsRepositoryImpl @Inject constructor(
 		}
 		return coroutineScope {
 			val dictionaryDeferred = async {
-				runCatching {
+				try {
 					freeDictionaryApi.lookup(word = normalized).toWordLookup(query = normalized)
-				}.getOrNull()
+				} catch (_: Exception) {
+					null
+				}
 			}
 			val vocabularyDeferred = async {
-				runCatching {
+				try {
 					wordsApi.lookupVocabulary(query = normalized).toWordLookup()
-				}.getOrNull()
+				} catch (_: Exception) {
+					null
+				}
 			}
 			val merged = mergeLookups(
 				query = normalized,
@@ -115,7 +119,7 @@ class WordsRepositoryImpl @Inject constructor(
 	}
 
 	private suspend fun translateEnToRu(text: String): String? =
-		runCatching {
+		try {
 			val translated = myMemoryApi.translate(query = text.take(450))
 				.responseData
 				?.translatedText
@@ -127,7 +131,9 @@ class WordsRepositoryImpl @Inject constructor(
 				translated.equals(text, ignoreCase = true) -> null
 				else -> translated
 			}
-		}.getOrNull()
+		} catch (_: Exception) {
+			null
+		}
 
 	private fun mockLookup(query: String): WordLookup =
 		WordLookup(

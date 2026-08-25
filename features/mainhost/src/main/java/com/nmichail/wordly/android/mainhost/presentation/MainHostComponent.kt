@@ -4,6 +4,7 @@ import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.router.stack.ChildStack
 import com.arkivanov.decompose.value.Value
 import com.nmichail.wordly.android.features.books.presentation.BooksComponent
+import com.nmichail.wordly.android.features.books.detail.presentation.BookDetailComponent
 import com.nmichail.wordly.android.features.books.reader.presentation.BookReaderComponent
 import com.nmichail.wordly.android.features.cards.presentation.CardsComponent
 import com.nmichail.wordly.android.features.cards.training.presentation.CardPracticeComponent
@@ -51,6 +52,8 @@ interface MainHostComponent {
 		data class ConstructorPractice(val component: ConstructorPracticeComponent) : Child
 
 		data class Books(val component: BooksComponent) : Child
+
+		data class BookDetail(val component: BookDetailComponent) : Child
 
 		data class BookReader(val component: BookReaderComponent) : Child
 	}

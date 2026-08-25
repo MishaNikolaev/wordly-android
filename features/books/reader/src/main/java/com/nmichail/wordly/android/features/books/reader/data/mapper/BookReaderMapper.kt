@@ -31,6 +31,16 @@ fun BookTranslationResponse.toEntity(): BookTranslation =
         paragraphs = paragraphs.map { it.toEntity() },
     )
 
+private fun BookTranslatedParagraphResponse.toEntity(): BookTranslatedParagraph =
+    BookTranslatedParagraph(
+        id = id,
+        // Drop English leftovers that were mistakenly stored as "translation".
+        text = text.takeIf(::hasCyrillic).orEmpty(),
+    )
+
+private fun hasCyrillic(value: String): Boolean =
+    value.any { it in '\u0400'..'\u04FF' }
+
 private fun BookParagraphResponse.toEntity(): BookParagraph =
     BookParagraph(
         id = id,
@@ -67,10 +77,4 @@ private fun BookWordDefinitionResponse.toEntity(): BookWordDefinition =
         translation = translation,
         partOfSpeech = partOfSpeech,
         example = example,
-    )
-
-private fun BookTranslatedParagraphResponse.toEntity(): BookTranslatedParagraph =
-    BookTranslatedParagraph(
-        id = id,
-        text = text,
     )
