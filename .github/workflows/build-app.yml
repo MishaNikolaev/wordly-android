@@ -33,5 +33,10 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
+      - name: Provide google-services.json for CI
+        run: |
+          cp app/ci/google-services.json app/src/dev/google-services.json
+          cp app/ci/google-services.json app/src/mock/google-services.json
+
       - name: Assemble debug APK
         run: ./gradlew :app:assembleDebug --no-daemon --stacktrace

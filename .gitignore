@@ -13,10 +13,10 @@ build
 .cxx
 local.properties
 
-# Firebase: локальные secrets / project binding не коммитить
 config/firebase/.firebaserc
 config/firebase/seed/
 **/google-services.json
 google-services.json
+!app/ci/google-services.json
 firebase-debug.log
 *-debug.log
