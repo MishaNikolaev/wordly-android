@@ -151,7 +151,9 @@ internal class CardPracticeStoreFactory @Inject constructor(
 			dispatch(Msg.Loading)
 			scope.launch {
 				try {
-					val words = getCardSessionUseCase(cardId)
+					val words = getCardSessionUseCase(cardId).map { word ->
+						word.withShuffledOptions(seed = "$cardId:${word.id}")
+					}
 					if (words.isEmpty()) {
 						dispatch(Msg.SetError)
 					} else {

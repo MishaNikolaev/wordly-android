@@ -2,11 +2,13 @@ package com.nmichail.wordly.android.core.fakenetwork.methods
 
 import android.content.Context
 import android.net.Uri
-import com.nmichail.wordly.android.core.fakenetwork.FakeProfileStore
 import com.nmichail.wordly.android.core.fakenetwork.FakeServerResponses
+import com.nmichail.wordly.android.core.fakenetwork.R
 import com.nmichail.wordly.android.core.fakenetwork.create
 import com.nmichail.wordly.android.core.fakenetwork.error404
+import com.nmichail.wordly.android.core.fakenetwork.getJson
 import okhttp3.Response
+import org.json.JSONObject
 
 internal fun patch(
 	context: Context,
@@ -40,10 +42,25 @@ private val patchHandlers: Map<Regex, PatchHandler> = mapOf(
 	Regex("^/api/gateway/profile$") to { context, _, response, requestBody ->
 		response.create(
 			description = "Update profile",
-			body = FakeProfileStore.updateProfile(context = context, requestBody = requestBody),
+			body = mergeProfilePatch(
+				baseJson = context.getJson(R.raw.profile_ok),
+				requestBody = requestBody,
+			),
 		)
 	},
 	Regex("^/api/gateway/profile/password$") to { _, _, response, _ ->
 		response.create(description = "Change password")
 	},
 )
+
+private fun mergeProfilePatch(baseJson: String, requestBody: String?): String {
+	val current = JSONObject(baseJson)
+	if (requestBody.isNullOrBlank()) return current.toString()
+	val patch = JSONObject(requestBody)
+	patch.keys().forEach { key ->
+		if (!patch.isNull(key)) {
+			current.put(key, patch.get(key))
+		}
+	}
+	return current.toString()
+}

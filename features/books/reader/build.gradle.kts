@@ -8,6 +8,7 @@ dependencies {
 	implementation(libs.decompose.compose)
 	implementation(platform(libs.androidx.compose.bom))
 	implementation(libs.androidx.ui)
+	implementation(libs.androidx.foundation)
 	implementation(libs.androidx.material3)
 	implementation(libs.androidx.material.icons.extended)
 	implementation(libs.androidx.ui.tooling.preview)
@@ -23,6 +24,8 @@ dependencies {
 	implementation(projects.component.presentation)
 	implementation(projects.core.navigation)
 	implementation(projects.core.network)
+	implementation(projects.core.preferences)
+	implementation(projects.shared.words.domain)
 
 	testImplementation(projects.testutils)
 	testImplementation(libs.kotlinx.coroutines.test)

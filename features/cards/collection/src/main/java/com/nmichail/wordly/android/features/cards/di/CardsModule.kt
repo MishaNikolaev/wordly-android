@@ -2,6 +2,8 @@ package com.nmichail.wordly.android.features.cards.di
 
 import com.nmichail.wordly.android.core.network.di.GeneralRetrofit
 import com.nmichail.wordly.android.features.cards.data.api.CardsApi
+import com.nmichail.wordly.android.features.cards.data.datasource.CardsDataSource
+import com.nmichail.wordly.android.features.cards.data.datasource.CardsDataSourceImpl
 import com.nmichail.wordly.android.features.cards.data.repository.CardsRepositoryImpl
 import com.nmichail.wordly.android.features.cards.domain.repository.CardsRepository
 import com.nmichail.wordly.android.features.cards.presentation.CardsComponent
@@ -14,6 +16,11 @@ import javax.inject.Singleton
 
 @Module
 abstract class CardsModule {
+
+	@Binds
+	abstract fun bindCardsDataSource(
+		impl: CardsDataSourceImpl,
+	): CardsDataSource
 
 	@Binds
 	abstract fun bindCardsRepository(

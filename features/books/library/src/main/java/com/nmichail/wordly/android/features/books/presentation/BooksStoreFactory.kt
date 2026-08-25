@@ -15,7 +15,7 @@ import com.nmichail.wordly.android.features.books.domain.usecase.GetBooksCatalog
 import com.nmichail.wordly.android.shared.catalog.filterCatalogSections
 import com.nmichail.wordly.android.shared.catalog.findCatalogItem
 import com.nmichail.wordly.android.shared.catalog.matchesCatalogSearch
-import com.nmichail.wordly.android.shared.catalog.updateCatalogLevelSectionTitles
+import com.nmichail.wordly.android.shared.catalog.regroupCatalogSectionsByLevel
 import javax.inject.Inject
 
 internal class BooksStoreFactory @Inject constructor(
@@ -66,14 +66,24 @@ internal class BooksStoreFactory @Inject constructor(
         override fun BooksStore.State.reduce(msg: Msg): BooksStore.State =
             when (msg) {
                 Msg.Loading -> BooksStore.State.Loading
-                is Msg.CatalogLoaded -> BooksStore.State.Content(
-                    title = msg.catalog.title,
-                    searchQuery = "",
-                    searchPlaceholder = msg.catalog.searchPlaceholder,
-                    levelBanner = msg.catalog.levelBanner,
-                    allSections = msg.catalog.sections,
-                    sections = msg.catalog.sections,
-                )
+                is Msg.CatalogLoaded -> {
+                    val level = msg.catalog.levelBanner?.levelLabel.orEmpty().ifBlank { "B1" }
+                    val sections = regroupCatalogSectionsByLevel(
+                        sections = msg.catalog.sections,
+                        level = level,
+                        getItems = { it.items },
+                        getBadge = { it.badge },
+                        createSection = { title, items -> BooksSection(title = title, items = items) },
+                    )
+                    BooksStore.State.Content(
+                        title = msg.catalog.title,
+                        searchQuery = "",
+                        searchPlaceholder = msg.catalog.searchPlaceholder,
+                        levelBanner = msg.catalog.levelBanner,
+                        allSections = sections,
+                        sections = sections,
+                    )
+                }
 
                 Msg.SetError -> BooksStore.State.Error
                 is Msg.SearchUpdated -> {
@@ -127,7 +137,7 @@ internal class BooksStoreFactory @Inject constructor(
                                 itemMatches = { item, query ->
                                     matchesCatalogSearch(
                                         title = item.title,
-                                        subtitle = item.subtitle,
+                                        subtitle = item.author,
                                         badge = item.badge,
                                         query = query,
                                     )
@@ -156,11 +166,12 @@ internal class BooksStoreFactory @Inject constructor(
             val content = state() as? BooksStore.State.Content ?: return
             scope.launch {
                 updateEnglishLevelUseCase(level)
-                val allSections = updateCatalogLevelSectionTitles(
+                val allSections = regroupCatalogSectionsByLevel(
                     sections = content.allSections,
                     level = level,
-                    getTitle = { it.title },
-                    copyWithTitle = { section, title -> section.copy(title = title) },
+                    getItems = { it.items },
+                    getBadge = { it.badge },
+                    createSection = { title, items -> BooksSection(title = title, items = items) },
                 )
                 val sections = filterCatalogSections(
                     sections = allSections,
@@ -169,7 +180,7 @@ internal class BooksStoreFactory @Inject constructor(
                     itemMatches = { item, query ->
                         matchesCatalogSearch(
                             title = item.title,
-                            subtitle = item.subtitle,
+                            subtitle = item.author,
                             badge = item.badge,
                             query = query,
                         )

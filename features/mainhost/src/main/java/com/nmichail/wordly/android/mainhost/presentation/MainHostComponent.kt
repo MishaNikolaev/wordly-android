@@ -4,6 +4,7 @@ import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.router.stack.ChildStack
 import com.arkivanov.decompose.value.Value
 import com.nmichail.wordly.android.features.books.presentation.BooksComponent
+import com.nmichail.wordly.android.features.books.detail.presentation.BookDetailComponent
 import com.nmichail.wordly.android.features.books.reader.presentation.BookReaderComponent
 import com.nmichail.wordly.android.features.cards.presentation.CardsComponent
 import com.nmichail.wordly.android.features.cards.training.presentation.CardPracticeComponent
@@ -13,8 +14,8 @@ import com.nmichail.wordly.android.features.home.presentation.HomeComponent
 import com.nmichail.wordly.android.features.materials.presentation.MaterialsComponent
 import com.nmichail.wordly.android.features.materials.article.presentation.MaterialDetailComponent
 import com.nmichail.wordly.android.features.profile.presentation.ProfileComponent
-import com.nmichail.wordly.android.features.profile.presentation.edit.ProfileEditComponent
-import com.nmichail.wordly.android.features.profile.presentation.reminder.ReminderTimesComponent
+import com.nmichail.wordly.android.features.profile.editor.presentation.ProfileEditComponent
+import com.nmichail.wordly.android.features.profile.reminders.presentation.ReminderTimesComponent
 import com.nmichail.wordly.android.features.review.presentation.ReviewComponent
 import com.nmichail.wordly.android.features.words.presentation.WordsComponent
 
@@ -52,12 +53,17 @@ interface MainHostComponent {
 
 		data class Books(val component: BooksComponent) : Child
 
+		data class BookDetail(val component: BookDetailComponent) : Child
+
 		data class BookReader(val component: BookReaderComponent) : Child
 	}
 
 	fun interface Factory {
 
-		operator fun invoke(componentContext: ComponentContext): MainHostComponent
+		operator fun invoke(
+			componentContext: ComponentContext,
+			onOpenNetworkSelection: () -> Unit,
+		): MainHostComponent
 	}
 }
 

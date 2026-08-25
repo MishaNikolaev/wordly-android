@@ -11,6 +11,10 @@ import com.arkivanov.decompose.router.stack.push
 import com.arkivanov.decompose.value.Value
 import com.nmichail.wordly.android.features.books.presentation.BooksComponent
 import com.nmichail.wordly.android.features.books.presentation.BooksRouter
+import com.nmichail.wordly.android.features.books.detail.domain.entity.BookDetail
+import com.nmichail.wordly.android.features.books.detail.presentation.BookDetailComponent
+import com.nmichail.wordly.android.features.books.detail.presentation.BookDetailRouter
+import com.nmichail.wordly.android.features.books.domain.entity.BooksItem
 import com.nmichail.wordly.android.features.books.reader.presentation.BookReaderComponent
 import com.nmichail.wordly.android.features.books.reader.presentation.BookReaderRouter
 import com.nmichail.wordly.android.features.cards.presentation.CardsComponent
@@ -27,10 +31,10 @@ import com.nmichail.wordly.android.features.materials.presentation.MaterialsComp
 import com.nmichail.wordly.android.features.materials.article.presentation.MaterialDetailComponent
 import com.nmichail.wordly.android.features.materials.article.presentation.MaterialDetailRouter
 import com.nmichail.wordly.android.features.profile.presentation.ProfileComponent
-import com.nmichail.wordly.android.features.profile.presentation.edit.ProfileEditComponent
-import com.nmichail.wordly.android.features.profile.presentation.edit.ProfileEditRouter
-import com.nmichail.wordly.android.features.profile.presentation.reminder.ReminderTimesComponent
-import com.nmichail.wordly.android.features.profile.presentation.reminder.ReminderTimesRouter
+import com.nmichail.wordly.android.features.profile.editor.presentation.ProfileEditComponent
+import com.nmichail.wordly.android.features.profile.editor.presentation.ProfileEditRouter
+import com.nmichail.wordly.android.features.profile.reminders.presentation.ReminderTimesComponent
+import com.nmichail.wordly.android.features.profile.reminders.presentation.ReminderTimesRouter
 import com.nmichail.wordly.android.features.review.presentation.ReviewComponent
 import com.nmichail.wordly.android.features.review.presentation.ReviewRouter
 import com.nmichail.wordly.android.features.words.presentation.WordsComponent
@@ -52,7 +56,9 @@ internal class DefaultMainHostComponent(
 	private val constructorComponentFactory: ConstructorComponent.Factory,
 	private val constructorPracticeComponentFactory: ConstructorPracticeComponent.Factory,
 	private val booksComponentFactory: BooksComponent.Factory,
+	private val bookDetailComponentFactory: BookDetailComponent.Factory,
 	private val bookReaderComponentFactory: BookReaderComponent.Factory,
+	private val onOpenNetworkSelection: () -> Unit,
 ) : MainHostComponent, ComponentContext by componentContext {
 
 	private val navigation = StackNavigation<MainHostConfig>()
@@ -104,11 +110,12 @@ internal class DefaultMainHostComponent(
 						componentContext = componentContext,
 						booksRouter = booksRouter,
 						onBookClick = { book ->
-							navigation.push(MainHostConfig.BookReader(bookId = book.id))
+							navigation.push(book.toBookDetailConfig())
 						},
 					),
 				)
 			}
+			is MainHostConfig.BookDetail -> bookDetailChild(config, componentContext)
 			is MainHostConfig.BookReader -> {
 				val bookReaderRouter = object : BookReaderRouter {
 					override fun navigateBack() {
@@ -138,6 +145,7 @@ internal class DefaultMainHostComponent(
 			onOpenReminderTimes = {
 				navigation.push(MainHostConfig.ReminderTimes)
 			},
+			onOpenNetworkSelection = onOpenNetworkSelection,
 		)
 		profileComponent = component
 		return MainHostComponent.Child.Profile(component = component)
@@ -297,6 +305,42 @@ internal class DefaultMainHostComponent(
 		)
 	}
 
+	@OptIn(DelicateDecomposeApi::class)
+	private fun bookDetailChild(
+		config: MainHostConfig.BookDetail,
+		componentContext: ComponentContext,
+	): MainHostComponent.Child {
+		val bookDetailRouter = object : BookDetailRouter {
+			override fun navigateBack() {
+				navigation.pop()
+			}
+		}
+		val initialBook = BookDetail(
+			id = config.bookId,
+			title = config.title,
+			author = config.author,
+			coverUrl = config.coverUrl,
+			description = config.description,
+			genre = config.genre,
+			category = config.category,
+			level = config.level,
+		)
+		return MainHostComponent.Child.BookDetail(
+			component = bookDetailComponentFactory(
+				componentContext = componentContext,
+				bookId = config.bookId,
+				initialBook = initialBook,
+				bookDetailRouter = bookDetailRouter,
+				onReadClick = { id ->
+					navigation.push(MainHostConfig.BookReader(bookId = id))
+				},
+				onSimilarBookClick = { book ->
+					navigation.push(book.toBookDetailConfig())
+				},
+			),
+		)
+	}
+
 	private fun constructorPracticeChild(
 		themeId: String,
 		componentContext: ComponentContext,
@@ -365,10 +409,34 @@ private sealed interface MainHostConfig {
 	data object Books : MainHostConfig
 
 	@Serializable
+	data class BookDetail(
+		val bookId: String,
+		val title: String,
+		val author: String,
+		val coverUrl: String? = null,
+		val description: String = "",
+		val genre: String? = null,
+		val category: String? = null,
+		val level: String? = null,
+	) : MainHostConfig
+
+	@Serializable
 	data class BookReader(
 		val bookId: String,
 	) : MainHostConfig
 }
+
+private fun BooksItem.toBookDetailConfig(): MainHostConfig.BookDetail =
+	MainHostConfig.BookDetail(
+		bookId = id,
+		title = title,
+		author = author,
+		coverUrl = imageUrl,
+		description = description,
+		genre = genre,
+		category = category,
+		level = badge,
+	)
 
 private fun MainHostTab.toConfig(): MainHostConfig =
 	when (this) {
@@ -394,5 +462,6 @@ fun MainHostComponent.Child.toTab(): MainHostTab? =
 		is MainHostComponent.Child.Constructor -> null
 		is MainHostComponent.Child.ConstructorPractice -> null
 		is MainHostComponent.Child.Books -> null
+		is MainHostComponent.Child.BookDetail -> null
 		is MainHostComponent.Child.BookReader -> null
 	}

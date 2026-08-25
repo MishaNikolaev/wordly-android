@@ -1,6 +1,7 @@
 package com.nmichail.wordly.android.shared.catalog
 
 const val CATALOG_LEVEL_SECTION_PREFIX = "Под ваш уровень · "
+const val CATALOG_OTHER_LEVELS_TITLE = "Другие уровни"
 
 fun matchesCatalogSearch(
 	title: String,
@@ -46,6 +47,54 @@ fun <Section> updateCatalogLevelSectionTitles(
 			section
 		}
 	}
+
+fun <Section, Item> regroupCatalogSectionsByLevel(
+	sections: List<Section>,
+	level: String,
+	getItems: (Section) -> List<Item>,
+	getBadge: (Item) -> String?,
+	createSection: (title: String, items: List<Item>) -> Section,
+): List<Section> {
+	val allItems = sections.flatMap(getItems)
+	if (allItems.isEmpty()) return emptyList()
+
+	val normalizedLevel = level.trim()
+	val forLevel = allItems.filter { item ->
+		getBadge(item)?.equals(normalizedLevel, ignoreCase = true) == true
+	}
+	val others = allItems.filter { item ->
+		getBadge(item)?.equals(normalizedLevel, ignoreCase = true) != true
+	}
+
+	return buildList {
+		if (forLevel.isNotEmpty()) {
+			add(createSection("$CATALOG_LEVEL_SECTION_PREFIX$normalizedLevel", forLevel))
+		}
+		if (others.isNotEmpty()) {
+			add(createSection(CATALOG_OTHER_LEVELS_TITLE, others))
+		}
+	}
+}
+
+fun <Item> filterSimilarCatalogItems(
+	items: List<Item>,
+	excludeItemId: String,
+	genre: String?,
+	getId: (Item) -> String,
+	getGenre: (Item) -> String?,
+	limit: Int = DEFAULT_SIMILAR_CATALOG_LIMIT,
+): List<Item> {
+	val normalizedGenre = genre?.trim().orEmpty()
+	if (normalizedGenre.isEmpty()) return emptyList()
+	return items
+		.asSequence()
+		.filter { getId(it) != excludeItemId }
+		.filter { getGenre(it)?.equals(normalizedGenre, ignoreCase = true) == true }
+		.take(limit)
+		.toList()
+}
+
+const val DEFAULT_SIMILAR_CATALOG_LIMIT = 6
 
 fun <Section, Item> findCatalogItem(
 	sections: List<Section>,

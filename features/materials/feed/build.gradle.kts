@@ -20,7 +20,9 @@ dependencies {
 	ksp(libs.dagger.compiler)
 
 	implementation(projects.component.wui)
+	implementation(projects.shared.catalog)
 	implementation(projects.component.presentation)
 	implementation(projects.core.navigation)
 	implementation(projects.core.network)
+	implementation(projects.core.preferences)
 }

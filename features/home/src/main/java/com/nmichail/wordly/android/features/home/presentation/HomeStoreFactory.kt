@@ -11,10 +11,10 @@ import com.nmichail.wordly.android.component.presentation.BaseCoroutineExecutor
 import com.nmichail.wordly.android.features.home.domain.entity.Home
 import com.nmichail.wordly.android.features.home.domain.usecase.GetHomeUseCase
 import com.nmichail.wordly.android.features.home.domain.entity.TrainingType
-import com.nmichail.wordly.android.features.home.presentation.calendar.Month
-import com.nmichail.wordly.android.features.home.presentation.calendar.MonthFactory
-import com.nmichail.wordly.android.features.home.presentation.calendar.WeekDay
-import com.nmichail.wordly.android.features.home.presentation.calendar.WeekDaysFactory
+import com.nmichail.wordly.android.shared.calendar.Month
+import com.nmichail.wordly.android.shared.calendar.MonthFactory
+import com.nmichail.wordly.android.shared.calendar.WeekDay
+import com.nmichail.wordly.android.shared.calendar.WeekDaysFactory
 import java.time.Clock
 import java.time.YearMonth
 import javax.inject.Inject
@@ -127,8 +127,8 @@ internal class HomeStoreFactory @Inject constructor(
 					dispatch(Msg.ShowCalendar)
 				}
 				HomeStore.Intent.DismissMonth -> dispatch(Msg.HideCalendar)
-				HomeStore.Intent.PreviousMonth -> shiftMonth(months = -1)
-				HomeStore.Intent.NextMonth -> shiftMonth(months = 1)
+				HomeStore.Intent.PreviousMonth -> changeDisplayedMonth(months = -1)
+				HomeStore.Intent.NextMonth -> changeDisplayedMonth(months = 1)
 				HomeStore.Intent.GoToCurrentMonth -> showCurrentMonth()
 				HomeStore.Intent.StartReview -> publish(HomeStore.Label.StartReview)
 				is HomeStore.Intent.OpenTraining -> when (intent.training.type) {
@@ -173,7 +173,7 @@ internal class HomeStoreFactory @Inject constructor(
 			)
 		}
 
-		private fun shiftMonth(months: Long) {
+		private fun changeDisplayedMonth(months: Long) {
 			val content = state() as? HomeStore.State.Content ?: return
 			dispatchCalendarMonth(
 				displayedMonth = content.displayedMonth.plusMonths(months),

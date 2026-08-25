@@ -215,24 +215,31 @@ class CardPracticeStoreTest {
 		assertEquals(CardPracticeStore.Label.Close, labelsChannel.receive())
 	}
 
+	private val cardId = "science"
+
+	private fun shuffledWords(): List<CardPracticeWord> =
+		words.map { it.withShuffledOptions(seed = "$cardId:${it.id}") }
+
 	private fun inProgress(
 		currentIndex: Int = 0,
 		selectedOptionId: String? = null,
 		answerRevealed: Boolean = false,
 		correct: Boolean = false,
 		correctCount: Int = 0,
-	): CardPracticeStore.State.Content.InProgress =
-		CardPracticeStore.State.Content.InProgress(
-			words = words,
+	): CardPracticeStore.State.Content.InProgress {
+		val sessionWords = shuffledWords()
+		return CardPracticeStore.State.Content.InProgress(
+			words = sessionWords,
 			currentIndex = currentIndex,
-			currentWord = words[currentIndex],
-			totalCount = words.size,
+			currentWord = sessionWords[currentIndex],
+			totalCount = sessionWords.size,
 			progressIndex = currentIndex + 1,
 			selectedOptionId = selectedOptionId,
 			answerRevealed = answerRevealed,
 			correct = correct,
 			correctCount = correctCount,
 		)
+	}
 
 	private fun finished(
 		correctCount: Int,
@@ -245,5 +252,5 @@ class CardPracticeStoreTest {
 	private fun createStore(): CardPracticeStore =
 		CardPracticeStoreFactory(
 			getCardSessionUseCase = getCardSessionUseCase,
-		).create(cardId = "science")
+		).create(cardId = cardId)
 }

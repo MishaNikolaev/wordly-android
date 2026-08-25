@@ -2,6 +2,8 @@ package com.nmichail.wordly.android.features.books.di
 
 import com.nmichail.wordly.android.core.network.di.GeneralRetrofit
 import com.nmichail.wordly.android.features.books.data.api.BooksApi
+import com.nmichail.wordly.android.features.books.data.datasource.BooksDataSource
+import com.nmichail.wordly.android.features.books.data.datasource.BooksDataSourceImpl
 import com.nmichail.wordly.android.features.books.data.repository.BooksRepositoryImpl
 import com.nmichail.wordly.android.features.books.domain.repository.BooksRepository
 import com.nmichail.wordly.android.features.books.presentation.BooksComponent
@@ -14,6 +16,11 @@ import javax.inject.Singleton
 
 @Module
 abstract class BooksModule {
+
+    @Binds
+    abstract fun bindBooksDataSource(
+        impl: BooksDataSourceImpl,
+    ): BooksDataSource
 
     @Binds
     abstract fun bindBooksRepository(

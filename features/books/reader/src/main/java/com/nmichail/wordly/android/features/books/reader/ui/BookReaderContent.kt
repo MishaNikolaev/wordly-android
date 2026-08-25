@@ -123,10 +123,41 @@ internal fun BookReaderWordLookupDialog(
         word = definition.word,
         phonetic = definition.phonetic,
         translation = definition.translation,
+        definition = definition.definition,
         addButtonText = stringResource(R.string.book_reader_add_word),
         addedStatusText = stringResource(R.string.book_reader_word_added_status),
+        noTranslationText = stringResource(R.string.book_reader_word_no_translation),
         added = added,
         onAddClick = onAddClick,
         onDismiss = onDismiss,
     )
+}
+
+@OptIn(androidx.compose.material3.ExperimentalMaterial3Api::class)
+@Composable
+internal fun BookWordLookupLoadingDialog(
+    title: String,
+    onDismiss: () -> Unit,
+) {
+    androidx.compose.material3.ModalBottomSheet(
+        onDismissRequest = onDismiss,
+        sheetState = androidx.compose.material3.rememberModalBottomSheetState(skipPartiallyExpanded = true),
+        shape = androidx.compose.foundation.shape.RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
+        containerColor = MaterialTheme.colorScheme.surface,
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp, vertical = 28.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+        ) {
+            CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
+            Text(
+                text = title,
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onSurface,
+            )
+        }
+    }
 }

@@ -41,7 +41,7 @@ private val getHandlers: Map<Regex, Handler> = mapOf(
 	Regex("^/api/gateway/profile$") to { context, _, response ->
 		response.create(
 			description = "User profile",
-			body = com.nmichail.wordly.android.core.fakenetwork.FakeProfileStore.getProfile(context),
+			body = context.getJson(R.raw.profile_ok),
 		)
 	},
 	Regex("^/api/home$") to { context, _, response ->
@@ -92,7 +92,7 @@ private val getHandlers: Map<Regex, Handler> = mapOf(
 	},
 	Regex("^/api/gateway/cards/([^/]+)/session$") to { context, uri, response ->
 		val cardId = uri.path?.removePrefix("/api/gateway/cards/")?.removeSuffix("/session").orEmpty()
-		if (cardId !in setOf("science", "journalism", "medicine", "engineering")) {
+		if (cardId.isBlank()) {
 			response.error404(context)
 		} else {
 			response.create(description = "Card practice session", body = context.getJson(R.raw.get_cards_session))
@@ -100,27 +100,73 @@ private val getHandlers: Map<Regex, Handler> = mapOf(
 	},
 	Regex("^/api/gateway/constructor/([^/]+)/session$") to { context, uri, response ->
 		val themeId = uri.path?.removePrefix("/api/gateway/constructor/")?.removeSuffix("/session").orEmpty()
-		if (themeId !in setOf("philosophy", "movies", "books")) {
+		if (themeId.isBlank()) {
 			response.error404(context)
 		} else {
-			response.create(description = "Constructor session", body = context.getJson(R.raw.get_constructor_session))
+			val body = JSONObject(context.getJson(R.raw.get_constructor_session)).apply {
+				put("themeId", themeId)
+			}.toString()
+			response.create(description = "Constructor session", body = body)
+		}
+	},
+	Regex("^/api/gateway/books/([^/]+)/detail$") to { context, uri, response ->
+		val bookId = uri.path?.removePrefix("/api/gateway/books/")?.removeSuffix("/detail").orEmpty()
+		val detail = context.bookDetailJson(bookId)
+		if (detail == null) {
+			response.error404(context)
+		} else {
+			response.create(description = "Book detail", body = detail.toString())
 		}
 	},
 	Regex("^/api/gateway/books/([^/]+)$") to { context, uri, response ->
 		val bookId = uri.path?.removePrefix("/api/gateway/books/").orEmpty()
-		if (bookId !in setOf("little-prince", "animal-farm", "1984")) {
+		if (bookId.isBlank()) {
 			response.error404(context)
 		} else {
-			response.create(description = "Book content", body = context.getJson(R.raw.get_book_little_prince))
+			val raw = context.bookContentRaw(bookId)
+			if (raw == null) {
+				response.error404(context)
+			} else {
+				response.create(description = "Book content", body = context.getJson(raw))
+			}
 		}
 	},
 	Regex("^/api/gateway/books/([^/]+)/translation$") to { context, uri, response ->
 		val bookId = uri.path?.removePrefix("/api/gateway/books/")?.removeSuffix("/translation").orEmpty()
-		if (bookId !in setOf("little-prince", "animal-farm", "1984")) {
+		if (bookId.isBlank()) {
 			response.error404(context)
 		} else {
-			response.create(description = "Book translation", body = context.getJson(R.raw.get_book_translation_little_prince))
+			val raw = context.bookTranslationRaw(bookId)
+			if (raw == null) {
+				response.error404(context)
+			} else {
+				response.create(description = "Book translation", body = context.getJson(raw))
+			}
 		}
+	},
+	Regex("^/api/gateway/vocabulary/lookup$") to { _, uri, response ->
+		val query = uri.getQueryParameter("q")?.trim().orEmpty().ifBlank { "resilience" }
+		response.create(
+			description = "Vocabulary lookup",
+			body = JSONObject()
+				.put("word", query)
+				.put("phonetic", "/ˈwɜːd/")
+				.put("translation", "слово, термин")
+				.put("definition", "a single distinct meaningful element of speech or writing")
+				.put("audioUrl", JSONObject.NULL)
+				.put(
+					"examples",
+					JSONArray().put(
+						JSONObject()
+							.put("text", "This word is useful.")
+							.put("translation", "Это слово полезно."),
+					),
+				)
+				.put("level", "A1")
+				.put("difficulty", 1)
+				.put("pos", "noun")
+				.toString(),
+		)
 	},
 )
 
@@ -167,3 +213,53 @@ private fun wordMatchesQuery(word: JSONObject, query: String): Boolean {
 	)
 	return fields.any { it.contains(query, ignoreCase = true) }
 }
+
+private fun Context.findBookCatalogItem(bookId: String): JSONObject? {
+	val catalog = JSONObject(getJson(R.raw.get_books))
+	val sections = catalog.getJSONArray("sections")
+	for (sectionIndex in 0 until sections.length()) {
+		val items = sections.getJSONObject(sectionIndex).getJSONArray("items")
+		for (itemIndex in 0 until items.length()) {
+			val item = items.getJSONObject(itemIndex)
+			if (item.optString("id") == bookId) {
+				return item
+			}
+		}
+	}
+	return null
+}
+
+private fun Context.bookDetailJson(bookId: String): JSONObject? {
+	val item = findBookCatalogItem(bookId) ?: return null
+	return JSONObject()
+		.put("id", bookId)
+		.put("title", item.optString("title"))
+		.put("author", item.optString("author"))
+		.put(
+			"coverUrl",
+			if (item.has("imageUrl") && !item.isNull("imageUrl")) {
+				item.get("imageUrl")
+			} else {
+				JSONObject.NULL
+			},
+		)
+		.put("genre", item.optString("genre"))
+		.put("category", item.optString("category"))
+		.put("badge", item.optString("badge"))
+		.put("description", item.optString("description"))
+}
+
+private fun Context.bookRawResourceId(bookId: String, translation: Boolean): Int? {
+	val normalized = bookId.replace('-', '_')
+	val name = if (translation) {
+		"get_book_translation_$normalized"
+	} else {
+		"get_book_$normalized"
+	}
+	val rawId = resources.getIdentifier(name, "raw", packageName)
+	return rawId.takeIf { it != 0 }
+}
+
+private fun Context.bookContentRaw(bookId: String): Int? = bookRawResourceId(bookId, translation = false)
+
+private fun Context.bookTranslationRaw(bookId: String): Int? = bookRawResourceId(bookId, translation = true)

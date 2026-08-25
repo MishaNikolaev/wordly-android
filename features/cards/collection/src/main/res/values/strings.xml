@@ -2,6 +2,7 @@
 <resources>
 	<string name="cards_back">Назад</string>
 	<string name="cards_level_banner_action">Выбрать уровень</string>
+	<string name="cards_level_dialog_title">Уровень</string>
 	<string name="cards_retry">Повторить</string>
 	<string name="cards_error_title">Не удалось загрузить карточки</string>
 	<string name="cards_error_subtitle">Проверьте соединение и попробуйте снова</string>

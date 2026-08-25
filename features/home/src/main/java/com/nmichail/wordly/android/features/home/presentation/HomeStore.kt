@@ -2,8 +2,8 @@ package com.nmichail.wordly.android.features.home.presentation
 
 import com.arkivanov.mvikotlin.core.store.Store
 import com.nmichail.wordly.android.features.home.domain.entity.Training
-import com.nmichail.wordly.android.features.home.presentation.calendar.MonthDay
-import com.nmichail.wordly.android.features.home.presentation.calendar.WeekDay
+import com.nmichail.wordly.android.shared.calendar.CalendarDay
+import com.nmichail.wordly.android.shared.calendar.WeekDay
 import java.time.YearMonth
 
 interface HomeStore :
@@ -26,7 +26,7 @@ interface HomeStore :
 			val completedDayOffsets: Set<Int>,
 			val displayedMonth: YearMonth,
 			val monthTitle: String,
-			val monthDays: List<MonthDay?>,
+			val monthDays: List<CalendarDay?>,
 			val monthActiveDays: Int,
 			val monthCompletionPercent: Int,
 			val calendarVisible: Boolean,

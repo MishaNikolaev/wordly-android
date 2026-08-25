@@ -5,4 +5,5 @@
 	<string name="constructor_error_title">Не удалось загрузить конструктор</string>
 	<string name="constructor_error_subtitle">Проверьте соединение и попробуйте снова</string>
 	<string name="constructor_level_banner_action">Выбрать уровень</string>
+	<string name="constructor_level_dialog_title">Уровень</string>
 </resources>

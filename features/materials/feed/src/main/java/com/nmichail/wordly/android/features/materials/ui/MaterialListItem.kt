@@ -29,6 +29,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.nmichail.wordly.android.features.materials.ui.component.MaterialsCardBackground
 import com.nmichail.wordly.android.features.materials.ui.component.materialsCardBackgroundStyleFor
+import com.nmichail.wordly.android.shared.catalog.CatalogRemoteImage
 import com.nmichail.wordly.android.component.wui.theme.Wui
 import com.nmichail.wordly.android.features.materials.feed.R
 import com.nmichail.wordly.android.features.materials.domain.entity.MaterialCategory
@@ -61,10 +62,17 @@ internal fun MaterialListItem(
 				.height(84.dp)
 				.clip(RoundedCornerShape(topStart = 10.dp, topEnd = 10.dp)),
 		) {
-			MaterialsCardBackground(
-				style = materialsCardBackgroundStyleFor(item.id),
-				modifier = Modifier.fillMaxSize(),
-			)
+			if (item.photoUrl.isNullOrBlank()) {
+				MaterialsCardBackground(
+					style = materialsCardBackgroundStyleFor(item.id),
+					modifier = Modifier.fillMaxSize(),
+				)
+			} else {
+				CatalogRemoteImage(
+					url = item.photoUrl,
+					modifier = Modifier.fillMaxSize(),
+				)
+			}
 		}
 		MaterialListItemText(
 			item = item,

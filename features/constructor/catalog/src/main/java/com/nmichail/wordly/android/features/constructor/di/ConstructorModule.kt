@@ -2,6 +2,8 @@ package com.nmichail.wordly.android.features.constructor.di
 
 import com.nmichail.wordly.android.core.network.di.GeneralRetrofit
 import com.nmichail.wordly.android.features.constructor.data.api.ConstructorApi
+import com.nmichail.wordly.android.features.constructor.data.datasource.ConstructorDataSource
+import com.nmichail.wordly.android.features.constructor.data.datasource.ConstructorDataSourceImpl
 import com.nmichail.wordly.android.features.constructor.data.repository.ConstructorRepositoryImpl
 import com.nmichail.wordly.android.features.constructor.domain.repository.ConstructorRepository
 import com.nmichail.wordly.android.features.constructor.presentation.ConstructorComponent
@@ -14,6 +16,11 @@ import javax.inject.Singleton
 
 @Module
 abstract class ConstructorModule {
+
+    @Binds
+    abstract fun bindConstructorDataSource(
+        impl: ConstructorDataSourceImpl,
+    ): ConstructorDataSource
 
     @Binds
     abstract fun bindConstructorRepository(

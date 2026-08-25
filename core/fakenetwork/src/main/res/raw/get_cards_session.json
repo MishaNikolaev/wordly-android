@@ -1,56 +1,202 @@
 {
   "words": [
     {
-      "id": "hypothesis",
-      "word": "hypothesis",
-      "phonetic": "/haɪˈpɒθəsɪs/",
+      "id": "patient",
+      "word": "patient",
+      "phonetic": "/ˈpeɪʃnt/",
       "audioUrl": null,
       "options": [
-        { "id": "hypothesis-1", "text": "молекула" },
-        { "id": "hypothesis-2", "text": "гипотеза" },
-        { "id": "hypothesis-3", "text": "гравитация" },
-        { "id": "hypothesis-4", "text": "эксперимент" }
+        {
+          "id": "patient-w0",
+          "text": "врач"
+        },
+        {
+          "id": "patient-w2",
+          "text": "хирург"
+        },
+        {
+          "id": "patient-w4",
+          "text": "лечение"
+        },
+        {
+          "id": "patient-w1",
+          "text": "медсестра"
+        },
+        {
+          "id": "patient-w3",
+          "text": "диагноз"
+        },
+        {
+          "id": "patient-ok",
+          "text": "пациент"
+        }
       ],
-      "correctOptionId": "hypothesis-2"
+      "correctOptionId": "patient-ok"
     },
     {
-      "id": "molecule",
-      "word": "molecule",
-      "phonetic": "/ˈmɒlɪkjuːl/",
+      "id": "diagnosis",
+      "word": "diagnosis",
+      "phonetic": "/ˌdaɪəɡˈnəʊsɪs/",
       "audioUrl": null,
       "options": [
-        { "id": "molecule-1", "text": "молекула" },
-        { "id": "molecule-2", "text": "гипотеза" },
-        { "id": "molecule-3", "text": "реакция" },
-        { "id": "molecule-4", "text": "формула" }
+        {
+          "id": "diagnosis-w2",
+          "text": "анализ"
+        },
+        {
+          "id": "diagnosis-w3",
+          "text": "операция"
+        },
+        {
+          "id": "diagnosis-w0",
+          "text": "лечение"
+        },
+        {
+          "id": "diagnosis-w1",
+          "text": "симптом"
+        },
+        {
+          "id": "diagnosis-w4",
+          "text": "рецепт"
+        },
+        {
+          "id": "diagnosis-ok",
+          "text": "диагноз"
+        }
       ],
-      "correctOptionId": "molecule-1"
+      "correctOptionId": "diagnosis-ok"
     },
     {
-      "id": "gravity",
-      "word": "gravity",
-      "phonetic": "/ˈɡrævəti/",
+      "id": "surgery",
+      "word": "surgery",
+      "phonetic": "/ˈsɜːdʒəri/",
       "audioUrl": null,
       "options": [
-        { "id": "gravity-1", "text": "энергия" },
-        { "id": "gravity-2", "text": "скорость" },
-        { "id": "gravity-3", "text": "гравитация" },
-        { "id": "gravity-4", "text": "давление" }
+        {
+          "id": "surgery-w2",
+          "text": "осмотр"
+        },
+        {
+          "id": "surgery-ok",
+          "text": "операция"
+        },
+        {
+          "id": "surgery-w3",
+          "text": "рецепт"
+        },
+        {
+          "id": "surgery-w4",
+          "text": "диагноз"
+        },
+        {
+          "id": "surgery-w0",
+          "text": "лечение"
+        },
+        {
+          "id": "surgery-w1",
+          "text": "анализ"
+        }
       ],
-      "correctOptionId": "gravity-3"
+      "correctOptionId": "surgery-ok"
     },
     {
-      "id": "experiment",
-      "word": "experiment",
-      "phonetic": "/ɪkˈsperɪmənt/",
+      "id": "symptom",
+      "word": "symptom",
+      "phonetic": "/ˈsɪmptəm/",
       "audioUrl": null,
       "options": [
-        { "id": "experiment-1", "text": "теория" },
-        { "id": "experiment-2", "text": "образец" },
-        { "id": "experiment-3", "text": "наблюдение" },
-        { "id": "experiment-4", "text": "эксперимент" }
+        {
+          "id": "symptom-w2",
+          "text": "диагноз"
+        },
+        {
+          "id": "symptom-w3",
+          "text": "рецепт"
+        },
+        {
+          "id": "symptom-w0",
+          "text": "болезнь"
+        },
+        {
+          "id": "symptom-w1",
+          "text": "лечение"
+        },
+        {
+          "id": "symptom-w4",
+          "text": "анализ"
+        },
+        {
+          "id": "symptom-ok",
+          "text": "симптом"
+        }
       ],
-      "correctOptionId": "experiment-4"
+      "correctOptionId": "symptom-ok"
+    },
+    {
+      "id": "recovery",
+      "word": "recovery",
+      "phonetic": "/rɪˈkʌvəri/",
+      "audioUrl": null,
+      "options": [
+        {
+          "id": "recovery-w0",
+          "text": "болезнь"
+        },
+        {
+          "id": "recovery-w2",
+          "text": "диагноз"
+        },
+        {
+          "id": "recovery-w4",
+          "text": "анализ"
+        },
+        {
+          "id": "recovery-ok",
+          "text": "выздоровление"
+        },
+        {
+          "id": "recovery-w1",
+          "text": "операция"
+        },
+        {
+          "id": "recovery-w3",
+          "text": "симптом"
+        }
+      ],
+      "correctOptionId": "recovery-ok"
+    },
+    {
+      "id": "emergency",
+      "word": "emergency",
+      "phonetic": "/ɪˈmɜːdʒənsi/",
+      "audioUrl": null,
+      "options": [
+        {
+          "id": "emergency-w0",
+          "text": "плановый приём"
+        },
+        {
+          "id": "emergency-w4",
+          "text": "консультация"
+        },
+        {
+          "id": "emergency-w2",
+          "text": "анализ"
+        },
+        {
+          "id": "emergency-w3",
+          "text": "рецепт"
+        },
+        {
+          "id": "emergency-ok",
+          "text": "неотложная помощь"
+        },
+        {
+          "id": "emergency-w1",
+          "text": "осмотр"
+        }
+      ],
+      "correctOptionId": "emergency-ok"
     }
   ]
 }

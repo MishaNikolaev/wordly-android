@@ -42,6 +42,7 @@ fun RootContent(
 					is RootComponent.Child.MainHost -> MainHostContent(
 						component = instance.component,
 						themeMode = themeMode,
+						devEnabled = devEnabled,
 					)
 
 					is RootComponent.Child.NetworkSelection -> NetworkSelectionContent(

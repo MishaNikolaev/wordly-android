@@ -172,6 +172,7 @@ internal class SignUpStoreFactory @Inject constructor(
         }
 
         private fun handleError(error: Exception) {
+            android.util.Log.e("SignUp", "registration failed", error)
             val networkError = networkExceptionConverter.convert(error)
             if (errorDelegate.handleError(networkError) == HandleErrorResult.HANDLED) {
                 dispatch(Msg.SetSubmitting(submitting = false))

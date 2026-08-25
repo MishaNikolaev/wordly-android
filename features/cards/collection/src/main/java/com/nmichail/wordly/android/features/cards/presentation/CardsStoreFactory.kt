@@ -15,7 +15,7 @@ import com.nmichail.wordly.android.features.cards.domain.usecase.GetCardsUseCase
 import com.nmichail.wordly.android.shared.catalog.filterCatalogSections
 import com.nmichail.wordly.android.shared.catalog.findCatalogItem
 import com.nmichail.wordly.android.shared.catalog.matchesCatalogSearch
-import com.nmichail.wordly.android.shared.catalog.updateCatalogLevelSectionTitles
+import com.nmichail.wordly.android.shared.catalog.regroupCatalogSectionsByLevel
 import javax.inject.Inject
 
 internal class CardsStoreFactory @Inject constructor(
@@ -66,14 +66,24 @@ internal class CardsStoreFactory @Inject constructor(
 		override fun CardsStore.State.reduce(msg: Msg): CardsStore.State =
 			when (msg) {
 				Msg.Loading -> CardsStore.State.Loading
-				is Msg.CardsLoaded -> CardsStore.State.Content(
-					title = msg.cards.title,
-					searchQuery = "",
-					searchPlaceholder = msg.cards.searchPlaceholder,
-					levelBanner = msg.cards.levelBanner,
-					allSections = msg.cards.sections,
-					sections = msg.cards.sections,
-				)
+				is Msg.CardsLoaded -> {
+					val level = msg.cards.levelBanner?.levelLabel.orEmpty().ifBlank { "B1" }
+					val sections = regroupCatalogSectionsByLevel(
+						sections = msg.cards.sections,
+						level = level,
+						getItems = { it.items },
+						getBadge = { it.badge },
+						createSection = { title, items -> CardsSection(title = title, items = items) },
+					)
+					CardsStore.State.Content(
+						title = msg.cards.title,
+						searchQuery = "",
+						searchPlaceholder = msg.cards.searchPlaceholder,
+						levelBanner = msg.cards.levelBanner,
+						allSections = sections,
+						sections = sections,
+					)
+				}
 				Msg.SetError -> CardsStore.State.Error
 				is Msg.SearchUpdated -> {
 					val content = this as? CardsStore.State.Content ?: return this
@@ -152,11 +162,12 @@ internal class CardsStoreFactory @Inject constructor(
 			val content = state() as? CardsStore.State.Content ?: return
 			scope.launch {
 				updateEnglishLevelUseCase(level)
-				val allSections = updateCatalogLevelSectionTitles(
+				val allSections = regroupCatalogSectionsByLevel(
 					sections = content.allSections,
 					level = level,
-					getTitle = { it.title },
-					copyWithTitle = { section, title -> section.copy(title = title) },
+					getItems = { it.items },
+					getBadge = { it.badge },
+					createSection = { title, items -> CardsSection(title = title, items = items) },
 				)
 				val sections = filterCatalogSections(
 					sections = allSections,

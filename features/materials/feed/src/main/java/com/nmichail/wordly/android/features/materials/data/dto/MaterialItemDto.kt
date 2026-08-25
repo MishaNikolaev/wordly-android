@@ -5,5 +5,6 @@ data class MaterialItemDto(
 	val category: String,
 	val title: String,
 	val description: String,
+	val photoUrl: String?,
 	val status: String,
 )

@@ -175,9 +175,8 @@ internal class WordsListStoreFactory @Inject constructor(
 					)
 					dispatch(Msg.CatalogLoaded(catalog = catalog))
 				} catch (_: Exception) {
-					if (showLoading) {
-						dispatch(Msg.SetError)
-					}
+					if (!showLoading) return@launch
+					dispatch(Msg.SetError)
 				}
 			}
 		}

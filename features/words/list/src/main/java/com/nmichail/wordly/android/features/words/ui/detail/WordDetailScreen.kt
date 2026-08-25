@@ -18,7 +18,6 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
@@ -49,13 +48,18 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.activity.compose.BackHandler
 import com.nmichail.wordly.android.component.wui.components.button.WuiButton
+import com.nmichail.wordly.android.component.wui.components.calendar.WuiCalendarDay
+import com.nmichail.wordly.android.component.wui.components.calendar.WuiCalendarDayStatusId
 import com.nmichail.wordly.android.component.wui.components.calendar.WuiCalendarDialog
 import com.nmichail.wordly.android.component.wui.theme.Wui
 import com.nmichail.wordly.android.component.wui.theme.WuiTypography
 import com.nmichail.wordly.android.component.wui.theme.isAppInDarkTheme
 import com.nmichail.wordly.android.features.words.list.R
 import com.nmichail.wordly.android.features.words.presentation.WordDetailDialogState
+import com.nmichail.wordly.android.shared.calendar.CalendarDay
+import com.nmichail.wordly.android.shared.calendar.CalendarDayStatus
 import com.nmichail.wordly.android.features.words.domain.entity.WordExample
 import com.nmichail.wordly.android.features.words.domain.entity.WordStatus
 
@@ -74,6 +78,14 @@ fun WordDetailScreen(
 	onPlayAudio: () -> Unit,
 	modifier: Modifier = Modifier,
 ) {
+	BackHandler {
+		if (state.calendar != null) {
+			onDismissCalendar()
+		} else {
+			onDismiss()
+		}
+	}
+
 	WordDetailBody(
 		state = state,
 		onDismiss = onDismiss,
@@ -86,7 +98,7 @@ fun WordDetailScreen(
 	state.calendar?.let { calendar ->
 		WuiCalendarDialog(
 			monthTitle = calendar.monthTitle,
-			days = calendar.days,
+			days = calendar.days.map { day -> day?.toWuiDay() },
 			onDismiss = onDismissCalendar,
 			onTodayClick = onCalendarToday,
 			onPreviousMonthClick = onCalendarPreviousMonth,
@@ -107,91 +119,75 @@ private fun WordDetailBody(
 	modifier: Modifier = Modifier,
 ) {
 	val colorScheme = MaterialTheme.colorScheme
+	val scrollState = rememberScrollState()
 	Column(
 		modifier = modifier
 			.fillMaxSize()
-			.navigationBarsPadding()
 			.padding(horizontal = 16.dp)
-			.padding(top = 20.dp),
+			.padding(top = 8.dp, bottom = 16.dp)
+			.verticalScroll(scrollState),
 		verticalArrangement = Arrangement.spacedBy(12.dp),
 	) {
+		WordDetailCloseButton(onDismiss = onDismiss)
 		Column(
-			modifier = Modifier
-				.weight(1f)
-				.fillMaxWidth()
-				.verticalScroll(rememberScrollState()),
-			verticalArrangement = Arrangement.spacedBy(12.dp),
+			modifier = Modifier.fillMaxWidth(),
+			verticalArrangement = Arrangement.spacedBy(4.dp),
 		) {
-			Box(modifier = Modifier.fillMaxWidth()) {
-				Column(
-					modifier = Modifier
-						.fillMaxWidth()
-						.padding(top = 64.dp),
-					verticalArrangement = Arrangement.spacedBy(4.dp),
-				) {
-					Text(
-						text = state.word,
-						style = WuiTypography.wordDetailWord,
-						color = colorScheme.onSurface,
-					)
-					WordDetailPhonetic(
-						phonetic = state.phonetic,
-						onPlayAudio = onPlayAudio,
-					)
-				}
-				WordDetailCloseButton(
-					onDismiss = onDismiss,
-					modifier = Modifier
-						.align(Alignment.TopStart)
-						.padding(top = 10.dp),
-				)
-			}
-			WordDetailStatusRow(
-				status = state.status,
-				onStatusChange = onStatusChange,
+			Text(
+				text = state.word,
+				style = WuiTypography.wordDetailWord,
+				color = colorScheme.onSurface,
 			)
-			if (!state.translation.isNullOrBlank()) {
-				Text(
-					text = state.translation,
-					style = WuiTypography.wordDetailTranslation,
-					color = colorScheme.onSurface,
-				)
-			}
-			if (!state.definition.isNullOrBlank()) {
-				Text(
-					text = stringResource(R.string.words_detail_definition_label),
-					style = MaterialTheme.typography.labelLarge,
-					fontWeight = FontWeight.SemiBold,
-					color = colorScheme.onSurface,
-				)
-				Text(
-					text = state.definition,
-					style = MaterialTheme.typography.bodyMedium,
-					color = colorScheme.onSurfaceVariant,
-				)
-			}
-			WordDetailExamples(examples = state.examples)
-			Row(
+			WordDetailPhonetic(
+				phonetic = state.phonetic,
+				onPlayAudio = onPlayAudio,
+			)
+		}
+		WordDetailStatusRow(
+			status = state.status,
+			onStatusChange = onStatusChange,
+		)
+		if (!state.translation.isNullOrBlank()) {
+			Text(
+				text = state.translation,
+				style = WuiTypography.wordDetailTranslation,
+				color = colorScheme.onSurface,
+			)
+		}
+		if (!state.definition.isNullOrBlank()) {
+			Text(
+				text = stringResource(R.string.words_detail_definition_label),
+				style = MaterialTheme.typography.labelLarge,
+				fontWeight = FontWeight.SemiBold,
+				color = colorScheme.onSurface,
+			)
+			Text(
+				text = state.definition,
+				style = MaterialTheme.typography.bodyMedium,
+				color = colorScheme.onSurfaceVariant,
+			)
+		}
+		WordDetailExamples(examples = state.examples)
+		Row(
+			modifier = Modifier
+				.fillMaxWidth()
+				.height(IntrinsicSize.Max),
+			horizontalArrangement = Arrangement.spacedBy(8.dp),
+		) {
+			DifficultyBox(
+				difficulty = state.difficulty,
+				maxDifficulty = state.maxDifficulty,
 				modifier = Modifier
-					.fillMaxWidth()
-					.height(IntrinsicSize.Max),
-				horizontalArrangement = Arrangement.spacedBy(8.dp),
-			) {
-				DifficultyBox(
-					difficulty = state.difficulty,
-					maxDifficulty = state.maxDifficulty,
-					modifier = Modifier
-						.weight(1f)
-						.fillMaxHeight(),
-				)
-				RepeatDateBox(
-					label = state.repeatDateLabel,
-					onClick = onOpenCalendar,
-					modifier = Modifier
-						.weight(1f)
-						.fillMaxHeight(),
-				)
-			}
+					.weight(1f)
+					.fillMaxHeight(),
+			)
+			RepeatDateBox(
+				label = state.repeatDateLabel,
+				onClick = onOpenCalendar,
+				modifier = Modifier
+					.weight(1f)
+					.fillMaxHeight(),
+			)
 		}
 		if (state.tags.isNotEmpty()) {
 			WordDetailTags(
@@ -219,7 +215,6 @@ private fun WordDetailBody(
 			} else {
 				MaterialTheme.colorScheme.onPrimary
 			},
-			modifier = Modifier.padding(bottom = 10.dp),
 		)
 	}
 }
@@ -568,3 +563,19 @@ private fun detailTagPalette(index: Int): Color {
 	)
 	return colors[index % colors.size]
 }
+
+private fun CalendarDay.toWuiDay(): WuiCalendarDay =
+	WuiCalendarDay(
+		dayOfMonth = dayOfMonth,
+		statusId = status.toUiId(),
+	)
+
+private fun CalendarDayStatus.toUiId(): String =
+	when (this) {
+		CalendarDayStatus.Completed -> WuiCalendarDayStatusId.Completed
+		CalendarDayStatus.Missed -> WuiCalendarDayStatusId.Missed
+		CalendarDayStatus.Today -> WuiCalendarDayStatusId.Today
+		CalendarDayStatus.Inactive -> WuiCalendarDayStatusId.Inactive
+		CalendarDayStatus.Selected -> WuiCalendarDayStatusId.Selected
+		CalendarDayStatus.Plain -> WuiCalendarDayStatusId.Plain
+	}

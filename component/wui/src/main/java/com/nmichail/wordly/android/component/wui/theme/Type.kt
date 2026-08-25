@@ -152,11 +152,20 @@ object WuiTypography {
 		lineHeight = 16.sp,
 	)
 
+	/** Book reader body — do not use outside book reader. */
 	val bookReaderBody = TextStyle(
-		fontFamily = InterFontFamily,
+		fontFamily = KazimirTextFontFamily,
 		fontWeight = FontWeight.Normal,
 		fontSize = 20.sp,
 		lineHeight = 30.sp,
+	)
+
+	/** Book reading progress label — do not use outside book reader. */
+	val bookReaderProgress = TextStyle(
+		fontFamily = KazimirTextFontFamily,
+		fontWeight = FontWeight.Normal,
+		fontSize = 14.sp,
+		lineHeight = 18.sp,
 	)
 
 	val addWordTitle = TextStyle(

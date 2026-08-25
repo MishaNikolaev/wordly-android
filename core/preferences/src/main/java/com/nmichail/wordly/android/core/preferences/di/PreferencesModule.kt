@@ -1,6 +1,8 @@
 package com.nmichail.wordly.android.core.preferences.di
 
 import com.google.gson.Gson
+import com.nmichail.wordly.android.core.preferences.data.cache.JsonCacheStore
+import com.nmichail.wordly.android.core.preferences.data.cache.JsonCacheStoreImpl
 import com.nmichail.wordly.android.core.preferences.data.repository.ThemeRepositoryImpl
 import com.nmichail.wordly.android.core.preferences.data.repository.TokenRepositoryImpl
 import com.nmichail.wordly.android.core.preferences.domain.repository.ThemeRepository
@@ -23,6 +25,12 @@ abstract class PreferencesModule {
 	abstract fun bindThemeRepository(
 		impl: ThemeRepositoryImpl,
 	): ThemeRepository
+
+	@Binds
+	@Singleton
+	abstract fun bindJsonCacheStore(
+		impl: JsonCacheStoreImpl,
+	): JsonCacheStore
 
 	companion object {
 

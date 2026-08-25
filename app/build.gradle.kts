@@ -1,6 +1,7 @@
 plugins {
 	alias(libs.plugins.wordlyAndroidApplication)
 	alias(libs.plugins.ksp)
+	id("com.google.gms.google-services")
 }
 
 android {
@@ -32,18 +33,25 @@ dependencies {
 	implementation(projects.features.constructor.catalog)
 	implementation(projects.features.constructor.practice)
 	implementation(projects.features.books.library)
+	implementation(projects.features.books.detail)
 	implementation(projects.features.books.reader)
 	implementation(projects.features.words.list)
 	implementation(projects.features.materials.feed)
 	implementation(projects.features.materials.article)
-	implementation(projects.features.profile)
+	implementation(projects.features.profile.account)
+	implementation(projects.features.profile.editor)
+	implementation(projects.features.profile.reminders)
 	implementation(projects.component.wui)
 	implementation(projects.core.network)
+	implementation(projects.core.firebase)
 	implementation(projects.core.preferences)
 	implementation(projects.core.fakenetwork)
 	implementation(projects.core.validation)
 	implementation(projects.shared.englishlevel)
 	implementation(projects.shared.error)
+
+	implementation(platform(libs.firebase.bom))
+	implementation(libs.firebase.auth)
 
 	implementation(libs.decompose)
 	implementation(libs.decompose.compose)

@@ -2,6 +2,7 @@ package com.nmichail.wordly.android.di
 
 import android.app.Application
 import com.nmichail.wordly.android.WordlyApplication
+import com.nmichail.wordly.android.core.firebase.di.FirebaseModule
 import com.nmichail.wordly.android.core.preferences.di.PreferencesModule
 import com.nmichail.wordly.android.shared.englishlevel.di.EnglishLevelModule
 import com.nmichail.wordly.android.shared.error.di.ErrorModule
@@ -16,6 +17,7 @@ import javax.inject.Singleton
 		AppModule::class,
 		NetworkModule::class,
 		PreferencesModule::class,
+		FirebaseModule::class,
 		EnglishLevelModule::class,
 		FeaturesModule::class,
 		ErrorModule::class,

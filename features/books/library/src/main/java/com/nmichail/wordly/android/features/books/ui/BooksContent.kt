@@ -14,13 +14,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -34,21 +33,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import com.nmichail.wordly.android.component.wui.components.button.WuiButton
-import com.nmichail.wordly.android.component.wui.components.card.WuiCatalogCard
-import com.nmichail.wordly.android.component.wui.components.field.WuiSearchField
-import com.nmichail.wordly.android.component.wui.components.text.WuiSectionLabel
 import com.nmichail.wordly.android.component.wui.components.button.WuiTextLink
-import com.nmichail.wordly.android.features.books.library.R
+import com.nmichail.wordly.android.component.wui.components.dialog.WuiSelectionDialog
+import com.nmichail.wordly.android.component.wui.components.field.WuiSearchField
+import com.nmichail.wordly.android.component.wui.R as ComponentR
 import com.nmichail.wordly.android.features.books.domain.entity.BooksLevelBanner
+import com.nmichail.wordly.android.features.books.domain.entity.BooksSection
+import com.nmichail.wordly.android.features.books.library.R
 import com.nmichail.wordly.android.features.books.presentation.BooksComponent
 import com.nmichail.wordly.android.features.books.presentation.BooksStore
-import com.nmichail.wordly.android.shared.catalog.CatalogRemoteImage
-
 @Composable
 fun BooksContent(
     component: BooksComponent,
@@ -135,57 +132,91 @@ private fun BooksLoaded(
     component: BooksComponent,
     modifier: Modifier = Modifier,
 ) {
-    Column(
+    Box(
         modifier = modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
             .statusBarsPadding()
             .navigationBarsPadding(),
     ) {
-        BooksTopBar(
-            title = state.title,
+        BooksCatalogList(
+            state = state,
             onBackClick = component::handleBack,
+            onLevelChange = component::handleLevelChange,
+            onSearchQueryChange = component::handleSearchQueryChange,
+            onBookClick = component::handleBookClick,
         )
-        LazyColumn(
-            modifier = Modifier.fillMaxSize(),
-            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
-        ) {
-            state.levelBanner?.let { banner ->
-                item(key = "level_banner") {
-                    BooksLevelBannerContent(
-                        banner = banner,
-                        onLevelChange = component::handleLevelChange,
-                    )
-                }
-            }
-            item(key = "search") {
-                WuiSearchField(
-                    value = state.searchQuery,
-                    onValueChange = component::handleSearchQueryChange,
-                    placeholder = state.searchPlaceholder,
+    }
+}
+
+@Composable
+private fun BooksCatalogList(
+    state: BooksStore.State.Content,
+    onBackClick: () -> Unit,
+    onLevelChange: (String) -> Unit,
+    onSearchQueryChange: (String) -> Unit,
+    onBookClick: (String) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    LazyColumn(
+        modifier = modifier.fillMaxSize(),
+        contentPadding = PaddingValues(vertical = 8.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp),
+    ) {
+        item(key = "top_bar") {
+            BooksTopBar(
+                title = state.title,
+                onBackClick = onBackClick,
+            )
+        }
+        state.levelBanner?.let { banner ->
+            item(key = "level_banner") {
+                BooksLevelBannerContent(
+                    banner = banner,
+                    onLevelChange = onLevelChange,
+                    modifier = Modifier.padding(horizontal = 16.dp),
                 )
             }
-            state.sections.forEach { section ->
-                item(key = "section_${section.title}") {
-                    WuiSectionLabel(
-                        text = section.title,
-                        modifier = Modifier.padding(top = 8.dp, bottom = 4.dp),
-                    )
-                }
-                items(
-                    items = section.items,
-                    key = { it.id },
-                ) { item ->
-                    WuiCatalogCard(
-                        title = item.title,
-                        subtitle = item.subtitle,
-                        badge = item.badge,
-                        image = { CatalogRemoteImage(url = item.imageUrl) },
-                        onClick = { component.handleBookClick(item.id) },
-                    )
-                }
-            }
+        }
+        item(key = "search") {
+            WuiSearchField(
+                value = state.searchQuery,
+                onValueChange = onSearchQueryChange,
+                placeholder = state.searchPlaceholder,
+                modifier = Modifier.padding(horizontal = 16.dp),
+            )
+        }
+        booksSectionItems(
+            sections = state.sections,
+            onBookClick = onBookClick,
+        )
+    }
+}
+
+private fun LazyListScope.booksSectionItems(
+    sections: List<BooksSection>,
+    onBookClick: (String) -> Unit,
+) {
+    sections.forEach { section ->
+        item(key = "section_${section.title}") {
+            Text(
+                text = section.title,
+                style = MaterialTheme.typography.labelMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .padding(top = 8.dp, bottom = 4.dp),
+            )
+        }
+        items(
+            items = section.items,
+            key = { it.id },
+        ) { item ->
+            BooksListItem(
+                item = item,
+                onClick = { onBookClick(item.id) },
+                modifier = Modifier.padding(horizontal = 16.dp),
+            )
         }
     }
 }
@@ -212,7 +243,6 @@ private fun BooksTopBar(
         Text(
             text = title,
             style = MaterialTheme.typography.titleLarge,
-            fontWeight = FontWeight.SemiBold,
             color = MaterialTheme.colorScheme.onBackground,
             modifier = Modifier.padding(start = 4.dp),
         )
@@ -258,55 +288,44 @@ private fun BooksLevelSelector(
     modifier: Modifier = Modifier,
 ) {
     val colorScheme = MaterialTheme.colorScheme
-    var expanded by remember { mutableStateOf(false) }
+    var showDialog by remember { mutableStateOf(false) }
 
-    Box(modifier = modifier) {
-        Row(
-            modifier = Modifier
-                .clip(MaterialTheme.shapes.extraLarge)
-                .background(colorScheme.primary)
-                .clickable { expanded = true }
-                .padding(horizontal = 12.dp, vertical = 8.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(2.dp),
-        ) {
-            Text(
-                text = selectedLevel,
-                style = MaterialTheme.typography.labelLarge,
-                fontWeight = FontWeight.SemiBold,
-                color = colorScheme.onPrimary,
-            )
-            Icon(
-                imageVector = Icons.Filled.KeyboardArrowDown,
-                contentDescription = stringResource(R.string.books_level_banner_action),
-                tint = colorScheme.onPrimary,
-                modifier = Modifier.size(18.dp),
-            )
-        }
-        DropdownMenu(
-            expanded = expanded,
-            onDismissRequest = { expanded = false },
-        ) {
-            levels.forEach { level ->
-                DropdownMenuItem(
-                    text = {
-                        Text(
-                            text = level,
-                            fontWeight = if (level == selectedLevel) {
-                                FontWeight.SemiBold
-                            } else {
-                                FontWeight.Normal
-                            },
-                        )
-                    },
-                    onClick = {
-                        expanded = false
-                        if (level != selectedLevel) {
-                            onLevelChange(level)
-                        }
-                    },
-                )
-            }
-        }
+    Row(
+        modifier = modifier
+            .clip(MaterialTheme.shapes.extraLarge)
+            .background(colorScheme.primary)
+            .clickable { showDialog = true }
+            .padding(horizontal = 12.dp, vertical = 8.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(2.dp),
+    ) {
+        Text(
+            text = selectedLevel,
+            style = MaterialTheme.typography.labelLarge,
+            color = colorScheme.onPrimary,
+        )
+        Icon(
+            imageVector = Icons.Filled.KeyboardArrowDown,
+            contentDescription = stringResource(R.string.books_level_banner_action),
+            tint = colorScheme.onPrimary,
+            modifier = Modifier.size(18.dp),
+        )
+    }
+
+    if (showDialog) {
+        WuiSelectionDialog(
+            title = stringResource(R.string.books_level_dialog_title),
+            options = levels,
+            selectedOption = selectedLevel,
+            saveButtonText = stringResource(ComponentR.string.common_ok),
+            cancelButtonText = stringResource(ComponentR.string.common_cancel),
+            onDismiss = { showDialog = false },
+            onSave = { level ->
+                showDialog = false
+                if (level != selectedLevel) {
+                    onLevelChange(level)
+                }
+            },
+        )
     }
 }

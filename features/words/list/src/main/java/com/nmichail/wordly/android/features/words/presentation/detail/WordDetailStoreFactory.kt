@@ -15,9 +15,9 @@ import com.nmichail.wordly.android.features.words.domain.entity.WordReview
 import com.nmichail.wordly.android.features.words.domain.entity.WordStatus
 import com.nmichail.wordly.android.features.words.domain.usecase.AddWordToReviewUseCase
 import com.nmichail.wordly.android.features.words.domain.usecase.UpdateWordStatusUseCase
-import com.nmichail.wordly.android.features.words.presentation.RepeatDateFormatter
-import com.nmichail.wordly.android.features.words.presentation.WordCalendarFactory
 import com.nmichail.wordly.android.features.words.presentation.WordDetailDialogState
+import com.nmichail.wordly.android.shared.calendar.RepeatDateFormatter
+import com.nmichail.wordly.android.shared.calendar.SelectionCalendarFactory
 import java.time.LocalDate
 import java.time.YearMonth
 import javax.inject.Inject
@@ -137,8 +137,8 @@ internal class WordDetailStoreFactory @Inject constructor(
 			when (action) {
 				WordDetailStore.CalendarAction.Open -> openRepeatCalendar()
 				WordDetailStore.CalendarAction.Dismiss -> dismissRepeatCalendar()
-				WordDetailStore.CalendarAction.PreviousMonth -> shiftCalendarMonth(-1)
-				WordDetailStore.CalendarAction.NextMonth -> shiftCalendarMonth(1)
+				WordDetailStore.CalendarAction.PreviousMonth -> changeDisplayedMonth(months = -1)
+				WordDetailStore.CalendarAction.NextMonth -> changeDisplayedMonth(months = 1)
 				WordDetailStore.CalendarAction.Today -> selectToday()
 				is WordDetailStore.CalendarAction.DayClick -> selectCalendarDay(action.dayOfMonth)
 			}
@@ -155,7 +155,7 @@ internal class WordDetailStoreFactory @Inject constructor(
 					dialog = dialog.copy(
 						repeatEpochDay = selected,
 						repeatDateLabel = RepeatDateFormatter.label(selected),
-						calendar = WordCalendarFactory.build(
+						calendar = SelectionCalendarFactory.build(
 							yearMonth = yearMonth,
 							selectedEpochDay = selected,
 						),
@@ -169,14 +169,14 @@ internal class WordDetailStoreFactory @Inject constructor(
 			dispatch(Msg.DialogUpdated(dialog = dialog.copy(calendar = null)))
 		}
 
-		private fun shiftCalendarMonth(delta: Long) {
+		private fun changeDisplayedMonth(months: Long) {
 			val dialog = currentDialog() ?: return
 			val calendar = dialog.calendar ?: return
-			val next = YearMonth.of(calendar.year, calendar.month).plusMonths(delta)
+			val next = YearMonth.of(calendar.year, calendar.month).plusMonths(months)
 			dispatch(
 				Msg.DialogUpdated(
 					dialog = dialog.copy(
-						calendar = WordCalendarFactory.build(
+						calendar = SelectionCalendarFactory.build(
 							yearMonth = next,
 							selectedEpochDay = calendar.selectedEpochDay,
 						),
@@ -207,7 +207,7 @@ internal class WordDetailStoreFactory @Inject constructor(
 					dialog = dialog.copy(
 						repeatEpochDay = safeEpochDay,
 						repeatDateLabel = RepeatDateFormatter.label(safeEpochDay),
-						calendar = WordCalendarFactory.build(
+						calendar = SelectionCalendarFactory.build(
 							yearMonth = yearMonth,
 							selectedEpochDay = safeEpochDay,
 						),

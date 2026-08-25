@@ -37,12 +37,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.tooling.preview.Preview
 import com.nmichail.wordly.android.component.wui.theme.WuiTheme
 import com.nmichail.wordly.android.component.wui.theme.Wui
+import com.nmichail.wordly.android.features.words.domain.previewDefinition
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BookWordLookupDialog(
     word: String,
-    translation: String,
+    translation: String?,
     addButtonText: String,
     addedStatusText: String,
     added: Boolean,
@@ -50,6 +51,8 @@ fun BookWordLookupDialog(
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
     phonetic: String? = null,
+    definition: String? = null,
+    noTranslationText: String = "Перевод не найден",
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
@@ -65,6 +68,8 @@ fun BookWordLookupDialog(
             word = word,
             phonetic = phonetic,
             translation = translation,
+            definition = definition,
+            noTranslationText = noTranslationText,
             addButtonText = addButtonText,
             addedStatusText = addedStatusText,
             added = added,
@@ -78,7 +83,9 @@ fun BookWordLookupDialog(
 private fun BookWordLookupSheetContent(
     word: String,
     phonetic: String?,
-    translation: String,
+    translation: String?,
+    definition: String?,
+    noTranslationText: String,
     addButtonText: String,
     addedStatusText: String,
     added: Boolean,
@@ -99,11 +106,22 @@ private fun BookWordLookupSheetContent(
             onDismiss = onDismiss,
         )
         Text(
-            text = translation,
+            text = translation?.takeIf { it.isNotBlank() } ?: noTranslationText,
             style = MaterialTheme.typography.titleMedium,
-            color = MaterialTheme.colorScheme.onSurface,
+            color = if (translation.isNullOrBlank()) {
+                MaterialTheme.colorScheme.onSurfaceVariant
+            } else {
+                MaterialTheme.colorScheme.onSurface
+            },
             modifier = Modifier.padding(bottom = 6.dp),
         )
+        if (!definition.isNullOrBlank()) {
+            Text(
+                text = previewDefinition(definition) ?: definition,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        }
         if (added) {
             BookWordAddedStatus(text = addedStatusText)
         } else {

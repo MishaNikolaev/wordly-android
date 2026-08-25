@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="book_detail_read">Читать</string>
+	<string name="book_detail_close">Назад</string>
+	<string name="book_detail_retry">Повторить</string>
+	<string name="book_detail_error_title">Не удалось загрузить книгу</string>
+	<string name="book_detail_error_subtitle">Проверьте соединение и попробуйте снова</string>
+	<string name="book_detail_similar">Похожие по жанру</string>
+	<string name="book_detail_add_to_important">Добавить в важное</string>
+</resources>

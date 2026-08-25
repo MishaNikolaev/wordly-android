@@ -20,12 +20,18 @@ class NetworkStandRepositoryImpl @Inject constructor(
 			NetworkStand.MOCK
 		} else {
 			when (endpointDataSource.getEndpoint()) {
+				Endpoint.LOCAL -> NetworkStand.LOCAL
 				Endpoint.DEV -> NetworkStand.DEV
 			}
 		}
 
 	override fun setSelected(stand: NetworkStand) {
 		when (stand) {
+			NetworkStand.LOCAL -> {
+				mockDataSource.setMock(false)
+				endpointDataSource.setEndpoint(Endpoint.LOCAL)
+			}
+
 			NetworkStand.DEV -> {
 				mockDataSource.setMock(false)
 				endpointDataSource.setEndpoint(Endpoint.DEV)

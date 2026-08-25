@@ -20,6 +20,7 @@ interface BookReaderStore :
             val translationVisible: Boolean,
             val translating: Boolean,
             val selectedWord: BookWordDefinition?,
+            val wordLookupLoading: Boolean = false,
             val showWordAddedDialog: Boolean,
         ) : State
 

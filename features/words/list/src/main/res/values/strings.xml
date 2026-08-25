@@ -17,6 +17,7 @@
 	<string name="words_add_title">Добавить слово</string>
 	<string name="words_add_word_label">Слово</string>
 	<string name="words_add_examples_label">ПРИМЕРЫ</string>
+	<string name="words_add_examples_more">…</string>
 	<string name="words_add_confirm">Добавить в словарь</string>
 	<string name="words_add_close">Закрыть</string>
 	<string name="words_add_autofilled">автозаполнено</string>

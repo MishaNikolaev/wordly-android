@@ -1,37 +1,274 @@
 {
-  "themeId": "philosophy",
-  "themeTitle": "Философские мысли",
+  "themeId": "b2-inception",
+  "themeTitle": "Начало",
   "phrases": [
     {
-      "id": "socrates-1",
-      "question": "Я знаю, что ничего не знаю.",
-      "author": "Сократ",
+      "id": "b2-inc-p1",
+      "question": "Нам нужно идти глубже.",
+      "author": "Inception",
       "words": [
-        { "id": "w1", "text": "I" },
-        { "id": "w2", "text": "know" },
-        { "id": "w3", "text": "that" },
-        { "id": "w4", "text": "I" },
-        { "id": "w5", "text": "know" },
-        { "id": "w6", "text": "nothing" },
-        { "id": "w7", "text": "never" },
-        { "id": "w8", "text": "am" }
+        {
+          "id": "b2-inc-p1-c1",
+          "text": "need"
+        },
+        {
+          "id": "b2-inc-p1-c3",
+          "text": "go"
+        },
+        {
+          "id": "b2-inc-p1-d4",
+          "text": "out"
+        },
+        {
+          "id": "b2-inc-p1-d0",
+          "text": "faster"
+        },
+        {
+          "id": "b2-inc-p1-c2",
+          "text": "to"
+        },
+        {
+          "id": "b2-inc-p1-d1",
+          "text": "higher"
+        },
+        {
+          "id": "b2-inc-p1-d2",
+          "text": "back"
+        },
+        {
+          "id": "b2-inc-p1-d5",
+          "text": "in"
+        },
+        {
+          "id": "b2-inc-p1-c0",
+          "text": "We"
+        },
+        {
+          "id": "b2-inc-p1-c4",
+          "text": "deeper"
+        },
+        {
+          "id": "b2-inc-p1-d6",
+          "text": "up"
+        },
+        {
+          "id": "b2-inc-p1-d3",
+          "text": "home"
+        }
       ],
-      "correctOrder": ["w1", "w2", "w3", "w4", "w5", "w6"]
+      "correctOrder": [
+        "b2-inc-p1-c0",
+        "b2-inc-p1-c1",
+        "b2-inc-p1-c2",
+        "b2-inc-p1-c3",
+        "b2-inc-p1-c4"
+      ]
     },
     {
-      "id": "descartes-1",
-      "question": "Я мыслю, следовательно, я существую.",
-      "author": "Декарт",
+      "id": "b2-inc-p2",
+      "question": "Идея — устойчивый паразит.",
+      "author": "Inception",
       "words": [
-        { "id": "d1", "text": "I" },
-        { "id": "d2", "text": "think" },
-        { "id": "d3", "text": "therefore" },
-        { "id": "d4", "text": "I" },
-        { "id": "d5", "text": "am" },
-        { "id": "d6", "text": "exist" },
-        { "id": "d7", "text": "so" }
+        {
+          "id": "b2-inc-p2-d4",
+          "text": "song"
+        },
+        {
+          "id": "b2-inc-p2-c3",
+          "text": "like"
+        },
+        {
+          "id": "b2-inc-p2-d6",
+          "text": "book"
+        },
+        {
+          "id": "b2-inc-p2-d1",
+          "text": "plan"
+        },
+        {
+          "id": "b2-inc-p2-d2",
+          "text": "game"
+        },
+        {
+          "id": "b2-inc-p2-c4",
+          "text": "a"
+        },
+        {
+          "id": "b2-inc-p2-c1",
+          "text": "idea"
+        },
+        {
+          "id": "b2-inc-p2-d5",
+          "text": "film"
+        },
+        {
+          "id": "b2-inc-p2-c5",
+          "text": "virus"
+        },
+        {
+          "id": "b2-inc-p2-d0",
+          "text": "dream"
+        },
+        {
+          "id": "b2-inc-p2-d3",
+          "text": "story"
+        },
+        {
+          "id": "b2-inc-p2-c0",
+          "text": "An"
+        },
+        {
+          "id": "b2-inc-p2-c2",
+          "text": "is"
+        }
       ],
-      "correctOrder": ["d1", "d2", "d3", "d4", "d5"]
+      "correctOrder": [
+        "b2-inc-p2-c0",
+        "b2-inc-p2-c1",
+        "b2-inc-p2-c2",
+        "b2-inc-p2-c3",
+        "b2-inc-p2-c4",
+        "b2-inc-p2-c5"
+      ]
+    },
+    {
+      "id": "b2-inc-p3",
+      "question": "Ты должен верить в реальность того, что ты видишь.",
+      "author": "Inception",
+      "words": [
+        {
+          "id": "b2-inc-p3-c4",
+          "text": "the"
+        },
+        {
+          "id": "b2-inc-p3-c1",
+          "text": "must"
+        },
+        {
+          "id": "b2-inc-p3-c0",
+          "text": "You"
+        },
+        {
+          "id": "b2-inc-p3-d0",
+          "text": "dream"
+        },
+        {
+          "id": "b2-inc-p3-d4",
+          "text": "game"
+        },
+        {
+          "id": "b2-inc-p3-c6",
+          "text": "you"
+        },
+        {
+          "id": "b2-inc-p3-c5",
+          "text": "reality"
+        },
+        {
+          "id": "b2-inc-p3-d2",
+          "text": "story"
+        },
+        {
+          "id": "b2-inc-p3-d1",
+          "text": "truth"
+        },
+        {
+          "id": "b2-inc-p3-d3",
+          "text": "world"
+        },
+        {
+          "id": "b2-inc-p3-d5",
+          "text": "plan"
+        },
+        {
+          "id": "b2-inc-p3-c7",
+          "text": "see"
+        },
+        {
+          "id": "b2-inc-p3-c2",
+          "text": "believe"
+        },
+        {
+          "id": "b2-inc-p3-d6",
+          "text": "hope"
+        },
+        {
+          "id": "b2-inc-p3-c3",
+          "text": "in"
+        }
+      ],
+      "correctOrder": [
+        "b2-inc-p3-c0",
+        "b2-inc-p3-c1",
+        "b2-inc-p3-c2",
+        "b2-inc-p3-c3",
+        "b2-inc-p3-c4",
+        "b2-inc-p3-c5",
+        "b2-inc-p3-c6",
+        "b2-inc-p3-c7"
+      ]
+    },
+    {
+      "id": "b2-inc-p1",
+      "question": "Нам нужно идти глубже.",
+      "author": "Inception",
+      "words": [
+        {
+          "id": "b2-inc-p1-c1",
+          "text": "need"
+        },
+        {
+          "id": "b2-inc-p1-c3",
+          "text": "go"
+        },
+        {
+          "id": "b2-inc-p1-d4",
+          "text": "out"
+        },
+        {
+          "id": "b2-inc-p1-d0",
+          "text": "faster"
+        },
+        {
+          "id": "b2-inc-p1-c2",
+          "text": "to"
+        },
+        {
+          "id": "b2-inc-p1-d1",
+          "text": "higher"
+        },
+        {
+          "id": "b2-inc-p1-d2",
+          "text": "back"
+        },
+        {
+          "id": "b2-inc-p1-d5",
+          "text": "in"
+        },
+        {
+          "id": "b2-inc-p1-c0",
+          "text": "We"
+        },
+        {
+          "id": "b2-inc-p1-c4",
+          "text": "deeper"
+        },
+        {
+          "id": "b2-inc-p1-d6",
+          "text": "up"
+        },
+        {
+          "id": "b2-inc-p1-d3",
+          "text": "home"
+        }
+      ],
+      "correctOrder": [
+        "b2-inc-p1-c0",
+        "b2-inc-p1-c1",
+        "b2-inc-p1-c2",
+        "b2-inc-p1-c3",
+        "b2-inc-p1-c4"
+      ]
     }
   ]
 }

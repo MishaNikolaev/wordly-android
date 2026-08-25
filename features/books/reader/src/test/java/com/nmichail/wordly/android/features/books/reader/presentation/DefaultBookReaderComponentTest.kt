@@ -7,15 +7,19 @@ import com.nmichail.wordly.android.features.books.reader.domain.entity.BookConte
 import com.nmichail.wordly.android.features.books.reader.domain.entity.BookParagraph
 import com.nmichail.wordly.android.features.books.reader.domain.entity.BookTextSegment
 import com.nmichail.wordly.android.features.books.reader.domain.entity.BookTextSegmentType
+import com.nmichail.wordly.android.features.books.reader.domain.entity.BookTranslation
 import com.nmichail.wordly.android.features.books.reader.domain.entity.BookWordDefinition
 import com.nmichail.wordly.android.features.books.reader.domain.usecase.GetBookContentUseCase
 import com.nmichail.wordly.android.features.books.reader.domain.usecase.GetBookTranslationUseCase
+import com.nmichail.wordly.android.features.words.domain.usecase.AddWordUseCase
+import com.nmichail.wordly.android.features.words.domain.usecase.LookupWordUseCase
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.junit.jupiter.MockitoExtension
+import org.mockito.kotlin.any
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
@@ -30,6 +34,8 @@ class DefaultBookReaderComponentTest {
 
 	private val getBookContentUseCase: GetBookContentUseCase = mock()
 	private val getBookTranslationUseCase: GetBookTranslationUseCase = mock()
+	private val lookupWordUseCase: LookupWordUseCase = mock()
+	private val addWordUseCase: AddWordUseCase = mock()
 	private val bookReaderRouter: BookReaderRouter = mock()
 	private val onAddWordToCard: (BookWordDefinition) -> Unit = mock()
 
@@ -65,12 +71,16 @@ class DefaultBookReaderComponentTest {
 	@BeforeEach
 	fun setUp() = runTest {
 		whenever(getBookContentUseCase("little-prince")) doReturn book
+		whenever(getBookTranslationUseCase("little-prince")) doReturn BookTranslation(paragraphs = emptyList())
+		whenever(addWordUseCase(any())).thenReturn(Unit)
 		component = DefaultBookReaderComponent(
 			componentContext = createTestComponentContext(),
 			bookId = "little-prince",
 			bookReaderStoreFactory = BookReaderStoreFactory(
 				getBookContentUseCase = getBookContentUseCase,
 				getBookTranslationUseCase = getBookTranslationUseCase,
+				lookupWordUseCase = lookupWordUseCase,
+				addWordUseCase = addWordUseCase,
 			),
 			bookReaderRouter = bookReaderRouter,
 			onAddWordToCard = onAddWordToCard,

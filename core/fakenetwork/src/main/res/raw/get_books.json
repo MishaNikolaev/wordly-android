@@ -4,37 +4,42 @@
   "levelBanner": {
     "text": "Ваш уровень / книги подбираются под него",
     "levelLabel": "B2",
-    "levels": ["A1", "A2", "B1", "B2", "C1", "C2"]
+    "levels": [
+      "A1",
+      "A2",
+      "B1",
+      "B2",
+      "C1",
+      "C2"
+    ]
   },
   "sections": [
     {
-      "title": "Под ваш уровень · B2",
+      "title": "Mock · демо",
       "items": [
         {
           "id": "little-prince",
-          "title": "The Little Prince",
-          "subtitle": "Antoine de Saint-Exupéry",
-          "badge": "B1",
-          "imageUrl": null
+          "title": "Маленький принц",
+          "subtitle": "Антуан де Сент-Экзюпери",
+          "author": "Антуан де Сент-Экзюпери",
+          "genre": "Сказка",
+          "category": "6+",
+          "badge": "A2",
+          "imageUrl": "https://i1.storeland.net/3/1629/216281990/075a3e/cover1w600-7-jpg.jpg",
+          "description": "Философская сказка о Маленьком принце, дружбе, любви и ответственности.",
+          "readersCount": 13800
         },
         {
-          "id": "animal-farm",
-          "title": "Animal Farm",
-          "subtitle": "George Orwell",
+          "id": "time-machine",
+          "title": "Машина времени",
+          "subtitle": "Герберт Уэллс",
+          "author": "Герберт Уэллс",
+          "genre": "Фантастика",
+          "category": "12+",
           "badge": "B1",
-          "imageUrl": null
-        }
-      ]
-    },
-    {
-      "title": "Другие уровни",
-      "items": [
-        {
-          "id": "1984",
-          "title": "1984",
-          "subtitle": "George Orwell",
-          "badge": "B2",
-          "imageUrl": null
+          "imageUrl": "https://imo10.labirint.ru/books/934612/cover.jpg/484-0",
+          "description": "Путешественник во времени оказывается в далёком будущем человечества.",
+          "readersCount": 7200
         }
       ]
     }

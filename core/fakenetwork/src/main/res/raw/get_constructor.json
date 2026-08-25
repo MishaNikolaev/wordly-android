@@ -4,37 +4,321 @@
   "levelBanner": {
     "text": "Ваш уровень / темы подбираются под него",
     "levelLabel": "B2",
-    "levels": ["A1", "A2", "B1", "B2", "C1", "C2"]
+    "levels": [
+      "A1",
+      "A2",
+      "B1",
+      "B2",
+      "C1",
+      "C2"
+    ]
   },
   "sections": [
     {
-      "title": "Под ваш уровень · B2",
+      "title": "Уровень A1",
       "items": [
         {
-          "id": "philosophy",
-          "title": "Философские мысли",
-          "subtitle": "4 фразы",
-          "badge": "B2",
-          "imageUrl": null
+          "id": "a1-disney",
+          "title": "Классика Disney",
+          "subtitle": "4 phrases",
+          "badge": "A1",
+          "imageUrl": "https://images.pexels.com/photos/33129/popcorn-movie-party-entertainment.jpg?auto=compress&cs=tinysrgb&w=800"
         },
         {
-          "id": "movies",
-          "title": "Цитаты из фильмов",
-          "subtitle": "4 фразы",
-          "badge": "B2",
-          "imageUrl": null
+          "id": "a1-pixar",
+          "title": "Мультфильмы Pixar",
+          "subtitle": "4 phrases",
+          "badge": "A1",
+          "imageUrl": "https://images.pexels.com/photos/799137/pexels-photo-799137.jpeg?auto=compress&cs=tinysrgb&w=800"
+        },
+        {
+          "id": "a1-fairy-tales",
+          "title": "Сказки",
+          "subtitle": "4 phrases",
+          "badge": "A1",
+          "imageUrl": "https://images.pexels.com/photos/256541/pexels-photo-256541.jpeg?auto=compress&cs=tinysrgb&w=800"
+        },
+        {
+          "id": "a1-children-books",
+          "title": "Детские книги",
+          "subtitle": "4 phrases",
+          "badge": "A1",
+          "imageUrl": "https://images.pexels.com/photos/159711/books-bookstore-book-reading-159711.jpeg?auto=compress&cs=tinysrgb&w=800"
+        },
+        {
+          "id": "a1-simple-movies",
+          "title": "Простые фразы из фильмов",
+          "subtitle": "4 phrases",
+          "badge": "A1",
+          "imageUrl": "https://images.pexels.com/photos/7991579/pexels-photo-7991579.jpeg?auto=compress&cs=tinysrgb&w=800"
         }
       ]
     },
     {
-      "title": "Другие уровни",
+      "title": "Уровень A2",
       "items": [
         {
-          "id": "books",
-          "title": "Цитаты из книг",
-          "subtitle": "3 фразы",
+          "id": "a2-harry-potter",
+          "title": "Гарри Поттер",
+          "subtitle": "4 phrases",
+          "badge": "A2",
+          "imageUrl": "https://covers.openlibrary.org/b/isbn/9780747532699-L.jpg"
+        },
+        {
+          "id": "a2-forrest-gump",
+          "title": "Форрест Гамп",
+          "subtitle": "4 phrases",
+          "badge": "A2",
+          "imageUrl": "https://images.pexels.com/photos/346885/pexels-photo-346885.jpeg?auto=compress&cs=tinysrgb&w=800"
+        },
+        {
+          "id": "a2-little-prince",
+          "title": "Маленький принц",
+          "subtitle": "4 phrases",
+          "badge": "A2",
+          "imageUrl": "https://covers.openlibrary.org/b/isbn/9780156013987-L.jpg"
+        },
+        {
+          "id": "a2-shrek",
+          "title": "Шрек",
+          "subtitle": "4 phrases",
+          "badge": "A2",
+          "imageUrl": "https://images.pexels.com/photos/235294/pexels-photo-235294.jpeg?auto=compress&cs=tinysrgb&w=800"
+        },
+        {
+          "id": "a2-pride-prejudice",
+          "title": "Гордость и предубеждение",
+          "subtitle": "4 phrases",
+          "badge": "A2",
+          "imageUrl": "https://covers.openlibrary.org/b/isbn/9780141439518-L.jpg"
+        }
+      ]
+    },
+    {
+      "title": "Уровень B1",
+      "items": [
+        {
+          "id": "b1-matrix",
+          "title": "Матрица",
+          "subtitle": "4 phrases",
           "badge": "B1",
-          "imageUrl": null
+          "imageUrl": "https://images.pexels.com/photos/546819/pexels-photo-546819.jpeg?auto=compress&cs=tinysrgb&w=800"
+        },
+        {
+          "id": "b1-lotr",
+          "title": "Властелин колец",
+          "subtitle": "4 phrases",
+          "badge": "B1",
+          "imageUrl": "https://covers.openlibrary.org/b/isbn/9780618640157-L.jpg"
+        },
+        {
+          "id": "b1-gatsby",
+          "title": "Великий Гэтсби",
+          "subtitle": "4 phrases",
+          "badge": "B1",
+          "imageUrl": "https://covers.openlibrary.org/b/isbn/9780743273565-L.jpg"
+        },
+        {
+          "id": "b1-interstellar",
+          "title": "Интерстеллар",
+          "subtitle": "4 phrases",
+          "badge": "B1",
+          "imageUrl": "https://images.pexels.com/photos/2156881/pexels-photo-2156881.jpeg?auto=compress&cs=tinysrgb&w=800"
+        },
+        {
+          "id": "b1-sherlock",
+          "title": "Шерлок Холмс",
+          "subtitle": "4 phrases",
+          "badge": "B1",
+          "imageUrl": "https://covers.openlibrary.org/b/isbn/9780141034324-L.jpg"
+        }
+      ]
+    },
+    {
+      "title": "Уровень B2",
+      "items": [
+        {
+          "id": "b2-inception",
+          "title": "Начало",
+          "subtitle": "4 phrases",
+          "badge": "B2",
+          "imageUrl": "https://images.pexels.com/photos/8728382/pexels-photo-8728382.jpeg?auto=compress&cs=tinysrgb&w=800"
+        },
+        {
+          "id": "b2-1984",
+          "title": "1984",
+          "subtitle": "4 phrases",
+          "badge": "B2",
+          "imageUrl": "https://covers.openlibrary.org/b/isbn/9780451524935-L.jpg"
+        },
+        {
+          "id": "b2-pulp-fiction",
+          "title": "Криминальное чтиво",
+          "subtitle": "4 phrases",
+          "badge": "B2",
+          "imageUrl": "https://covers.openlibrary.org/b/isbn/9780571201822-L.jpg"
+        },
+        {
+          "id": "b2-jane-eyre",
+          "title": "Джейн Эйр",
+          "subtitle": "4 phrases",
+          "badge": "B2",
+          "imageUrl": "https://covers.openlibrary.org/b/isbn/9780141441146-L.jpg"
+        },
+        {
+          "id": "b2-fight-club",
+          "title": "Бойцовский клуб",
+          "subtitle": "4 phrases",
+          "badge": "B2",
+          "imageUrl": "https://images.pexels.com/photos/4761792/pexels-photo-4761792.jpeg?auto=compress&cs=tinysrgb&w=800"
+        }
+      ]
+    },
+    {
+      "title": "Уровень C1",
+      "items": [
+        {
+          "id": "c1-shawshank",
+          "title": "Побег из Шоушенка",
+          "subtitle": "4 phrases",
+          "badge": "C1",
+          "imageUrl": "https://images.pexels.com/photos/269563/pexels-photo-269563.jpeg?auto=compress&cs=tinysrgb&w=800"
+        },
+        {
+          "id": "c1-hamlet",
+          "title": "Гамлет",
+          "subtitle": "4 phrases",
+          "badge": "C1",
+          "imageUrl": "https://covers.openlibrary.org/b/isbn/9780743477123-L.jpg"
+        },
+        {
+          "id": "c1-godfather",
+          "title": "Крёстный отец",
+          "subtitle": "4 phrases",
+          "badge": "C1",
+          "imageUrl": "https://covers.openlibrary.org/b/isbn/9780451205766-L.jpg"
+        },
+        {
+          "id": "c1-dune",
+          "title": "Дюна",
+          "subtitle": "4 phrases",
+          "badge": "C1",
+          "imageUrl": "https://covers.openlibrary.org/b/isbn/9780441172717-L.jpg"
+        },
+        {
+          "id": "c1-oscar-wilde",
+          "title": "Оскар Уайльд",
+          "subtitle": "4 phrases",
+          "badge": "C1",
+          "imageUrl": "https://covers.openlibrary.org/b/isbn/9780141439570-L.jpg"
+        }
+      ]
+    },
+    {
+      "title": "Уровень C2",
+      "items": [
+        {
+          "id": "c2-blade-runner",
+          "title": "Бегущий по лезвию",
+          "subtitle": "4 phrases",
+          "badge": "C2",
+          "imageUrl": "https://images.pexels.com/photos/2156/sky-earth-space-working.jpg?auto=compress&cs=tinysrgb&w=800"
+        },
+        {
+          "id": "c2-moby-dick",
+          "title": "Моби Дик",
+          "subtitle": "4 phrases",
+          "badge": "C2",
+          "imageUrl": "https://covers.openlibrary.org/b/isbn/9780142437247-L.jpg"
+        },
+        {
+          "id": "c2-apocalypse-now",
+          "title": "Апокалипсис сегодня",
+          "subtitle": "4 phrases",
+          "badge": "C2",
+          "imageUrl": "https://images.pexels.com/photos/269563/pexels-photo-269563.jpeg?auto=compress&cs=tinysrgb&w=800"
+        },
+        {
+          "id": "c2-ulysses",
+          "title": "Модернистская литература",
+          "subtitle": "4 phrases",
+          "badge": "C2",
+          "imageUrl": "https://covers.openlibrary.org/b/isbn/9780141182803-L.jpg"
+        },
+        {
+          "id": "c2-king-lear",
+          "title": "Король Лир",
+          "subtitle": "4 phrases",
+          "badge": "C2",
+          "imageUrl": "https://covers.openlibrary.org/b/isbn/9780743482769-L.jpg"
+        }
+      ]
+    },
+    {
+      "title": "Цитаты из фильмов",
+      "items": [
+        {
+          "id": "rhetoric-c2",
+          "title": "Сложная риторика",
+          "subtitle": "4 фразы",
+          "badge": "C2",
+          "imageUrl": "https://covers.openlibrary.org/b/isbn/9780743482769-L.jpg"
+        },
+        {
+          "id": "movie-inception",
+          "title": "Начало",
+          "subtitle": "15 фраз",
+          "badge": "B2",
+          "imageUrl": "https://images.pexels.com/photos/8728382/pexels-photo-8728382.jpeg?auto=compress&cs=tinysrgb&w=800"
+        },
+        {
+          "id": "movie-titanic",
+          "title": "Титаник",
+          "subtitle": "15 фраз",
+          "badge": "A2",
+          "imageUrl": "https://images.pexels.com/photos/7234263/pexels-photo-7234263.jpeg?auto=compress&cs=tinysrgb&w=800"
+        },
+        {
+          "id": "movie-gladiator",
+          "title": "Гладиатор",
+          "subtitle": "15 фраз",
+          "badge": "B1",
+          "imageUrl": "https://covers.openlibrary.org/b/isbn/9780451524935-L.jpg"
+        },
+        {
+          "id": "movie-interstellar",
+          "title": "Интерстеллар",
+          "subtitle": "15 фраз",
+          "badge": "B2",
+          "imageUrl": "https://covers.openlibrary.org/b/isbn/9781101912256-L.jpg"
+        },
+        {
+          "id": "movie-back-to-future",
+          "title": "Назад в будущее",
+          "subtitle": "15 фраз",
+          "badge": "A2",
+          "imageUrl": "https://covers.openlibrary.org/b/isbn/9780345410016-L.jpg"
+        },
+        {
+          "id": "movie-joker",
+          "title": "Джокер",
+          "subtitle": "15 фраз",
+          "badge": "C1",
+          "imageUrl": "https://covers.openlibrary.org/b/isbn/9781401225810-L.jpg"
+        },
+        {
+          "id": "movie-harry-potter",
+          "title": "Гарри Поттер",
+          "subtitle": "15 фраз",
+          "badge": "A2",
+          "imageUrl": "https://covers.openlibrary.org/b/isbn/9780747532699-L.jpg"
+        },
+        {
+          "id": "movie-pulp-fiction-ru",
+          "title": "Криминальное чтиво",
+          "subtitle": "15 фраз",
+          "badge": "B2",
+          "imageUrl": "https://covers.openlibrary.org/b/isbn/9780571201822-L.jpg"
         }
       ]
     }

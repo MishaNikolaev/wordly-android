@@ -2,6 +2,8 @@ package com.nmichail.wordly.android.features.home.di
 
 import com.nmichail.wordly.android.core.network.di.GeneralRetrofit
 import com.nmichail.wordly.android.features.home.data.api.HomeApi
+import com.nmichail.wordly.android.features.home.data.datasource.HomeDataSource
+import com.nmichail.wordly.android.features.home.data.datasource.HomeDataSourceImpl
 import com.nmichail.wordly.android.features.home.data.repository.HomeRepositoryImpl
 import com.nmichail.wordly.android.features.home.domain.repository.HomeRepository
 import com.nmichail.wordly.android.features.home.presentation.DefaultHomeComponentFactory
@@ -15,6 +17,11 @@ import javax.inject.Singleton
 
 @Module
 abstract class HomeModule {
+
+	@Binds
+	abstract fun bindHomeDataSource(
+		impl: HomeDataSourceImpl,
+	): HomeDataSource
 
 	@Binds
 	abstract fun bindHomeRepository(

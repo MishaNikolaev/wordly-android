@@ -32,8 +32,9 @@ fun CatalogRemoteImage(
 			},
 			modifier = contentModifier,
 			update = { imageView ->
-				Glide.with(imageView)
+				Glide.with(imageView.context.applicationContext)
 					.load(url)
+					.centerCrop()
 					.placeholder(R.drawable.frame)
 					.error(R.drawable.frame)
 					.into(imageView)
