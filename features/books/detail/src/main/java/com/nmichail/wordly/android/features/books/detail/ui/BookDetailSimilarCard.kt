@@ -27,6 +27,7 @@ internal fun BookDetailSimilarCard(
 	onClick: () -> Unit,
 	modifier: Modifier = Modifier,
 ) {
+	val colorScheme = MaterialTheme.colorScheme
 	Column(
 		modifier = modifier
 			.clickable(
@@ -46,7 +47,7 @@ internal fun BookDetailSimilarCard(
 				)
 				.clip(shape)
 				.aspectRatio(COVER_ASPECT_RATIO)
-				.background(MaterialTheme.colorScheme.surfaceContainerHigh),
+				.background(colorScheme.surfaceContainerHigh),
 		) {
 			CatalogRemoteImage(
 				url = item.imageUrl,
@@ -56,14 +57,14 @@ internal fun BookDetailSimilarCard(
 		Text(
 			text = item.title,
 			style = MaterialTheme.typography.titleSmall,
-			color = MaterialTheme.colorScheme.onBackground,
+			color = colorScheme.onBackground,
 			maxLines = 2,
 			overflow = TextOverflow.Ellipsis,
 		)
 		Text(
 			text = item.author,
 			style = MaterialTheme.typography.bodySmall,
-			color = MaterialTheme.colorScheme.onSurfaceVariant,
+			color = colorScheme.onSurfaceVariant,
 			maxLines = 1,
 			overflow = TextOverflow.Ellipsis,
 		)

@@ -38,17 +38,18 @@ internal fun MaterialRatingSection(
 	onDislikeClick: () -> Unit,
 	modifier: Modifier = Modifier,
 ) {
+	val colorScheme = MaterialTheme.colorScheme
 	Column(modifier = modifier.fillMaxWidth()) {
 		Text(
 			text = stringResource(R.string.materials_detail_rate_title),
 			style = MaterialTheme.typography.titleMedium,
 			fontWeight = FontWeight.SemiBold,
-			color = MaterialTheme.colorScheme.onBackground,
+			color = colorScheme.onBackground,
 		)
 		Text(
 			text = stringResource(R.string.materials_detail_rate_subtitle),
 			style = MaterialTheme.typography.bodyMedium,
-			color = MaterialTheme.colorScheme.onSurfaceVariant,
+			color = colorScheme.onSurfaceVariant,
 			modifier = Modifier.padding(top = 6.dp),
 		)
 		Row(

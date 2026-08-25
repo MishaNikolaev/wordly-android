@@ -103,6 +103,7 @@ private fun BookDetailError(
 	onReadClick: () -> Unit,
 	modifier: Modifier = Modifier,
 ) {
+	val colorScheme = MaterialTheme.colorScheme
 	Column(
 		modifier = modifier
 			.statusBarsPadding()
@@ -114,13 +115,13 @@ private fun BookDetailError(
 		Text(
 			text = stringResource(R.string.book_detail_error_title),
 			style = MaterialTheme.typography.titleMedium,
-			color = MaterialTheme.colorScheme.onSurface,
+			color = colorScheme.onSurface,
 			textAlign = TextAlign.Center,
 		)
 		Text(
 			text = stringResource(R.string.book_detail_error_subtitle),
 			style = MaterialTheme.typography.bodyMedium,
-			color = MaterialTheme.colorScheme.onSurfaceVariant,
+			color = colorScheme.onSurfaceVariant,
 			textAlign = TextAlign.Center,
 			modifier = Modifier.padding(top = 8.dp),
 		)
@@ -266,6 +267,7 @@ private fun BookDetailSimilarSection(
 ) {
 	if (similarBooks.isEmpty()) return
 
+	val colorScheme = MaterialTheme.colorScheme
 	Column(
 		modifier = modifier,
 		verticalArrangement = Arrangement.spacedBy(12.dp),
@@ -273,7 +275,7 @@ private fun BookDetailSimilarSection(
 		Text(
 			text = stringResource(R.string.book_detail_similar),
 			style = MaterialTheme.typography.titleMedium,
-			color = MaterialTheme.colorScheme.onBackground,
+			color = colorScheme.onBackground,
 			modifier = Modifier
 				.fillMaxWidth()
 				.padding(horizontal = 8.dp),
@@ -389,6 +391,7 @@ private fun BookDetailCover(
 	coverUrl: String?,
 	modifier: Modifier = Modifier,
 ) {
+	val colorScheme = MaterialTheme.colorScheme
 	val shape = RoundedCornerShape(6.dp)
 	Box(
 		modifier = modifier
@@ -400,7 +403,7 @@ private fun BookDetailCover(
 			)
 			.clip(shape)
 			.aspectRatio(COVER_ASPECT_RATIO)
-			.background(MaterialTheme.colorScheme.surfaceContainerHigh),
+			.background(colorScheme.surfaceContainerHigh),
 	) {
 		CatalogRemoteImage(
 			url = coverUrl,
