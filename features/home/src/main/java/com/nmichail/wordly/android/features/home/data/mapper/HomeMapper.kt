@@ -14,7 +14,6 @@ internal fun HomeResponse.toEntity(): Home =
 		estimatedMinutes = estimatedMinutes,
 		reviewStreakDays = reviewStreakDays,
 		trainings = trainings.mapNotNull { it.toEntity() },
-		completedDayOffsets = completedDayOffsets,
 	)
 
 private fun TrainingResponse.toEntity(): Training? {

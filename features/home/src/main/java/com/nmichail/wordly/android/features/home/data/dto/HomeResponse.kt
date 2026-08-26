@@ -7,5 +7,4 @@ data class HomeResponse(
 	val estimatedMinutes: Int,
 	val reviewStreakDays: Int,
 	val trainings: List<TrainingResponse>,
-	val completedDayOffsets: List<Int>,
 )

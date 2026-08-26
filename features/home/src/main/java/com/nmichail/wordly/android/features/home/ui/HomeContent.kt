@@ -1,6 +1,5 @@
 package com.nmichail.wordly.android.features.home.ui
 
-import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -31,16 +30,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import com.nmichail.wordly.android.component.wui.components.button.WuiButton
-import com.nmichail.wordly.android.component.wui.components.calendar.WuiCalendarDay
-import com.nmichail.wordly.android.component.wui.components.calendar.WuiCalendarDayStatusId
-import com.nmichail.wordly.android.component.wui.components.calendar.WuiCalendarDialog
 import com.nmichail.wordly.android.features.home.ui.component.DailyReviewCard
 import com.nmichail.wordly.android.features.home.ui.component.HomeTopBar
 import com.nmichail.wordly.android.component.wui.components.text.WuiSectionLabel
 import com.nmichail.wordly.android.features.home.ui.component.TrainingListItem
-import com.nmichail.wordly.android.features.home.ui.component.WeekDayIndicator
-import com.nmichail.wordly.android.features.home.ui.component.WeekDayStatusId
-import com.nmichail.wordly.android.features.home.ui.component.WeekProgressCard
 import com.nmichail.wordly.android.features.home.ui.component.homeGreeting
 import com.nmichail.wordly.android.component.wui.components.snackbar.WuiSnackBarHost
 import com.nmichail.wordly.android.component.wui.components.snackbar.showWuiInfoSnackBar
@@ -49,234 +42,165 @@ import com.nmichail.wordly.android.features.home.domain.entity.Training
 import com.nmichail.wordly.android.features.home.domain.entity.TrainingType
 import com.nmichail.wordly.android.features.home.presentation.HomeComponent
 import com.nmichail.wordly.android.features.home.presentation.HomeStore
-import com.nmichail.wordly.android.shared.calendar.CalendarDayStatus
-import com.nmichail.wordly.android.shared.calendar.WeekDayStatus
-import java.time.DayOfWeek
 
 @Composable
 fun HomeContent(
-    component: HomeComponent,
-    modifier: Modifier = Modifier,
+	component: HomeComponent,
+	modifier: Modifier = Modifier,
 ) {
-    val state by component.model.subscribeAsState()
+	val state by component.model.subscribeAsState()
 
-    when (val uiState = state) {
-        HomeStore.State.Initial,
-        HomeStore.State.Loading -> {
-            Box(
-                modifier = modifier
+	when (val uiState = state) {
+		HomeStore.State.Initial,
+		HomeStore.State.Loading -> {
+			Box(
+				modifier = modifier
 					.fillMaxSize()
 					.background(MaterialTheme.colorScheme.background),
-                contentAlignment = Alignment.Center,
-            ) {
-                CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
-            }
-        }
+				contentAlignment = Alignment.Center,
+			) {
+				CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
+			}
+		}
 
-        HomeStore.State.Error -> {
-            HomeError(
-                onRetryClick = component::handleRetry,
-                modifier = modifier.fillMaxSize(),
-            )
-        }
+		HomeStore.State.Error -> {
+			HomeError(
+				onRetryClick = component::handleRetry,
+				modifier = modifier.fillMaxSize(),
+			)
+		}
 
-        is HomeStore.State.Content -> {
-            HomeLoaded(
-                state = uiState,
-                component = component,
-                modifier = modifier,
-            )
-        }
-    }
+		is HomeStore.State.Content -> {
+			HomeLoaded(
+				state = uiState,
+				component = component,
+				modifier = modifier,
+			)
+		}
+	}
 }
 
 @Composable
 private fun HomeError(
-    onRetryClick: () -> Unit,
-    modifier: Modifier = Modifier,
+	onRetryClick: () -> Unit,
+	modifier: Modifier = Modifier,
 ) {
-    Column(
-        modifier = modifier
+	Column(
+		modifier = modifier
 			.background(MaterialTheme.colorScheme.background)
 			.padding(horizontal = 24.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally,
-    ) {
-        Text(
-            text = stringResource(R.string.home_error_title),
-            style = MaterialTheme.typography.titleMedium,
-            color = MaterialTheme.colorScheme.onSurface,
-            textAlign = TextAlign.Center,
-        )
-        Text(
-            text = stringResource(R.string.home_error_description),
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            textAlign = TextAlign.Center,
-            modifier = Modifier.padding(top = 8.dp),
-        )
-        WuiButton(
-            text = stringResource(R.string.home_retry),
-            onClick = onRetryClick,
-            modifier = Modifier.padding(top = 24.dp),
-        )
-    }
+		verticalArrangement = Arrangement.Center,
+		horizontalAlignment = Alignment.CenterHorizontally,
+	) {
+		Text(
+			text = stringResource(R.string.home_error_title),
+			style = MaterialTheme.typography.titleMedium,
+			color = MaterialTheme.colorScheme.onSurface,
+			textAlign = TextAlign.Center,
+		)
+		Text(
+			text = stringResource(R.string.home_error_description),
+			style = MaterialTheme.typography.bodyMedium,
+			color = MaterialTheme.colorScheme.onSurfaceVariant,
+			textAlign = TextAlign.Center,
+			modifier = Modifier.padding(top = 8.dp),
+		)
+		WuiButton(
+			text = stringResource(R.string.home_retry),
+			onClick = onRetryClick,
+			modifier = Modifier.padding(top = 24.dp),
+		)
+	}
 }
 
 @Composable
 private fun HomeLoaded(
-    state: HomeStore.State.Content,
-    component: HomeComponent,
-    modifier: Modifier = Modifier,
+	state: HomeStore.State.Content,
+	component: HomeComponent,
+	modifier: Modifier = Modifier,
 ) {
-    val snackBarHostState = remember { SnackbarHostState() }
-    val coroutineScope = rememberCoroutineScope()
-    val context = LocalContext.current
+	val snackBarHostState = remember { SnackbarHostState() }
+	val coroutineScope = rememberCoroutineScope()
+	val context = LocalContext.current
 
-    fun showStreakSnackBar(days: Int) {
-        val message = if (days <= 0) {
-            context.getString(R.string.home_streak_snackbar_empty)
-        } else {
-            context.resources.getQuantityString(R.plurals.home_streak_snackbar, days, days)
-        }
-        coroutineScope.showWuiInfoSnackBar(
-            snackBarHostState = snackBarHostState,
-            message = message,
-        )
-    }
+	fun showStreakSnackBar(days: Int) {
+		val message = if (days <= 0) {
+			context.getString(R.string.home_streak_snackbar_empty)
+		} else {
+			context.resources.getQuantityString(R.plurals.home_streak_snackbar, days, days)
+		}
+		coroutineScope.showWuiInfoSnackBar(
+			snackBarHostState = snackBarHostState,
+			message = message,
+		)
+	}
 
-    Box(modifier = modifier.fillMaxSize()) {
-        Column(
-            modifier = Modifier
+	Box(modifier = modifier.fillMaxSize()) {
+		Column(
+			modifier = Modifier
 				.fillMaxSize()
 				.background(MaterialTheme.colorScheme.background)
 				.verticalScroll(rememberScrollState()),
-        ) {
-            HomeTopBar(
-                title = homeGreeting(firstName = state.firstName),
-                streakDays = state.streakDays,
-                onStreakClick = { showStreakSnackBar(state.streakDays) },
-            )
-            Column(
-                modifier = Modifier
+		) {
+			HomeTopBar(
+				title = homeGreeting(firstName = state.firstName),
+				streakDays = state.streakDays,
+				onStreakClick = { showStreakSnackBar(state.streakDays) },
+			)
+			Column(
+				modifier = Modifier
 					.fillMaxWidth()
 					.padding(horizontal = 16.dp)
 					.padding(top = 16.dp, bottom = 24.dp),
-                verticalArrangement = Arrangement.spacedBy(16.dp),
-            ) {
-                WeekProgressCard(onMonthClick = component::handleOpenMonth) {
-                    state.weekDays.forEach { day ->
-                        WeekDayIndicator(
-                            label = stringResource(day.dayOfWeek.labelRes()),
-                            statusId = day.status.toUiId(),
-                            dayOfMonth = day.dayOfMonth,
-                            modifier = Modifier.weight(1f),
-                        )
-                    }
-                }
-                DailyReviewCard(
-                    wordsToReview = state.wordsToReview,
-                    estimatedMinutes = state.estimatedMinutes,
-                    streakDays = state.reviewStreakDays,
-                    onStartClick = component::handleStartReview,
-                    onStreakClick = { showStreakSnackBar(state.reviewStreakDays) },
-                )
-                TrainingsBlock(
-                    trainings = state.trainings,
-                    onTrainingClick = component::handleOpenTraining,
-                )
-            }
-        }
-        WuiSnackBarHost(
-            snackBarHostState = snackBarHostState,
-            modifier = Modifier.align(Alignment.BottomCenter),
-        )
-    }
-
-    if (state.calendarVisible) {
-        HomeCalendarDialog(state = state, component = component)
-    }
-}
-
-@Composable
-private fun HomeCalendarDialog(
-    state: HomeStore.State.Content,
-    component: HomeComponent,
-) {
-    WuiCalendarDialog(
-        monthTitle = state.monthTitle,
-        days = state.monthDays.map { day ->
-            day?.let {
-                WuiCalendarDay(
-                    dayOfMonth = it.dayOfMonth,
-                    statusId = it.status.toUiId(),
-                )
-            }
-        },
-        onDismiss = component::handleDismissMonth,
-        onTodayClick = component::handleGoToCurrentMonth,
-        onPreviousMonthClick = component::handlePreviousMonth,
-        onNextMonthClick = component::handleNextMonth,
-    )
+				verticalArrangement = Arrangement.spacedBy(16.dp),
+			) {
+				DailyReviewCard(
+					wordsToReview = state.wordsToReview,
+					estimatedMinutes = state.estimatedMinutes,
+					streakDays = state.reviewStreakDays,
+					onStartClick = component::handleStartReview,
+					onStreakClick = { showStreakSnackBar(state.reviewStreakDays) },
+				)
+				TrainingsBlock(
+					trainings = state.trainings,
+					onTrainingClick = component::handleOpenTraining,
+				)
+			}
+		}
+		WuiSnackBarHost(
+			snackBarHostState = snackBarHostState,
+			modifier = Modifier.align(Alignment.BottomCenter),
+		)
+	}
 }
 
 @Composable
 private fun TrainingsBlock(
-    trainings: List<Training>,
-    onTrainingClick: (Training) -> Unit,
+	trainings: List<Training>,
+	onTrainingClick: (Training) -> Unit,
 ) {
-    Column(
-        modifier = Modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(12.dp),
-    ) {
-        WuiSectionLabel(
-            text = stringResource(R.string.home_trainings_section),
-            modifier = Modifier.padding(start = 4.dp),
-        )
-        trainings.forEach { training ->
-            TrainingListItem(
-                title = training.title,
-                subtitle = training.subtitle,
-                icon = training.icon(),
-                onClick = { onTrainingClick(training) },
-            )
-        }
-    }
+	Column(
+		modifier = Modifier.fillMaxWidth(),
+		verticalArrangement = Arrangement.spacedBy(12.dp),
+	) {
+		WuiSectionLabel(
+			text = stringResource(R.string.home_trainings_section),
+			modifier = Modifier.padding(start = 4.dp),
+		)
+		trainings.forEach { training ->
+			TrainingListItem(
+				title = training.title,
+				subtitle = training.subtitle,
+				icon = training.icon(),
+				onClick = { onTrainingClick(training) },
+			)
+		}
+	}
 }
 
-@StringRes
-private fun DayOfWeek.labelRes(): Int =
-    when (this) {
-        DayOfWeek.MONDAY -> R.string.home_day_mon
-        DayOfWeek.TUESDAY -> R.string.home_day_tue
-        DayOfWeek.WEDNESDAY -> R.string.home_day_wed
-        DayOfWeek.THURSDAY -> R.string.home_day_thu
-        DayOfWeek.FRIDAY -> R.string.home_day_fri
-        DayOfWeek.SATURDAY -> R.string.home_day_sat
-        DayOfWeek.SUNDAY -> R.string.home_day_sun
-    }
-
-private fun WeekDayStatus.toUiId(): String =
-    when (this) {
-        WeekDayStatus.Completed -> WeekDayStatusId.Completed
-        WeekDayStatus.Today -> WeekDayStatusId.Today
-        WeekDayStatus.Missed -> WeekDayStatusId.Missed
-        WeekDayStatus.Upcoming -> WeekDayStatusId.Upcoming
-    }
-
-private fun CalendarDayStatus.toUiId(): String =
-    when (this) {
-        CalendarDayStatus.Completed -> WuiCalendarDayStatusId.Completed
-        CalendarDayStatus.Missed -> WuiCalendarDayStatusId.Missed
-        CalendarDayStatus.Today -> WuiCalendarDayStatusId.Today
-        CalendarDayStatus.Inactive -> WuiCalendarDayStatusId.Inactive
-        CalendarDayStatus.Selected -> WuiCalendarDayStatusId.Selected
-        CalendarDayStatus.Plain -> WuiCalendarDayStatusId.Plain
-    }
-
 private fun Training.icon(): ImageVector =
-    when (type) {
-        TrainingType.Cards -> Icons.Outlined.Style
-        TrainingType.Constructor -> Icons.Outlined.GridView
-        TrainingType.Books -> Icons.Outlined.MenuBook
-    }
+	when (type) {
+		TrainingType.Cards -> Icons.Outlined.Style
+		TrainingType.Constructor -> Icons.Outlined.GridView
+		TrainingType.Books -> Icons.Outlined.MenuBook
+	}

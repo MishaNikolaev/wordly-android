@@ -10,16 +10,6 @@ interface HomeComponent {
 
 	fun handleRetry()
 
-	fun handleOpenMonth()
-
-	fun handleDismissMonth()
-
-	fun handlePreviousMonth()
-
-	fun handleNextMonth()
-
-	fun handleGoToCurrentMonth()
-
 	fun handleStartReview()
 
 	fun handleOpenTraining(training: Training)

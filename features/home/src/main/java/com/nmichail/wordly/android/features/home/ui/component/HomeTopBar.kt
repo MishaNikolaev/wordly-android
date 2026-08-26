@@ -33,7 +33,7 @@ fun HomeTopBar(
 	Row(
 		modifier = modifier
 			.fillMaxWidth()
-			.background(MaterialTheme.colorScheme.surface)
+			.background(MaterialTheme.colorScheme.background)
 			.padding(horizontal = 16.dp, vertical = 12.dp),
 		horizontalArrangement = Arrangement.SpaceBetween,
 		verticalAlignment = Alignment.CenterVertically,

@@ -42,26 +42,6 @@ internal class DefaultHomeComponent @AssistedInject constructor(
 		store.accept(HomeStore.Intent.Retry)
 	}
 
-	override fun handleOpenMonth() {
-		store.accept(HomeStore.Intent.OpenMonth)
-	}
-
-	override fun handleDismissMonth() {
-		store.accept(HomeStore.Intent.DismissMonth)
-	}
-
-	override fun handlePreviousMonth() {
-		store.accept(HomeStore.Intent.PreviousMonth)
-	}
-
-	override fun handleNextMonth() {
-		store.accept(HomeStore.Intent.NextMonth)
-	}
-
-	override fun handleGoToCurrentMonth() {
-		store.accept(HomeStore.Intent.GoToCurrentMonth)
-	}
-
 	override fun handleStartReview() {
 		store.accept(HomeStore.Intent.StartReview)
 	}

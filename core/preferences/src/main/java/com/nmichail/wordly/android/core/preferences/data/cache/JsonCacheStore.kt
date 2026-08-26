@@ -17,11 +17,6 @@ private val Context.jsonCacheDataStore: DataStore<Preferences> by preferencesDat
 )
 
 private const val JSON_CACHE_PREFERENCES = "wordly_page_cache_preferences"
-
-/**
- * Thin TTL JSON store over Preferences DataStore.
- * Feature DataSources own keys and fetch-or-cache policy; this only persists JSON.
- */
 interface JsonCacheStore {
 
 	suspend fun <T> getFresh(
