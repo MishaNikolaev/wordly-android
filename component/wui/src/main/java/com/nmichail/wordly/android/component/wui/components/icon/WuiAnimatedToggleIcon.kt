@@ -40,10 +40,22 @@ fun WuiAnimatedToggleIcon(
 	contentDescription: String? = null,
 	iconSize: Dp = 28.dp,
 ) {
-	val filledScale = remember { Animatable(0f) }
-	var showUnchecked by remember { mutableStateOf(true) }
+	val filledScale = remember { Animatable(if (checked) 1f else 0f) }
+	var showUnchecked by remember { mutableStateOf(!checked) }
+	var previousChecked by remember { mutableStateOf(checked) }
 
 	LaunchedEffect(checked) {
+		if (checked == previousChecked) {
+			if (checked) {
+				filledScale.snapTo(1f)
+				showUnchecked = false
+			} else {
+				filledScale.snapTo(0f)
+				showUnchecked = true
+			}
+			return@LaunchedEffect
+		}
+		previousChecked = checked
 		if (checked) {
 			showUnchecked = true
 			filledScale.snapTo(0f)

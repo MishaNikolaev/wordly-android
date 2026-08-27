@@ -4,6 +4,8 @@ import com.nmichail.wordly.android.core.network.di.GeneralRetrofit
 import com.nmichail.wordly.android.features.materials.data.api.MaterialsApi
 import com.nmichail.wordly.android.features.materials.data.datasource.MaterialsDataSource
 import com.nmichail.wordly.android.features.materials.data.datasource.MaterialsDataSourceImpl
+import com.nmichail.wordly.android.features.materials.data.datasource.MaterialsLocalDataSource
+import com.nmichail.wordly.android.features.materials.data.datasource.MaterialsLocalDataSourceImpl
 import com.nmichail.wordly.android.features.materials.data.repository.MaterialsRepositoryImpl
 import com.nmichail.wordly.android.features.materials.domain.repository.MaterialsRepository
 import com.nmichail.wordly.android.features.materials.presentation.DefaultMaterialsComponent
@@ -21,6 +23,11 @@ abstract class MaterialsModule {
 	abstract fun bindMaterialsDataSource(
 		impl: MaterialsDataSourceImpl,
 	): MaterialsDataSource
+
+	@Binds
+	abstract fun bindMaterialsLocalDataSource(
+		impl: MaterialsLocalDataSourceImpl,
+	): MaterialsLocalDataSource
 
 	@Binds
 	abstract fun bindMaterialsRepository(

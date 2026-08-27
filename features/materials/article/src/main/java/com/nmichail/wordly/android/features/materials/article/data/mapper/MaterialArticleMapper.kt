@@ -18,6 +18,7 @@ fun MaterialDetailDto.toDomain(): MaterialDetail =
 		likes = likes,
 		dislikes = dislikes,
 		status = status.toReadStatus(),
+		photoUrl = photoUrl,
 	)
 
 private fun String.toCategory(): MaterialCategory =
