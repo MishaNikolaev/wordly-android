@@ -30,6 +30,10 @@ import com.nmichail.wordly.android.features.home.presentation.HomeRouter
 import com.nmichail.wordly.android.features.materials.presentation.MaterialsComponent
 import com.nmichail.wordly.android.features.materials.article.presentation.MaterialDetailComponent
 import com.nmichail.wordly.android.features.materials.article.presentation.MaterialDetailRouter
+import com.nmichail.wordly.android.features.movies.presentation.MoviesComponent
+import com.nmichail.wordly.android.features.movies.presentation.MoviesRouter
+import com.nmichail.wordly.android.features.recap.presentation.RecapComponent
+import com.nmichail.wordly.android.features.recap.presentation.RecapRouter
 import com.nmichail.wordly.android.features.profile.presentation.ProfileComponent
 import com.nmichail.wordly.android.features.profile.editor.presentation.ProfileEditComponent
 import com.nmichail.wordly.android.features.profile.editor.presentation.ProfileEditRouter
@@ -53,6 +57,8 @@ internal class DefaultMainHostComponent @AssistedInject constructor(
 	private val profileEditComponentFactory: ProfileEditComponent.Factory,
 	private val reminderTimesComponentFactory: ReminderTimesComponent.Factory,
 	private val reviewComponentFactory: ReviewComponent.Factory,
+	private val moviesComponentFactory: MoviesComponent.Factory,
+	private val recapComponentFactory: RecapComponent.Factory,
 	private val cardsComponentFactory: CardsComponent.Factory,
 	private val cardPracticeComponentFactory: CardPracticeComponent.Factory,
 	private val constructorComponentFactory: ConstructorComponent.Factory,
@@ -96,6 +102,8 @@ internal class DefaultMainHostComponent @AssistedInject constructor(
 			MainHostConfig.ProfileEdit -> profileEditChild(componentContext)
 			MainHostConfig.ReminderTimes -> reminderTimesChild(componentContext)
 			MainHostConfig.Review -> reviewChild(componentContext)
+			MainHostConfig.Movies -> moviesChild(componentContext)
+			MainHostConfig.Recap -> recapChild(componentContext)
 			MainHostConfig.Cards -> cardsChild(componentContext)
 			is MainHostConfig.CardPractice -> cardPracticeChild(config.cardId, componentContext)
 			MainHostConfig.Constructor -> constructorChild(componentContext)
@@ -231,6 +239,14 @@ internal class DefaultMainHostComponent @AssistedInject constructor(
 			override fun navigateToBooks() {
 				navigation.push(MainHostConfig.Books)
 			}
+
+			override fun navigateToMovies() {
+				navigation.push(MainHostConfig.Movies)
+			}
+
+			override fun navigateToRecap() {
+				navigation.push(MainHostConfig.Recap)
+			}
 		}
 		return MainHostComponent.Child.Home(
 			component = homeComponentFactory(
@@ -250,6 +266,34 @@ internal class DefaultMainHostComponent @AssistedInject constructor(
 			component = reviewComponentFactory(
 				componentContext = componentContext,
 				reviewRouter = reviewRouter,
+			),
+		)
+	}
+
+	private fun moviesChild(componentContext: ComponentContext): MainHostComponent.Child {
+		val moviesRouter = object : MoviesRouter {
+			override fun navigateBack() {
+				navigation.pop()
+			}
+		}
+		return MainHostComponent.Child.Movies(
+			component = moviesComponentFactory(
+				componentContext = componentContext,
+				moviesRouter = moviesRouter,
+			),
+		)
+	}
+
+	private fun recapChild(componentContext: ComponentContext): MainHostComponent.Child {
+		val recapRouter = object : RecapRouter {
+			override fun navigateBack() {
+				navigation.pop()
+			}
+		}
+		return MainHostComponent.Child.Recap(
+			component = recapComponentFactory(
+				componentContext = componentContext,
+				recapRouter = recapRouter,
 			),
 		)
 	}
@@ -401,6 +445,12 @@ private sealed interface MainHostConfig {
 	data object Review : MainHostConfig
 
 	@Serializable
+	data object Movies : MainHostConfig
+
+	@Serializable
+	data object Recap : MainHostConfig
+
+	@Serializable
 	data object Cards : MainHostConfig
 
 	@Serializable
@@ -468,6 +518,8 @@ fun MainHostComponent.Child.toTab(): MainHostTab? =
 		is MainHostComponent.Child.ReminderTimes -> null
 		is MainHostComponent.Child.MaterialDetail -> null
 		is MainHostComponent.Child.Review -> null
+		is MainHostComponent.Child.Movies -> null
+		is MainHostComponent.Child.Recap -> null
 		is MainHostComponent.Child.Cards -> null
 		is MainHostComponent.Child.CardPractice -> null
 		is MainHostComponent.Child.Constructor -> null

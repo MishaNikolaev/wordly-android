@@ -10,7 +10,6 @@ import com.arkivanov.mvikotlin.main.store.DefaultStoreFactory
 import com.nmichail.wordly.android.component.presentation.BaseCoroutineExecutor
 import com.nmichail.wordly.android.features.home.domain.entity.Home
 import com.nmichail.wordly.android.features.home.domain.usecase.GetHomeUseCase
-import com.nmichail.wordly.android.features.home.domain.entity.TrainingType
 import javax.inject.Inject
 
 internal class HomeStoreFactory @Inject constructor(
@@ -80,11 +79,11 @@ internal class HomeStoreFactory @Inject constructor(
 			when (intent) {
 				HomeStore.Intent.Retry -> loadHome()
 				HomeStore.Intent.StartReview -> publish(HomeStore.Label.StartReview)
-				is HomeStore.Intent.OpenTraining -> when (intent.training.type) {
-					TrainingType.Cards -> publish(HomeStore.Label.OpenCards)
-					TrainingType.Constructor -> publish(HomeStore.Label.OpenConstructor)
-					TrainingType.Books -> publish(HomeStore.Label.OpenBooks)
-				}
+				HomeStore.Intent.OpenCards -> publish(HomeStore.Label.OpenCards)
+				HomeStore.Intent.OpenConstructor -> publish(HomeStore.Label.OpenConstructor)
+				HomeStore.Intent.OpenBooks -> publish(HomeStore.Label.OpenBooks)
+				HomeStore.Intent.OpenMovies -> publish(HomeStore.Label.OpenMovies)
+				HomeStore.Intent.OpenRecap -> publish(HomeStore.Label.OpenRecap)
 			}
 		}
 

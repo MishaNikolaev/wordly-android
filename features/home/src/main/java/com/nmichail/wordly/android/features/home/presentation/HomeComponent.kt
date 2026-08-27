@@ -2,7 +2,6 @@ package com.nmichail.wordly.android.features.home.presentation
 
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.value.Value
-import com.nmichail.wordly.android.features.home.domain.entity.Training
 
 interface HomeComponent {
 
@@ -12,7 +11,15 @@ interface HomeComponent {
 
 	fun handleStartReview()
 
-	fun handleOpenTraining(training: Training)
+	fun handleOpenCards()
+
+	fun handleOpenConstructor()
+
+	fun handleOpenBooks()
+
+	fun handleOpenMovies()
+
+	fun handleOpenRecap()
 
 	fun interface Factory {
 

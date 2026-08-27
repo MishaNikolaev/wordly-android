@@ -36,7 +36,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.res.stringResource
@@ -47,6 +46,7 @@ import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import com.nmichail.wordly.android.component.wui.components.button.WuiButton
 import com.nmichail.wordly.android.component.wui.components.button.WuiTextLink
 import com.nmichail.wordly.android.component.wui.components.icon.WuiAnimatedToggleIcon
+import com.nmichail.wordly.android.component.wui.theme.WuiBrushes
 import com.nmichail.wordly.android.features.books.detail.R
 import com.nmichail.wordly.android.features.books.detail.domain.entity.BookDetail
 import com.nmichail.wordly.android.features.books.detail.presentation.BookDetailComponent
@@ -245,15 +245,12 @@ private fun BookDetailGradientBackdrop(
 	Box(
 		modifier = modifier
 			.fillMaxWidth()
-			.height(GRADIENT_HEIGHT)
+			.height(WuiBrushes.HeroBackdropHeight)
 			.background(
-				Brush.verticalGradient(
-					colorStops = arrayOf(
-						0f to top,
-						GRADIENT_MID_STOP to bottom,
-						GRADIENT_FADE_STOP to background,
-						1f to background,
-					),
+				WuiBrushes.heroBackdropFadeFromTop(
+					vivid = top,
+					mid = bottom,
+					background = background,
 				),
 			),
 	)
@@ -413,8 +410,5 @@ private fun BookDetailCover(
 }
 
 private const val COVER_ASPECT_RATIO = 2f / 3f
-private const val GRADIENT_MID_STOP = 0.28f
-private const val GRADIENT_FADE_STOP = 0.52f
 private const val SIMILAR_BOOKS_COLUMNS = 2
 private val COVER_WIDTH = 168.dp
-private val GRADIENT_HEIGHT = 360.dp

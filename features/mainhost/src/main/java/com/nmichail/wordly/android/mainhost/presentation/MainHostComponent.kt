@@ -17,6 +17,8 @@ import com.nmichail.wordly.android.features.profile.presentation.ProfileComponen
 import com.nmichail.wordly.android.features.profile.editor.presentation.ProfileEditComponent
 import com.nmichail.wordly.android.features.profile.reminders.presentation.ReminderTimesComponent
 import com.nmichail.wordly.android.features.review.presentation.ReviewComponent
+import com.nmichail.wordly.android.features.movies.presentation.MoviesComponent
+import com.nmichail.wordly.android.features.recap.presentation.RecapComponent
 import com.nmichail.wordly.android.features.words.presentation.WordsComponent
 
 interface MainHostComponent {
@@ -42,6 +44,10 @@ interface MainHostComponent {
 		data class ReminderTimes(val component: ReminderTimesComponent) : Child
 
 		data class Review(val component: ReviewComponent) : Child
+
+		data class Movies(val component: MoviesComponent) : Child
+
+		data class Recap(val component: RecapComponent) : Child
 
 		data class Cards(val component: CardsComponent) : Child
 

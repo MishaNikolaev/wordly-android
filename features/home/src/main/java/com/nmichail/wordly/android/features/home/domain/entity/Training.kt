@@ -6,6 +6,8 @@ sealed interface TrainingType {
 
 	data object Constructor : TrainingType
 
+	data object Listening : TrainingType
+
 	data object Books : TrainingType
 }
 

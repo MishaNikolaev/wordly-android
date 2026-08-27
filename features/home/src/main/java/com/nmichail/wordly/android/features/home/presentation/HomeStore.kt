@@ -33,6 +33,10 @@ interface HomeStore :
 		data object OpenConstructor : Label
 
 		data object OpenBooks : Label
+
+		data object OpenMovies : Label
+
+		data object OpenRecap : Label
 	}
 
 	sealed interface Intent {
@@ -41,6 +45,14 @@ interface HomeStore :
 
 		data object StartReview : Intent
 
-		data class OpenTraining(val training: Training) : Intent
+		data object OpenCards : Intent
+
+		data object OpenConstructor : Intent
+
+		data object OpenBooks : Intent
+
+		data object OpenMovies : Intent
+
+		data object OpenRecap : Intent
 	}
 }

@@ -1,6 +1,7 @@
 package com.nmichail.wordly.android.component.wui.theme
 
 import androidx.compose.material3.Typography
+import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
@@ -129,15 +130,15 @@ object WuiTypography {
 	)
 
 	val dailyReviewCount = TextStyle(
-		fontWeight = FontWeight.Black,
-		fontSize = 56.sp,
-		lineHeight = 56.sp,
+		fontWeight = FontWeight.ExtraBold,
+		fontSize = 54.sp,
+		lineHeight = 54.sp,
 	)
 
 	val dailyReviewCountLabel = TextStyle(
 		fontWeight = FontWeight.Bold,
-		fontSize = 18.sp,
-		lineHeight = 22.sp,
+		fontSize = 17.sp,
+		lineHeight = 20.sp,
 	)
 
 	val trainingTileTitle = TextStyle(
@@ -208,5 +209,48 @@ object WuiTypography {
 		fontWeight = FontWeight.SemiBold,
 		fontSize = 14.sp,
 		lineHeight = 20.sp,
+	)
+
+	val homeQuote = TextStyle(
+		fontFamily = OnestFontFamily,
+		fontWeight = FontWeight.Medium,
+		fontSize = 16.sp,
+		lineHeight = 22.sp,
+	)
+
+	val homeTrainingsTitle = TextStyle(
+		fontFamily = OnestFontFamily,
+		fontWeight = FontWeight.ExtraBold,
+		fontSize = 18.sp,
+		lineHeight = 22.sp,
+	)
+
+	val homeTrainingLabel = TextStyle(
+		fontFamily = OnestFontFamily,
+		fontWeight = FontWeight.Medium,
+		fontSize = 10.sp,
+		lineHeight = 13.sp,
+		platformStyle = PlatformTextStyle(includeFontPadding = false),
+	)
+
+	val homeRecapTitle = TextStyle(
+		fontFamily = OnestFontFamily,
+		fontWeight = FontWeight.ExtraBold,
+		fontSize = 25.sp,
+		lineHeight = 30.sp,
+	)
+
+	val homeRecapSubtitle = TextStyle(
+		fontFamily = OnestFontFamily,
+		fontWeight = FontWeight.Medium,
+		fontSize = 13.sp,
+		lineHeight = 18.sp,
+	)
+
+	val homeRecapCta = TextStyle(
+		fontFamily = OnestFontFamily,
+		fontWeight = FontWeight.Bold,
+		fontSize = 14.sp,
+		lineHeight = 18.sp,
 	)
 }

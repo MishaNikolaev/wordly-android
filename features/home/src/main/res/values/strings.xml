@@ -19,20 +19,14 @@
 
 	<string name="home_daily_review_chip">Повторение на сегодня</string>
 	<string name="home_daily_review_duration">≈ %d мин</string>
-	<string name="home_daily_review_start">Начать</string>
 
-	<plurals name="home_words_to_review_prefix">
-		<item quantity="one">новое</item>
-		<item quantity="few">новых</item>
-		<item quantity="many">новых</item>
-		<item quantity="other">новых</item>
+	<plurals name="home_words_to_review_line1">
+		<item quantity="one">слово к</item>
+		<item quantity="few">слова к</item>
+		<item quantity="many">слов к</item>
+		<item quantity="other">слов к</item>
 	</plurals>
-	<plurals name="home_words_to_review_suffix">
-		<item quantity="one">слово</item>
-		<item quantity="few">слова</item>
-		<item quantity="many">слов</item>
-		<item quantity="other">слов</item>
-	</plurals>
+	<string name="home_words_to_review_line2">повторению</string>
 
 	<plurals name="home_daily_review_streak">
 		<item quantity="one">серия %d день</item>
@@ -41,7 +35,17 @@
 		<item quantity="other">серия %d дней</item>
 	</plurals>
 
+	<string name="home_quote">«Каждое выученное слово делает тебя чуть свободнее»</string>
+	<string name="home_watch_with_subtitles">Фильмы с субтитрами</string>
+	<string name="home_training_grid_content_description">Все тренировки</string>
+	<string name="home_training_listening_coming_soon">Аудирование скоро будет доступно</string>
+	<string name="home_training_songs_coming_soon">Песни скоро будут доступны</string>
+
 	<string name="home_trainings_section">Тренировки</string>
+
+	<string name="home_recap_title">Смотри,\nсколько\nслов ты выучил!</string>
+	<string name="home_recap_subtitle">Мы посчитали каждое слово,\nкоторое ты запомнил с Wordly</string>
+	<string name="home_recap_cta">Смотреть итоги</string>
 
 	<string name="home_training_cards_title">Карточки</string>
 	<string name="home_training_cards_subtitle">слова по темам</string>

@@ -1,42 +1,45 @@
 package com.nmichail.wordly.android.features.home.ui.component
 
-import androidx.compose.foundation.background
+import androidx.annotation.DrawableRes
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
-import androidx.compose.material3.Icon
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.unit.dp
-import com.nmichail.wordly.android.component.wui.theme.WuiTypography
-import com.nmichail.wordly.android.component.wui.components.card.WuiAppCard
-import androidx.compose.material.icons.automirrored.rounded.MenuBook
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import com.nmichail.wordly.android.component.wui.components.card.WuiAppCard
+import com.nmichail.wordly.android.component.wui.R as WuiR
 import com.nmichail.wordly.android.component.wui.theme.WuiTheme
+import com.nmichail.wordly.android.component.wui.theme.WuiTypography
+
+private val TrainingCardHeight = 80.dp
+private val TrainingImageWidth = 80.dp
+private val TrainingImageShape = RoundedCornerShape(
+	topStart = 16.dp,
+	bottomStart = 16.dp,
+)
 
 @Composable
 fun TrainingListItem(
 	title: String,
-	subtitle: String,
-	icon: ImageVector,
+	@DrawableRes iconRes: Int,
 	onClick: () -> Unit,
 	modifier: Modifier = Modifier,
 ) {
-	val colorScheme = MaterialTheme.colorScheme
-	val iconTint = colorScheme.onPrimaryContainer
-
 	WuiAppCard(
 		modifier = modifier.fillMaxWidth(),
 		onClick = onClick,
@@ -45,42 +48,24 @@ fun TrainingListItem(
 		Row(
 			modifier = Modifier
 				.fillMaxWidth()
-				.padding(horizontal = 16.dp, vertical = 14.dp),
+				.height(TrainingCardHeight),
 			verticalAlignment = Alignment.CenterVertically,
 			horizontalArrangement = Arrangement.spacedBy(12.dp),
 		) {
-			Box(
-				modifier = Modifier
-					.size(44.dp)
-					.clip(MaterialTheme.shapes.small)
-					.background(colorScheme.primaryContainer),
-				contentAlignment = Alignment.Center,
-			) {
-				Icon(
-					imageVector = icon,
-					contentDescription = null,
-					tint = iconTint,
-					modifier = Modifier.size(22.dp),
-				)
-			}
-			Column(modifier = Modifier.weight(1f)) {
-				Text(
-					text = title,
-					style = WuiTypography.trainingTileTitle,
-					color = colorScheme.onSurface,
-				)
-				Text(
-					text = subtitle,
-					style = WuiTypography.trainingTileSubtitle,
-					color = colorScheme.onSurfaceVariant,
-					modifier = Modifier.padding(top = 2.dp),
-				)
-			}
-			Icon(
-				imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
+			Image(
+				painter = painterResource(iconRes),
 				contentDescription = null,
-				tint = colorScheme.onSurfaceVariant,
-				modifier = Modifier.size(24.dp),
+				contentScale = ContentScale.Crop,
+				modifier = Modifier
+					.fillMaxHeight()
+					.width(TrainingImageWidth)
+					.clip(TrainingImageShape),
+			)
+			Text(
+				text = title,
+				style = WuiTypography.homeTrainingLabel,
+				color = MaterialTheme.colorScheme.onSurface,
+				modifier = Modifier.padding(end = 12.dp),
 			)
 		}
 	}
@@ -92,8 +77,7 @@ private fun TrainingListItemPreview() {
 	WuiTheme {
 		TrainingListItem(
 			title = "Карточки",
-			subtitle = "8 слов",
-			icon = Icons.AutoMirrored.Rounded.MenuBook,
+			iconRes = WuiR.drawable.cards,
 			onClick = {},
 			modifier = Modifier.padding(16.dp),
 		)

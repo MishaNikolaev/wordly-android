@@ -20,6 +20,8 @@ dependencies {
 	implementation(projects.features.dev.networkselection)
 	implementation(projects.features.home)
 	implementation(projects.features.review)
+	implementation(projects.features.movies)
+	implementation(projects.features.recap)
 	implementation(projects.features.cards.collection)
 	implementation(projects.features.cards.training)
 	implementation(projects.features.constructor.catalog)

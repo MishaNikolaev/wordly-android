@@ -23,9 +23,10 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.PlaylistAdd
+import androidx.compose.material.icons.automirrored.filled.PlaylistAdd
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.automirrored.rounded.VolumeUp
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.Icon
@@ -154,7 +155,10 @@ private fun WordDetailBody(
 			onClick = onConfirmAddToReview,
 			enabled = !state.submittingReview && !state.addedToReview,
 			loading = state.submittingReview,
-			leadingIcon = if (state.addedToReview) null else Icons.AutoMirrored.Outlined.PlaylistAdd,
+			leadingIcon = when {
+				state.addedToReview -> Icons.Filled.Check
+				else -> Icons.AutoMirrored.Filled.PlaylistAdd
+			},
 			containerColor = if (state.addedToReview) {
 				Wui.colors.success
 			} else {

@@ -9,4 +9,8 @@ interface HomeRouter {
 	fun navigateToConstructor()
 
 	fun navigateToBooks()
+
+	fun navigateToMovies()
+
+	fun navigateToRecap()
 }

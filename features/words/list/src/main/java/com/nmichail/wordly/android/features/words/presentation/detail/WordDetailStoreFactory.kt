@@ -97,6 +97,7 @@ internal class WordDetailStoreFactory @Inject constructor(
 			(state() as? WordDetailStore.State.Open)?.dialog
 
 		private fun open(word: WordItem) {
+			val alreadyInReview = word.repeatEpochDay != null
 			dispatch(
 				Msg.Opened(
 					dialog = WordDetailDialogState(
@@ -113,7 +114,7 @@ internal class WordDetailStoreFactory @Inject constructor(
 						repeatEpochDay = word.repeatEpochDay,
 						repeatDateLabel = repeatDateLabel(word.repeatEpochDay),
 						submittingReview = false,
-						addedToReview = false,
+						addedToReview = alreadyInReview,
 					),
 				),
 			)

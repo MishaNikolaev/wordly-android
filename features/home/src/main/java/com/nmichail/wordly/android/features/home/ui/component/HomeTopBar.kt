@@ -47,10 +47,12 @@ fun HomeTopBar(
 				.weight(1f)
 				.padding(end = 12.dp),
 		)
-		StreakChip(
-			streakDays = streakDays,
-			onClick = onStreakClick,
-		)
+		if (streakDays > 0) {
+			StreakChip(
+				streakDays = streakDays,
+				onClick = onStreakClick,
+			)
+		}
 	}
 }
 

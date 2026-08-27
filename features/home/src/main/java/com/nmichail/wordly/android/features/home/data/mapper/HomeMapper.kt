@@ -20,6 +20,7 @@ private fun TrainingResponse.toEntity(): Training? {
 	val type = when (id) {
 		"cards" -> TrainingType.Cards
 		"constructor" -> TrainingType.Constructor
+		"listening" -> TrainingType.Listening
 		"books" -> TrainingType.Books
 		else -> return null
 	}
