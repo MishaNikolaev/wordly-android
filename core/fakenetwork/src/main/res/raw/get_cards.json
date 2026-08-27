@@ -19,36 +19,36 @@
       "items": [
         {
           "id": "a1-colors-films",
-          "title": "Colors in films",
-          "subtitle": "6 words",
+          "title": "Цвета в фильмах",
+          "subtitle": "6 слов",
           "badge": "A1",
           "imageUrl": "https://images.pexels.com/photos/102127/pexels-photo-102127.jpeg?auto=compress&cs=tinysrgb&w=800"
         },
         {
           "id": "a1-animals-stories",
-          "title": "Animals in stories",
-          "subtitle": "6 words",
+          "title": "Животные в историях",
+          "subtitle": "6 слов",
           "badge": "A1",
           "imageUrl": "https://images.pexels.com/photos/45201/kitty-cat-kitten-pet-45201.jpeg?auto=compress&cs=tinysrgb&w=800"
         },
         {
           "id": "a1-family-words",
-          "title": "Family words",
-          "subtitle": "6 words",
+          "title": "Слова о семье",
+          "subtitle": "6 слов",
           "badge": "A1",
           "imageUrl": "https://images.pexels.com/photos/1128318/pexels-photo-1128318.jpeg?auto=compress&cs=tinysrgb&w=800"
         },
         {
           "id": "a1-food-movies",
-          "title": "Food in movies",
-          "subtitle": "6 words",
+          "title": "Еда в кино",
+          "subtitle": "6 слов",
           "badge": "A1",
           "imageUrl": "https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=800"
         },
         {
           "id": "a1-basic-actions",
-          "title": "Basic actions",
-          "subtitle": "6 words",
+          "title": "Базовые действия",
+          "subtitle": "6 слов",
           "badge": "A1",
           "imageUrl": "https://images.pexels.com/photos/248547/pexels-photo-248547.jpeg?auto=compress&cs=tinysrgb&w=800"
         }
@@ -59,36 +59,36 @@
       "items": [
         {
           "id": "a2-school-harry-potter",
-          "title": "School & magic",
-          "subtitle": "6 words",
+          "title": "Школа и магия",
+          "subtitle": "6 слов",
           "badge": "A2",
           "imageUrl": "https://images.pexels.com/photos/159711/books-bookstore-book-reading-159711.jpeg?auto=compress&cs=tinysrgb&w=800"
         },
         {
           "id": "a2-travel-shrek",
-          "title": "Travel words",
-          "subtitle": "6 words",
+          "title": "Слова про путешествия",
+          "subtitle": "6 слов",
           "badge": "A2",
           "imageUrl": "https://images.pexels.com/photos/346885/pexels-photo-346885.jpeg?auto=compress&cs=tinysrgb&w=800"
         },
         {
           "id": "a2-feelings-films",
-          "title": "Feelings in films",
-          "subtitle": "6 words",
+          "title": "Чувства в фильмах",
+          "subtitle": "6 слов",
           "badge": "A2",
           "imageUrl": "https://images.pexels.com/photos/4101143/pexels-photo-4101143.jpeg?auto=compress&cs=tinysrgb&w=800"
         },
         {
           "id": "a2-weather-books",
-          "title": "Weather in books",
-          "subtitle": "6 words",
+          "title": "Погода в книгах",
+          "subtitle": "6 слов",
           "badge": "A2",
           "imageUrl": "https://images.pexels.com/photos/1118873/pexels-photo-1118873.jpeg?auto=compress&cs=tinysrgb&w=800"
         },
         {
           "id": "a2-home-stories",
-          "title": "Home in stories",
-          "subtitle": "6 words",
+          "title": "Дом в историях",
+          "subtitle": "6 слов",
           "badge": "A2",
           "imageUrl": "https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg?auto=compress&cs=tinysrgb&w=800"
         }
@@ -99,36 +99,36 @@
       "items": [
         {
           "id": "b1-science-fiction",
-          "title": "Science fiction",
-          "subtitle": "6 words",
+          "title": "Научная фантастика",
+          "subtitle": "6 слов",
           "badge": "B1",
           "imageUrl": "https://images.pexels.com/photos/256262/pexels-photo-256262.jpeg?auto=compress&cs=tinysrgb&w=800"
         },
         {
           "id": "b1-crime-detective",
-          "title": "Crime & detective",
-          "subtitle": "6 words",
+          "title": "Криминал и детектив",
+          "subtitle": "6 слов",
           "badge": "B1",
           "imageUrl": "https://images.pexels.com/photos/6077326/pexels-photo-6077326.jpeg?auto=compress&cs=tinysrgb&w=800"
         },
         {
           "id": "b1-fantasy-lotr",
-          "title": "Fantasy world",
-          "subtitle": "6 words",
+          "title": "Мир фэнтези",
+          "subtitle": "6 слов",
           "badge": "B1",
           "imageUrl": "https://images.pexels.com/photos/256541/pexels-photo-256541.jpeg?auto=compress&cs=tinysrgb&w=800"
         },
         {
           "id": "b1-journalism-news",
-          "title": "Journalism",
-          "subtitle": "6 words",
+          "title": "Журналистика",
+          "subtitle": "6 слов",
           "badge": "B1",
           "imageUrl": "https://images.pexels.com/photos/518543/pexels-photo-518543.jpeg?auto=compress&cs=tinysrgb&w=800"
         },
         {
           "id": "b1-romance-novels",
-          "title": "Romance novels",
-          "subtitle": "6 words",
+          "title": "Романы",
+          "subtitle": "6 слов",
           "badge": "B1",
           "imageUrl": "https://images.pexels.com/photos/1024993/pexels-photo-1024993.jpeg?auto=compress&cs=tinysrgb&w=800"
         }
@@ -139,36 +139,36 @@
       "items": [
         {
           "id": "b2-medicine-drama",
-          "title": "Medical drama",
-          "subtitle": "6 words",
+          "title": "Медицинская драма",
+          "subtitle": "6 слов",
           "badge": "B2",
           "imageUrl": "https://images.pexels.com/photos/40568/medical-appointment-doctor-healthcare-40568.jpeg?auto=compress&cs=tinysrgb&w=800"
         },
         {
           "id": "b2-business-films",
-          "title": "Business in films",
-          "subtitle": "6 words",
+          "title": "Бизнес в фильмах",
+          "subtitle": "6 слов",
           "badge": "B2",
           "imageUrl": "https://images.pexels.com/photos/3184292/pexels-photo-3184292.jpeg?auto=compress&cs=tinysrgb&w=800"
         },
         {
           "id": "b2-psychology-books",
-          "title": "Psychology books",
-          "subtitle": "6 words",
+          "title": "Книги по психологии",
+          "subtitle": "6 слов",
           "badge": "B2",
           "imageUrl": "https://images.pexels.com/photos/4101143/pexels-photo-4101143.jpeg?auto=compress&cs=tinysrgb&w=800"
         },
         {
           "id": "b2-engineering-sci-fi",
-          "title": "Engineering sci-fi",
-          "subtitle": "6 words",
+          "title": "Инженерия в sci-fi",
+          "subtitle": "6 слов",
           "badge": "B2",
           "imageUrl": "https://images.pexels.com/photos/3862130/pexels-photo-3862130.jpeg?auto=compress&cs=tinysrgb&w=800"
         },
         {
           "id": "b2-politics-dystopia",
-          "title": "Political dystopia",
-          "subtitle": "6 words",
+          "title": "Политическая антиутопия",
+          "subtitle": "6 слов",
           "badge": "B2",
           "imageUrl": "https://images.pexels.com/photos/1550337/pexels-photo-1550337.jpeg?auto=compress&cs=tinysrgb&w=800"
         }
@@ -179,36 +179,36 @@
       "items": [
         {
           "id": "c1-philosophy-books",
-          "title": "Philosophy books",
-          "subtitle": "6 words",
+          "title": "Философские книги",
+          "subtitle": "6 слов",
           "badge": "C1",
           "imageUrl": "https://images.pexels.com/photos/46274/pexels-photo-46274.jpeg?auto=compress&cs=tinysrgb&w=800"
         },
         {
           "id": "c1-law-courtroom",
-          "title": "Courtroom drama",
-          "subtitle": "6 words",
+          "title": "Судебная драма",
+          "subtitle": "6 слов",
           "badge": "C1",
           "imageUrl": "https://images.pexels.com/photos/6077326/pexels-photo-6077326.jpeg?auto=compress&cs=tinysrgb&w=800"
         },
         {
           "id": "c1-war-literature",
-          "title": "War literature",
-          "subtitle": "6 words",
+          "title": "Военная литература",
+          "subtitle": "6 слов",
           "badge": "C1",
           "imageUrl": "https://images.pexels.com/photos/269563/pexels-photo-269563.jpeg?auto=compress&cs=tinysrgb&w=800"
         },
         {
           "id": "c1-art-cinema",
-          "title": "Art cinema",
-          "subtitle": "6 words",
+          "title": "Артхаус",
+          "subtitle": "6 слов",
           "badge": "C1",
           "imageUrl": "https://images.pexels.com/photos/102127/pexels-photo-102127.jpeg?auto=compress&cs=tinysrgb&w=800"
         },
         {
           "id": "c1-economics-classics",
-          "title": "Economic classics",
-          "subtitle": "6 words",
+          "title": "Классика экономики",
+          "subtitle": "6 слов",
           "badge": "C1",
           "imageUrl": "https://images.pexels.com/photos/534216/pexels-photo-534216.jpeg?auto=compress&cs=tinysrgb&w=800"
         }
@@ -219,36 +219,36 @@
       "items": [
         {
           "id": "c2-literary-criticism",
-          "title": "Literary criticism",
-          "subtitle": "6 words",
+          "title": "Литературная критика",
+          "subtitle": "6 слов",
           "badge": "C2",
           "imageUrl": "https://images.pexels.com/photos/261763/pexels-photo-261763.jpeg?auto=compress&cs=tinysrgb&w=800"
         },
         {
           "id": "c2-existentialism",
-          "title": "Existentialism",
-          "subtitle": "6 words",
+          "title": "Экзистенциализм",
+          "subtitle": "6 слов",
           "badge": "C2",
           "imageUrl": "https://images.pexels.com/photos/46274/pexels-photo-46274.jpeg?auto=compress&cs=tinysrgb&w=800"
         },
         {
           "id": "c2-diplomacy-history",
-          "title": "Diplomacy & history",
-          "subtitle": "6 words",
+          "title": "Дипломатия и история",
+          "subtitle": "6 слов",
           "badge": "C2",
           "imageUrl": "https://images.pexels.com/photos/1550337/pexels-photo-1550337.jpeg?auto=compress&cs=tinysrgb&w=800"
         },
         {
           "id": "c2-neuroscience",
-          "title": "Neuroscience",
-          "subtitle": "6 words",
+          "title": "Нейронаука",
+          "subtitle": "6 слов",
           "badge": "C2",
           "imageUrl": "https://images.pexels.com/photos/3825586/pexels-photo-3825586.jpeg?auto=compress&cs=tinysrgb&w=800"
         },
         {
           "id": "c2-advanced-rhetoric",
-          "title": "Advanced rhetoric",
-          "subtitle": "6 words",
+          "title": "Риторика",
+          "subtitle": "6 слов",
           "badge": "C2",
           "imageUrl": "https://images.pexels.com/photos/267669/pexels-photo-267669.jpeg?auto=compress&cs=tinysrgb&w=800"
         }

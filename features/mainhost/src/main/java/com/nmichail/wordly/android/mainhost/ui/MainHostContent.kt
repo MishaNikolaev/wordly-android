@@ -126,7 +126,8 @@ private fun MainHostChildContent(
 			component = child.component,
 			themeMode = themeMode,
 			devEnabled = devEnabled,
-			modifier = Modifier.padding(innerPadding),
+			modifier = Modifier.padding(top = innerPadding.calculateTopPadding()),
+			bottomContentPadding = innerPadding.calculateBottomPadding(),
 		)
 		is MainHostComponent.Child.ProfileEdit -> ProfileEditContent(
 			component = child.component,

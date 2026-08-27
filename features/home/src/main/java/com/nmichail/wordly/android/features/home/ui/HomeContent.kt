@@ -184,7 +184,6 @@ private fun HomeLoadedBody(
 	onStreakSnackBar: (Int) -> Unit,
 	onUnavailableTraining: (Int) -> Unit,
 ) {
-	var selectedTrainingTab by rememberSaveable { mutableStateOf<HomeTrainingTab?>(null) }
 	var showTrainingFiltersSheet by rememberSaveable { mutableStateOf(false) }
 
 	Column(
@@ -208,10 +207,8 @@ private fun HomeLoadedBody(
 				modifier = Modifier.padding(top = 16.dp),
 			)
 			TrainingFilterTabs(
-				selectedTab = selectedTrainingTab,
 				onGridClick = { showTrainingFiltersSheet = true },
 				onTabSelected = { tab ->
-					selectedTrainingTab = tab
 					openTrainingTab(tab, component, onUnavailableTraining)
 				},
 				modifier = Modifier.padding(top = 16.dp),
@@ -224,12 +221,10 @@ private fun HomeLoadedBody(
 
 	if (showTrainingFiltersSheet) {
 		TrainingFiltersBottomSheet(
-			selectedTab = selectedTrainingTab,
 			onDismiss = { showTrainingFiltersSheet = false },
 			onFilterClick = { filter ->
 				showTrainingFiltersSheet = false
-				selectedTrainingTab = openTrainingFilter(filter, component, onUnavailableTraining)
-					?: selectedTrainingTab
+				openTrainingFilter(filter, component, onUnavailableTraining)
 			},
 		)
 	}
@@ -252,7 +247,7 @@ private fun openTrainingFilter(
 	filter: HomeTrainingFilter,
 	component: HomeComponent,
 	onUnavailableTraining: (Int) -> Unit,
-): HomeTrainingTab? {
+) {
 	when (filter) {
 		HomeTrainingFilter.Cards -> component.handleOpenCards()
 		HomeTrainingFilter.Constructor -> component.handleOpenConstructor()
@@ -261,7 +256,6 @@ private fun openTrainingFilter(
 		HomeTrainingFilter.Movies -> component.handleOpenMovies()
 		HomeTrainingFilter.Books -> component.handleOpenBooks()
 	}
-	return filter.toTabOrNull()
 }
 
 @Composable

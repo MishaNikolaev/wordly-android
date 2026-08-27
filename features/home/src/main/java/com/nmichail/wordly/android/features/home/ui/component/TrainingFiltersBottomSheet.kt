@@ -27,24 +27,11 @@ enum class HomeTrainingFilter {
 	Songs,
 	Movies,
 	Books,
-	;
-
-	fun toTabOrNull(): HomeTrainingTab? =
-		when (this) {
-			Cards -> HomeTrainingTab.Cards
-			Constructor -> HomeTrainingTab.Constructor
-			Listening -> HomeTrainingTab.Listening
-			Books -> HomeTrainingTab.Books
-			Songs,
-			Movies,
-			-> null
-		}
 }
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 fun TrainingFiltersBottomSheet(
-	selectedTab: HomeTrainingTab?,
 	onDismiss: () -> Unit,
 	onFilterClick: (HomeTrainingFilter) -> Unit,
 ) {
@@ -78,7 +65,7 @@ fun TrainingFiltersBottomSheet(
 				HomeTrainingFilter.entries.forEach { filter ->
 					TrainingFilterChip(
 						text = stringResource(filter.titleRes()),
-						selected = filter.matches(selectedTab),
+						selected = false,
 						onClick = { onFilterClick(filter) },
 					)
 				}

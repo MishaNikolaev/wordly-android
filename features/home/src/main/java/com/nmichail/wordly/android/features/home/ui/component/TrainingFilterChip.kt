@@ -97,14 +97,3 @@ internal fun HomeTrainingFilter.titleRes(): Int =
 		HomeTrainingFilter.Movies -> R.string.home_training_movies_title
 		HomeTrainingFilter.Books -> R.string.home_training_books_title
 	}
-
-internal fun HomeTrainingFilter.matches(selectedTab: HomeTrainingTab?): Boolean =
-	when (this) {
-		HomeTrainingFilter.Cards -> selectedTab == HomeTrainingTab.Cards
-		HomeTrainingFilter.Constructor -> selectedTab == HomeTrainingTab.Constructor
-		HomeTrainingFilter.Listening -> selectedTab == HomeTrainingTab.Listening
-		HomeTrainingFilter.Books -> selectedTab == HomeTrainingTab.Books
-		HomeTrainingFilter.Songs,
-		HomeTrainingFilter.Movies,
-		-> false
-	}

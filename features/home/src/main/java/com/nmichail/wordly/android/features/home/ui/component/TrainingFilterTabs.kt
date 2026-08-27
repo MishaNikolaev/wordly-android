@@ -28,7 +28,6 @@ private val visibleTabs = listOf(
 
 @Composable
 fun TrainingFilterTabs(
-	selectedTab: HomeTrainingTab?,
 	onGridClick: () -> Unit,
 	onTabSelected: (HomeTrainingTab) -> Unit,
 	modifier: Modifier = Modifier,
@@ -44,7 +43,7 @@ fun TrainingFilterTabs(
 		items(visibleTabs) { tab ->
 			TrainingFilterChip(
 				text = stringResource(tab.titleRes()),
-				selected = selectedTab == tab,
+				selected = false,
 				onClick = { onTabSelected(tab) },
 			)
 		}
@@ -56,7 +55,6 @@ fun TrainingFilterTabs(
 private fun TrainingFilterTabsPreview() {
 	WuiTheme {
 		TrainingFilterTabs(
-			selectedTab = HomeTrainingTab.Listening,
 			onGridClick = {},
 			onTabSelected = {},
 		)
