@@ -19,7 +19,6 @@ class WordlyApplication : Application(), AppComponentProvider {
 		super.onCreate()
 		appComponent = DaggerAppComponent.factory().create(application = this)
 		appComponent.inject(this)
-		// Touch repository so night mode is applied before any Activity is created.
 		themeRepository.getThemeMode()
 	}
 }
