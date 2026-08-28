@@ -30,6 +30,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import com.nmichail.wordly.android.component.wui.components.button.WuiButton
@@ -44,6 +45,7 @@ fun ProfileContent(
     themeMode: AppThemeMode,
     devEnabled: Boolean,
     modifier: Modifier = Modifier,
+    bottomContentPadding: Dp = 0.dp,
 ) {
     val state by component.model.subscribeAsState()
 
@@ -56,6 +58,7 @@ fun ProfileContent(
             themeMode = themeMode,
             devEnabled = devEnabled,
             component = component,
+            bottomContentPadding = bottomContentPadding,
             modifier = modifier,
         )
 
@@ -119,6 +122,7 @@ private fun ProfileLoaded(
     themeMode: AppThemeMode,
     devEnabled: Boolean,
     component: ProfileComponent,
+    bottomContentPadding: Dp,
     modifier: Modifier = Modifier,
 ) {
     ProfileDialogHost(
@@ -130,43 +134,38 @@ private fun ProfileLoaded(
             modifier = modifier
 				.fillMaxSize()
 				.background(MaterialTheme.colorScheme.background)
+				.verticalScroll(rememberScrollState())
 				.padding(horizontal = 20.dp)
-				.padding(top = 12.dp, bottom = 24.dp),
+				.padding(top = 12.dp, bottom = 24.dp + bottomContentPadding),
         ) {
-            Column(
-                modifier = Modifier
-					.weight(1f)
-					.verticalScroll(rememberScrollState()),
-            ) {
-                ProfileHeader(fullName = state.profile.fullName)
-                ProfileLevelRow(
-                    level = state.profile.englishLevel,
-                    onClick = { openDialog(ProfileDialog.Level) },
-                    modifier = Modifier.padding(top = 20.dp),
-                )
-                WuiButton(
-                    text = stringResource(R.string.profile_edit),
-                    onClick = component::handleOpenEdit,
-                    modifier = Modifier.padding(top = 20.dp),
-                    containerColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.08f),
-                    contentColor = MaterialTheme.colorScheme.onSurface,
-                )
-                ProfileSettingsSection(
-                    state = state,
-                    themeMode = themeMode,
-                    devEnabled = devEnabled,
-                    onOpenNotifications = component::handleOpenReminderTimes,
-                    onOpenDailyGoal = { openDialog(ProfileDialog.DailyGoal) },
-                    onOpenTheme = { openDialog(ProfileDialog.Theme) },
-                    onOpenNetworkSelection = component::handleOpenNetworkSelection,
-                    onToggleNotificationsEnabled = component::handleToggleNotificationsEnabled,
-                    modifier = Modifier.padding(top = 28.dp, bottom = 24.dp),
-                )
-            }
+            ProfileHeader(fullName = state.profile.fullName)
+            ProfileLevelRow(
+                level = state.profile.englishLevel,
+                onClick = { openDialog(ProfileDialog.Level) },
+                modifier = Modifier.padding(top = 20.dp),
+            )
+            WuiButton(
+                text = stringResource(R.string.profile_edit),
+                onClick = component::handleOpenEdit,
+                modifier = Modifier.padding(top = 20.dp),
+                containerColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.08f),
+                contentColor = MaterialTheme.colorScheme.onSurface,
+            )
+            ProfileSettingsSection(
+                state = state,
+                themeMode = themeMode,
+                devEnabled = devEnabled,
+                onOpenNotifications = component::handleOpenReminderTimes,
+                onOpenDailyGoal = { openDialog(ProfileDialog.DailyGoal) },
+                onOpenTheme = { openDialog(ProfileDialog.Theme) },
+                onOpenNetworkSelection = component::handleOpenNetworkSelection,
+                onToggleNotificationsEnabled = component::handleToggleNotificationsEnabled,
+                modifier = Modifier.padding(top = 28.dp, bottom = 24.dp),
+            )
             ProfileLogoutButton(
                 onClick = { openDialog(ProfileDialog.Logout) },
                 loading = state.loggingOut,
-                modifier = Modifier.padding(top = 8.dp),
+                modifier = Modifier.padding(top = 8.dp, bottom = 8.dp),
             )
         }
     }

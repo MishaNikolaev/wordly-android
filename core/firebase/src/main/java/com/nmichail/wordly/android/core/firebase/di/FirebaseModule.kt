@@ -27,4 +27,3 @@ abstract class FirebaseModule {
 }
 
 // TODO(fcm): добавить Firebase Messaging для пушей —
-// MessagingService, FcmTokenDataSource, регистрация токена после входа/регистрации.

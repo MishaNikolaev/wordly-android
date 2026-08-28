@@ -7,7 +7,6 @@ import com.arkivanov.decompose.value.Value
 import com.arkivanov.mvikotlin.core.instancekeeper.getStore
 import com.arkivanov.mvikotlin.extensions.coroutines.labelsChannel
 import com.nmichail.wordly.android.core.navigation.asValue
-import com.nmichail.wordly.android.features.home.domain.entity.Training
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -33,6 +32,8 @@ internal class DefaultHomeComponent @AssistedInject constructor(
 					HomeStore.Label.OpenCards -> homeRouter.navigateToCards()
 					HomeStore.Label.OpenConstructor -> homeRouter.navigateToConstructor()
 					HomeStore.Label.OpenBooks -> homeRouter.navigateToBooks()
+					HomeStore.Label.OpenMovies -> homeRouter.navigateToMovies()
+					HomeStore.Label.OpenRecap -> homeRouter.navigateToRecap()
 				}
 			}
 		}
@@ -42,32 +43,32 @@ internal class DefaultHomeComponent @AssistedInject constructor(
 		store.accept(HomeStore.Intent.Retry)
 	}
 
-	override fun handleOpenMonth() {
-		store.accept(HomeStore.Intent.OpenMonth)
-	}
-
-	override fun handleDismissMonth() {
-		store.accept(HomeStore.Intent.DismissMonth)
-	}
-
-	override fun handlePreviousMonth() {
-		store.accept(HomeStore.Intent.PreviousMonth)
-	}
-
-	override fun handleNextMonth() {
-		store.accept(HomeStore.Intent.NextMonth)
-	}
-
-	override fun handleGoToCurrentMonth() {
-		store.accept(HomeStore.Intent.GoToCurrentMonth)
+	override fun handleRefresh() {
+		store.accept(HomeStore.Intent.Refresh)
 	}
 
 	override fun handleStartReview() {
 		store.accept(HomeStore.Intent.StartReview)
 	}
 
-	override fun handleOpenTraining(training: Training) {
-		store.accept(HomeStore.Intent.OpenTraining(training = training))
+	override fun handleOpenCards() {
+		store.accept(HomeStore.Intent.OpenCards)
+	}
+
+	override fun handleOpenConstructor() {
+		store.accept(HomeStore.Intent.OpenConstructor)
+	}
+
+	override fun handleOpenBooks() {
+		store.accept(HomeStore.Intent.OpenBooks)
+	}
+
+	override fun handleOpenMovies() {
+		store.accept(HomeStore.Intent.OpenMovies)
+	}
+
+	override fun handleOpenRecap() {
+		store.accept(HomeStore.Intent.OpenRecap)
 	}
 
 	@AssistedFactory

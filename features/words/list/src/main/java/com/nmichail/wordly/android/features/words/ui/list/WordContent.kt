@@ -183,46 +183,22 @@ private fun WordsDetailOverlay(
     dialog: WordDetailDialogState,
     component: WordsComponent,
 ) {
-    WordDetailScreen(
-        state = dialog,
-        onDismiss = { component.wordDetailStore.accept(WordDetailStore.Intent.Dismiss) },
-        onStatusChange = { status ->
-            component.wordDetailStore.accept(
-                WordDetailStore.Intent.ChangeStatus(
-                    status
-                )
-            )
-        },
-        onOpenCalendar = {
-            component.wordDetailStore.accept(WordDetailStore.Intent.Calendar(WordDetailStore.CalendarAction.Open))
-        },
-        onDismissCalendar = {
-            component.wordDetailStore.accept(WordDetailStore.Intent.Calendar(WordDetailStore.CalendarAction.Dismiss))
-        },
-        onCalendarPreviousMonth = {
-            component.wordDetailStore.accept(WordDetailStore.Intent.Calendar(WordDetailStore.CalendarAction.PreviousMonth))
-        },
-        onCalendarNextMonth = {
-            component.wordDetailStore.accept(WordDetailStore.Intent.Calendar(WordDetailStore.CalendarAction.NextMonth))
-        },
-        onCalendarToday = {
-            component.wordDetailStore.accept(WordDetailStore.Intent.Calendar(WordDetailStore.CalendarAction.Today))
-        },
-        onCalendarDayClick = { day ->
-            component.wordDetailStore.accept(
-                WordDetailStore.Intent.Calendar(
-                    WordDetailStore.CalendarAction.DayClick(
-                        day
-                    )
-                )
-            )
-        },
-        onConfirmAddToReview = { component.wordDetailStore.accept(WordDetailStore.Intent.ConfirmAddToReview) },
-        onPlayAudio = { component.wordDetailStore.accept(WordDetailStore.Intent.PlayAudio) },
-        modifier = Modifier
+	WordDetailScreen(
+		state = dialog,
+		onDismiss = { component.wordDetailStore.accept(WordDetailStore.Intent.Dismiss) },
+		onStatusChange = { status ->
+			component.wordDetailStore.accept(
+				WordDetailStore.Intent.ChangeStatus(
+					status
+				)
+			)
+		},
+		onConfirmAddToReview = { component.wordDetailStore.accept(WordDetailStore.Intent.ConfirmAddToReview) },
+		onPlayAudio = { component.wordDetailStore.accept(WordDetailStore.Intent.PlayAudio) },
+		modifier = Modifier
 			.fillMaxSize()
 			.background(MaterialTheme.colorScheme.background),
-    )
+	)
 }
 
 @Composable

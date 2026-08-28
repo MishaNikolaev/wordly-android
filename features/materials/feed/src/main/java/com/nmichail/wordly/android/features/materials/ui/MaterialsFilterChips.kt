@@ -23,7 +23,6 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.nmichail.wordly.android.component.wui.theme.Wui
 import com.nmichail.wordly.android.features.materials.feed.R
 import com.nmichail.wordly.android.features.materials.domain.entity.MaterialFilter
 
@@ -44,7 +43,7 @@ internal fun MaterialsFilterChips(
 	LazyRow(
 		modifier = modifier.fillMaxWidth(),
 		contentPadding = PaddingValues(horizontal = 16.dp),
-		horizontalArrangement = Arrangement.spacedBy(6.dp),
+		horizontalArrangement = Arrangement.spacedBy(8.dp),
 	) {
 		items(filters) { (filter, title) ->
 			MaterialsFilterChip(
@@ -64,29 +63,25 @@ private fun MaterialsFilterChip(
 	modifier: Modifier = Modifier,
 ) {
 	val colorScheme = MaterialTheme.colorScheme
-	val background = if (selected) {
-		Wui.colors.primaryMuted
-	} else {
-		colorScheme.surfaceVariant.copy(alpha = 0.55f)
-	}
-	val content = colorScheme.onSurface
+	val background = if (selected) colorScheme.onSurface else colorScheme.surfaceVariant.copy(alpha = 0.55f)
+	val contentColor = if (selected) colorScheme.surface else colorScheme.onSurface
 
 	Box(
 		modifier = modifier
-			.height(32.dp)
+			.height(40.dp)
 			.defaultMinSize(minWidth = 58.dp)
 			.clip(RoundedCornerShape(percent = 50))
 			.background(background)
 			.clickable(role = Role.Button, onClick = onClick)
-			.padding(horizontal = 12.dp),
+			.padding(horizontal = 16.dp),
 		contentAlignment = Alignment.Center,
 	) {
 		Text(
 			text = text,
 			fontSize = 14.sp,
 			lineHeight = 18.sp,
-			fontWeight = FontWeight.Medium,
-			color = content,
+			fontWeight = FontWeight.SemiBold,
+			color = contentColor,
 			maxLines = 1,
 		)
 	}

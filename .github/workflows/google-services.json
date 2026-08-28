@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "73298162878",
+    "project_id": "wordly-a99ba",
+    "storage_bucket": "wordly-a99ba.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:73298162878:android:dfcfea9e4d0491376bdaef",
+        "android_client_info": {
+          "package_name": "com.nmichail.wordly.android"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDeKVyfAgkIqybk6W4-n8tMIPPjbUh9Iqg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:73298162878:android:eb0baa8b45c6d5976bdaef",
+        "android_client_info": {
+          "package_name": "com.nmichail.wordly.android.mock"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDeKVyfAgkIqybk6W4-n8tMIPPjbUh9Iqg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

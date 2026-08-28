@@ -14,13 +14,13 @@ internal fun HomeResponse.toEntity(): Home =
 		estimatedMinutes = estimatedMinutes,
 		reviewStreakDays = reviewStreakDays,
 		trainings = trainings.mapNotNull { it.toEntity() },
-		completedDayOffsets = completedDayOffsets,
 	)
 
 private fun TrainingResponse.toEntity(): Training? {
 	val type = when (id) {
 		"cards" -> TrainingType.Cards
 		"constructor" -> TrainingType.Constructor
+		"listening" -> TrainingType.Listening
 		"books" -> TrainingType.Books
 		else -> return null
 	}

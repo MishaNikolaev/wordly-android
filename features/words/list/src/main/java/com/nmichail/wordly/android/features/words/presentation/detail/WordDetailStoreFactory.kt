@@ -1,5 +1,3 @@
-@file:Suppress("TooManyFunctions")
-
 package com.nmichail.wordly.android.features.words.presentation.detail
 
 import kotlinx.coroutines.launch
@@ -16,10 +14,9 @@ import com.nmichail.wordly.android.features.words.domain.entity.WordStatus
 import com.nmichail.wordly.android.features.words.domain.usecase.AddWordToReviewUseCase
 import com.nmichail.wordly.android.features.words.domain.usecase.UpdateWordStatusUseCase
 import com.nmichail.wordly.android.features.words.presentation.WordDetailDialogState
-import com.nmichail.wordly.android.shared.calendar.RepeatDateFormatter
-import com.nmichail.wordly.android.shared.calendar.SelectionCalendarFactory
 import java.time.LocalDate
-import java.time.YearMonth
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 import javax.inject.Inject
 
 internal class WordDetailStoreFactory @Inject constructor(
@@ -91,7 +88,6 @@ internal class WordDetailStoreFactory @Inject constructor(
 					publish(WordDetailStore.Label.Dismiss)
 				}
 				is WordDetailStore.Intent.ChangeStatus -> changeStatus(intent.status)
-				is WordDetailStore.Intent.Calendar -> handleCalendar(intent.action)
 				WordDetailStore.Intent.ConfirmAddToReview -> confirmAddToReview()
 				WordDetailStore.Intent.PlayAudio -> Unit
 			}
@@ -101,25 +97,25 @@ internal class WordDetailStoreFactory @Inject constructor(
 			(state() as? WordDetailStore.State.Open)?.dialog
 
 		private fun open(word: WordItem) {
+			val alreadyInReview = word.repeatEpochDay != null
 			dispatch(
 				Msg.Opened(
 					dialog = WordDetailDialogState(
-                        wordId = word.id,
-                        word = word.word,
-                        phonetic = word.phonetic,
-                        translation = word.translation,
-                        definition = word.definition,
-                        examples = word.examples,
-                        status = word.status,
-                        tags = word.tags,
-                        difficulty = word.difficulty,
-                        maxDifficulty = 5,
-                        repeatEpochDay = word.repeatEpochDay,
-                        repeatDateLabel = RepeatDateFormatter.label(word.repeatEpochDay),
-                        calendar = null,
-                        submittingReview = false,
-                        addedToReview = false,
-                    ),
+						wordId = word.id,
+						word = word.word,
+						phonetic = word.phonetic,
+						translation = word.translation,
+						definition = word.definition,
+						examples = word.examples,
+						status = word.status,
+						tags = word.tags,
+						difficulty = word.difficulty,
+						maxDifficulty = 5,
+						repeatEpochDay = word.repeatEpochDay,
+						repeatDateLabel = repeatDateLabel(word.repeatEpochDay),
+						submittingReview = false,
+						addedToReview = alreadyInReview,
+					),
 				),
 			)
 		}
@@ -131,89 +127,6 @@ internal class WordDetailStoreFactory @Inject constructor(
 				updateWordStatusUseCase(wordId = dialog.wordId, status = status)
 				publish(WordDetailStore.Label.Changed)
 			}
-		}
-
-		private fun handleCalendar(action: WordDetailStore.CalendarAction) {
-			when (action) {
-				WordDetailStore.CalendarAction.Open -> openRepeatCalendar()
-				WordDetailStore.CalendarAction.Dismiss -> dismissRepeatCalendar()
-				WordDetailStore.CalendarAction.PreviousMonth -> changeDisplayedMonth(months = -1)
-				WordDetailStore.CalendarAction.NextMonth -> changeDisplayedMonth(months = 1)
-				WordDetailStore.CalendarAction.Today -> selectToday()
-				is WordDetailStore.CalendarAction.DayClick -> selectCalendarDay(action.dayOfMonth)
-			}
-		}
-
-		private fun openRepeatCalendar() {
-			val dialog = currentDialog() ?: return
-			val today = LocalDate.now()
-			val selected = (dialog.repeatEpochDay ?: today.toEpochDay())
-				.coerceAtLeast(today.toEpochDay())
-			val yearMonth = YearMonth.from(LocalDate.ofEpochDay(selected))
-			dispatch(
-				Msg.DialogUpdated(
-					dialog = dialog.copy(
-						repeatEpochDay = selected,
-						repeatDateLabel = RepeatDateFormatter.label(selected),
-						calendar = SelectionCalendarFactory.build(
-							yearMonth = yearMonth,
-							selectedEpochDay = selected,
-						),
-					),
-				),
-			)
-		}
-
-		private fun dismissRepeatCalendar() {
-			val dialog = currentDialog() ?: return
-			dispatch(Msg.DialogUpdated(dialog = dialog.copy(calendar = null)))
-		}
-
-		private fun changeDisplayedMonth(months: Long) {
-			val dialog = currentDialog() ?: return
-			val calendar = dialog.calendar ?: return
-			val next = YearMonth.of(calendar.year, calendar.month).plusMonths(months)
-			dispatch(
-				Msg.DialogUpdated(
-					dialog = dialog.copy(
-						calendar = SelectionCalendarFactory.build(
-							yearMonth = next,
-							selectedEpochDay = calendar.selectedEpochDay,
-						),
-					),
-				),
-			)
-		}
-
-		private fun selectToday() {
-			val today = LocalDate.now()
-			applySelectedEpochDay(today.toEpochDay(), YearMonth.from(today))
-		}
-
-		private fun selectCalendarDay(dayOfMonth: Int) {
-			val dialog = currentDialog() ?: return
-			val calendar = dialog.calendar ?: return
-			val date = YearMonth.of(calendar.year, calendar.month).atDay(dayOfMonth)
-			if (date.isBefore(LocalDate.now())) return
-			applySelectedEpochDay(date.toEpochDay(), YearMonth.from(date))
-		}
-
-		private fun applySelectedEpochDay(epochDay: Long, yearMonth: YearMonth) {
-			val dialog = currentDialog() ?: return
-			val todayEpoch = LocalDate.now().toEpochDay()
-			val safeEpochDay = epochDay.coerceAtLeast(todayEpoch)
-			dispatch(
-				Msg.DialogUpdated(
-					dialog = dialog.copy(
-						repeatEpochDay = safeEpochDay,
-						repeatDateLabel = RepeatDateFormatter.label(safeEpochDay),
-						calendar = SelectionCalendarFactory.build(
-							yearMonth = yearMonth,
-							selectedEpochDay = safeEpochDay,
-						),
-					),
-				),
-			)
 		}
 
 		private fun confirmAddToReview() {
@@ -244,6 +157,22 @@ internal class WordDetailStoreFactory @Inject constructor(
 					val current = currentDialog() ?: return@launch
 					dispatch(Msg.DialogUpdated(dialog = current.copy(submittingReview = false)))
 				}
+			}
+		}
+	}
+
+	private companion object {
+
+		private val monthDayFormatter =
+			DateTimeFormatter.ofPattern("d MMMM", Locale.forLanguageTag("ru"))
+
+		private fun repeatDateLabel(epochDay: Long?, today: LocalDate = LocalDate.now()): String {
+			if (epochDay == null) return ""
+			val date = LocalDate.ofEpochDay(epochDay)
+			return if (date == today) {
+				"сегодня"
+			} else {
+				date.format(monthDayFormatter)
 			}
 		}
 	}

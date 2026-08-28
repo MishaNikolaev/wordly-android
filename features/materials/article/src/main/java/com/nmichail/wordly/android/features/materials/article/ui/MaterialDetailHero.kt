@@ -18,6 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -28,28 +29,58 @@ import com.nmichail.wordly.android.component.wui.theme.isAppInDarkTheme
 import com.nmichail.wordly.android.features.materials.article.R
 import com.nmichail.wordly.android.features.materials.article.domain.entity.MaterialCategory
 import com.nmichail.wordly.android.features.materials.article.domain.entity.MaterialDetail
+import com.nmichail.wordly.android.shared.catalog.CatalogRemoteImage
 
 @Composable
 internal fun MaterialDetailHero(
 	material: MaterialDetail,
 	modifier: Modifier = Modifier,
 ) {
-	Column(
+	val shape = RoundedCornerShape(24.dp)
+	Box(
 		modifier = modifier
 			.fillMaxWidth()
-			.clip(RoundedCornerShape(24.dp))
-			.background(WuiBrushes.MaterialHero)
-			.padding(20.dp),
+			.clip(shape),
 	) {
-		MaterialHeroTagsRow(material = material)
-		Text(
-			text = material.title,
-			style = MaterialTheme.typography.headlineSmall,
-			fontWeight = FontWeight.Normal,
-			color = Color.White,
-			modifier = Modifier.padding(top = 16.dp),
-		)
-		MaterialHeroMetaRow(material = material)
+		if (material.photoUrl.isNullOrBlank()) {
+			Box(
+				modifier = Modifier
+					.matchParentSize()
+					.background(WuiBrushes.MaterialHero),
+			)
+		} else {
+			CatalogRemoteImage(
+				url = material.photoUrl,
+				modifier = Modifier.matchParentSize(),
+			)
+			Box(
+				modifier = Modifier
+					.matchParentSize()
+					.background(
+						Brush.verticalGradient(
+							colors = listOf(
+								Color.Black.copy(alpha = 0.35f),
+								Color.Black.copy(alpha = 0.72f),
+							),
+						),
+					),
+			)
+		}
+		Column(
+			modifier = Modifier
+				.fillMaxWidth()
+				.padding(20.dp),
+		) {
+			MaterialHeroTagsRow(material = material)
+			Text(
+				text = material.title,
+				style = MaterialTheme.typography.headlineSmall,
+				fontWeight = FontWeight.Normal,
+				color = Color.White,
+				modifier = Modifier.padding(top = 16.dp),
+			)
+			MaterialHeroMetaRow(material = material)
+		}
 	}
 }
 

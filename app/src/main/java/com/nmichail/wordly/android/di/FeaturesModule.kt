@@ -13,6 +13,8 @@ import com.nmichail.wordly.android.features.dev.networkselection.di.NetworkSelec
 import com.nmichail.wordly.android.features.home.di.HomeModule
 import com.nmichail.wordly.android.features.materials.di.MaterialsModule
 import com.nmichail.wordly.android.features.materials.article.di.MaterialArticleModule
+import com.nmichail.wordly.android.features.movies.di.MoviesModule
+import com.nmichail.wordly.android.features.recap.di.RecapModule
 import com.nmichail.wordly.android.features.profile.di.ProfileModule
 import com.nmichail.wordly.android.features.profile.editor.di.ProfileEditModule
 import com.nmichail.wordly.android.features.profile.reminders.di.ReminderTimesModule
@@ -28,6 +30,8 @@ import dagger.Module
 		NetworkSelectionModule::class,
 		HomeModule::class,
 		ReviewModule::class,
+		MoviesModule::class,
+		RecapModule::class,
 		CardsModule::class,
 		CardPracticeModule::class,
 		ConstructorModule::class,

@@ -12,4 +12,5 @@ data class MaterialDetail(
 	val likes: Int,
 	val dislikes: Int,
 	val status: MaterialReadStatus,
+	val photoUrl: String? = null,
 )

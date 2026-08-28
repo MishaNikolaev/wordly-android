@@ -7,5 +7,4 @@ data class Home(
 	val estimatedMinutes: Int,
 	val reviewStreakDays: Int,
 	val trainings: List<Training>,
-	val completedDayOffsets: List<Int>,
 )

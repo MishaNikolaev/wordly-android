@@ -58,7 +58,7 @@ internal fun MaterialRatingSection(
 		) {
 			ReactionButton(
 				selected = selectedReaction == MaterialReaction.Like,
-				count = likes + if (selectedReaction == MaterialReaction.Like) 1 else 0,
+				count = likes,
 				selectedIcon = Icons.Filled.ThumbUp,
 				unselectedIcon = Icons.Outlined.ThumbUp,
 				contentDescription = stringResource(R.string.materials_detail_like),
@@ -67,7 +67,7 @@ internal fun MaterialRatingSection(
 			)
 			ReactionButton(
 				selected = selectedReaction == MaterialReaction.Dislike,
-				count = dislikes + if (selectedReaction == MaterialReaction.Dislike) 1 else 0,
+				count = dislikes,
 				selectedIcon = Icons.Filled.ThumbDown,
 				unselectedIcon = Icons.Outlined.ThumbDown,
 				contentDescription = stringResource(R.string.materials_detail_dislike),

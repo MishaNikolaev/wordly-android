@@ -5,6 +5,8 @@ include(
 	":features:mainhost",
 	":features:home",
 	":features:review",
+	":features:movies",
+	":features:recap",
 	":features:cards:collection",
 	":features:cards:training",
 	":features:constructor:catalog",
@@ -30,7 +32,6 @@ include(
 	":core:preferences",
 
 	":shared:authorization",
-	":shared:calendar",
 	":shared:catalog",
 	":shared:englishlevel",
 	":shared:practice",

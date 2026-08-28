@@ -10,11 +10,15 @@ import com.arkivanov.mvikotlin.main.store.DefaultStoreFactory
 import com.nmichail.wordly.android.component.presentation.BaseCoroutineExecutor
 import com.nmichail.wordly.android.features.materials.article.domain.entity.MaterialDetail
 import com.nmichail.wordly.android.features.materials.article.domain.entity.MaterialReaction
+import com.nmichail.wordly.android.features.materials.article.domain.usecase.GetMaterialReactionUseCase
 import com.nmichail.wordly.android.features.materials.article.domain.usecase.GetMaterialUseCase
+import com.nmichail.wordly.android.features.materials.article.domain.usecase.SetMaterialReactionUseCase
 import javax.inject.Inject
 
 internal class MaterialDetailStoreFactory @Inject constructor(
 	private val getMaterialUseCase: GetMaterialUseCase,
+	private val getMaterialReactionUseCase: GetMaterialReactionUseCase,
+	private val setMaterialReactionUseCase: SetMaterialReactionUseCase,
 ) {
 
 	private val storeFactory: StoreFactory = LoggingStoreFactory(DefaultStoreFactory())
@@ -45,9 +49,15 @@ internal class MaterialDetailStoreFactory @Inject constructor(
 
 		data object SetError : Msg
 
-		data class Loaded(val material: MaterialDetail) : Msg
+		data class Loaded(
+			val material: MaterialDetail,
+			val selectedReaction: MaterialReaction?,
+		) : Msg
 
-		data class ReactionUpdated(val reaction: MaterialReaction?) : Msg
+		data class ReactionUpdated(
+			val material: MaterialDetail,
+			val reaction: MaterialReaction?,
+		) : Msg
 	}
 
 	private object ReducerImpl : Reducer<MaterialDetailStore.State, Msg> {
@@ -59,9 +69,12 @@ internal class MaterialDetailStoreFactory @Inject constructor(
 				Msg.SetError -> MaterialDetailStore.State.Error
 				is Msg.Loaded -> MaterialDetailStore.State.Content(
 					material = msg.material,
-					selectedReaction = null,
+					selectedReaction = msg.selectedReaction,
 				)
-				is Msg.ReactionUpdated -> content?.copy(selectedReaction = msg.reaction) ?: this
+				is Msg.ReactionUpdated -> content?.copy(
+					material = msg.material,
+					selectedReaction = msg.reaction,
+				) ?: this
 			}
 		}
 	}
@@ -98,7 +111,15 @@ internal class MaterialDetailStoreFactory @Inject constructor(
 		private fun toggleReaction(reaction: MaterialReaction) {
 			val content = state() as? MaterialDetailStore.State.Content ?: return
 			val next = if (content.selectedReaction == reaction) null else reaction
-			dispatch(Msg.ReactionUpdated(reaction = next))
+			val optimistic = content.material.withOptimisticReaction(
+				previous = content.selectedReaction,
+				next = next,
+			)
+			dispatch(Msg.ReactionUpdated(material = optimistic, reaction = next))
+			scope.launch {
+				val updated = setMaterialReactionUseCase(id = materialId, reaction = next)
+				dispatch(Msg.ReactionUpdated(material = updated, reaction = next))
+			}
 		}
 
 		private fun load(materialId: String) {
@@ -106,11 +127,34 @@ internal class MaterialDetailStoreFactory @Inject constructor(
 			scope.launch {
 				try {
 					val material = getMaterialUseCase(materialId)
-					dispatch(Msg.Loaded(material = material))
+					val reaction = getMaterialReactionUseCase(materialId)
+					dispatch(Msg.Loaded(material = material, selectedReaction = reaction))
 				} catch (_: Exception) {
 					dispatch(Msg.SetError)
 				}
 			}
 		}
 	}
+}
+
+private fun MaterialDetail.withOptimisticReaction(
+	previous: MaterialReaction?,
+	next: MaterialReaction?,
+): MaterialDetail {
+	var likes = likes
+	var dislikes = dislikes
+	when (previous) {
+		MaterialReaction.Like -> likes -= 1
+		MaterialReaction.Dislike -> dislikes -= 1
+		null -> Unit
+	}
+	when (next) {
+		MaterialReaction.Like -> likes += 1
+		MaterialReaction.Dislike -> dislikes += 1
+		null -> Unit
+	}
+	return copy(
+		likes = likes.coerceAtLeast(0),
+		dislikes = dislikes.coerceAtLeast(0),
+	)
 }

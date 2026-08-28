@@ -76,14 +76,7 @@ private val getHandlers: Map<Regex, Handler> = mapOf(
 	},
 	Regex("^/api/materials/([^/]+)$") to { context, uri, response ->
 		val materialId = uri.path?.removePrefix("/api/materials/").orEmpty()
-		val body = when (materialId) {
-			"present-perfect" -> context.getJson(R.raw.get_material_present_perfect)
-			"daily-idioms" -> context.getJson(R.raw.get_material_daily_idioms)
-			"small-talk" -> context.getJson(R.raw.get_material_small_talk)
-			"listening-shadowing" -> context.getJson(R.raw.get_material_listening_shadowing)
-			"conditionals" -> context.getJson(R.raw.get_material_conditionals)
-			else -> null
-		}
+		val body = context.materialDetailJson(materialId)
 		if (body == null) {
 			response.error404(context)
 		} else {
@@ -171,18 +164,34 @@ private val getHandlers: Map<Regex, Handler> = mapOf(
 )
 
 private fun filterMaterialsCatalog(json: String, category: String?): String {
-	if (category.isNullOrBlank()) return json
 	val root = JSONObject(json)
 	val items = root.getJSONArray("items")
-	val filtered = JSONArray()
+	val catalogItems = JSONArray()
 	for (index in 0 until items.length()) {
 		val item = items.getJSONObject(index)
-		if (item.optString("category").equals(category, ignoreCase = true)) {
-			filtered.put(item)
+		if (!category.isNullOrBlank() &&
+			!item.optString("category").equals(category, ignoreCase = true)
+		) {
+			continue
 		}
+		catalogItems.put(item.toMaterialCatalogItem())
 	}
-	root.put("items", filtered)
+	root.put("items", catalogItems)
 	return root.toString()
+}
+
+private fun JSONObject.toMaterialCatalogItem(): JSONObject {
+	val summary = optString("summary").ifBlank { optString("description") }
+	val catalog = JSONObject()
+		.put("id", optString("id"))
+		.put("category", optString("category"))
+		.put("title", optString("title"))
+		.put("description", summary)
+		.put("status", optString("status", "NEW"))
+	if (has("photoUrl") && !isNull("photoUrl")) {
+		catalog.put("photoUrl", get("photoUrl"))
+	}
+	return catalog
 }
 
 private fun filterWordsCatalog(json: String, status: String?, query: String?): String {

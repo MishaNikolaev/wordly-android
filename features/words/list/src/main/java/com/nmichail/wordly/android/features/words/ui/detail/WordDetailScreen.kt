@@ -11,10 +11,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -25,11 +23,11 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.PlaylistAdd
+import androidx.compose.material.icons.automirrored.filled.PlaylistAdd
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.automirrored.rounded.VolumeUp
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.outlined.CalendarMonth
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -50,16 +48,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.activity.compose.BackHandler
 import com.nmichail.wordly.android.component.wui.components.button.WuiButton
-import com.nmichail.wordly.android.component.wui.components.calendar.WuiCalendarDay
-import com.nmichail.wordly.android.component.wui.components.calendar.WuiCalendarDayStatusId
-import com.nmichail.wordly.android.component.wui.components.calendar.WuiCalendarDialog
 import com.nmichail.wordly.android.component.wui.theme.Wui
 import com.nmichail.wordly.android.component.wui.theme.WuiTypography
-import com.nmichail.wordly.android.component.wui.theme.isAppInDarkTheme
 import com.nmichail.wordly.android.features.words.list.R
 import com.nmichail.wordly.android.features.words.presentation.WordDetailDialogState
-import com.nmichail.wordly.android.shared.calendar.CalendarDay
-import com.nmichail.wordly.android.shared.calendar.CalendarDayStatus
 import com.nmichail.wordly.android.features.words.domain.entity.WordExample
 import com.nmichail.wordly.android.features.words.domain.entity.WordStatus
 
@@ -68,44 +60,20 @@ fun WordDetailScreen(
 	state: WordDetailDialogState,
 	onDismiss: () -> Unit,
 	onStatusChange: (WordStatus) -> Unit,
-	onOpenCalendar: () -> Unit,
-	onDismissCalendar: () -> Unit,
-	onCalendarPreviousMonth: () -> Unit,
-	onCalendarNextMonth: () -> Unit,
-	onCalendarToday: () -> Unit,
-	onCalendarDayClick: (Int) -> Unit,
 	onConfirmAddToReview: () -> Unit,
 	onPlayAudio: () -> Unit,
 	modifier: Modifier = Modifier,
 ) {
-	BackHandler {
-		if (state.calendar != null) {
-			onDismissCalendar()
-		} else {
-			onDismiss()
-		}
-	}
+	BackHandler(onBack = onDismiss)
 
 	WordDetailBody(
 		state = state,
 		onDismiss = onDismiss,
 		onStatusChange = onStatusChange,
-		onOpenCalendar = onOpenCalendar,
 		onConfirmAddToReview = onConfirmAddToReview,
 		onPlayAudio = onPlayAudio,
 		modifier = modifier,
 	)
-	state.calendar?.let { calendar ->
-		WuiCalendarDialog(
-			monthTitle = calendar.monthTitle,
-			days = calendar.days.map { day -> day?.toWuiDay() },
-			onDismiss = onDismissCalendar,
-			onTodayClick = onCalendarToday,
-			onPreviousMonthClick = onCalendarPreviousMonth,
-			onNextMonthClick = onCalendarNextMonth,
-			onDayClick = onCalendarDayClick,
-		)
-	}
 }
 
 @Composable
@@ -113,7 +81,6 @@ private fun WordDetailBody(
 	state: WordDetailDialogState,
 	onDismiss: () -> Unit,
 	onStatusChange: (WordStatus) -> Unit,
-	onOpenCalendar: () -> Unit,
 	onConfirmAddToReview: () -> Unit,
 	onPlayAudio: () -> Unit,
 	modifier: Modifier = Modifier,
@@ -168,27 +135,11 @@ private fun WordDetailBody(
 			)
 		}
 		WordDetailExamples(examples = state.examples)
-		Row(
-			modifier = Modifier
-				.fillMaxWidth()
-				.height(IntrinsicSize.Max),
-			horizontalArrangement = Arrangement.spacedBy(8.dp),
-		) {
-			DifficultyBox(
-				difficulty = state.difficulty,
-				maxDifficulty = state.maxDifficulty,
-				modifier = Modifier
-					.weight(1f)
-					.fillMaxHeight(),
-			)
-			RepeatDateBox(
-				label = state.repeatDateLabel,
-				onClick = onOpenCalendar,
-				modifier = Modifier
-					.weight(1f)
-					.fillMaxHeight(),
-			)
-		}
+		DifficultyBox(
+			difficulty = state.difficulty,
+			maxDifficulty = state.maxDifficulty,
+			modifier = Modifier.fillMaxWidth(),
+		)
 		if (state.tags.isNotEmpty()) {
 			WordDetailTags(
 				tags = state.tags,
@@ -204,7 +155,10 @@ private fun WordDetailBody(
 			onClick = onConfirmAddToReview,
 			enabled = !state.submittingReview && !state.addedToReview,
 			loading = state.submittingReview,
-			leadingIcon = if (state.addedToReview) null else Icons.AutoMirrored.Outlined.PlaylistAdd,
+			leadingIcon = when {
+				state.addedToReview -> Icons.Filled.Check
+				else -> Icons.AutoMirrored.Filled.PlaylistAdd
+			},
 			containerColor = if (state.addedToReview) {
 				Wui.colors.success
 			} else {
@@ -494,54 +448,6 @@ private fun DifficultyBox(
 }
 
 @Composable
-private fun RepeatDateBox(
-	label: String,
-	onClick: () -> Unit,
-	modifier: Modifier = Modifier,
-) {
-	val shape = RoundedCornerShape(14.dp)
-	val accent = MaterialTheme.colorScheme.primary
-	val containerColor = if (isAppInDarkTheme()) {
-		Color(0xFF3A2245)
-	} else {
-		Color(0xFFEAE4F6)
-	}
-	Column(
-		modifier = modifier
-			.clip(shape)
-			.background(containerColor)
-			.border(1.dp, accent, shape)
-			.clickable(role = Role.Button, onClick = onClick)
-			.padding(horizontal = 12.dp, vertical = 10.dp),
-	) {
-		Row(
-			modifier = Modifier.fillMaxWidth(),
-			horizontalArrangement = Arrangement.SpaceBetween,
-			verticalAlignment = Alignment.CenterVertically,
-		) {
-			Text(
-				text = label,
-				style = MaterialTheme.typography.headlineSmall.copy(fontSize = 22.sp),
-				fontWeight = FontWeight.Bold,
-				color = MaterialTheme.colorScheme.onSurface,
-			)
-			Icon(
-				imageVector = Icons.Outlined.CalendarMonth,
-				contentDescription = null,
-				tint = accent,
-				modifier = Modifier.size(20.dp),
-			)
-		}
-		Spacer(modifier = Modifier.height(2.dp))
-		Text(
-			text = stringResource(R.string.words_detail_repeat_label),
-			style = MaterialTheme.typography.bodySmall.copy(fontSize = 12.sp),
-			color = accent,
-		)
-	}
-}
-
-@Composable
 private fun statusAccentColor(status: WordStatus): Color {
 	val extended = Wui.colors
 	return when (status) {
@@ -563,19 +469,3 @@ private fun detailTagPalette(index: Int): Color {
 	)
 	return colors[index % colors.size]
 }
-
-private fun CalendarDay.toWuiDay(): WuiCalendarDay =
-	WuiCalendarDay(
-		dayOfMonth = dayOfMonth,
-		statusId = status.toUiId(),
-	)
-
-private fun CalendarDayStatus.toUiId(): String =
-	when (this) {
-		CalendarDayStatus.Completed -> WuiCalendarDayStatusId.Completed
-		CalendarDayStatus.Missed -> WuiCalendarDayStatusId.Missed
-		CalendarDayStatus.Today -> WuiCalendarDayStatusId.Today
-		CalendarDayStatus.Inactive -> WuiCalendarDayStatusId.Inactive
-		CalendarDayStatus.Selected -> WuiCalendarDayStatusId.Selected
-		CalendarDayStatus.Plain -> WuiCalendarDayStatusId.Plain
-	}

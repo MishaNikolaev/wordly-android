@@ -29,7 +29,6 @@
 	<string name="words_detail_difficulty_label">сложность слова</string>
 	<string name="words_detail_difficulty_value">%1$d</string>
 	<string name="words_detail_difficulty_max">/%1$d</string>
-	<string name="words_detail_repeat_label">выбрать дату повторения</string>
 	<string name="words_detail_add_to_review">Добавить в повторение</string>
 	<string name="words_detail_added_to_review">Добавлено в повторение</string>
 	<string name="words_detail_examples_label">ПРИМЕРЫ</string>

@@ -23,6 +23,8 @@ import com.nmichail.wordly.android.features.cards.ui.CardsContent
 import com.nmichail.wordly.android.features.constructor.ui.ConstructorContent
 import com.nmichail.wordly.android.features.constructor.practice.ui.ConstructorPracticeContent
 import com.nmichail.wordly.android.features.home.ui.HomeContent
+import com.nmichail.wordly.android.features.movies.ui.MoviesContent
+import com.nmichail.wordly.android.features.recap.ui.RecapContent
 import com.nmichail.wordly.android.features.profile.ui.ProfileContent
 import com.nmichail.wordly.android.features.profile.editor.ui.ProfileEditContent
 import com.nmichail.wordly.android.features.profile.reminders.ui.ReminderTimesContent
@@ -46,15 +48,14 @@ fun MainHostContent(
 	val stack by component.stack.subscribeAsState()
 	val selectedTab = stack.active.instance.toTab()
 	var wordDetailOpen by remember { mutableStateOf(false) }
-	val showBottomBar = selectedTab != null && !wordDetailOpen
 
 	Scaffold(
 		modifier = modifier.fillMaxSize(),
 		containerColor = MaterialTheme.colorScheme.background,
 		bottomBar = {
-			if (showBottomBar && selectedTab != null) {
+			selectedTab?.takeIf { !wordDetailOpen }?.let { tab ->
 				MainBottomBar(
-					selectedTab = selectedTab,
+					selectedTab = tab,
 					onTabSelected = component::handleSelectTab,
 				)
 			}
@@ -125,7 +126,8 @@ private fun MainHostChildContent(
 			component = child.component,
 			themeMode = themeMode,
 			devEnabled = devEnabled,
-			modifier = Modifier.padding(innerPadding),
+			modifier = Modifier.padding(top = innerPadding.calculateTopPadding()),
+			bottomContentPadding = innerPadding.calculateBottomPadding(),
 		)
 		is MainHostComponent.Child.ProfileEdit -> ProfileEditContent(
 			component = child.component,
@@ -138,6 +140,12 @@ private fun MainHostChildContent(
 		is MainHostComponent.Child.Review -> ReviewContent(
 			component = child.component,
 			modifier = Modifier.padding(innerPadding),
+		)
+		is MainHostComponent.Child.Movies -> MoviesContent(
+			component = child.component,
+		)
+		is MainHostComponent.Child.Recap -> RecapContent(
+			component = child.component,
 		)
 		is MainHostComponent.Child.Cards -> CardsContent(
 			component = child.component,

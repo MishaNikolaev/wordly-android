@@ -2,7 +2,6 @@ package com.nmichail.wordly.android.features.home.presentation
 
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.value.Value
-import com.nmichail.wordly.android.features.home.domain.entity.Training
 
 interface HomeComponent {
 
@@ -10,19 +9,19 @@ interface HomeComponent {
 
 	fun handleRetry()
 
-	fun handleOpenMonth()
-
-	fun handleDismissMonth()
-
-	fun handlePreviousMonth()
-
-	fun handleNextMonth()
-
-	fun handleGoToCurrentMonth()
+	fun handleRefresh()
 
 	fun handleStartReview()
 
-	fun handleOpenTraining(training: Training)
+	fun handleOpenCards()
+
+	fun handleOpenConstructor()
+
+	fun handleOpenBooks()
+
+	fun handleOpenMovies()
+
+	fun handleOpenRecap()
 
 	fun interface Factory {
 

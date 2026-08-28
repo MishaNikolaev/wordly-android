@@ -12,7 +12,6 @@ import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import retrofit2.Retrofit
-import java.time.Clock
 import javax.inject.Singleton
 
 @Module
@@ -41,10 +40,5 @@ abstract class HomeModule {
 			@GeneralRetrofit retrofit: Retrofit,
 		): HomeApi =
 			retrofit.create(HomeApi::class.java)
-
-		@Provides
-		@Singleton
-		fun provideClock(): Clock =
-			Clock.systemDefaultZone()
 	}
 }

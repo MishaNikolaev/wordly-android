@@ -33,7 +33,7 @@ fun HomeTopBar(
 	Row(
 		modifier = modifier
 			.fillMaxWidth()
-			.background(MaterialTheme.colorScheme.surface)
+			.background(MaterialTheme.colorScheme.background)
 			.padding(horizontal = 16.dp, vertical = 12.dp),
 		horizontalArrangement = Arrangement.SpaceBetween,
 		verticalAlignment = Alignment.CenterVertically,
@@ -47,10 +47,12 @@ fun HomeTopBar(
 				.weight(1f)
 				.padding(end = 12.dp),
 		)
-		StreakChip(
-			streakDays = streakDays,
-			onClick = onStreakClick,
-		)
+		if (streakDays > 0) {
+			StreakChip(
+				streakDays = streakDays,
+				onClick = onStreakClick,
+			)
+		}
 	}
 }
 

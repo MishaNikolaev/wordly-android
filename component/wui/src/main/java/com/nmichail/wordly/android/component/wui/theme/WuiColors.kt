@@ -37,6 +37,9 @@ internal object WuiColors {
 	val LightStreak = Color(0xFFFF9500)
 	val LightStreakContainer = Color(0xFFFFF2DD)
 
+	val LightDailyReviewGradientStart = Color(0xFFF1E5F9)
+	val LightDailyReviewGradientEnd = Color(0xFFFCF2F6)
+
 	val HeroGradientMiddle = Color(0xFFD4559E)
 	val HeroGradientEnd = Color(0xFFFF7B5A)
 

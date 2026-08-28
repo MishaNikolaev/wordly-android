@@ -12,4 +12,6 @@ data class MaterialDetailDto(
 	val likes: Int,
 	val dislikes: Int,
 	val status: String,
+	val photoUrl: String? = null,
+	val userReaction: String? = null,
 )
