@@ -13,10 +13,9 @@ build
 .cxx
 local.properties
 
-config/firebase/.firebaserc
-config/firebase/seed/
+core/firebase/config/.firebaserc
+core/firebase/config/seed/
 **/google-services.json
-google-services.json
-!.github/workflows/google-services.json
+!core/firebase/google-services.json
 firebase-debug.log
 *-debug.log
