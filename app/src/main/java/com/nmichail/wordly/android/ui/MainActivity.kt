@@ -4,8 +4,8 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.arkivanov.decompose.defaultComponentContext
 import com.nmichail.wordly.android.core.preferences.domain.usecase.ObserveThemeModeUseCase
 import com.nmichail.wordly.android.di.appComponent
@@ -35,7 +35,7 @@ class MainActivity : ComponentActivity() {
 		val rootComponent = rootComponentFactory(defaultComponentContext())
 
 		setContent {
-			val themeMode by observeThemeModeUseCase().collectAsState()
+			val themeMode by observeThemeModeUseCase().collectAsStateWithLifecycle()
 			RootContent(
 				component = rootComponent,
 				devEnabled = devEnabled,
