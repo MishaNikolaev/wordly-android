@@ -19,18 +19,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.nmichail.wordly.android.component.wui.theme.Wui
 import com.nmichail.wordly.android.component.wui.theme.WuiTheme
 import com.nmichail.wordly.android.component.wui.theme.WuiTypography
 import com.nmichail.wordly.android.features.home.R
 import com.nmichail.wordly.android.component.wui.R as WuiR
-
-private val RecapCtaColor = Color(0xFFFF800F)
 
 @Composable
 fun WordsLearnedRecapCard(
@@ -64,7 +62,7 @@ fun WordsLearnedRecapCard(
 					.height(44.dp)
 					.width(158.dp)
 					.clip(RoundedCornerShape(22.dp))
-					.background(RecapCtaColor)
+					.background(Wui.colors.recapCta)
 					.clickable(role = Role.Button, onClick = onCtaClick),
 				contentAlignment = Alignment.Center,
 			) {
@@ -76,7 +74,7 @@ fun WordsLearnedRecapCard(
 			}
 		}
 		Image(
-			painter = painterResource(WuiR.drawable.perfect_bull),
+			painter = painterResource(WuiR.drawable.bull),
 			contentDescription = null,
 			modifier = Modifier.size(width = 128.dp, height = 154.dp),
 		)
