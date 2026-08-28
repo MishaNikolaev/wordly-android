@@ -1,7 +1,6 @@
 plugins {
 	alias(libs.plugins.wordlyAndroidApplication)
 	alias(libs.plugins.ksp)
-	id("com.google.gms.google-services")
 }
 
 android {
@@ -63,6 +62,7 @@ dependencies {
 
 	implementation(libs.androidx.core.ktx)
 	implementation(libs.androidx.lifecycle.runtime.ktx)
+	implementation(libs.androidx.lifecycle.runtime.compose)
 	implementation(libs.androidx.activity.compose)
 	implementation(platform(libs.androidx.compose.bom))
 	implementation(libs.androidx.ui)

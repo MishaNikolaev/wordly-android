@@ -67,7 +67,6 @@ internal class DefaultRootComponent @AssistedInject constructor(
 		}
 	}
 
-	/** Like cft_shift splash: local tokens are not enough — confirm session with backend. */
 	private fun validateSessionIfNeeded() {
 		if (!isAuthTokensExistUseCase()) return
 		scope.launch {

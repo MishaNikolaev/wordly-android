@@ -1,6 +1,7 @@
 plugins {
 	alias(libs.plugins.wordlyAndroidLibrary)
 	alias(libs.plugins.ksp)
+	id("com.google.gms.google-services")
 }
 
 dependencies {
