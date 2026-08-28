@@ -168,6 +168,7 @@ internal class DefaultMainHostComponent @AssistedInject constructor(
 			override fun navigateBack() {
 				navigation.pop()
 				profileComponent?.handleRefresh()
+				homeComponent?.handleRefresh()
 			}
 		}
 		return MainHostComponent.Child.ProfileEdit(

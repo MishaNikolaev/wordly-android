@@ -1,5 +1,7 @@
 package com.nmichail.wordly.android.features.books.reader.presentation
 
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import com.arkivanov.mvikotlin.core.store.Reducer
 import com.arkivanov.mvikotlin.core.store.SimpleBootstrapper
@@ -149,6 +151,9 @@ internal class BookReaderStoreFactory @Inject constructor(
             BookReaderStore.Label,
             >() {
 
+        private var lookupJob: Job? = null
+        private var pendingLookupQuery: String? = null
+
         override fun executeAction(action: Action) {
             when (action) {
                 Action.Init -> loadBook()
@@ -161,12 +166,22 @@ internal class BookReaderStoreFactory @Inject constructor(
                 BookReaderStore.Intent.Retry -> loadBook()
                 BookReaderStore.Intent.ToggleTranslate -> handleToggleTranslate()
                 is BookReaderStore.Intent.SelectWord -> selectWord(wordId = intent.wordId)
-                BookReaderStore.Intent.DismissWordDialog -> dispatch(Msg.WordDialogDismissed)
+                BookReaderStore.Intent.DismissWordDialog -> {
+                    cancelWordLookup()
+                    dispatch(Msg.WordDialogDismissed)
+                }
                 BookReaderStore.Intent.AddWordToCard -> addWordToDictionary()
                 BookReaderStore.Intent.DismissWordAddedDialog -> {
+                    cancelWordLookup()
                     dispatch(Msg.WordAddedDialogDismissed)
                 }
             }
+        }
+
+        private fun cancelWordLookup() {
+            lookupJob?.cancel()
+            lookupJob = null
+            pendingLookupQuery = null
         }
 
         private fun loadBook() {
@@ -220,6 +235,8 @@ internal class BookReaderStoreFactory @Inject constructor(
 
         private fun selectWord(wordId: String) {
             val content = state() as? BookReaderStore.State.Content ?: return
+            cancelWordLookup()
+
             findEmbeddedDefinition(book = content.book, wordId = wordId)?.let { definition ->
                 dispatch(Msg.WordSelected(definition = definition))
                 return
@@ -237,12 +254,17 @@ internal class BookReaderStoreFactory @Inject constructor(
                 return
             }
 
+            pendingLookupQuery = query
             dispatch(Msg.WordLookupLoading)
-            scope.launch {
+            lookupJob = scope.launch {
                 try {
                     val lookup = lookupWordUseCase(query)
+                    if (pendingLookupQuery != query) return@launch
                     dispatch(Msg.WordSelected(definition = lookup.toBookDefinition(fallbackWord = query)))
+                } catch (e: CancellationException) {
+                    throw e
                 } catch (_: Exception) {
+                    if (pendingLookupQuery != query) return@launch
                     dispatch(
                         Msg.WordSelected(
                             definition = BookWordDefinition(
