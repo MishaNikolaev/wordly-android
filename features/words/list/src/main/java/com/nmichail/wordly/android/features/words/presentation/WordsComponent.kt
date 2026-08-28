@@ -24,8 +24,13 @@ interface WordsComponent {
 
 	fun openWordDetail(wordId: String)
 
+	fun handleRefresh()
+
 	fun interface Factory {
 
-		operator fun invoke(componentContext: ComponentContext): WordsComponent
+		operator fun invoke(
+			componentContext: ComponentContext,
+			onCatalogChanged: () -> Unit,
+		): WordsComponent
 	}
 }

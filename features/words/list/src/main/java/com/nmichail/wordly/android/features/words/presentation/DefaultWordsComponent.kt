@@ -23,6 +23,7 @@ internal class DefaultWordsComponent @AssistedInject constructor(
 	private val addWordStoreFactory: AddWordStoreFactory,
 	private val wordDetailStoreFactory: WordDetailStoreFactory,
 	@Assisted("componentContext") componentContext: ComponentContext,
+	@Assisted("onCatalogChanged") private val onCatalogChanged: () -> Unit,
 ) : ComponentContext by componentContext,
 	WordsComponent {
 
@@ -51,6 +52,7 @@ internal class DefaultWordsComponent @AssistedInject constructor(
 					AddWordStore.Label.Dismiss -> Unit
 					AddWordStore.Label.WordAdded -> {
 						listStore.accept(WordsListStore.Intent.Refresh)
+						onCatalogChanged()
 					}
 				}
 			}
@@ -61,6 +63,7 @@ internal class DefaultWordsComponent @AssistedInject constructor(
 					WordDetailStore.Label.Dismiss -> Unit
 					WordDetailStore.Label.Changed -> {
 						listStore.accept(WordsListStore.Intent.Refresh)
+						onCatalogChanged()
 					}
 				}
 			}
@@ -78,10 +81,15 @@ internal class DefaultWordsComponent @AssistedInject constructor(
 		wordDetailStore.accept(WordDetailStore.Intent.Open(word = word))
 	}
 
+	override fun handleRefresh() {
+		listStore.accept(WordsListStore.Intent.Refresh)
+	}
+
 	@AssistedFactory
 	fun interface Factory : WordsComponent.Factory {
 		override fun invoke(
 			@Assisted("componentContext") componentContext: ComponentContext,
+			@Assisted("onCatalogChanged") onCatalogChanged: () -> Unit,
 		): DefaultWordsComponent
 	}
 }

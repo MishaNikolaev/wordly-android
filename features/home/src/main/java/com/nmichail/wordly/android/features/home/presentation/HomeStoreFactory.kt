@@ -9,11 +9,13 @@ import com.arkivanov.mvikotlin.logging.store.LoggingStoreFactory
 import com.arkivanov.mvikotlin.main.store.DefaultStoreFactory
 import com.nmichail.wordly.android.component.presentation.BaseCoroutineExecutor
 import com.nmichail.wordly.android.features.home.domain.entity.Home
+import com.nmichail.wordly.android.features.home.domain.repository.HomeRepository
 import com.nmichail.wordly.android.features.home.domain.usecase.GetHomeUseCase
 import javax.inject.Inject
 
 internal class HomeStoreFactory @Inject constructor(
 	private val getHomeUseCase: GetHomeUseCase,
+	private val homeRepository: HomeRepository,
 ) {
 
 	private val storeFactory: StoreFactory = LoggingStoreFactory(DefaultStoreFactory())
@@ -71,13 +73,14 @@ internal class HomeStoreFactory @Inject constructor(
 
 		override fun executeAction(action: Action) {
 			when (action) {
-				Action.Init -> loadHome()
+				Action.Init -> loadHome(showLoading = true, invalidateCache = false)
 			}
 		}
 
 		override fun executeIntent(intent: HomeStore.Intent) {
 			when (intent) {
-				HomeStore.Intent.Retry -> loadHome()
+				HomeStore.Intent.Retry -> loadHome(showLoading = true, invalidateCache = true)
+				HomeStore.Intent.Refresh -> loadHome(showLoading = false, invalidateCache = true)
 				HomeStore.Intent.StartReview -> publish(HomeStore.Label.StartReview)
 				HomeStore.Intent.OpenCards -> publish(HomeStore.Label.OpenCards)
 				HomeStore.Intent.OpenConstructor -> publish(HomeStore.Label.OpenConstructor)
@@ -87,12 +90,18 @@ internal class HomeStoreFactory @Inject constructor(
 			}
 		}
 
-		private fun loadHome() {
-			dispatch(Msg.Loading)
+		private fun loadHome(showLoading: Boolean, invalidateCache: Boolean) {
+			if (showLoading) {
+				dispatch(Msg.Loading)
+			}
 			scope.launch {
 				try {
+					if (invalidateCache) {
+						homeRepository.invalidateCache()
+					}
 					dispatch(Msg.HomeLoaded(home = getHomeUseCase()))
 				} catch (_: Exception) {
+					if (!showLoading) return@launch
 					dispatch(Msg.SetError)
 				}
 			}

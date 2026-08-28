@@ -43,6 +43,8 @@ interface HomeStore :
 
 		data object Retry : Intent
 
+		data object Refresh : Intent
+
 		data object StartReview : Intent
 
 		data object OpenCards : Intent

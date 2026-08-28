@@ -9,6 +9,8 @@ interface HomeComponent {
 
 	fun handleRetry()
 
+	fun handleRefresh()
+
 	fun handleStartReview()
 
 	fun handleOpenCards()

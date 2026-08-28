@@ -72,6 +72,8 @@ internal class DefaultMainHostComponent @AssistedInject constructor(
 
 	private val navigation = StackNavigation<MainHostConfig>()
 	private var profileComponent: ProfileComponent? = null
+	private var homeComponent: HomeComponent? = null
+	private var wordsComponent: WordsComponent? = null
 
 	override val stack: Value<ChildStack<*, MainHostComponent.Child>> = childStack(
 		source = navigation,
@@ -93,9 +95,7 @@ internal class DefaultMainHostComponent @AssistedInject constructor(
 	): MainHostComponent.Child =
 		when (config) {
 			MainHostConfig.Home -> homeChild(componentContext)
-			MainHostConfig.Words -> MainHostComponent.Child.Words(
-				component = wordsComponentFactory(componentContext),
-			)
+			MainHostConfig.Words -> wordsChild(componentContext)
 			MainHostConfig.Materials -> materialsChild(componentContext)
 			is MainHostConfig.MaterialDetail -> materialDetailChild(config.materialId, componentContext)
 			MainHostConfig.Profile -> profileChild(componentContext)
@@ -139,7 +139,8 @@ internal class DefaultMainHostComponent @AssistedInject constructor(
 						bookId = config.bookId,
 						bookReaderRouter = bookReaderRouter,
 						onAddWordToCard = {
-							// TODO: реализовать добавление слова в карточку
+							wordsComponent?.handleRefresh()
+							homeComponent?.handleRefresh()
 						},
 					),
 				)
@@ -221,6 +222,15 @@ internal class DefaultMainHostComponent @AssistedInject constructor(
 		)
 	}
 
+	private fun wordsChild(componentContext: ComponentContext): MainHostComponent.Child {
+		val component = wordsComponentFactory(
+			componentContext = componentContext,
+			onCatalogChanged = { homeComponent?.handleRefresh() },
+		)
+		wordsComponent = component
+		return MainHostComponent.Child.Words(component = component)
+	}
+
 	@OptIn(DelicateDecomposeApi::class)
 	private fun homeChild(componentContext: ComponentContext): MainHostComponent.Child {
 		val homeRouter = object : HomeRouter {
@@ -248,12 +258,12 @@ internal class DefaultMainHostComponent @AssistedInject constructor(
 				navigation.push(MainHostConfig.Recap)
 			}
 		}
-		return MainHostComponent.Child.Home(
-			component = homeComponentFactory(
-				componentContext = componentContext,
-				homeRouter = homeRouter,
-			),
+		val component = homeComponentFactory(
+			componentContext = componentContext,
+			homeRouter = homeRouter,
 		)
+		homeComponent = component
+		return MainHostComponent.Child.Home(component = component)
 	}
 
 	private fun reviewChild(componentContext: ComponentContext): MainHostComponent.Child {

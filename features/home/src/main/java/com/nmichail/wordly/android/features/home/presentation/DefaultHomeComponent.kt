@@ -43,6 +43,10 @@ internal class DefaultHomeComponent @AssistedInject constructor(
 		store.accept(HomeStore.Intent.Retry)
 	}
 
+	override fun handleRefresh() {
+		store.accept(HomeStore.Intent.Refresh)
+	}
+
 	override fun handleStartReview() {
 		store.accept(HomeStore.Intent.StartReview)
 	}
