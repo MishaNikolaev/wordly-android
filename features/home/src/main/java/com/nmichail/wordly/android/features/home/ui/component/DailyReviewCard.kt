@@ -93,16 +93,16 @@ private fun DailyReviewCardContent(
 			.padding(19.dp),
 	) {
 		Image(
-			painter = painterResource(WuiR.drawable.mascot),
+			painter = painterResource(WuiR.drawable.bull_head),
 			contentDescription = null,
 			modifier = Modifier
 				.align(Alignment.CenterEnd)
-				.size(width = 99.dp, height = 93.dp),
+				.size(width = 136.dp, height = 128.dp),
 		)
 		Column(
 			modifier = Modifier
 				.fillMaxWidth()
-				.padding(end = 100.dp),
+				.padding(end = 128.dp),
 			verticalArrangement = Arrangement.spacedBy(12.dp),
 		) {
 			TitleChip()

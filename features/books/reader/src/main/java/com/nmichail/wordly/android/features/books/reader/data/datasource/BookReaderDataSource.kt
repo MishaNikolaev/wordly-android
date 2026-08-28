@@ -36,7 +36,7 @@ class BookReaderDataSourceImpl @Inject constructor(
 		}
 
 	private companion object {
-		const val CACHE_VERSION = 9
+		const val CACHE_VERSION = 10
 
 		fun contentKey(bookId: String): String = "page_book_content_v${CACHE_VERSION}_$bookId"
 

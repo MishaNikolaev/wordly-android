@@ -10,7 +10,7 @@ import androidx.compose.ui.graphics.Color
  * Cross-cutting semantic colors beyond Material3 [androidx.compose.material3.ColorScheme].
  *
  * Use [MaterialTheme.colorScheme] for surfaces/primary/error.
- * Use [Wui.colors] for success/warning/streak and soft accents.
+ * Use [Wui.colors] for success/warning/streak/recapCta and soft accents.
  * Feature-specific tags (category, repeat date, etc.) stay in features.
  */
 @Immutable
@@ -23,6 +23,7 @@ data class WuiExtendedColors(
 	val warningContainer: Color,
 	val streak: Color,
 	val streakContainer: Color,
+	val recapCta: Color,
 	val errorContainer: Color,
 	val muted: Color,
 	val outlineSoft: Color,
@@ -39,6 +40,7 @@ internal val LightExtendedColors = WuiExtendedColors(
 	warningContainer = WuiColors.LightWarningContainer,
 	streak = WuiColors.LightStreak,
 	streakContainer = WuiColors.LightStreakContainer,
+	recapCta = WuiColors.LightRecapCta,
 	errorContainer = WuiColors.LightErrorContainer,
 	muted = WuiColors.LightOnSurfaceVariant2,
 	outlineSoft = WuiColors.LightOutline.copy(alpha = 0.55f),
@@ -55,6 +57,7 @@ internal val DarkExtendedColors = WuiExtendedColors(
 	warningContainer = WuiColors.DarkWarningContainer,
 	streak = WuiColors.DarkStreak,
 	streakContainer = WuiColors.DarkStreakContainer,
+	recapCta = WuiColors.DarkRecapCta,
 	errorContainer = WuiColors.DarkErrorContainer,
 	muted = WuiColors.DarkOnSurfaceVariant2,
 	outlineSoft = WuiColors.DarkOutline.copy(alpha = 0.7f),
